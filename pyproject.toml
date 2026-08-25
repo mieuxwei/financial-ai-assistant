@@ -21,12 +21,20 @@ dependencies = [
 financial-ai-import-holdings = "scripts.import_holdings:main"
 financial-ai-market-data = "jobs.market_data:main"
 financial-ai-news = "jobs.news:main"
+financial-ai-sentiment = "jobs.sentiment:main"
+financial-ai-sentiment-audit = "research.evaluation.sentiment_error_analysis:main"
+financial-ai-chinese-sentiment-benchmark = "research.evaluation.chinese_sentiment_benchmark:main"
 
 [project.optional-dependencies]
 dev = [
   "pytest>=8.3,<9.0",
   "pytest-cov>=6.0,<8.0",
   "ruff>=0.8,<1.0",
+]
+nlp = [
+  "torch>=2.5,<3.0",
+  "transformers>=4.48,<5.0",
+  "sentencepiece>=0.2,<1.0",
 ]
 
 [tool.setuptools.packages.find]

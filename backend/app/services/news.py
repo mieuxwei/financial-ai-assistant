@@ -68,7 +68,7 @@ class NewsIngestionService:
                 matches = self.matcher.match(item)
                 article = NewsArticle(
                     title=item.title.strip(),
-                    published_at=item.published_at,
+                    published_at=item.published_at.astimezone(UTC),
                     fetched_at=fetched_at,
                     source=item.source,
                     source_type=item.source_type,

@@ -51,3 +51,19 @@ TWSE official news RSS ─────────────┘
 ```
 
 Provider adapters never call Perplexity or another LLM. The OpenAPI provider uses the official company code as an explicit match and its stable record identity for exact deduplication; distinct official records are not collapsed merely because their titles resemble one another. RSS matching is deterministic and records its method and score. Raw RSS HTML and full article bodies are discarded after extracting a maximum 500-character plain-text excerpt. Source URL, timestamps, external identifier and provider metadata preserve traceability.
+
+## M5 sentiment boundary
+
+```text
+news_articles + article_tickers
+  → explicit language gate (English only for ProsusAI/finbert)
+  → title + legal short summary input contract
+  → fixed model ID + immutable revision
+  → batched CPU inference
+  → positive / neutral / negative + continuous score
+  → sentiment_results
+  → Asia/Taipei calendar-day aggregation
+  → daily_sentiment_aggregates
+```
+
+The model adapter is optional and lazy-loaded, so FastAPI and CI do not download PyTorch or model weights. Results are keyed by article, ticker and model version. Inference runs record scored, existing and unsupported-language counts; unsupported text is never silently converted to neutral. M6 will decide trading-session attribution and information cutoffs—M5 daily dates are calendar-day aggregates only.

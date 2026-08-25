@@ -11,3 +11,5 @@ Do not commit credentials, identifiers, real portfolios, broker screenshots, imp
 - Public demo data must use a physically separate demo portfolio/database environment.
 - M4 news ingestion stores only public source metadata, traceable URLs and short plain-text excerpts. It does not retain raw RSS HTML or full article content.
 - Routine news ingestion does not call Perplexity, Gemini, or another LLM and does not require API credentials.
+- FinBERT runs locally on the retained title and short excerpt. M5 sends no article, portfolio, identifier, or prompt to an inference API.
+- Model weights and Hugging Face caches are local generated artifacts under ignored paths and must not be committed.

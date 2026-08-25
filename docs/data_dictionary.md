@@ -70,7 +70,7 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 
 - `id`: internal UUID.
 - `title`: provider title; required.
-- `published_at`, `fetched_at`: timezone-aware publication and UTC retrieval times.
+- `published_at`, `fetched_at`: publication and retrieval timestamps normalized to UTC before persistence; consumers explicitly convert to the required market timezone.
 - `source`: `twse_material` or `twse_news_rss` for the M4 official providers.
 - `source_type`: `official_announcement` or `official_rss`.
 - `url`: original traceable source URL.
@@ -99,4 +99,34 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `error_code`: exception class only; response bodies are not stored.
 - `started_at`, `completed_at`: UTC lifecycle timestamps.
 
-Sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.
+### sentiment_results
+
+- `article_id`, `ticker`, `model_version`: composite identity; permits multiple pinned models without overwriting prior research.
+- `positive_prob`, `neutral_prob`, `negative_prob`: softmax probabilities stored to eight decimal places.
+- `sentiment_score`: `positive_prob - negative_prob`, ranging from `-1` to `1`.
+- `predicted_label`: probability argmax; downstream research should still use all probabilities.
+- `input_hash`: SHA-256 of exact inference text plus model version.
+- `scored_at`: UTC inference timestamp.
+
+### daily_sentiment_aggregates
+
+- `ticker`, `sentiment_date`, `model_version`: composite identity. M5 uses an Asia/Taipei calendar date, not yet a trading-session assignment.
+- `article_count`: included article-ticker result count.
+- `positive_prob_mean`, `neutral_prob_mean`, `negative_prob_mean`: daily arithmetic means.
+- `sentiment_score_mean`: unweighted daily score mean.
+- `relevance_weighted_score`: score weighted by M4 article-ticker relevance.
+- `positive_ratio`, `negative_ratio`: argmax-label proportions.
+- `aggregated_at`: UTC aggregation timestamp.
+
+### sentiment_inference_runs
+
+- `id`, `model_version`, `pipeline_version`: run identity and fixed contracts (`sentiment-v1`).
+- `status`: `running`, `succeeded`, or `failed`.
+- `candidate_pairs`, `scored_pairs`, `existing_pairs`: idempotency and throughput counts.
+- `skipped_language_pairs`: unsupported article-ticker pairs; these receive no fake probabilities.
+- `aggregate_rows`: rebuilt daily aggregate count.
+- `quality_report`: supported languages, translation policy and batch size.
+- `error_code`: exception class only.
+- `started_at`, `completed_at`: UTC lifecycle timestamps.
+
+Feature, prediction, and research-request definitions remain reserved for their corresponding milestones.

@@ -1,0 +1,14 @@
+[
+  {"id": "p01", "text": "The company reported record revenue and profit above expectations.", "expected": "positive"},
+  {"id": "p02", "text": "Management raised its full-year earnings outlook after strong demand.", "expected": "positive"},
+  {"id": "p03", "text": "The firm won a major contract that is expected to increase future sales.", "expected": "positive"},
+  {"id": "p04", "text": "Operating margins improved while debt declined substantially.", "expected": "positive"},
+  {"id": "n01", "text": "The company posted a larger loss and cut its revenue forecast.", "expected": "negative"},
+  {"id": "n02", "text": "Sales fell sharply after the firm lost its largest customer.", "expected": "negative"},
+  {"id": "n03", "text": "Regulators imposed a significant fine following an accounting investigation.", "expected": "negative"},
+  {"id": "n04", "text": "Cash flow weakened and management warned of continued uncertainty.", "expected": "negative"},
+  {"id": "u01", "text": "The board scheduled its annual shareholder meeting for next month.", "expected": "neutral"},
+  {"id": "u02", "text": "The company published its quarterly financial statements on Tuesday.", "expected": "neutral"},
+  {"id": "u03", "text": "A director resigned and a replacement will be appointed at the next meeting.", "expected": "neutral"},
+  {"id": "u04", "text": "The firm announced that its registered office address has changed.", "expected": "neutral"}
+]

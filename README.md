@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M4 news pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入歷史日線 OHLCV 管線；M4 接入 TWSE 官方重大訊息 OpenAPI 與官方新聞 RSS，並加入 exact／fuzzy 去重、股票配對及來源追溯。FinBERT、ML 與前端 Demo 尚未實作。
+目前狀態：**M5 FinBERT sentiment pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入歷史日線 OHLCV；M4 加入 TWSE 官方新聞／公告管線；M5 建立固定模型 revision 的英文 FinBERT 批次推論、每日聚合與可重現 error analysis。ML 預測與前端 Demo 尚未實作。
 
 ## 預計系統架構
 
@@ -99,11 +99,44 @@ python -m jobs.news --source all \
 
 每個來源各自產生 ingestion run。重大訊息的官方公司代號具有最高配對信度；一般新聞使用設定檔中的公開 ticker／公司別名進行可解釋配對。去重先比較標準化 identity hash，再於相近發布時間內比較標題相似度。Perplexity 不參與例行 ingestion。
 
+## M5 FinBERT 情緒分析
+
+NLP 依賴是選配，避免一般 API／CI 安裝大型模型：
+
+```bash
+python -m pip install -e ".[nlp]"
+alembic upgrade head
+financial-ai-sentiment
+```
+
+預設模型固定為 `ProsusAI/finbert@4556d13015211d73dccd3fdd39d39232506f3e43`。每筆結果保存 positive／neutral／negative 機率、`positive - negative` 連續分數、input hash 與 model version；相同 article／ticker／model 重跑不會重複推論。
+
+官方 model card 將此模型標示為英文模型，因此 `zh-TW` 新聞會明確跳過，不會被當成 neutral，也不會自動送往翻譯或 LLM。語言策略與後續中文替代模型驗證門檻見 `docs/sentiment_language_strategy.md`。
+
+M5.1 已比較透明詞典、兩個中文金融 BERT、多語金融模型，以及本機翻譯後接英文 FinBERT。所有候選都未通過 TWSE context set 的採用門檻，因此目前仍不產生中文 sentiment。比較結果見 `research/evaluation/chinese_sentiment_model_comparison.md`。
+
+執行人工樣本 error analysis：
+
+```bash
+financial-ai-sentiment-audit \
+  --output artifacts/finbert-manual-error-analysis.json
+```
+
+重跑 M5.1 比較（需要已下載的本機模型）：
+
+```bash
+financial-ai-chinese-sentiment-benchmark \
+  --samples research/evaluation/twse_announcement_sentiment_samples.json \
+  --local-files-only \
+  --quiet \
+  --output artifacts/chinese-sentiment-benchmark.json
+```
+
 ## 測試與品質檢查
 
 ```bash
 pytest
-pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov-report=term-missing
+pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov=pipelines.sentiment --cov-report=term-missing
 ruff check .
 python scripts/check_secrets.py .
 ```
