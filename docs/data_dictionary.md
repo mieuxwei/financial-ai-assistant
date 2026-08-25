@@ -39,4 +39,31 @@
 - `payload_hash`: deterministic SHA-256 of the validated preview.
 - `created_at`, `expires_at`, `confirmed_at`: operation lifecycle timestamps.
 
-Public examples and test fixtures must use synthetic values. Market, news, sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.
+Public examples and test fixtures must use synthetic values. News, sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.
+
+### market_prices
+
+- `ticker`: canonical ticker; part of the primary key.
+- `trading_date`: Asia/Taipei-normalized trading date; part of the primary key.
+- `source`: provider name; part of the primary key.
+- `open`, `high`, `low`, `close`: normalized positive daily prices.
+- `adjusted_close`: provider adjusted close normalized to three decimal places, falling back to normalized close only when unavailable. This removes provider floating-point jitter while preserving material corporate-action revisions.
+- `volume`: non-negative daily share volume.
+- `ingested_at`: UTC timestamp of the latest successful upsert.
+
+For an existing row, adjusted-close changes of `0.005` or less are treated as provider floating-point jitter and retain the stored value. Larger changes are applied as material revisions.
+
+### market_ingestion_runs
+
+- `id`: UUID run identifier.
+- `provider`: provider adapter name.
+- `pipeline_version`: normalization and quality-contract version; currently `market-data-v1`.
+- `status`: `running`, `succeeded`, or `failed`.
+- `tickers`: canonical ticker and provider-symbol mappings used by the run.
+- `start_date`, `end_date`: inclusive requested range.
+- `records_fetched`, `records_upserted`: normalized row counts.
+- `quality_report`: per-ticker ranges, warnings, potential gaps, and fatal issues.
+- `error_code`: exception class only; never raw provider payloads or credentials.
+- `started_at`, `completed_at`: UTC lifecycle timestamps.
+
+News, sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.

@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**First iteration（M0～M2）/ early development**。Repository 內的安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務已建立；外部憑證輪替及 GAS／LINE 串接仍需由專案擁有者在對應平台完成。本迭代不包含市場資料、新聞、FinBERT、ML 或前端 Demo。
+目前狀態：**M3 market-data pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入可替換的 Yahoo 歷史日線 OHLCV adapter、品質檢查、冪等 upsert 與可重現 snapshot。新聞、FinBERT、ML 與前端 Demo 尚未實作。
 
 ## 預計系統架構
 
@@ -69,6 +69,23 @@ python -m scripts.import_holdings imports/holdings.csv \
 ```
 
 人工確認驗證結果後才可加上 `--apply`。不得把 CSV、真實持股或匯入後的本機資料庫提交 Git。
+
+## M3 歷史市場資料
+
+範例 universe 位於 `research/configs/market_universe.example.json`。執行前必須先完成 migration：
+
+```bash
+alembic upgrade head
+python -m jobs.market_data \
+  --config research/configs/market_universe.example.json \
+  --start 2025-01-01 \
+  --end 2025-12-31 \
+  --snapshot artifacts/market-prices-2025.json
+```
+
+Yahoo 只是可替換的原型 provider。每次 ingestion 保存 provider、日期範圍、抓取時間、筆數與品質報告；相同 ticker／日期／來源重跑會更新同一列，不產生重複資料。
+
+品質報告中的 `potential_missing_weekdays` 只是候選缺漏，仍需用台股交易日曆排除國定假日。Snapshot 依排序後的標準 OHLCV 計算 SHA-256，不包含會隨執行改變的 ingestion timestamp。
 
 ## 測試與品質檢查
 

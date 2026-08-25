@@ -1,0 +1,9 @@
+{
+  "instruments": [
+    {"ticker": "0050", "provider_symbol": "0050.TW"},
+    {"ticker": "2330", "provider_symbol": "2330.TW"},
+    {"ticker": "2317", "provider_symbol": "2317.TW"},
+    {"ticker": "2454", "provider_symbol": "2454.TW"},
+    {"ticker": "2881", "provider_symbol": "2881.TW"}
+  ]
+}

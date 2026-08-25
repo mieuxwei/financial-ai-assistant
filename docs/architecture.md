@@ -20,3 +20,19 @@ Portfolio sync uses a short-lived preview operation. Confirm applies additions, 
 ## Planned system
 
 Future ingestion pipelines will remain separate from feature generation and offline research. The LINE adapter consumes backend contracts and must not become a second source of portfolio, market-data, or research truth.
+
+## M3 market-data boundary
+
+```text
+Universe config
+  → MarketDataRequest (canonical ticker + provider symbol)
+  → MarketDataProvider protocol
+  → YahooFinanceProvider
+  → schema parsing + Taipei trading-date normalization
+  → quality assessment
+  → transactional SQLAlchemy upsert
+  → market_prices / market_ingestion_runs
+  → deterministic snapshot + SHA-256
+```
+
+Canonical tickers are independent of `.TW` or `.TWO`; provider symbols live in configuration. Provider response parsing, retry policy, data-quality assessment, persistence, and snapshot generation are separate modules so Yahoo can be replaced without changing research contracts.
