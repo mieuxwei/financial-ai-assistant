@@ -1,0 +1,9 @@
+{
+  "instruments": [
+    {"ticker": "0050", "aliases": ["元大台灣50"]},
+    {"ticker": "2330", "aliases": ["台積電", "臺灣積體電路", "TSMC"]},
+    {"ticker": "2317", "aliases": ["鴻海", "鴻海精密"]},
+    {"ticker": "2454", "aliases": ["聯發科", "MediaTek"]},
+    {"ticker": "2881", "aliases": ["富邦金", "富邦金控"]}
+  ]
+}

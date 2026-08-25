@@ -20,6 +20,7 @@ dependencies = [
 [project.scripts]
 financial-ai-import-holdings = "scripts.import_holdings:main"
 financial-ai-market-data = "jobs.market_data:main"
+financial-ai-news = "jobs.news:main"
 
 [project.optional-dependencies]
 dev = [

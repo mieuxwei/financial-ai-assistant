@@ -36,3 +36,18 @@ Universe config
 ```
 
 Canonical tickers are independent of `.TW` or `.TWO`; provider symbols live in configuration. Provider response parsing, retry policy, data-quality assessment, persistence, and snapshot generation are separate modules so Yahoo can be replaced without changing research contracts.
+
+## M4 news boundary
+
+```text
+TWSE material-announcement OpenAPI ─┐
+                                    ├→ NewsItem contract
+TWSE official news RSS ─────────────┘
+  → URL/title normalization
+  → exact hash + fuzzy title deduplication
+  → official-code / configured-alias ticker matching
+  → transactional news_articles + article_tickers
+  → news_ingestion_runs audit record
+```
+
+Provider adapters never call Perplexity or another LLM. The OpenAPI provider uses the official company code as an explicit match and its stable record identity for exact deduplication; distinct official records are not collapsed merely because their titles resemble one another. RSS matching is deterministic and records its method and score. Raw RSS HTML and full article bodies are discarded after extracting a maximum 500-character plain-text excerpt. Source URL, timestamps, external identifier and provider metadata preserve traceability.

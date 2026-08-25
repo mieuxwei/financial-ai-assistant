@@ -66,4 +66,37 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `error_code`: exception class only; never raw provider payloads or credentials.
 - `started_at`, `completed_at`: UTC lifecycle timestamps.
 
-News, sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.
+### news_articles
+
+- `id`: internal UUID.
+- `title`: provider title; required.
+- `published_at`, `fetched_at`: timezone-aware publication and UTC retrieval times.
+- `source`: `twse_material` or `twse_news_rss` for the M4 official providers.
+- `source_type`: `official_announcement` or `official_rss`.
+- `url`: original traceable source URL.
+- `canonical_url`: URL after fragment and known tracking parameters are removed.
+- `summary`: optional plain-text excerpt limited to 500 characters; never raw RSS HTML/full text.
+- `content_hash`: exact deduplication identity derived from normalized title, canonical URL, publication time and provider external ID when available.
+- `title_fingerprint`: SHA-256 of the normalized title for reproducibility/audit.
+- `language`: provider content language, currently `zh-TW`.
+- `external_id`: provider identifier where available.
+- `source_metadata`: non-secret source fields such as public company name, disclosure clause and fact date.
+
+### article_tickers
+
+- `article_id`, `ticker`: composite primary key.
+- `relevance_score`: deterministic score from `0` to `1`.
+- `match_method`: `official_company_code`, `ticker_title`, `company_alias_title`, `ticker_summary`, or `company_alias_summary`.
+
+### news_ingestion_runs
+
+- `id`, `provider`, `pipeline_version`: auditable run identity and contract version (`news-v1`).
+- `status`: `running`, `succeeded`, or `failed`.
+- `records_fetched`, `records_inserted`: provider and persistence counts.
+- `exact_duplicates`, `fuzzy_duplicates`: skipped duplicate counts.
+- `ticker_matches`: persisted article-to-ticker link count.
+- `quality_report`: unmatched count and content-retention policy flags.
+- `error_code`: exception class only; response bodies are not stored.
+- `started_at`, `completed_at`: UTC lifecycle timestamps.
+
+Sentiment, feature, prediction, and research-request definitions remain reserved for their corresponding milestones.

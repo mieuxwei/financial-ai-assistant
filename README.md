@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M3 market-data pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入可替換的 Yahoo 歷史日線 OHLCV adapter、品質檢查、冪等 upsert 與可重現 snapshot。新聞、FinBERT、ML 與前端 Demo 尚未實作。
+目前狀態：**M4 news pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入歷史日線 OHLCV 管線；M4 接入 TWSE 官方重大訊息 OpenAPI 與官方新聞 RSS，並加入 exact／fuzzy 去重、股票配對及來源追溯。FinBERT、ML 與前端 Demo 尚未實作。
 
 ## 預計系統架構
 
@@ -87,11 +87,23 @@ Yahoo 只是可替換的原型 provider。每次 ingestion 保存 provider、日
 
 品質報告中的 `potential_missing_weekdays` 只是候選缺漏，仍需用台股交易日曆排除國定假日。Snapshot 依排序後的標準 OHLCV 計算 SHA-256，不包含會隨執行改變的 ingestion timestamp。
 
+## M4 新聞與公告資料
+
+M4 僅使用公開的 TWSE 官方來源：上市公司每日重大訊息 OpenAPI 與 TWSE 新聞 RSS。RSS 只保存必要 metadata、原始連結與最多 500 字元的純文字短摘要，不保存原始 HTML 或全文。
+
+```bash
+alembic upgrade head
+python -m jobs.news --source all \
+  --aliases research/configs/ticker_aliases.example.json
+```
+
+每個來源各自產生 ingestion run。重大訊息的官方公司代號具有最高配對信度；一般新聞使用設定檔中的公開 ticker／公司別名進行可解釋配對。去重先比較標準化 identity hash，再於相近發布時間內比較標題相似度。Perplexity 不參與例行 ingestion。
+
 ## 測試與品質檢查
 
 ```bash
 pytest
-pytest --cov=backend --cov-report=term-missing
+pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov-report=term-missing
 ruff check .
 python scripts/check_secrets.py .
 ```

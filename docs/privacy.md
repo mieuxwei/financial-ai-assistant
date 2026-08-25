@@ -9,3 +9,5 @@ Do not commit credentials, identifiers, real portfolios, broker screenshots, imp
 - Portfolio ownership is enforced in every M2 route. Transitional `X-User-ID` is not sufficient for public authentication and must be replaced in M10.
 - Broker screenshots are not supported or persisted in this iteration.
 - Public demo data must use a physically separate demo portfolio/database environment.
+- M4 news ingestion stores only public source metadata, traceable URLs and short plain-text excerpts. It does not retain raw RSS HTML or full article content.
+- Routine news ingestion does not call Perplexity, Gemini, or another LLM and does not require API credentials.
