@@ -1,0 +1,65 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.tools/
+.local/
+.python-version
+
+# Tests and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+
+# IDE and operating system
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local databases, logs, and temporary files
+*.sqlite
+*.sqlite3
+*.db
+logs/
+*.log
+tmp/
+temp/
+*.tmp
+
+# Private and user-provided data
+uploads/
+user_data/
+data/raw/
+data/private/
+data/personal/
+private_datasets/
+broker_screenshots/
+imports/
+
+# Generated model and research artifacts
+artifacts/*
+!artifacts/README.md
+models/*.bin
+models/*.pt
+models/*.pth
+models/*.onnx
+*.joblib
+*.pkl
+
+# Notebooks
+.ipynb_checkpoints/
