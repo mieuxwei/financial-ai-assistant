@@ -129,4 +129,27 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `error_code`: exception class only.
 - `started_at`, `completed_at`: UTC lifecycle timestamps.
 
-Feature, prediction, and research-request definitions remain reserved for their corresponding milestones.
+### feature_dataset_runs
+
+- `id`: operational UUID; excluded from the reproducible dataset hash.
+- `pipeline_version`: feature contract version, currently `features-v1`.
+- `config_sha256`: canonical hash of tickers, date range, providers, model version, timezone and cutoff.
+- `market_snapshot_sha256`, `sentiment_snapshot_sha256`: hashes of the exact normalized source rows consumed by the builder.
+- `dataset_sha256`: unique canonical hash of configuration, source hashes and ordered modeling rows.
+- `market_source`, `sentiment_model_version`: pinned upstream identities. Sentiment version may be null for market-only datasets.
+- `start_date`, `end_date`: inclusive source/query contract.
+- `row_count`: usable labeled rows after warm-up and final unlabeled-session exclusion.
+- `config`: complete non-secret reconstruction configuration.
+- `status`, `error_code`, `created_at`: operational metadata.
+
+### daily_features
+
+- `dataset_run_id`, `ticker`, `feature_date`: composite row identity.
+- `target_date`: next observed trading session; always later than `feature_date`.
+- `information_cutoff`: UTC representation of the local market-close cutoff.
+- `latest_sentiment_published_at`: latest publication used by any 1/3/5-session sentiment feature; null when none was used and never later than the cutoff.
+- `features`: versioned JSON numeric feature map defined in `docs/feature_definitions.md`. Missing sentiment values remain null.
+- `forward_return_1d`: next observed session adjusted-close return.
+- `label_up`: `1` for a strictly positive forward return, otherwise `0`.
+
+Prediction and research-request definitions remain reserved for their corresponding milestones.

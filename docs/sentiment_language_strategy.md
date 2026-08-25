@@ -26,6 +26,12 @@ The controlled comparison is complete. Five profiles were evaluated on both an e
 
 The best TWSE macro-F1 was 0.640 from `Kenpache/finbert-multilingual-v2`, but its positive recall was only 0.125. Translation followed by English FinBERT reached macro-F1 0.592 and exposed material financial-term translation errors. Chinese sentiment therefore remains disabled. Full results and pinned revisions are recorded in `research/evaluation/chinese_sentiment_model_comparison.md`.
 
+## Revised Taiwan-domain direction
+
+The next track is not a generic Chinese sentiment substitution. Taiwan disclosures require two versioned outputs: event type and entity-specific financial impact, with `AMBIGUOUS` available when context is insufficient. Linguistic tone, event impact and historical market reaction are different concepts and remain separate in storage and experiments.
+
+M6.1 defines annotation, taxonomy, review, source/licensing and leakage-safe split rules before any expensive training. MacBERT is one possible encoder for M6.2, not an accepted model. Historical future/abnormal returns belong to the separate M6.3 reaction target and can never be an event-time feature.
+
 References:
 
 - [ProsusAI/finbert model card](https://huggingface.co/ProsusAI/finbert)

@@ -23,7 +23,7 @@ jobs:
           DATABASE_URL: sqlite:////tmp/financial-ai-ci.db
         run: alembic upgrade head
       - name: Test
-        run: pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov=pipelines.sentiment --cov-report=term-missing
+        run: pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov=pipelines.sentiment --cov=pipelines.features --cov-report=term-missing
       - name: Lint
         run: ruff check .
       - name: Scan for common secret patterns

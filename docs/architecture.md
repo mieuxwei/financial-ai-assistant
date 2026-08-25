@@ -67,3 +67,44 @@ news_articles + article_tickers
 ```
 
 The model adapter is optional and lazy-loaded, so FastAPI and CI do not download PyTorch or model weights. Results are keyed by article, ticker and model version. Inference runs record scored, existing and unsupported-language counts; unsupported text is never silently converted to neutral. M6 will decide trading-session attribution and information cutoffs—M5 daily dates are calendar-day aggregates only.
+
+## M6 feature-dataset foundation
+
+```text
+market_prices ───────────────────────────────┐
+                                             ├→ immutable FeatureConfig
+news_articles + article_tickers             │   → trading-session cutoff assignment
+  + pinned sentiment_results ───────────────┘   → trailing-only technical/sentiment features
+                                                 → next-session return + Up/Down label
+                                                 → daily_features
+                                                 → feature_dataset_runs + SHA-256 snapshot
+```
+
+The information cutoff is Asia/Taipei 13:30 for the first Taiwan-market contract. A publication at or before the cutoff may enter that session; a later, weekend, or holiday publication enters the next observed trading session. Market features end at `t`; only the label reads the adjusted close at the next observed session. Dataset hashes exclude operational UUIDs and timestamps and include the exact configuration and normalized market/sentiment inputs.
+
+M6 currently accepts validated English sentiment and keeps unsupported Chinese probability/score values missing. It is a versioned engineering foundation, not evidence that Taiwan-domain text modeling has been solved.
+
+## Planned Taiwan NLP and market-reaction boundaries
+
+```text
+                                  ┌→ English financial text
+news_articles + article_tickers ──┤   → pinned ProsusAI/finbert
+                                  │   → sentiment_results
+                                  │
+                                  └→ Taiwan financial text
+                                      → versioned event taxonomy
+                                      → POSITIVE / NEUTRAL / NEGATIVE / AMBIGUOUS impact
+                                      → taiwan_financial_text_results
+
+event timestamp + historical prices
+  → leakage-safe reaction window
+  → benchmark-adjusted historical target
+  → market_reaction_targets
+
+validated English sentiment ──────┐
+Taiwan event / impact ────────────┼→ M6.4 versioned integrated dataset
+past-only reaction statistics ────┤   → M7 signal-group experiments
+price / volume / technical ───────┘
+```
+
+Textual sentiment, Taiwan event impact and historical price reaction are separate contracts. Future returns may train or evaluate a reaction model, but never enter a feature available at the event timestamp. GAS remains outside these pipelines and only routes LINE interactions to Python during migration.

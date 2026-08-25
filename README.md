@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M5 FinBERT sentiment pipeline / early development**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3 加入歷史日線 OHLCV；M4 加入 TWSE 官方新聞／公告管線；M5 建立固定模型 revision 的英文 FinBERT 批次推論、每日聚合與可重現 error analysis。ML 預測與前端 Demo 尚未實作。
+目前狀態：**M6 feature and label foundation complete / M6.1 Taiwan annotation protocol next**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.1 正式保留五個中文候選未通過 gate 的結果；M6 建立防止前視偏誤的價格、成交量、技術、已驗證情緒特徵與 `t+1` label。台灣 event／impact model、歷史 market-reaction 研究、下游模型、回測與 Demo 尚未實作。
 
 ## 預計系統架構
 
@@ -113,7 +113,7 @@ financial-ai-sentiment
 
 官方 model card 將此模型標示為英文模型，因此 `zh-TW` 新聞會明確跳過，不會被當成 neutral，也不會自動送往翻譯或 LLM。語言策略與後續中文替代模型驗證門檻見 `docs/sentiment_language_strategy.md`。
 
-M5.1 已比較透明詞典、兩個中文金融 BERT、多語金融模型，以及本機翻譯後接英文 FinBERT。所有候選都未通過 TWSE context set 的採用門檻，因此目前仍不產生中文 sentiment。比較結果見 `research/evaluation/chinese_sentiment_model_comparison.md`。
+M5.1 已比較透明詞典、兩個中文金融 BERT、多語金融模型，以及本機翻譯後接英文 FinBERT。所有候選都未通過 TWSE context set 的採用門檻，因此目前仍不產生中文 sentiment。接下來的台灣 NLP 路線會把 event type、financial impact、textual sentiment 與 historical market reaction 分開研究；MacBERT 只是待驗證候選，不是既定成功模型。比較結果見 `research/evaluation/chinese_sentiment_model_comparison.md`，後續協定見 `PROJECT_PLAN.md`。
 
 執行人工樣本 error analysis：
 
@@ -132,11 +132,24 @@ financial-ai-chinese-sentiment-benchmark \
   --output artifacts/chinese-sentiment-benchmark.json
 ```
 
+## M6 Feature 與 Label Dataset
+
+M6 使用交易日 `t` 收盤時已知的資料預測下一個實際交易日方向。台股 information cutoff 預設為 Asia/Taipei 13:30；收盤後或非交易日發布的新聞歸到下一個交易日。至少需要 27 筆連續市場觀測才能產生包含 26 日 MACD 暖機與下一日 label 的資料列。
+
+```bash
+alembic upgrade head
+financial-ai-features \
+  --config research/configs/feature_pipeline.example.json \
+  --snapshot artifacts/modeling-dataset.json
+```
+
+輸出保存完整設定、`features-v1`、market/sentiment snapshot hash 與 dataset SHA-256。相同輸入重跑會復用既有 dataset run。中文新聞沒有通過 M5.1 採用門檻，因此對應 sentiment probability/score 保持 `null`；新聞數量則為 `0`，不會偽裝成 neutral sentiment。詳細定義見 `docs/feature_definitions.md`。
+
 ## 測試與品質檢查
 
 ```bash
 pytest
-pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov=pipelines.sentiment --cov-report=term-missing
+pytest --cov=backend --cov=pipelines.market_data --cov=pipelines.news --cov=pipelines.sentiment --cov=pipelines.features --cov-report=term-missing
 ruff check .
 python scripts/check_secrets.py .
 ```

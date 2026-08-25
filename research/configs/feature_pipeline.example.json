@@ -1,0 +1,11 @@
+{
+  "tickers": ["0050", "2330"],
+  "benchmark_ticker": "0050",
+  "start_date": "2020-01-01",
+  "end_date": "2025-12-31",
+  "market_source": "yahoo",
+  "sentiment_model_version": "ProsusAI/finbert@4556d13015211d73dccd3fdd39d39232506f3e43",
+  "market_timezone": "Asia/Taipei",
+  "market_close_time": "13:30:00"
+}
+
