@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M6 feature and label foundation complete / M6.1 Taiwan annotation protocol next**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.1 正式保留五個中文候選未通過 gate 的結果；M6 建立防止前視偏誤的價格、成交量、技術、已驗證情緒特徵與 `t+1` label。台灣 event／impact model、歷史 market-reaction 研究、下游模型、回測與 Demo 尚未實作。
+目前狀態：**M6 feature and label foundation complete / M6.1 Taiwan annotation protocol in progress**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.1 正式保留五個中文候選未通過 gate 的結果；M6 建立防止前視偏誤的價格、成交量、技術、已驗證情緒特徵與 `t+1` label。M6.1 已建立 event／impact taxonomy、版本化標注 schema、QC 協定與不輸出原文的資料稽核工具；Eland 候選資料仍為初步 HOLD，尚未核准訓練。台灣 event／impact model、歷史 market-reaction 研究、下游模型、回測與 Demo 尚未實作。
 
 ## 預計系統架構
 
@@ -144,6 +144,19 @@ financial-ai-features \
 ```
 
 輸出保存完整設定、`features-v1`、market/sentiment snapshot hash 與 dataset SHA-256。相同輸入重跑會復用既有 dataset run。中文新聞沒有通過 M5.1 採用門檻，因此對應 sentiment probability/score 保持 `null`；新聞數量則為 `0`，不會偽裝成 neutral sentiment。詳細定義見 `docs/feature_definitions.md`。
+
+## M6.1 台灣金融文本標注與資料稽核
+
+標注規範、事件 taxonomy、impact／ambiguous 規則、雙人覆核及 leakage-safe split 見 `docs/taiwan_financial_annotation_protocol.md`。候選外部資料只可放在 Git 忽略的 `.tools/` 或 `data/raw/`，不得提交原文。
+
+JSON、JSONL、CSV 可直接稽核；Parquet 另安裝輕量選配依賴：
+
+```bash
+python -m pip install -e ".[audit]"
+financial-ai-taiwan-dataset-audit --help
+```
+
+Eland 候選資料的官方頁面初步檢查發現領域混雜與來源追溯不足風險；因原始 split 尚未成功取得，現階段結論是 HOLD，不得用於訓練。詳見 `research/evaluation/eland_dataset_preliminary_audit.md`。
 
 ## 測試與品質檢查
 

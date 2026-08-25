@@ -773,7 +773,7 @@ financial-ai-assistant/
 - 任一 dataset snapshot 可由設定重建。
 - 未驗證中文 sentiment 不填 neutral 或零；後續 M6.4 再納入通過 gate 的台灣訊號。
 
-### M6.1 — Taiwan Financial Annotation Protocol（下一個最小里程碑）
+### M6.1 — Taiwan Financial Annotation Protocol（進行中）
 
 工作：
 
@@ -1036,7 +1036,7 @@ financial-ai-assistant/
 
 M0～M5.1 已完成並保留結果；M6 feature／label 工程骨架已完成驗證。現階段不得直接跳入 M7，也不得因中文模型不成熟而把所有中文資料填成 neutral。
 
-下一個最小可執行里程碑是 **M6.1 Taiwan Financial Annotation Protocol**：
+目前執行中的最小里程碑是 **M6.1 Taiwan Financial Annotation Protocol**：
 
 1. 建立 event taxonomy v1、impact label guide 與 AMBIGUOUS／abstain 規則。
 2. 定義 inclusion／exclusion、來源／授權 metadata 與合法文本 retention。
@@ -1044,4 +1044,6 @@ M0～M5.1 已完成並保留結果；M6 feature／label 工程骨架已完成驗
 4. 定義時間、事件群組及近似文本隔離的 train／validation／sealed-test protocol。
 5. 稽核候選公開資料的來源、標籤、重複與 split leakage；不先訓練 MacBERT。
 
-M6.1 完成並取得 go／no-go 決策後，才可進入 M6.2。GAS 在此期間維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。
+event taxonomy v1、impact／ambiguous guideline、版本化 schema、QC／split protocol 與資料稽核 CLI 已建立。Eland 候選資料的公開 viewer 初步顯示非金融內容混入，且官方 raw split 在本次環境下載回傳 HTTP 401；因此目前是 **HOLD／不得訓練**，仍須取得原始 split 後完成重複、標籤、來源與授權稽核。
+
+M6.1 完成完整資料稽核並取得 reviewer go／no-go 決策後，才可進入 M6.2。若來源追溯或授權無法確認，必須維持 no-go 並更換資料來源。GAS 在此期間維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。

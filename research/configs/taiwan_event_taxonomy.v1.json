@@ -1,0 +1,73 @@
+{
+  "taxonomy_version": "taiwan-event-taxonomy-v1",
+  "impact_label_version": "taiwan-impact-labels-v1",
+  "event_types": [
+    {
+      "code": "EARNINGS",
+      "definition": "損益、獲利、虧損、財務報告或重大財務結果。"
+    },
+    {
+      "code": "REVENUE",
+      "definition": "月營收、季營收、營收成長或衰退等營業收入資訊。"
+    },
+    {
+      "code": "DIVIDEND",
+      "definition": "現金股利、股票股利、盈餘分配或除權息相關決議。"
+    },
+    {
+      "code": "BUYBACK",
+      "definition": "庫藏股、買回股份、買回執行情形或註銷相關事項。"
+    },
+    {
+      "code": "CAPITAL_INCREASE",
+      "definition": "現金增資、私募、發行新股或其他增加股本事項。"
+    },
+    {
+      "code": "CAPITAL_REDUCTION",
+      "definition": "減資、彌補虧損、退還股款或其他降低股本事項。"
+    },
+    {
+      "code": "M&A",
+      "definition": "合併、收購、股份轉換、分割或控制權交易。"
+    },
+    {
+      "code": "REGULATORY",
+      "definition": "主管機關核准、處分、裁罰、調查、法遵或重大訴訟。"
+    },
+    {
+      "code": "MANAGEMENT_CHANGE",
+      "definition": "董事、經理人、發言人或重大治理角色異動。"
+    },
+    {
+      "code": "GUIDANCE",
+      "definition": "公司對未來營運、財務或市場展望的正式說明。"
+    },
+    {
+      "code": "MATERIAL_TRANSACTION",
+      "definition": "重大合約、資產取得處分、背書保證、資金貸與或其他重大交易。"
+    },
+    {
+      "code": "OTHER",
+      "definition": "無法歸入以上類型，但仍符合納入條件的重大公司事件。"
+    }
+  ],
+  "impact_labels": [
+    {
+      "code": "POSITIVE",
+      "definition": "文本提供足夠資訊，顯示對指定公司營運、財務或權益有明確有利方向。"
+    },
+    {
+      "code": "NEUTRAL",
+      "definition": "例行、行政或資訊性揭露，未呈現明確有利或不利方向。"
+    },
+    {
+      "code": "NEGATIVE",
+      "definition": "文本提供足夠資訊，顯示對指定公司營運、財務或權益有明確不利方向。"
+    },
+    {
+      "code": "AMBIGUOUS",
+      "definition": "資訊不足、正負效果並存、需外部上下文或合理 reviewer 可能分歧。"
+    }
+  ]
+}
+

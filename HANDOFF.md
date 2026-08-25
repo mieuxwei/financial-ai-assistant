@@ -4,9 +4,9 @@ Last revised: 2026-08-26
 
 ## Current boundary
 
-M0–M5.1 are complete and their evidence is retained. The M6 feature/label engineering foundation is implemented locally; check Git status before any work because those changes may still be uncommitted. Do not jump to M7 downstream modeling yet.
+M0–M6 are complete and their evidence is retained. M6.1 is in progress: the annotation protocol, taxonomy v1, versioned schema, dataset-audit CLI and unit tests are implemented locally. Check Git status before any work because M6.1 changes are uncommitted. Do not jump to M6.2 or M7 yet.
 
-The next minimum executable milestone is **M6.1 Taiwan Financial Annotation Protocol**. This is a protocol, data-audit and design milestone only. Do not train MacBERT, fabricate annotations, run downstream prediction, backtest, deploy, or modify working GAS code.
+The remaining M6.1 blocker is a full audit of candidate raw splits and a reviewed go/no-go decision. The Eland candidate is **HOLD / not approved for training** because official raw downloads returned HTTP 401 and the public viewer shows domain contamination. Do not train MacBERT, fabricate annotations, run downstream prediction, backtest, deploy, or modify working GAS code.
 
 ## Verified findings that must not change
 
@@ -47,18 +47,24 @@ Taiwan labels use a versioned event taxonomy and `POSITIVE`, `NEUTRAL`, `NEGATIV
 
 Future return is allowed as a historical reaction target, never as an input available at the event timestamp. A reaction-derived prediction feature may only use older events whose reaction windows completed before the current information cutoff.
 
-## Next task: M6.1
+## M6.1 delivered locally
 
-Deliver only:
+Implemented:
 
-1. Annotation guideline and inclusion/exclusion rules.
-2. Event taxonomy v1 and impact/ambiguous examples.
-3. Reviewer, adjudication, agreement and QC procedure.
-4. Label/source/taxonomy versioning schema.
-5. Copyright, retention and provenance checklist.
-6. Time-, event-group- and near-duplicate-safe train/validation/sealed-test protocol.
-7. Audit plan for candidate public Traditional Chinese finance datasets.
-8. Go/no-go recommendation and minimum reviewed-data requirement for M6.2.
+1. `docs/taiwan_financial_annotation_protocol.md`
+2. `research/configs/taiwan_event_taxonomy.v1.json`
+3. `research/annotation/schema.py`
+4. `research/evaluation/taiwan_dataset_audit.py`
+5. `research/evaluation/eland_dataset_preliminary_audit.md`
+6. Unit tests for schema invariants, taxonomy parity, leakage checks and raw-text omission.
+
+## Next task: finish M6.1 data review
+
+Obtain the official Eland raw splits without bypassing access controls, record an immutable
+revision and file hashes, place them only under ignored `.tools/`, run the audit CLI, and conduct
+a documented manual domain/provenance review. If access or source lineage remains unresolved,
+retain the no-go decision and evaluate another legally traceable candidate or build a small
+reviewed TWSE event dataset under the annotation protocol.
 
 Do not create fake labels. Keep external/full text and large model/data caches in ignored locations. Do not automatically commit or push.
 

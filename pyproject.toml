@@ -25,6 +25,7 @@ financial-ai-sentiment = "jobs.sentiment:main"
 financial-ai-sentiment-audit = "research.evaluation.sentiment_error_analysis:main"
 financial-ai-chinese-sentiment-benchmark = "research.evaluation.chinese_sentiment_benchmark:main"
 financial-ai-features = "jobs.features:main"
+financial-ai-taiwan-dataset-audit = "research.evaluation.taiwan_dataset_audit:main"
 
 [project.optional-dependencies]
 dev = [
@@ -36,6 +37,9 @@ nlp = [
   "torch>=2.5,<3.0",
   "transformers>=4.48,<5.0",
   "sentencepiece>=0.2,<1.0",
+]
+audit = [
+  "pyarrow>=18.0,<22.0",
 ]
 
 [tool.setuptools.packages.find]
