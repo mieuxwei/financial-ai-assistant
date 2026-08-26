@@ -76,24 +76,34 @@ Implemented:
 11. `research/evaluation/twse_calibration_round_1_result.md` and protocol v1.1 boundary clarifications.
 12. `docs/automated_chinese_text_signal_protocol.md` as the operative zero-human research contract.
 
-## Next minimum milestone: complete the M6 active-source audit
+## M6 metadata-first source audit completed
 
 Round 1 is complete as an AI-to-AI diagnostic: Gemini 3.1 Pro Reviewer A versus Codex Reviewer B.
 Impact raw agreement was 0.766667 with kappa 0.640411; event raw agreement was 0.650000 with kappa
 0.533679. Preserve these as stability evidence without human adjudication.
 
-The next executable unit is a metadata-first, no-training audit of active sources in this order:
+The metadata-first source audit is recorded in
+`research/evaluation/taiwan_active_source_metadata_audit.md`. It established:
 
-1. confirm access, provenance, licence/retention terms and corpus manifest boundaries for
-   `tw-finance-159M` and MOPS/TWSE;
-2. audit FinMind endpoints and underlying-source rights for news/market timestamp alignment;
-3. define an optional bounded FSC/regulatory corpus manifest;
-4. select and audit a Taiwan benchmark price series for the automatic market-reaction protocol;
-5. record only aggregate counts, hashes, decisions and unknowns in the governance register.
+1. TWSE OpenAPI is accepted for official ingestion/metadata; text training remains conditional.
+2. `tw-finance-159M` remains HOLD because gated access, original-publisher rights, temporal lineage,
+   duplicates and share-alike model implications remain unresolved.
+3. FinMind news is conditional for source/link metadata but HOLD as a reaction-event source until
+   timestamp timezone/semantics, duplicates and publisher rights pass.
+4. FinMind `TaiwanStockTotalReturnIndex` with `data_id=TAIEX` is accepted as the non-commercial
+   research benchmark.
+5. FSC official text requires a bounded source manifest; the derived `tw-fsc` OCR corpus remains
+   HOLD and was not downloaded.
 
-Do not download a large corpus, start domain adaptation or generate active model features until the
-relevant source moves through its purpose-specific gate. Eland is not part of this work queue.
-After M6 approval, M7 may begin with a small reproducible domain-adaptation feasibility run.
+The metadata-only source manifest and automated gate are now implemented in
+`research/configs/taiwan_active_sources.v1.json` and
+`research/evaluation/source_manifest.py`. The 2026-08-26 live run passed TWSE (101 records) and
+FinMind TAIEX (5 sessions); its raw-free report is ignored under `artifacts/`.
+
+The next minimum executable unit is a bounded official FSC text-source manifest and metadata-only
+coverage audit. Do not start M7 domain adaptation until at least one unlabelled domain corpus is
+purpose-specifically accepted. Do not download a large corpus or generate active model features.
+Eland is not part of this work queue.
 
 Do not create fake labels. Keep external/full text and large model/data caches in ignored locations.
 Do not automatically commit or push.

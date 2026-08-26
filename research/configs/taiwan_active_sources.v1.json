@@ -1,0 +1,72 @@
+{
+  "manifest_version": "taiwan-active-source-manifest-v1",
+  "sources": [
+    {
+      "source_id": "twse_material_metadata",
+      "purpose": "Official Taiwan listed-company disclosure ingestion and structured event metadata",
+      "decision": "ACCEPT",
+      "endpoint": "https://openapi.twse.com.tw/v1/opendata/t187ap04_L",
+      "terms_url": "https://wwwc.twse.com.tw/zh/terms/use.html",
+      "response_container": "root_list",
+      "query": {},
+      "required_fields": [
+        "出表日期",
+        "發言日期",
+        "發言時間",
+        "公司代號",
+        "公司名稱",
+        "主旨",
+        "符合條款",
+        "事實發生日",
+        "說明"
+      ],
+      "date_field": "發言日期",
+      "timezone_contract": "發言日期與發言時間依 Asia/Taipei 解析；事實發生日不得替代發布時間",
+      "retention_policy": "metadata_hash_only",
+      "allowed_uses": [
+        "official disclosure ingestion",
+        "ticker and event metadata",
+        "timestamp construction"
+      ],
+      "forbidden_uses": [
+        "human sentiment ground truth",
+        "unapproved full-text corpus export",
+        "raw response persistence in Git"
+      ],
+      "max_response_bytes": 5000000
+    },
+    {
+      "source_id": "finmind_taiex_total_return",
+      "purpose": "Broad Taiwan listed-market total-return benchmark for non-commercial research",
+      "decision": "ACCEPT",
+      "endpoint": "https://api.finmindtrade.com/api/v4/data",
+      "terms_url": "https://github.com/FinMind/FinMind/blob/master/README.md",
+      "response_container": "data",
+      "query": {
+        "dataset": "TaiwanStockTotalReturnIndex",
+        "data_id": "TAIEX",
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-08"
+      },
+      "required_fields": [
+        "price",
+        "stock_id",
+        "date"
+      ],
+      "date_field": "date",
+      "timezone_contract": "date is an Asia/Taipei trading-session date; no intraday timestamp is inferred",
+      "retention_policy": "metadata_hash_only",
+      "allowed_uses": [
+        "non-commercial research benchmark",
+        "benchmark return construction",
+        "market-reaction target alignment"
+      ],
+      "forbidden_uses": [
+        "sentiment ground truth",
+        "commercial deployment without licence re-audit",
+        "credential persistence"
+      ],
+      "max_response_bytes": 1000000
+    }
+  ]
+}

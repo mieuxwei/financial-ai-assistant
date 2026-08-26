@@ -156,7 +156,17 @@ python -m pip install -e ".[audit]"
 financial-ai-taiwan-dataset-audit --help
 ```
 
-Eland 只保留為歷史候選資料集的拒絕證據，狀態固定為 **HOLD／排除於主動建模流程**；不得用於訓練、領域自適應、weak supervision、正式評估、特徵或 corpus 合併，也不在本里程碑追加救援或重審。主動來源決策見 `research/evaluation/taiwan_dataset_governance.md`，歷史稽核記錄見 `research/evaluation/eland_dataset_preliminary_audit.md`。
+Eland 只保留為歷史候選資料集的拒絕證據，狀態固定為 **HOLD／排除於主動建模流程**；不得用於訓練、領域自適應、weak supervision、正式評估、特徵或 corpus 合併，也不在本里程碑追加救援或重審。主動來源決策見 `research/evaluation/taiwan_dataset_governance.md`，metadata-first 實查見 `research/evaluation/taiwan_active_source_metadata_audit.md`，Eland 歷史記錄見 `research/evaluation/eland_dataset_preliminary_audit.md`。
+
+已接受的 TWSE metadata 與 FinMind TAIEX benchmark 使用版本化 manifest 執行唯讀 gate：
+
+```bash
+financial-ai-source-gate \
+  --manifest research/configs/taiwan_active_sources.v1.json \
+  --output artifacts/taiwan-source-gate-report.json
+```
+
+報告只保存 endpoint、dataset ID、schema、terms URL、時間契約、筆數與 SHA-256，不保存公告原文或價格列；`artifacts/` 已由 Git 忽略。
 
 從本機已匯入的官方 TWSE 公告建立 60 筆未標注 calibration batch：
 

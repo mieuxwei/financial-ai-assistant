@@ -14,10 +14,11 @@ source decisions are maintained in `research/evaluation/taiwan_dataset_governanc
 | [`lianghsun/tw-finance-159M`](https://huggingface.co/datasets/lianghsun/tw-finance-159M) | Domain-adaptive pretraining | Active audit target; currently HOLD | Unlabelled, gated, non-commercial share-alike licence, and underlying article rights still require audit. It cannot provide event/impact gold labels. |
 | [Taiwan Financial Sentiment Dictionary](https://github.com/RemiMFB/Taiwan-Financial-Sentiment-Dictionary) | Interpretable lexicon baseline | Auxiliary only | A lexicon is not an entity/event-labelled corpus. The historical M5.5 lexicon diagnostic also failed the project adoption gate. |
 | Fin-SoMe academic annotations | Historical/social-media comparison | HOLD | Task/domain differ from official company-event impact and the non-commercial research licence remains unaudited. |
-| Official MOPS/TWSE announcements sampled by time/event group | Structured metadata and automated text signals | CONDITIONAL | Best source traceability, timestamps and target-company identity; retention/licence, duplicate and leakage gates still apply. |
-| FinMind | News/market alignment and reaction construction | CONDITIONAL | Endpoint-specific provenance, underlying news rights, duplicates and timestamp quality require audit. |
-| Taiwan FSC/regulatory text | Optional domain adaptation | HOLD pending audit | Corpus boundary, access, licence, duplicate and domain-purity evidence are not yet complete. |
-| Historical stock/benchmark prices | Automatic market-reaction targets | CONDITIONAL | Must pass provider licence, calendar, corporate-action, missing-data and sealed-test leakage controls. |
+| Official MOPS/TWSE announcements sampled by time/event group | Structured metadata and automated text signals | ACCEPT for ingestion/metadata; training CONDITIONAL | Live OpenAPI and official fields verified; retention/licence, duplicate and leakage gates still apply to corpus use. |
+| FinMind `TaiwanStockNews` | News discovery/source metadata | CONDITIONAL; reaction events HOLD | Live timestamp/source/link fields verified, but timezone semantics, underlying news rights and duplicates remain unresolved. |
+| Taiwan FSC/regulatory text | Optional domain adaptation | CONDITIONAL official manifest; derived `tw-fsc` HOLD | Government-open-data coverage is promising, but corpus boundary, source exceptions, OCR/derived content and split purity remain gated. |
+| FinMind `TaiwanStockTotalReturnIndex` / `TAIEX` | Automatic market-reaction benchmark | ACCEPT for non-commercial research | Live anonymous bounded request and documented total-return schema verified; snapshot/calendar and deployment re-audit still apply. |
+| Historical individual stock prices | Automatic stock-return targets | CONDITIONAL | Must pass provider licence, calendar, corporate-action, missing-data and sealed-test leakage controls. |
 
 ## Minimum automated-data contract for M6
 

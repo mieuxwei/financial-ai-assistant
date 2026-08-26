@@ -28,6 +28,7 @@ financial-ai-features = "jobs.features:main"
 financial-ai-taiwan-dataset-audit = "research.evaluation.taiwan_dataset_audit:main"
 financial-ai-taiwan-calibration-batch = "jobs.annotation_batch:main"
 financial-ai-taiwan-annotation-agreement = "jobs.annotation_agreement:main"
+financial-ai-source-gate = "research.evaluation.source_manifest:main"
 
 [project.optional-dependencies]
 dev = [
