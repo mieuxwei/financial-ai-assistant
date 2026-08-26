@@ -1,0 +1,22 @@
+{
+  "protocol_version": "market-reaction-v1",
+  "market_timezone": "Asia/Taipei",
+  "information_cutoff": "13:30:00",
+  "horizons": {
+    "next_session": 1,
+    "1d": 1,
+    "3d": 3
+  },
+  "neutral_thresholds": {
+    "next_session": "0.0100000000",
+    "1d": "0.0100000000",
+    "3d": "0.0200000000"
+  },
+  "threshold_version": "fixed-exploratory-v1",
+  "benchmark_id": "TAIEX_TOTAL_RETURN",
+  "benchmark_source": "FinMind:TaiwanStockTotalReturnIndex:TAIEX",
+  "stock_source": "yahoo",
+  "train_end": "2024-12-31",
+  "validation_end": "2025-12-31",
+  "max_abs_raw_return": "0.5000000000"
+}

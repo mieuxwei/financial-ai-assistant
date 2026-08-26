@@ -1,6 +1,18 @@
 # Experiment Protocol
 
-Experiments will compare a price/volume/technical baseline with otherwise matched models that add news count, English sentiment, Taiwan event/impact and historical market-reaction signals. These concepts remain separate, and all comparisons require time-aware splits and leakage controls.
+## Active Track A contract
+
+The mandatory experiment predicts next-session `NORMAL` versus `HIGH_RISK` abnormal-volatility /
+large-move risk from price, volume, volatility, a compact technical set and market context. The
+continuous outcome and risk threshold are fit under a versioned train-only protocol. Model,
+preprocessing, calibration and decision-threshold selection use chronological validation only;
+the final test remains sealed until the candidate manifest is frozen. Required reporting includes
+HIGH_RISK recall and false negatives, Balanced Accuracy, F1, MCC, PR-AUC, ROC-AUC when valid,
+Brier/calibration and confusion matrices.
+
+The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
+market-only and market+NLP models is now optional M10 work and is not part of the main definition
+of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.
 
 ## M5 sentiment reproducibility contract
 
@@ -56,6 +68,9 @@ The explicit rejection evidence is retained: lexicon macro-F1 0.320, yiyang 0.35
 - Future return is allowed only as an offline target/label. It is forbidden as an input available at the event time.
 - Any reaction-derived input at prediction time must use only events whose reaction windows finished before that prediction cutoff.
 - Target thresholds, beta estimates and normalisation are fit on train only and then frozen.
+- The v1 engine is implemented, but the first bounded snapshot contains only sealed-test events.
+  Train/validation backfill is mandatory before target selection or downstream training; test
+  reaction distributions stay withheld.
 
 ## M11 downstream comparison contract
 

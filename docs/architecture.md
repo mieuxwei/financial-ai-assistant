@@ -1,5 +1,14 @@
 # Architecture
 
+## Active research direction
+
+The core research path is now next-session abnormal-volatility / large-move risk prediction from
+leakage-safe price, volume, volatility, technical and market-context features. Financial NLP is a
+separate intelligence layer and optional ablation, not a dependency for core completion. The
+existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boundaries below are
+preserved and reusable; their historical milestone numbers are mapped in
+`docs/research_direction_migration.md`.
+
 ## First iteration boundary
 
 The M0–M2 implementation establishes FastAPI, SQLAlchemy/Alembic, user-owned portfolios, and atomic portfolio synchronization. It deliberately does not implement market data, news, sentiment, models, or backtesting.
@@ -129,6 +138,11 @@ English sentiment, Taiwan text signals and historical market reaction are separa
 Future returns may train or evaluate a reaction model, but never enter a feature available at the
 event timestamp. Predictive improvement does not establish linguistic or sentiment correctness.
 GAS remains outside these pipelines and only routes LINE interactions to Python during migration.
+
+The M8 implementation stores benchmark snapshots and split-separated reaction targets only under
+ignored local paths. Its first bounded input is entirely in the sealed-test interval, so the engine
+is operational but the historical dataset is not training-ready. A separately audited official
+event backfill must precede threshold fitting and downstream model work.
 
 Active Taiwan source audits prioritize `tw-finance-159M`, MOPS/TWSE, FinMind, optional FSC
 regulatory text and historical stock/benchmark prices. Eland is excluded from the active modeling

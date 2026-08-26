@@ -1,0 +1,12 @@
+{
+  "protocol_version": "taiwan-weak-aggregation-v1",
+  "minimum_sources": 2,
+  "minimum_margin": 0.2,
+  "labeling_function_weights": {
+    "deterministic_rules": 1.0,
+    "official_category_map": 1.0,
+    "local_frozen_model": 0.75,
+    "translation_finbert": 0.5,
+    "llm_structured": 0.5
+  }
+}

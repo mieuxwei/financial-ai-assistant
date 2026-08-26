@@ -11,7 +11,7 @@ Excluded: committed raw text, training, weak-label generation and backtesting
 | TWSE OpenAPI `t187ap04_L` for official disclosure ingestion and structured metadata | `ACCEPT` | Official endpoint is live without credentials and exposes announcement date/time, company code, title, disclosure clause, fact date and explanation. |
 | TWSE disclosure text for domain-adaptive training | `CONDITIONAL` | Training/redistribution must be limited to records whose open-data status, attribution and retention scope are documented; website content outside government-open-data authorization is not automatically reusable. |
 | `lianghsun/tw-finance-159M` for domain adaptation | `HOLD` | Dataset card is public, files are gated, licence is CC BY-NC-SA 4.0, underlying publisher rights remain unresolved, and `updated_at` does not establish publication-time lineage. |
-| FinMind `TaiwanStockNews` for discovery and metadata | `CONDITIONAL` | Anonymous single-stock/day request succeeded and returned timestamp, ticker, source, title and link; source quality is mixed, duplicates exist, timezone semantics and underlying publisher rights remain unresolved. |
+| FinMind `TaiwanStockNews` for discovery and metadata | `CONDITIONAL` | A later three-day historical audit returned 34 rows but failed schema consistency: one documented-example date was empty and live non-empty rows omitted `description`. Timestamp strings remained timezone-naive and duplicate links occurred. |
 | FinMind `TaiwanStockNews` as direct reaction-label event source | `HOLD` | Do not use until timestamp timezone/meaning, duplicate grouping and publication-versus-ingestion semantics are verified. |
 | FinMind `TaiwanStockTotalReturnIndex` / `TAIEX` as research benchmark | `ACCEPT` | Anonymous bounded request succeeded; official documentation describes a free total-return series with `price`, `stock_id` and `date`, available from 2003. Acceptance is for this non-commercial research purpose only. |
 | Official FSC law archives for optional domain adaptation | Purpose-specific `ACCEPT` | Five checksummed official archives and 6,047 XML records passed automated structure audit. Only filtered, deduplicated, non-commercial unlabelled adaptation feasibility is accepted; labels, redistribution and deployment are not. |
@@ -94,6 +94,12 @@ The news sample showed mixed publisher and forum sources plus repeated/syndicate
 documentation and schema do not specify a timezone field, so the timestamp must not yet drive the
 13:30 cutoff. Underlying publisher terms are not inherited automatically from FinMind's software
 or project licence.
+
+A subsequent `finmind-news-metadata-audit-v1` run sampled ticker `2330` on 2020-04-01, 2024-04-01
+and 2025-04-01 without retaining raw content. The dates returned 0, 9 and 25 rows respectively. The
+34 observed timestamp strings contained no timezone offsets, live non-empty schemas omitted the
+documented `description` field, and two exact duplicate links were detected. The schema gate failed;
+this strengthens rather than resolves the reaction-event HOLD decision.
 
 Decisions:
 

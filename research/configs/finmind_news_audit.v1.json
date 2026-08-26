@@ -1,0 +1,23 @@
+{
+  "audit_version": "finmind-news-metadata-audit-v1",
+  "endpoint": "https://api.finmindtrade.com/api/v4/data",
+  "dataset_id": "TaiwanStockNews",
+  "ticker": "2330",
+  "sample_dates": [
+    "2020-04-01",
+    "2024-04-01",
+    "2025-04-01"
+  ],
+  "required_fields": [
+    "date",
+    "stock_id",
+    "description",
+    "link",
+    "source",
+    "title"
+  ],
+  "max_response_bytes": 2000000,
+  "timestamp_semantics_documented": false,
+  "timezone_documented": false,
+  "retention_policy": "aggregate_hashes_only"
+}

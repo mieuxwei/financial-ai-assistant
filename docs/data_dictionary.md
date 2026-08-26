@@ -204,3 +204,20 @@ milestone.
 
 Future reaction values are target-side data. A downstream row may use only reaction statistics for
 older events whose complete reaction window ended before that row's information cutoff.
+
+The M8 v1 physical output is currently immutable split-separated JSONL in ignored `.tools/`
+storage, not a database migration. Its machine report records snapshot hashes, row/abstention counts
+and readiness status while withholding sealed-test class metrics. The first bounded snapshot has no
+train or validation rows and is not eligible for downstream fitting.
+
+### M9 weak-vote artifact contract
+
+- `labeling_function_id`, `labeling_function_revision`, `source_type`: independent automated source
+  identity; one vote per function and input.
+- `impact_label`, `normalized_event_type`, `confidence`, `abstention_reason`: silver signal only.
+- `input_sha256`, `model_version`, `prompt_sha256`: exact provenance required as applicable.
+- Aggregate output retains `official_source_category` separately and adds weak label/confidence,
+  inferred event type, coverage, agreement, vote entropy, function revisions, model/prompt hashes
+  and `vote_snapshot_sha256`.
+- `manual_labels_used`, `manual_review_used`, `sentiment_ground_truth`: always false in this
+  protocol. Insufficient or conflicting evidence is never silently filled as neutral.

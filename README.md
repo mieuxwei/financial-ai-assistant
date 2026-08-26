@@ -1,21 +1,47 @@
 # Financial AI Assistant
 
-結合金融新聞情緒、股票價格特徵、機器學習、回測與 LINE 持股助手的研究型 Financial AI 專題。
+**Stock Volatility Risk Prediction with Financial NLP Intelligence**
+
+中文工作名稱：**股票異常波動風險預警 × 金融 NLP 情報系統**。
+
+這是一套結合市場資料工程、下一交易日異常波動風險預測、金融 NLP 情報、事件研究與 LINE
+互動介面的研究型 Financial Intelligence Assistant。
 
 ## 核心研究問題
 
-加入全自動金融文字訊號後，是否能改善只使用價格、成交量與技術指標的短期股票方向預測？
+在嚴格避免資料洩漏的時間序列評估下，歷史價格、成交量、波動度、少量技術指標與市場情境
+特徵，能否預測下一交易日的異常波動／大幅移動風險？
 
-## 產品定位
+先前「自動中文金融文字訊號能否改善短期方向預測」的問題保留為次要探索研究，不再阻塞主專案完成。
+
+## 三軌定位
+
+- **Track A — Core Research**：`NORMAL`／`HIGH_RISK` 下一交易日波動風險預測。
+- **Track B — NLP Intelligence**：英文 FinBERT 與探索性台灣公告／金融 NLP。
+- **Track C — Product**：整合風險、市場、新聞、公告及摘要的 Financial Intelligence Assistant。
+
+本系統不是自動交易系統、AI 選股神諭、買賣建議或保證報酬工具。
+
+## 產品版本
 
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M7 bounded domain-adaptation pilot complete / M8 next / zero-manual-label protocol**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.5 保留中文候選拒絕證據；M6 完成來源治理與 FSC archive 稽核；M7 建立 6,021 筆 family-isolated corpus，並完成 MacBERT／BERT-base-Chinese 的 feasibility 與各 200-step bounded pilot。依預先規則，BERT-base-Chinese 暫定 frozen representation candidate；這不代表中文情緒正確性。台灣路線維持零人工標注／零人工覆核，最終價值仍由時間序列外樣本增益、coverage、abstention 與穩定性判斷。
+目前狀態：**M0 core-direction migration / next: M1 market dataset / no new model training**。
+
+既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
+M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
+supervision 與來源治理已重新定位為 Track B 探索研究；其結果與 sealed-test 邊界均未刪除或改寫。
+
+新里程碑與完成定義見 [PROJECT_PLAN.md](PROJECT_PLAN.md)，舊新里程碑對照見
+[research direction migration](docs/research_direction_migration.md)。
 
 ## 預計系統架構
 
-目前 FastAPI 提供健康檢查與具 ownership 邊界的持股 API，SQLite 作為本機預設資料庫，PostgreSQL 為部署目標。後續資料管線將分別擷取市場與新聞資料，產生情緒、價格、成交量及技術指標特徵；研究模組負責訓練、時間序列評估與回測；LINE adapter 維持在服務邊界，避免私人資料進入公開研究資料集。
+目前 FastAPI 提供健康檢查與具 ownership 邊界的持股 API，SQLite 作為本機預設資料庫，
+PostgreSQL 為部署目標。Python 負責市場／新聞 ingestion、風險特徵、模型、NLP、時間序列評估
+與排程；LINE/GAS adapter 維持在服務邊界。Track A 可在中文 sentiment 維持 unsupported 時獨立
+完成；Track B 以情報、metadata、embedding、retrieval 與可選消融提供產品研究價值。
 
 ## 本機安裝
 
@@ -132,9 +158,12 @@ financial-ai-chinese-sentiment-benchmark \
   --output artifacts/chinese-sentiment-benchmark.json
 ```
 
-## M6 Feature 與 Label Dataset
+## Legacy feature foundation（原 M6）
 
-M6 使用交易日 `t` 收盤時已知的資料預測下一個實際交易日方向。台股 information cutoff 預設為 Asia/Taipei 13:30；收盤後或非交易日發布的新聞歸到下一個交易日。至少需要 27 筆連續市場觀測才能產生包含 26 日 MACD 暖機與下一日 label 的資料列。
+原 M6 使用交易日 `t` 收盤時已知的資料建立下一交易日方向資料集。它現在是可重用的 legacy
+engineering foundation：保留 13:30 cutoff、rolling features、snapshot hash 與 future-price mutation
+test；`label_up` 不再是 Track A 的核心 target 或完成門檻。新風險 label 將依新 M2 protocol 另行
+版本化。
 
 ```bash
 alembic upgrade head
@@ -145,7 +174,7 @@ financial-ai-features \
 
 輸出保存完整設定、`features-v1`、market/sentiment snapshot hash 與 dataset SHA-256。相同輸入重跑會復用既有 dataset run。中文新聞沒有通過歷史 M5.5 採用門檻，因此對應 sentiment probability/score 保持 `null`；新聞數量則為 `0`，不會偽裝成 neutral sentiment。詳細定義見 `docs/feature_definitions.md`。
 
-## M6 台灣金融資料集／語料稽核
+## Exploratory Track B：台灣金融資料集／語料稽核（原 M6）
 
 事件 taxonomy、impact／ambiguous 規則與先前 AI-to-AI 診斷保留於 `docs/taiwan_financial_annotation_protocol.md`。正式研究路線不使用人工標注或人工覆核；自動訊號、consensus、abstention 與 leakage-safe 評估見 `docs/automated_chinese_text_signal_protocol.md`。候選外部資料只可放在 Git 忽略的 `.tools/` 或 `data/raw/`，不得提交原文。
 
@@ -203,6 +232,32 @@ python -m research.training.domain_adaptation_feasibility \
 Corpus 與模型只保存在 `.tools/`；統計報告在被忽略的 `artifacts/`。完整限制與結果見 `research/evaluation/m7_domain_adaptation_feasibility.md`。
 
 批准後的 200-step bounded pilot 已完成，結果見 `research/evaluation/m7_domain_adaptation_pilot.md`。兩候選皆通過至少 1% validation improvement；在相同 vocabulary 下，預先指定的 final MLM loss 規則選出 BERT-base-Chinese 作為下一階段 frozen representation candidate。兩份權重只保存在忽略的 `.tools/models/m7-domain-adaptation-pilot-v1/`。
+
+## Exploratory Track B：自動市場反應 target（原 M8）
+
+M8 以 TWSE 官方事件時間、Yahoo adjusted prices 與 FinMind TAIEX total-return benchmark 建立
+next-session／1d／3d raw、benchmark 及 abnormal return。未來價格只存在 target 端；產物、
+市場資料與報告都位於 Git 忽略路徑。
+
+```bash
+python -m jobs.reaction_labels prepare-market-config
+python -m jobs.m8_market_data \
+  --config .tools/configs/m8_market_universe.json \
+  --start 2026-08-16 --end 2026-08-31
+python -m jobs.benchmark_data --start 2026-08-16 --end 2026-08-31
+python -m jobs.reaction_labels build
+```
+
+首輪結果只驗證工程與 lineage，不能視為 sentiment、因果影響或可訓練資料集；test 的 return
+與 reaction-class 統計保持封存。詳細結果見
+`research/evaluation/m8_market_reaction_result.md`。
+
+## Exploratory Track B：weak-supervision 核心（原 M9）
+
+M9 已建立最小的版本化 vote 與 aggregation 核心，支援 weighted consensus、coverage、
+agreement、vote entropy、`AMBIGUOUS` 與明確 abstention。至少需要兩個獨立自動來源；官方
+category 不會被推論 event type 覆寫。現階段只用合成測試，尚未對真實事件執行，也未呼叫
+LLM、翻譯服務或外部模型。見 `research/evaluation/m9_weak_supervision_core.md`。
 
 從本機已匯入的官方 TWSE 公告建立 60 筆未標注 calibration batch：
 

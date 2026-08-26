@@ -1,5 +1,10 @@
 # M6 Feature Definitions
 
+Status: **preserved legacy direction-prediction foundation**. The cutoff alignment, market-feature
+formulas, snapshot hashing and leakage tests may be reused by new Track A. `forward_return_1d` and
+`label_up` do not define the new volatility-risk target. New M2 will introduce a separate versioned,
+train-only `NORMAL` / `HIGH_RISK` label protocol without overwriting this document or `features-v1`.
+
 ## Row and time contract
 
 Each row uses an observed trading session `t` and predicts the next observed session. The initial Taiwan-market contract uses Asia/Taipei 13:30 as the information cutoff. OHLCV for `t` is assumed available only after this cutoff, so this dataset is for post-close research and next-session prediction, not intraday trading.

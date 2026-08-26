@@ -2,13 +2,18 @@
 
 Status: approved research direction
 
+Implementation note: the M9 `taiwan-weak-aggregation-v1` minimal core is implemented with synthetic
+tests. Real-source adapters and downstream adoption experiments remain pending.
+
 ## Scope
 
 The project uses no human annotation or human label review. Chinese financial text outputs are
 automated research signals, not human-validated sentiment or expert labels.
 
-The primary research question is whether automated text-derived features improve strictly
-out-of-sample short-horizon direction prediction beyond price, volume and technical features.
+Within Track B / optional M10, the exploratory question is whether automated text-derived features
+add strictly out-of-sample value beyond the same price, volume, volatility, technical and
+market-context features. This is no longer the primary project question or a completion
+requirement. Track A next-session volatility-risk prediction must complete independently.
 
 Active source audits focus on `tw-finance-159M`, MOPS/TWSE, FinMind, optional Taiwan FSC/regulatory
 text and historical stock/benchmark prices, each only for its approved purpose. Eland is a
@@ -44,6 +49,12 @@ must never be exposed as expert truth.
   is retained as a feature rather than manually adjudicated.
 - Never use future prices, later disclosures or analyst reactions in event-time text generation.
 - Model-to-model agreement measures stability, not semantic correctness.
+
+The v1 aggregation core requires at least two uniquely identified labeling functions, rejects mixed
+input hashes, records source weights/revisions, and converts insufficient coverage to abstention.
+Impact conflicts become `AMBIGUOUS`; event-type conflicts abstain. Deterministic no-match output is
+missing, never a fabricated neutral. Official categories remain pass-through metadata rather than
+being overwritten by inferred event types.
 
 ## Targets and leakage boundary
 

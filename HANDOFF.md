@@ -1,8 +1,200 @@
 # Financial AI Assistant Handoff
 
-Last revised: 2026-08-26
+Last revised: 2026-08-27
 
-## Current boundary
+## Core research direction migration — authoritative handoff
+
+This repository has deliberately reduced and redirected its core research scope. This is not a
+restart and does not invalidate any prior result.
+
+New project title:
+
+> Financial AI Assistant: Stock Volatility Risk Prediction with Financial NLP Intelligence
+
+Chinese working title:
+
+> Financial AI Assistant：股票異常波動風險預警 × 金融 NLP 情報系統
+
+The primary research question is now:
+
+> Can historical price, volume, volatility, technical and market-context features predict
+> next-session abnormal volatility / large-move risk under strict leakage-safe temporal
+> evaluation?
+
+The previous blocking question—whether automatically generated Chinese financial-text signals
+improve short-horizon direction prediction—is now secondary, exploratory Track B work. It is not a
+completion requirement.
+
+Three tracks govern all new work:
+
+1. **Track A — Core Research:** leakage-safe next-session `NORMAL` versus `HIGH_RISK` volatility /
+   large-move prediction.
+2. **Track B — NLP Intelligence:** pinned English FinBERT plus preserved exploratory Taiwan
+   announcement/NLP research.
+3. **Track C — Product:** a Financial Intelligence Assistant combining risk, market data, news,
+   announcements and traceable summaries through Python APIs and a slim LINE/GAS adapter.
+
+Track A must complete independently of validated Chinese sentiment. The risk target threshold,
+preprocessing, model selection, probability threshold and calibration are train-fit only. Use
+chronological train/validation/sealed-test splits and walk-forward evaluation; never random split.
+Report HIGH_RISK recall and false negatives, Balanced Accuracy, F1, MCC, PR-AUC, ROC-AUC when
+valid, Brier/calibration and confusion matrices. The primary validation compares predicted
+HIGH_RISK and NORMAL sessions on subsequent realized absolute return, high-low range and a fixed
+realized-volatility proxy. It does not require a buy/sell strategy.
+
+The milestone sequence is now M0–M15: existing-work freeze/migration, market dataset, risk-label
+protocol, feature pipeline, baselines, tree models, temporal validation, sealed test, robustness,
+NLP intelligence, optional NLP ablation, risk validation, API, LINE/GAS slimming, public demo and
+portfolio finalization. `docs/research_direction_migration.md` maps the legacy milestones without
+deleting their evidence.
+
+Current task boundary: documentation migration only. Do not train a volatility or NLP model, open
+any sealed test, modify working GAS, deploy, commit or push. The next minimum executable unit after
+user approval is **new M1 — Market Dataset**: freeze an auditable market universe/period/split
+coverage and extend immutable OHLCV + TAIEX snapshots and quality tests without model training.
+
+## Preserved one-week TEJ/NLP context — secondary Track B
+
+The user has a hard delivery deadline of **one week**. Do not wait months for prospective text
+data. TEJ and historical announcement work below is preserved as Track B context and optional
+acceleration; it must no longer block Track A.
+
+The former blocking question was:
+
+> Under the available historical sources, study period and timestamp limitations, do automatically
+> generated Chinese financial-text signals add out-of-sample predictive value beyond price, volume
+> and technical features alone?
+
+It is now an optional Track B/M10 question rather than the definition of done. The zero-manual-label constraint remains absolute: no manual annotation, manual label review,
+human adjudication or manually constructed sentiment truth. Eland remains a historical rejected
+candidate only and must not re-enter any active experiment.
+
+### TEJ findings verified on 2026-08-27
+
+A newly rotated TEJ trial API key is configured only in the ignored local `.env`. Never print,
+copy, commit, log or ask the user to paste it into chat. The prior exposed credential was treated as
+compromised and replaced. `.env` is ignored and untracked.
+
+The TEJ API audit established:
+
+- Authentication succeeds.
+- Trial validity: 2026-08-27 through 2026-11-27.
+- Trial quotas: 500 requests/day and 50,000 rows/day.
+- The key exposes 28 `TRAIL/*` trial tables.
+- TEJ table search finds `TWN/AP11 — MOPS-重大訊息（含主旨／內容）`.
+- Search metadata identifies `發言時間`, `重大訊息主旨 (newstxt_1)` and
+  `重大訊息內容 (newstxt_2)`.
+- Direct `TWN/AP11` access fails with HTTP 400, TEJ error `PDB003`: no permission for the table.
+
+Therefore TEJ API itself works, but the current subscription cannot download AP11. Do not spend
+more calls trying alternate query syntax or attempt to bypass the entitlement. The user should ask
+TEJ or the university library for academic access to the exact table code `TWN/AP11`; treat access
+as optional acceleration rather than a prerequisite for the one-week MVP.
+
+Official references:
+
+- TEJ REST API: <https://api.tej.com.tw/document_rest.html>
+- TEJ EVENT system: <https://www.tejwin.com/news/event-%E4%BA%8B%E4%BB%B6%E7%A0%94%E7%A9%B6%E7%B3%BB%E7%B5%B1/>
+- TEJ EVENT manual: <https://www.tej.com.tw/TEJPLUS/EventStudy-UsersManual.pdf>
+
+### Local TEJ export already audited
+
+The user exported the TEJ `特殊事件日期資料庫` to a local Excel workbook outside the repository.
+Do not copy or commit the raw workbook until TEJ redistribution and project-use rights are
+confirmed. Read-only inspection found:
+
+- 412,150 records and 11 columns.
+- 104 event categories.
+- Fields include security code, event date, announcement date, shareholder-meeting date, capital
+  change information and notes.
+- Announcement dates are present for 377,078 records and missing for 35,072 records.
+- The sheet contains date-only `YYYYMMDD` values, not `HH:MM:SS` publication timestamps.
+- It contains structured event dates rather than the AP11 material-announcement title/full-text
+  corpus.
+
+This export is useful only as a licensed, private, structured historical-event supplement. It is
+not a replacement for historical announcement text, must not become sentiment ground truth and
+must not be publicly redistributed. If used for price alignment, apply the predeclared conservative
+next-session rule for date-only records and report the limitation.
+
+### Free official forward-ingestion route
+
+Do not scrape or reverse-engineer MOPS historical pages. Use the documented, keyless official
+OpenAPI endpoints for forward collection:
+
+- TWSE listed-company daily material information:
+  `https://openapi.twse.com.tw/v1/opendata/t187ap04_L`
+- TPEx OTC daily material information: endpoint `mopsfin_t187ap04_O` documented at
+  <https://www.tpex.org.tw/openapi/>.
+
+These feeds expose announcement date, announcement time, company code/name, subject, applicable
+paragraph, event date and description. They can support precise prospective collection without a
+TEJ subscription. They are daily feeds, not a verified historical-backfill interface. Preserve
+daily immutable snapshots, retrieval timestamps, hashes, source identifiers and licensing
+metadata. Use them as a forward validation set and pipeline demonstration within the one-week
+deliverable; do not imply that one week of observations provides robust market-regime evidence.
+
+### How TEJ EVENT should be used
+
+TEJ EVENT is a separate Windows event-study application, not the `特殊事件日期資料庫` and not an
+AP11 API entitlement. It can:
+
+- select built-in news or structured events;
+- import user event dates from CSV/TXT;
+- retrieve security and benchmark returns;
+- estimate mean-adjusted, market-adjusted, OLS, GARCH or Scholes-Williams models;
+- calculate AR/CAR and statistical tests; and
+- export detailed result tables.
+
+For the one-week deadline, test the university's TEJ EVENT entitlement immediately. In its
+`事件日選擇` screen, inspect `新聞檢索` and `特定事件日檢索`. Determine whether historical Taiwan
+company/industry news can be selected and whether export contains company code, event date,
+publication time, title, text/summary and category. Keep the raw export private and license-gated.
+
+- If time and text are exportable under the academic licence, audit the export and use it as the
+  historical text candidate.
+- If only event dates are exportable, use TEJ EVENT to produce AR/CAR reference results and validate
+  the Python market-reaction engine; it cannot supply the NLP input.
+- TEJ EVENT does not replace Chinese text features, baseline-versus-augmented ML comparison,
+  leakage-safe temporal evaluation or the reproducible Python pipeline.
+
+### Historical Track B fallback sequence — not the core critical path
+
+1. **Day 1 — freeze and audit sources.** Confirm the TEJ EVENT export capability. Freeze a
+   historical text candidate already legally available; otherwise retain the existing historical
+   news source as explicitly limited exploratory evidence. Do not hold the schedule open for AP11.
+2. **Day 2 — normalise and align.** Deduplicate text, resolve issuers, preserve source lineage and
+   map timestamps to trading sessions. Unknown intraday publication times use conservative
+   next-session alignment.
+3. **Day 3 — automated Chinese signals.** Run the versioned weak-supervision/encoder signal path
+   with abstention and ambiguity preserved. Do not fabricate neutral values for unsupported text.
+4. **Day 4 — paired models.** Train an identical price/volume/technical baseline and an augmented
+   model adding only pre-event text signals. Keep features, splits and tuning budget otherwise
+   identical.
+5. **Day 5 — leakage-safe evaluation.** Use temporal or walk-forward splits, embargo reaction
+   windows, trading costs and benchmark-adjusted targets. TEJ EVENT AR/CAR may be a private
+   cross-check if available.
+6. **Day 6 — robustness and reporting.** Report Balanced Accuracy, macro-F1 where applicable, MCC,
+   ROC-AUC/PR-AUC where valid, calibration, return, Sharpe and maximum drawdown. Include source,
+   timestamp, licensing and sample-size limitations.
+7. **Day 7 — package the MVP.** Run tests/lint/secret scan, freeze configurations and evidence,
+   update README/architecture/experiment docs and prepare an anonymised public demonstration. No
+   raw TEJ data, personal data, secret, model overclaim, automatic commit or push.
+
+### Historical NLP-pilot boundary — superseded by Track A definition of done
+
+If the optional NLP experiment is run, it is complete when the repository can reproducibly compare the same out-of-sample periods
+for:
+
+1. price/volume/technical features only; and
+2. the same features plus timestamp-safe automated Chinese text signals.
+
+This optional conclusion must distinguish `no demonstrated incremental value`, `inconclusive` and
+`positive exploratory evidence`. It must not claim human-validated Chinese sentiment truth,
+causality, production trading readiness or generalisation across unseen market regimes. A paid TEJ
+AP11 subscription is not part of either Track A or M10 completion.
+
+## Preserved legacy NLP boundary
 
 M0–M7 bounded pilot are complete and their evidence is retained under a hard zero-human-label constraint: no
 manual annotation, label review or human adjudication. The taxonomy, automated-signal protocol,
@@ -13,7 +205,12 @@ evidence only. The filtered official FSC corpus produced a 6,021-record family-i
 Pinned MacBERT-base and BERT-base-Chinese passed feasibility and an approved 200-step bounded pilot
 without reading sealed test. Both weights are preserved only under ignored storage. The
 predeclared identical-vocabulary/final-MLM-loss rule recommends BERT-base-Chinese as the frozen
-representation candidate, not as sentiment truth. Check Git status because changes are uncommitted.
+representation candidate, not as sentiment truth. The M8 `market-reaction-v1` engine and bounded
+snapshot are also complete: 108 deduplicated TWSE events produced 324 horizon rows from 599 stock
+prices and eight benchmark sessions. Every event is in the sealed test period, so train and
+validation are empty; test return/class distributions remain unread and withheld. The current
+legacy Track B status is implementation complete, historical backfill required—not training-ready.
+This no longer blocks new Track A. Check Git status because changes are uncommitted.
 
 There is no human gold-set objective. Eland is a **historical candidate — HOLD / excluded from the
 active modeling pipeline** because official raw downloads returned HTTP 401, a later live check
@@ -48,7 +245,7 @@ Primary evidence:
 - `research/evaluation/finbert_manual_error_analysis.md`
 - `docs/sentiment_language_strategy.md`
 
-## Revised research contracts
+## Preserved legacy NLP research contracts
 
 Keep these signal groups distinct:
 
@@ -56,7 +253,7 @@ Keep these signal groups distinct:
 2. Taiwan financial event type and entity-specific impact.
 3. Historical market reaction derived from future/abnormal returns as offline targets.
 4. Price, volume and technical features.
-5. Downstream short-horizon direction prediction.
+5. Optional downstream short-horizon direction or new M10 risk-prediction ablation.
 
 Taiwan labels use a versioned event taxonomy and `POSITIVE`, `NEUTRAL`, `NEGATIVE`, `AMBIGUOUS` impact. Linguistic tone, financial impact and observed price reaction are not interchangeable. MacBERT is a candidate encoder only.
 
@@ -114,10 +311,27 @@ only for filtered, deduplicated, non-commercial unlabelled domain-adaptation fea
 sentiment truth, redistribution approval or a completed training run. See
 `research/evaluation/fsc_official_archive_audit.md`.
 
-M6 source/corpus audit and the approved M7 bounded pilot are complete. The next minimum executable
-unit is M8 automatic market-reaction labeling. Keep the selected representation frozen, do not read
-the FSC sealed test, and do not release weights or claim sentiment quality. Eland is not part of
-this work queue.
+M6 source/corpus audit, the approved M7 bounded pilot and the M8 calculation/lineage engine are
+complete. Under the legacy plan, the next unit would have been an audit and backfill of a historical
+official event source with reliable publication timestamps; this is now optional Track B work, not
+the new project critical path. The first metadata audit found that official
+`t187ap04_L` is documented as a daily feed only; the MOPS historical browser query has no verified
+bulk API contract and may return a security block. Preserve it as HOLD rather than reverse
+engineering or bypassing controls. Forward daily collection remains accepted; historical backfill
+requires an official/licensed export that passes a new manifest audit. A bounded FinMind historical
+news audit then returned 34 rows across three dates but failed schema consistency, produced only
+timezone-naive timestamps and contained duplicate links; it remains discovery metadata only and
+HOLD for reaction events. Do not use the all-test M8
+snapshot for threshold selection or downstream training. Keep the selected representation frozen,
+do not read the FSC or market-reaction sealed tests, and do not release weights or claim sentiment
+quality. Eland is not part of this work queue.
+
+The independent M9 minimal aggregation core is now implemented under
+`research/weak_supervision/`. It requires at least two versioned sources, preserves official and
+inferred categories separately, records model/prompt/input/vote hashes, and maps conflict to
+`AMBIGUOUS` or abstention without human adjudication. Only synthetic tests have run; real-source
+adapters, external/local-model execution and adoption experiments remain pending. Do not imply M9
+signal quality from the passing engineering tests.
 
 Do not create fake labels. Keep external/full text and large model/data caches in ignored locations.
 Do not automatically commit or push.

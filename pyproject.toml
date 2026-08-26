@@ -33,6 +33,10 @@ financial-ai-fsc-archive-audit = "research.evaluation.fsc_archive_audit:main"
 financial-ai-fsc-corpus = "research.training.fsc_corpus:main"
 financial-ai-domain-feasibility = "research.training.domain_adaptation_feasibility:main"
 financial-ai-domain-pilot = "research.training.domain_adaptation_pilot:main"
+financial-ai-benchmark-data = "jobs.benchmark_data:main"
+financial-ai-reaction-labels = "jobs.reaction_labels:main"
+financial-ai-m8-market-data = "jobs.m8_market_data:main"
+financial-ai-finmind-news-audit = "research.evaluation.finmind_news_audit:main"
 
 [project.optional-dependencies]
 dev = [

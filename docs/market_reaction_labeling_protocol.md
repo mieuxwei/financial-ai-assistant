@@ -1,6 +1,6 @@
 # Automatic Market-Reaction Labeling Protocol v1
 
-Status: design approved; implementation pending M8
+Status: v1 engine implemented; historical train/validation backfill required
 
 ## 1. Meaning and claims boundary
 
@@ -113,3 +113,17 @@ Each `market_reaction_labels` row records:
 - continuous threshold inputs, reaction class and abstention/missing reason;
 - benchmark ID, market snapshot hash, split assignment and protocol version.
 
+## 11. M8 implementation evidence and current boundary
+
+The v1 engine, FinMind TAIEX benchmark adapter, per-ticker Yahoo ingestion job and immutable
+split-separated JSONL builder are implemented. The first bounded run used 108 deduplicated official
+TWSE events, 599 stock-price rows and eight benchmark sessions. It emitted 324 horizon rows. All
+events fall in the predeclared sealed-test period, so train and validation contain zero rows.
+
+The builder therefore reports `implementation_complete_historical_backfill_required`, withholds
+test return/class statistics, and forbids downstream training or threshold selection from this
+snapshot. This run proves the calculation and lineage path, not predictive value or dataset
+readiness. A separately audited historical official-event source must populate non-empty train and
+validation periods before M11 can consume reaction targets. The ignored machine-readable report is
+`artifacts/m8-market-reaction-build-report.json`; generated prices, benchmark rows and targets stay
+under ignored local storage.
