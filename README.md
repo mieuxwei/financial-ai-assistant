@@ -11,7 +11,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M6 Taiwan dataset/corpus audit in progress / zero-manual-label protocol approved**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.5 保留五個中文候選未通過舊標籤 gate 的結果；既有市場／英文 `features-v1` 已建立防止前視偏誤的價格、成交量、技術、已驗證英文情緒特徵與 `t+1` label。台灣路線採零人工標注／零人工覆核：中文輸出只作 automated silver signals，主要驗證改由時間序列外樣本增益、coverage、abstention 與穩定性決定。協定見 `docs/automated_chinese_text_signal_protocol.md`。
+目前狀態：**M7 bounded domain-adaptation pilot complete / M8 next / zero-manual-label protocol**。M0～M2 已建立安全基礎、FastAPI、SQLAlchemy/Alembic 與多使用者持股服務；M3～M5 完成歷史日線、TWSE 新聞／公告與英文 FinBERT；M5.5 保留中文候選拒絕證據；M6 完成來源治理與 FSC archive 稽核；M7 建立 6,021 筆 family-isolated corpus，並完成 MacBERT／BERT-base-Chinese 的 feasibility 與各 200-step bounded pilot。依預先規則，BERT-base-Chinese 暫定 frozen representation candidate；這不代表中文情緒正確性。台灣路線維持零人工標注／零人工覆核，最終價值仍由時間序列外樣本增益、coverage、abstention 與穩定性判斷。
 
 ## 預計系統架構
 
@@ -167,6 +167,42 @@ financial-ai-source-gate \
 ```
 
 報告只保存 endpoint、dataset ID、schema、terms URL、時間契約、筆數與 SHA-256，不保存公告原文或價格列；`artifacts/` 已由 Git 忽略。
+
+FSC 官方法規 Open Data 先以 HEAD-only coverage gate 驗證五個 ZIP：
+
+```bash
+financial-ai-source-gate \
+  --manifest research/configs/fsc_official_sources.v1.json \
+  --output artifacts/fsc-official-source-gate-report.json
+```
+
+五個 endpoint 均通過，合計宣告大小 7,224,679 bytes。取得使用者批准後，官方 ZIP 已下載至 Git 忽略的 `.tools/datasets/fsc-official/`，並用固定 snapshot 執行不輸出原文的自動稽核：
+
+```bash
+financial-ai-fsc-archive-audit \
+  --snapshot research/configs/fsc_official_archive_snapshot.v1.json \
+  --archive-dir .tools/datasets/fsc-official \
+  --output artifacts/fsc-official-archive-audit.json
+```
+
+5/5 archive、6,047 筆 XML 紀錄通過結構 gate。決策只接受經自動排除空內容／無法解析發布日、內容 hash 去重與 document-family 隔離後的非商用無標籤 domain-adaptation feasibility；不把官方分類當 sentiment truth，也不批准原文提交、公開重散布或正式模型訓練。完整結果見 `research/evaluation/fsc_official_archive_audit.md`。
+
+M7 corpus 與小型 feasibility：
+
+```bash
+python -m research.training.fsc_corpus \
+  --config research/configs/fsc_domain_corpus.v1.json \
+  --output-dir .tools/corpora/fsc-domain-corpus-v1
+
+python -m research.training.domain_adaptation_feasibility \
+  --config research/configs/m7_domain_adaptation_feasibility.v1.json \
+  --corpus-dir .tools/corpora/fsc-domain-corpus-v1 \
+  --cache-dir .tools/huggingface
+```
+
+Corpus 與模型只保存在 `.tools/`；統計報告在被忽略的 `artifacts/`。完整限制與結果見 `research/evaluation/m7_domain_adaptation_feasibility.md`。
+
+批准後的 200-step bounded pilot 已完成，結果見 `research/evaluation/m7_domain_adaptation_pilot.md`。兩候選皆通過至少 1% validation improvement；在相同 vocabulary 下，預先指定的 final MLM loss 規則選出 BERT-base-Chinese 作為下一階段 frozen representation candidate。兩份權重只保存在忽略的 `.tools/models/m7-domain-adaptation-pilot-v1/`。
 
 從本機已匯入的官方 TWSE 公告建立 60 筆未標注 calibration batch：
 

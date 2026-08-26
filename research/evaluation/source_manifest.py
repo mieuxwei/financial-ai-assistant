@@ -25,15 +25,19 @@ class SourceDefinition(BaseModel):
     decision: Literal["ACCEPT"] = "ACCEPT"
     endpoint: HttpUrl
     terms_url: HttpUrl
-    response_container: Literal["root_list", "data"]
+    http_method: Literal["GET", "HEAD"] = "GET"
+    response_container: Literal["root_list", "data", "headers_only"]
     query: dict[str, str] = Field(default_factory=dict)
-    required_fields: list[str] = Field(min_length=1)
+    required_fields: list[str] = Field(default_factory=list)
+    required_headers: list[str] = Field(default_factory=list)
     date_field: str | None = None
+    expected_content_type: str | None = None
     timezone_contract: str = Field(min_length=1, max_length=200)
     retention_policy: Literal["metadata_hash_only"] = "metadata_hash_only"
     allowed_uses: list[str] = Field(min_length=1)
     forbidden_uses: list[str] = Field(min_length=1)
     max_response_bytes: int = Field(default=5_000_000, ge=1, le=10_000_000)
+    max_content_length_bytes: int | None = Field(default=None, ge=1, le=50_000_000)
 
     @field_validator("query")
     @classmethod
@@ -44,20 +48,32 @@ class SourceDefinition(BaseModel):
                 raise ValueError(f"sensitive query parameter is forbidden: {key}")
         return value
 
-    @field_validator("required_fields")
+    @field_validator("required_fields", "required_headers")
     @classmethod
-    def require_unique_fields(cls, value: list[str]) -> list[str]:
+    def require_unique_names(cls, value: list[str]) -> list[str]:
         normalized = [field.strip() for field in value]
         if any(not field for field in normalized):
-            raise ValueError("required_fields cannot contain empty values")
+            raise ValueError("required names cannot contain empty values")
         if len(set(normalized)) != len(normalized):
-            raise ValueError("required_fields must be unique")
+            raise ValueError("required names must be unique")
         return normalized
 
     @model_validator(mode="after")
     def validate_date_field(self) -> SourceDefinition:
         if self.date_field and self.date_field not in self.required_fields:
             raise ValueError("date_field must also be listed in required_fields")
+        if self.response_container == "headers_only":
+            if self.http_method != "HEAD":
+                raise ValueError("headers_only sources must use HEAD")
+            if not self.required_headers:
+                raise ValueError("headers_only sources require required_headers")
+            if self.required_fields or self.date_field:
+                raise ValueError("headers_only sources cannot define row fields")
+        else:
+            if self.http_method != "GET":
+                raise ValueError("JSON row sources must use GET")
+            if not self.required_fields:
+                raise ValueError("JSON row sources require required_fields")
         return self
 
 
@@ -103,12 +119,21 @@ def run_source_gates(
         if owns_client:
             active_client.close()
 
+    content_lengths = [
+        item["content_length_bytes"]
+        for item in observations
+        if isinstance(item.get("content_length_bytes"), int)
+    ]
     return {
         "report_version": REPORT_VERSION,
         "manifest_version": manifest.manifest_version,
         "generated_at": observed_at.astimezone(UTC).isoformat(),
         "overall_passed": all(item["passed"] for item in observations),
         "source_count": len(observations),
+        "headers_only_source_count": sum(
+            source.response_container == "headers_only" for source in manifest.sources
+        ),
+        "total_content_length_bytes": sum(content_lengths),
         "observations": observations,
         "raw_content_stored": False,
     }
@@ -125,6 +150,7 @@ def _observe_source(
         "decision": source.decision,
         "endpoint": str(source.endpoint),
         "terms_url": str(source.terms_url),
+        "http_method": source.http_method,
         "dataset_id": source.query.get("dataset"),
         "data_id": source.query.get("data_id"),
         "requested_start_date": source.query.get("start_date"),
@@ -135,8 +161,10 @@ def _observe_source(
         "raw_content_stored": False,
     }
     try:
-        response = client.get(str(source.endpoint), params=source.query)
+        response = client.request(source.http_method, str(source.endpoint), params=source.query)
         response.raise_for_status()
+        if source.response_container == "headers_only":
+            return _observe_headers(source, response, base)
         if len(response.content) > source.max_response_bytes:
             raise ValueError("response exceeded manifest max_response_bytes")
         payload = response.json()
@@ -181,6 +209,13 @@ def _observe_source(
             "observed_fields": [],
             "required_fields": sorted(source.required_fields),
             "missing_fields": sorted(source.required_fields),
+            "observed_headers": [],
+            "required_headers": sorted(header.casefold() for header in source.required_headers),
+            "missing_headers": sorted(header.casefold() for header in source.required_headers),
+            "content_length_bytes": None,
+            "content_type": None,
+            "last_modified": None,
+            "etag_sha256": None,
             "observed_min_date": None,
             "observed_max_date": None,
             "snapshot_sha256": None,
@@ -188,6 +223,75 @@ def _observe_source(
             "issues": ["source_observation_failed"],
             "error_code": type(error).__name__,
         }
+
+
+def _observe_headers(
+    source: SourceDefinition,
+    response: httpx.Response,
+    base: dict[str, object],
+) -> dict[str, object]:
+    headers = {key.casefold(): value.strip() for key, value in response.headers.items()}
+    required_headers = sorted(header.casefold() for header in source.required_headers)
+    missing_headers = sorted(set(required_headers) - set(headers))
+    issues = []
+    if missing_headers:
+        issues.append("missing_required_headers")
+
+    content_length = _content_length(headers.get("content-length"))
+    if content_length is None or content_length <= 0:
+        issues.append("invalid_content_length")
+    if (
+        content_length is not None
+        and source.max_content_length_bytes is not None
+        and content_length > source.max_content_length_bytes
+    ):
+        issues.append("content_length_exceeded")
+
+    content_type = headers.get("content-type")
+    if source.expected_content_type and (
+        not content_type
+        or not content_type.casefold().startswith(source.expected_content_type.casefold())
+    ):
+        issues.append("unexpected_content_type")
+
+    retained_headers = {header: headers.get(header) for header in required_headers}
+    canonical_headers = json.dumps(
+        retained_headers, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
+    observed_headers = sorted(headers)
+    schema_payload = json.dumps(observed_headers, separators=(",", ":")).encode()
+    etag = headers.get("etag")
+    return {
+        **base,
+        "passed": not issues,
+        "http_status": response.status_code,
+        "record_count": None,
+        "observed_fields": [],
+        "required_fields": [],
+        "missing_fields": [],
+        "observed_headers": observed_headers,
+        "required_headers": required_headers,
+        "missing_headers": missing_headers,
+        "content_length_bytes": content_length,
+        "content_type": content_type,
+        "last_modified": headers.get("last-modified"),
+        "etag_sha256": hashlib.sha256(etag.encode()).hexdigest() if etag else None,
+        "observed_min_date": None,
+        "observed_max_date": None,
+        "snapshot_sha256": hashlib.sha256(canonical_headers).hexdigest(),
+        "schema_sha256": hashlib.sha256(schema_payload).hexdigest(),
+        "issues": issues,
+        "error_code": None,
+    }
+
+
+def _content_length(value: str | None) -> int | None:
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
 
 
 def _extract_rows(payload: object, container: str) -> list[dict[str, object]]:
@@ -238,6 +342,8 @@ def main() -> int:
                 "output": str(args.output),
                 "overall_passed": report["overall_passed"],
                 "source_count": report["source_count"],
+                "headers_only_source_count": report["headers_only_source_count"],
+                "total_content_length_bytes": report["total_content_length_bytes"],
                 "raw_content_stored": False,
             },
             ensure_ascii=False,

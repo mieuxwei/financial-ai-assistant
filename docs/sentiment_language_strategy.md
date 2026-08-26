@@ -30,8 +30,10 @@ The best TWSE macro-F1 was 0.640 from `Kenpache/finbert-multilingual-v2`, but it
 
 The next track is not a generic Chinese sentiment substitution. The project uses no human annotation or human review. Taiwan disclosures produce automated, versioned event/impact proxies, model-consensus metadata and `AMBIGUOUS`／`ABSTAIN` states. These are silver research signals, not semantic ground truth. Linguistic tone, event impact and historical market reaction remain separate in storage and experiments.
 
-M6 audits active corpora and sources. M7 evaluates domain-adaptive frozen representations, M8
-builds automatic market-reaction targets, and M9 aggregates versioned weak signals. M11 compares
+M6 completed the active source/corpus audit. M7 has built the filtered FSC snapshot and passed a
+two-step MacBERT/BERT operational feasibility check and an approved 200-step bounded pilot. The
+predeclared MLM rule recommends BERT-base-Chinese as a frozen representation candidate, not as a
+sentiment model. M8 builds automatic market-reaction targets, and M9 aggregates versioned weak signals. M11 compares
 their downstream out-of-sample value rather than human-label accuracy. Historical future/abnormal
 returns can never be an event-time feature.
 

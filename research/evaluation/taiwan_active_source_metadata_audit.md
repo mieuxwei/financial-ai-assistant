@@ -1,8 +1,8 @@
 # Taiwan Active Source Metadata Audit — M6
 
 Audit date: 2026-08-26  
-Scope: metadata, public documentation and minimal read-only API smoke checks only  
-Excluded: raw-corpus download, full-text retention, training, weak-label generation and backtesting
+Scope: metadata, public documentation, read-only API checks and the approved FSC archive audit
+Excluded: committed raw text, training, weak-label generation and backtesting
 
 ## Decision summary
 
@@ -14,7 +14,7 @@ Excluded: raw-corpus download, full-text retention, training, weak-label generat
 | FinMind `TaiwanStockNews` for discovery and metadata | `CONDITIONAL` | Anonymous single-stock/day request succeeded and returned timestamp, ticker, source, title and link; source quality is mixed, duplicates exist, timezone semantics and underlying publisher rights remain unresolved. |
 | FinMind `TaiwanStockNews` as direct reaction-label event source | `HOLD` | Do not use until timestamp timezone/meaning, duplicate grouping and publication-versus-ingestion semantics are verified. |
 | FinMind `TaiwanStockTotalReturnIndex` / `TAIEX` as research benchmark | `ACCEPT` | Anonymous bounded request succeeded; official documentation describes a free total-return series with `price`, `stock_id` and `date`, available from 2003. Acceptance is for this non-commercial research purpose only. |
-| Official FSC/regulatory text for optional domain adaptation | `CONDITIONAL` | Government-open-data material may be usable with attribution, but a bounded source manifest and per-source exceptions are still required. |
+| Official FSC law archives for optional domain adaptation | Purpose-specific `ACCEPT` | Five checksummed official archives and 6,047 XML records passed automated structure audit. Only filtered, deduplicated, non-commercial unlabelled adaptation feasibility is accepted; labels, redistribution and deployment are not. |
 | `lianghsun/tw-fsc` derived OCR/VLM corpus | `HOLD` | Gated 2.23 GB derived corpus; OCR, inline HTML, page images, LLM-generated table descriptions/categories and source-level licence scope require audit before any text-only use. |
 
 Eland is not included because it is excluded from the active modeling pipeline and requires no
@@ -120,9 +120,13 @@ The third-party `tw-fsc` corpus is not equivalent to a clean official-text mirro
 images, OCR output, inline table markup, automatically generated descriptions/tags/categories and
 document-version risks. Its automated labels are not ground truth.
 
-Decision: prefer a bounded official-source text manifest. Start with document ID, canonical URL,
-publication/revision timestamp, agency, licence/exception status and content hash. Keep the derived
-`tw-fsc` corpus on `HOLD`; do not download it in the current milestone.
+Decision: keep the derived `tw-fsc` corpus on `HOLD`. The separate official FSC archives have now
+passed an approved, raw-free automated audit and are purpose-specifically `ACCEPT` for a filtered,
+deduplicated, non-commercial unlabelled domain-adaptation feasibility corpus. The audit found 6,047
+records, no exact or cross-agency content duplicates, 14 within-agency duplicate-content extra
+rows, ten unparseable publication dates and one empty content record. The latter records must be
+excluded as applicable; attachments and special/third-party works remain forbidden. Full findings
+and mandatory filters are in `research/evaluation/fsc_official_archive_audit.md`.
 
 ## Source manifest gate delivered
 
@@ -139,9 +143,30 @@ The generated report belongs at `artifacts/taiwan-source-gate-report.json` and i
 
 This unit requires no model training, manual labels, paid LLM, Eland work or large data download.
 
-## Next minimum executable unit
+## FSC content-audit unit completed
 
-Complete the remaining M6 domain-corpus gate without downloading a large third-party corpus. Define
-a bounded official FSC text-source manifest (document/news-release IDs, canonical URLs,
-publication/revision times, licence exceptions and hashes) and run metadata-only coverage checks.
-M7 remains blocked until at least one unlabelled domain corpus is purpose-specifically accepted.
+The bounded FSC official-source manifest is now implemented at
+`research/configs/fsc_official_sources.v1.json`. Its HEAD-only live gate passed all five official
+archives on 2026-08-26 without downloading their bodies:
+
+| Archive | Content length |
+| --- | ---: |
+| FSC commission | 224,273 bytes |
+| Banking Bureau | 2,217,525 bytes |
+| Securities and Futures Bureau | 2,661,534 bytes |
+| Insurance Bureau | 2,054,245 bytes |
+| Financial Examination Bureau | 67,102 bytes |
+| **Total** | **7,224,679 bytes** |
+
+All endpoints returned HTTP 200, `application/x-zip-compressed`, `Content-Length`, `Last-Modified`
+and `ETag`; the gate retained only header/schema hashes and stored no archive content.
+
+The user approved the bounded download. The archives remain only in ignored
+`.tools/datasets/fsc-official/`; their exact sizes and SHA-256 values are pinned in
+`research/configs/fsc_official_archive_snapshot.v1.json`. The automated runner
+`research/evaluation/fsc_archive_audit.py` passed all five archives and emitted only aggregate
+statistics and hashes to the ignored artifact report. This satisfies the M6 purpose-specific corpus
+gate. The subsequent M7 builder retained 6,021 family-isolated records. The two-candidate,
+two-step CPU feasibility passed, followed by an explicitly approved 200-step bounded pilot. The
+pilot kept test sealed and weights ignored; it recommends BERT-base-Chinese for frozen
+representation only. Any larger/full-corpus run remains a separate future decision.

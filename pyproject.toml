@@ -29,6 +29,10 @@ financial-ai-taiwan-dataset-audit = "research.evaluation.taiwan_dataset_audit:ma
 financial-ai-taiwan-calibration-batch = "jobs.annotation_batch:main"
 financial-ai-taiwan-annotation-agreement = "jobs.annotation_agreement:main"
 financial-ai-source-gate = "research.evaluation.source_manifest:main"
+financial-ai-fsc-archive-audit = "research.evaluation.fsc_archive_audit:main"
+financial-ai-fsc-corpus = "research.training.fsc_corpus:main"
+financial-ai-domain-feasibility = "research.training.domain_adaptation_feasibility:main"
+financial-ai-domain-pilot = "research.training.domain_adaptation_pilot:main"
 
 [project.optional-dependencies]
 dev = [

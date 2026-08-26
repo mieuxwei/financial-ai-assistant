@@ -117,6 +117,14 @@ audited unlabelled domain text, structured official metadata, deterministic rule
 supervision and automatically generated market-reaction targets. Official source categories are
 stored separately from inferred normalized event types and are never silently rewritten.
 
+The accepted FSC path now builds a checksummed 6,021-record corpus under ignored storage. Splits are
+assigned by each document family's latest publication date, so content and family hashes cannot
+cross train, validation and sealed test. The M7 feasibility runner reads train/validation only,
+pins model revisions and emits resource/loss statistics without saving weights or source text.
+The approved bounded pilot subsequently saved two immutable ignored safetensors artifacts. Under
+the predeclared identical-vocabulary/final-validation-loss rule, BERT-base-Chinese is the frozen
+representation candidate for later ablation; this is not a sentiment classifier decision.
+
 English sentiment, Taiwan text signals and historical market reaction are separate contracts.
 Future returns may train or evaluate a reaction model, but never enter a feature available at the
 event timestamp. Predictive improvement does not establish linguistic or sentiment correctness.

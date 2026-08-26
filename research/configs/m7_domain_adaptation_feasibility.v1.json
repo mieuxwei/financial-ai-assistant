@@ -1,0 +1,26 @@
+{
+  "feasibility_version": "m7-domain-adaptation-feasibility-v1",
+  "seed": 20260826,
+  "max_length": 64,
+  "train_examples": 16,
+  "validation_examples": 8,
+  "batch_size": 2,
+  "train_steps": 2,
+  "validation_batches": 2,
+  "learning_rate": 0.00005,
+  "mlm_probability": 0.15,
+  "candidates": [
+    {
+      "candidate_id": "macbert-base",
+      "model_id": "hfl/chinese-macbert-base",
+      "revision": "a986e004d2a7f2a1c2f5a3edef4e20604a974ed1",
+      "license": "Apache-2.0"
+    },
+    {
+      "candidate_id": "bert-base-chinese",
+      "model_id": "google-bert/bert-base-chinese",
+      "revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "license": "Apache-2.0"
+    }
+  ]
+}

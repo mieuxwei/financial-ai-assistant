@@ -4,13 +4,16 @@ Last revised: 2026-08-26
 
 ## Current boundary
 
-M0–M5.5 are complete and their evidence is retained. M6 is the active Taiwan dataset/corpus-audit
-milestone under a hard zero-human-label constraint: no manual annotation, label review or human
-adjudication. The taxonomy, automated-signal protocol, market-reaction protocol, logical schema,
-dataset-governance register, dataset-audit CLI, calibration exporter, agreement CLI and tests are
-implemented locally. A 60-item Gemini-versus-Codex diagnostic is retained under ignored local
-directories as model-stability evidence only. Check Git status because these changes are
-uncommitted. Do not start M7 training until an active corpus receives purpose-specific approval.
+M0–M7 bounded pilot are complete and their evidence is retained under a hard zero-human-label constraint: no
+manual annotation, label review or human adjudication. The taxonomy, automated-signal protocol,
+market-reaction protocol, logical schema, dataset-governance register, source/archive audit CLIs,
+calibration exporter, agreement CLI and tests are implemented locally. A 60-item
+Gemini-versus-Codex diagnostic is retained under ignored local directories as model-stability
+evidence only. The filtered official FSC corpus produced a 6,021-record family-isolated snapshot.
+Pinned MacBERT-base and BERT-base-Chinese passed feasibility and an approved 200-step bounded pilot
+without reading sealed test. Both weights are preserved only under ignored storage. The
+predeclared identical-vocabulary/final-MLM-loss rule recommends BERT-base-Chinese as the frozen
+representation candidate, not as sentiment truth. Check Git status because changes are uncommitted.
 
 There is no human gold-set objective. Eland is a **historical candidate — HOLD / excluded from the
 active modeling pipeline** because official raw downloads returned HTTP 401, a later live check
@@ -92,7 +95,8 @@ The metadata-first source audit is recorded in
    timestamp timezone/semantics, duplicates and publisher rights pass.
 4. FinMind `TaiwanStockTotalReturnIndex` with `data_id=TAIEX` is accepted as the non-commercial
    research benchmark.
-5. FSC official text requires a bounded source manifest; the derived `tw-fsc` OCR corpus remains
+5. FSC official text passed a bounded, approved automated archive audit for a filtered
+   non-commercial unlabelled adaptation feasibility corpus; the derived `tw-fsc` OCR corpus remains
    HOLD and was not downloaded.
 
 The metadata-only source manifest and automated gate are now implemented in
@@ -100,10 +104,20 @@ The metadata-only source manifest and automated gate are now implemented in
 `research/evaluation/source_manifest.py`. The 2026-08-26 live run passed TWSE (101 records) and
 FinMind TAIEX (5 sessions); its raw-free report is ignored under `artifacts/`.
 
-The next minimum executable unit is a bounded official FSC text-source manifest and metadata-only
-coverage audit. Do not start M7 domain adaptation until at least one unlabelled domain corpus is
-purpose-specifically accepted. Do not download a large corpus or generate active model features.
-Eland is not part of this work queue.
+The bounded FSC official-source manifest and HEAD-only coverage gate passed. The user then approved
+the 7,224,679-byte download into ignored `.tools/datasets/fsc-official/`. Sizes and SHA-256 values
+are pinned in `research/configs/fsc_official_archive_snapshot.v1.json`; the raw-free automated audit
+passed all five archives and 6,047 XML records. There were no exact or cross-agency content
+duplicates; 14 within-agency duplicate-content extra rows, ten unparseable publication dates and
+one empty content record require deterministic filtering. The purpose-specific decision is ACCEPT
+only for filtered, deduplicated, non-commercial unlabelled domain-adaptation feasibility. It is not
+sentiment truth, redistribution approval or a completed training run. See
+`research/evaluation/fsc_official_archive_audit.md`.
+
+M6 source/corpus audit and the approved M7 bounded pilot are complete. The next minimum executable
+unit is M8 automatic market-reaction labeling. Keep the selected representation frozen, do not read
+the FSC sealed test, and do not release weights or claim sentiment quality. Eland is not part of
+this work queue.
 
 Do not create fake labels. Keep external/full text and large model/data caches in ignored locations.
 Do not automatically commit or push.

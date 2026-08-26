@@ -32,6 +32,16 @@ The explicit rejection evidence is retained: lexicon macro-F1 0.320, yiyang 0.35
 - The 30-item TWSE-derived set stays a frozen diagnostic artifact and is not sufficient for training or a publishable benchmark.
 - Candidate public data must pass provenance, licence, label, duplicate and split-leakage audits before use.
 
+## M7 domain-adaptation feasibility contract
+
+- Only the filtered official FSC train split may update encoder weights; validation is evaluation-only and test remains sealed.
+- Corpus, split files, tokenizer and model revisions, seed, masking parameters, compute time and peak memory are pinned.
+- The first feasibility run is deliberately tiny and tests operational reproducibility only; MLM loss movement is not a sentiment or downstream-quality claim.
+- Adapted weights were saved only after the bounded pilot configuration and ignored-storage policy were approved; they remain local and uncommitted.
+- Candidate comparison must use predeclared budgets and cannot select a winner from the two-step smoke result.
+- The approved 200-step pilot used the predeclared identical-vocabulary/final-validation-MLM-loss rule; BERT-base-Chinese is the frozen representation candidate, while MacBERT remains preserved comparison evidence.
+- This selection is domain-representation-only and must be re-tested through later downstream chronological ablation before any usefulness claim.
+
 ## M9 Taiwan weak-signal adoption contract
 
 - Frozen embeddings and structured AI event/impact proxies are candidates; none is a preselected winner.

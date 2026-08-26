@@ -775,7 +775,7 @@ financial-ai-assistant/
 - 沒有候選通過 gate；這些結果是模型拒絕證據，必須保留，不得隱藏、覆寫或偽造改善。
 - 正式中文 sentiment 維持 unsupported；30 筆診斷集不是 training dataset 或可發表 benchmark。
 
-### M6 — Taiwan Dataset & Corpus Audit（進行中）
+### M6 — Taiwan Dataset & Corpus Audit（已完成）
 
 工作：
 
@@ -790,7 +790,7 @@ financial-ai-assistant/
 - 未通過來源、授權、重複與 leakage 稽核的資料不得進入訓練 corpus。
 - 原文與大型資料只放在 Git 忽略路徑，公開報告只含統計、hash 與決策。
 
-### M7 — Taiwan Financial Domain Adaptation
+### M7 — Taiwan Financial Domain Adaptation（已完成；bounded pilot scope）
 
 工作：
 
@@ -803,6 +803,13 @@ financial-ai-assistant/
 - 不使用人工標籤。
 - 先以小型 feasibility run 驗證可重現性與資源需求，再批准大型訓練。
 - domain-adapted encoder 只代表文字 representation，不宣稱 sentiment 正確性。
+
+目前證據：FSC corpus builder 從 6,047 筆保留 6,021 筆，依 document-family 最新發布日切成
+5,117 train／482 validation／422 sealed test，且 content／family hash 不跨 split。固定 revision
+的 MacBERT-base 與 BERT-base-Chinese 先通過 2-step feasibility，再依批准的固定預算各完成
+200-step pilot。兩者 gate 皆通過；因 vocabulary hash 相同，依預先指定的 final validation MLM
+loss，BERT-base-Chinese 暫定為 frozen representation candidate。權重只在忽略路徑，test 未讀。
+此決策不代表 sentiment 正確性，也不自動批准 full-corpus training。
 
 ### M8 — Automatic Market-Reaction Labeling
 
@@ -1060,7 +1067,7 @@ financial-ai-assistant/
 
 ## 18. 當前執行邊界
 
-M0～M5.5 已完成並保留結果；既有市場／英文 `features-v1` 工程骨架已完成驗證。M6 是目前進行中的台灣資料集與 corpus 稽核；現階段不得直接跳入 M7，也不得因中文模型不成熟而把所有中文資料填成 neutral。
+M0～M7 bounded pilot 已完成並保留結果；既有市場／英文 `features-v1` 工程骨架已完成驗證。下一執行單元是 M8 automatic market-reaction labeling；不得未經新理由直接擴大 M7 訓練，也不得因中文模型不成熟而把所有中文資料填成 neutral。
 
 台灣路線的最終研究決策是 **Zero-Manual-Label Taiwan Financial Learning Protocol**：全程不使用人工標注、人工覆核、人工裁決或人工 sentiment ground-truth 建置。
 
@@ -1081,4 +1088,4 @@ kappa 0.640411；event raw agreement 0.650000、kappa 0.533679。因 event 未�
 作模型穩定性與 prompt/taxonomy 診斷，不是 gold set，也不作 supervised truth。衝突不人工
 裁決，而是保留為 disagreement／AMBIGUOUS／ABSTAIN metadata。
 
-M6 metadata-first 主動來源稽核已記錄於 `research/evaluation/taiwan_active_source_metadata_audit.md`：TWSE OpenAPI 接受作官方 ingestion／metadata；FinMind `TAIEX` total-return index 接受作非商用研究 benchmark；FinMind news 僅 conditional metadata，尚不得直接建立 reaction event；`tw-finance-159M` 與衍生 `tw-fsc` corpus 維持 HOLD。TWSE＋TAIEX 的版本化 metadata-only source manifest／gate report 已完成 live 驗證，會保存 endpoint、dataset ID、schema、時區契約、terms URL、range、count 與 snapshot hash，但不把全文提交 Git。下一個最小可執行單元是建立受限的官方 FSC text-source manifest 與 metadata-only coverage audit；至少一個無標籤 domain corpus 通過目的限定 gate 後，才可進入 M7 小型 domain-adaptation feasibility run。此步仍不下載大型 corpus、不訓練、不產生下游結果。Eland 不在工作佇列，只保留 HOLD／排除記錄。GAS 在此期間維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。
+M6 主動來源與 corpus 稽核已記錄於 `research/evaluation/taiwan_active_source_metadata_audit.md` 與 `research/evaluation/fsc_official_archive_audit.md`：TWSE OpenAPI 接受作官方 ingestion／metadata；FinMind `TAIEX` total-return index 接受作非商用研究 benchmark；FinMind news 僅 conditional metadata，尚不得直接建立 reaction event；`tw-finance-159M` 與衍生 `tw-fsc` corpus 維持 HOLD。取得批准後，FSC 五個官方 archive 只下載到 Git 忽略位置並通過自動稽核；builder 保留 6,021 筆 family-isolated corpus。M7 的兩步 feasibility 與固定 200-step bounded pilot 均完成，兩候選皆通過 gate；相同 vocabulary 下依預先 final-loss 規則推薦 BERT-base-Chinese 作 frozen representation candidate。權重僅存在忽略路徑，sealed test 未讀，且不宣稱 sentiment 品質。下一個最小可執行單元是 M8 automatic market-reaction labeling。Eland 不在工作佇列，只保留 HOLD／排除記錄。GAS 維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。

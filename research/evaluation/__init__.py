@@ -1,1 +1,1 @@
-"""Model evaluation modules."""
+"""Reproducible research evaluation and source-governance utilities."""

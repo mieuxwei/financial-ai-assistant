@@ -1,0 +1,18 @@
+{
+  "corpus_version": "fsc-domain-corpus-v1",
+  "normalization_version": "nfkc-whitespace-v1",
+  "train_end": "2022-12-31",
+  "validation_end": "2024-12-31",
+  "family_field_priority": ["法規名稱", "主旨", "發文字號"],
+  "text_field": "法規內容",
+  "publication_date_field": "公發布日",
+  "revision_date_field": "修正日期",
+  "allowed_use": "filtered non-commercial unlabelled domain-adaptation feasibility",
+  "forbidden_uses": [
+    "sentiment ground truth",
+    "impact ground truth",
+    "raw corpus commit or redistribution",
+    "commercial use",
+    "downstream test fitting"
+  ]
+}

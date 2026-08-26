@@ -128,3 +128,68 @@ def test_committed_manifest_has_only_accepted_metadata_sources() -> None:
     ]
     assert all(source.retention_policy == "metadata_hash_only" for source in manifest.sources)
     assert all(source.decision == "ACCEPT" for source in manifest.sources)
+
+
+def test_headers_only_gate_uses_head_without_downloading_archive() -> None:
+    manifest = SourceManifest.model_validate(
+        {
+            "sources": [
+                {
+                    "source_id": "fsc_test_archive",
+                    "purpose": "synthetic FSC archive coverage",
+                    "endpoint": "https://example.test/fsc.zip",
+                    "terms_url": "https://example.test/terms",
+                    "http_method": "HEAD",
+                    "response_container": "headers_only",
+                    "required_headers": [
+                        "content-length",
+                        "content-type",
+                        "last-modified",
+                        "etag",
+                    ],
+                    "expected_content_type": "application/x-zip-compressed",
+                    "timezone_contract": "HTTP GMT only",
+                    "allowed_uses": ["metadata coverage"],
+                    "forbidden_uses": ["download"],
+                    "max_response_bytes": 1,
+                    "max_content_length_bytes": 3000000,
+                }
+            ]
+        }
+    )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.method == "HEAD"
+        return httpx.Response(
+            200,
+            headers={
+                "Content-Length": "224273",
+                "Content-Type": "application/x-zip-compressed",
+                "Last-Modified": "Tue, 25 Aug 2026 17:00:06 GMT",
+                "ETag": '"synthetic-etag"',
+            },
+            content=b"",
+        )
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        report = run_source_gates(manifest, client=client)
+
+    observation = report["observations"][0]
+    assert report["overall_passed"] is True
+    assert report["headers_only_source_count"] == 1
+    assert report["total_content_length_bytes"] == 224273
+    assert observation["content_length_bytes"] == 224273
+    assert observation["record_count"] is None
+    assert observation["raw_content_stored"] is False
+
+
+def test_committed_fsc_manifest_is_headers_only() -> None:
+    manifest = load_manifest(Path("research/configs/fsc_official_sources.v1.json"))
+
+    assert len(manifest.sources) == 5
+    assert all(source.http_method == "HEAD" for source in manifest.sources)
+    assert all(source.response_container == "headers_only" for source in manifest.sources)
+    assert all(
+        "training before content audit" in source.forbidden_uses
+        for source in manifest.sources
+    )

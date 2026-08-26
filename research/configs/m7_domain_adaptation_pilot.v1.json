@@ -1,0 +1,31 @@
+{
+  "pilot_version": "m7-domain-adaptation-pilot-v1",
+  "required_corpus_sha256": "389640a2f3232cb95bc8c47032673ba8f90a8d5eb23affc1f01a03971d20366c",
+  "seed": 20260826,
+  "max_length": 128,
+  "train_examples": 512,
+  "validation_examples": 64,
+  "batch_size": 2,
+  "train_steps": 200,
+  "validation_batches": 16,
+  "learning_rate": 0.00002,
+  "mlm_probability": 0.15,
+  "max_gradient_norm": 1.0,
+  "max_seconds_per_candidate": 900,
+  "minimum_relative_validation_improvement": 0.01,
+  "selection_metric": "final_validation_mlm_loss",
+  "candidates": [
+    {
+      "candidate_id": "macbert-base",
+      "model_id": "hfl/chinese-macbert-base",
+      "revision": "a986e004d2a7f2a1c2f5a3edef4e20604a974ed1",
+      "license": "Apache-2.0"
+    },
+    {
+      "candidate_id": "bert-base-chinese",
+      "model_id": "google-bert/bert-base-chinese",
+      "revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+      "license": "Apache-2.0"
+    }
+  ]
+}
