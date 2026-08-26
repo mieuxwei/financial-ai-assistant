@@ -21,11 +21,11 @@
 
 本研究拆成五個問題：
 
-- **RQ1**：既有多語／中文金融 NLP 模型轉移到繁體中文台灣金融公告時表現如何？
-- **RQ2**：台灣領域的事件／影響模型，能否改善正式公告的分類品質？
-- **RQ3**：英文 FinBERT 與台灣金融文字訊號，能否在價格／成交量特徵之外改善短期方向預測？
-- **RQ4**：歷史市場反應特徵能否在不造成資料洩漏的前提下提供額外增益？
-- **RQ5**：哪些訊號群組在不同市場期間與 regime 仍維持穩定？
+- **RQ1**：既有多語／中文金融模型轉移到繁體中文台灣金融文字時表現如何？
+- **RQ2**：在沒有人工標籤的情況下，台灣金融領域自適應能否改善文字 representation？
+- **RQ3**：自動產生的 weak supervision 與 market-reaction labels 能否形成有用的台灣金融訊號？
+- **RQ4**：這些台灣金融訊號能否在價格／成交量／技術特徵之外改善下游股票方向預測？
+- **RQ5**：這些訊號在不同股票、事件類別、來源、市場期間與 regime 是否穩定？
 
 ### 核心產品問題
 
@@ -39,7 +39,7 @@
 
 - 建立可重現的歷史行情與新聞資料管線。
 - 對驗證通過的英文金融文字產生 Positive／Neutral／Negative 與連續情緒分數。
-- 對台灣金融文字建立版本化事件類型與金融影響協定；模型未通過門檻前，不偽造正式中文 sentiment score。
+- 對台灣金融文字建立零人工標注／零人工覆核的版本化自動訊號協定；不把 AI proxy 偽裝成正式中文 sentiment 或專家真值。
 - 將文字情緒、台灣事件／影響、歷史市場反應與價格技術特徵分成可獨立消融的訊號群組。
 - 建立價格基準、新聞數量、英文情緒、台灣事件、市場反應與組合模型。
 - 以時間順序切分 Train／Validation／Test，避免資料洩漏。
@@ -232,7 +232,7 @@ news / disclosures
 
 ### 標註與歷史市場反應資料
 
-- 標註資料保存來源 metadata、合法短文本、ticker、event type、impact label、review status 與 label version。
+- 自動文字訊號保存來源 metadata、合法短文本、ticker、event／impact proxy、model／prompt provenance、agreement、abstention 與 signal version。
 - 原始新聞全文不得因模型訓練需求而自動保存或提交；使用前必須確認來源與再利用條款。
 - 歷史市場反應以事件發布時間為起點，建立 next-session、1 日或 3 日報酬／abnormal return target。
 - 未來報酬只能作為歷史訓練 target／label，不能成為事件當下 prediction 的輸入。
@@ -302,7 +302,7 @@ news / disclosures
 - `relevance_score`
 - `match_method`
 
-#### `sentiment_results`
+#### `english_sentiment_results`（邏輯名稱；現有實體表為 `sentiment_results`）
 
 - 僅保存通過語言／領域 gate 的正式 sentiment inference；目前正式路線是英文 ProsusAI/finbert。
 - `article_id`
@@ -313,33 +313,40 @@ news / disclosures
 - `sentiment_score`
 - `model_version`
 
-#### `taiwan_financial_text_results`（規劃）
+#### `taiwan_text_signals`（規劃）
 
 - `article_id`
 - `ticker`
-- `event_type`
-- `impact_label`：`POSITIVE`／`NEUTRAL`／`NEGATIVE`／`AMBIGUOUS`
-- `impact_probabilities`／`confidence`：僅在模型與校準協定支援時保存
-- `model_version`
-- `taxonomy_version`
-- `inference_status`
-- `unsupported_reason`
+- `source_category`：官方來源原始 category，不被自動 taxonomy 覆寫
+- `normalized_event_type`：自動推定的標準事件類別
+- `event_type_source`：`official_metadata`／`deterministic_rule`／`model`／`llm`／`aggregate`
+- `weak_label`：machine-generated event-impact／reaction proxy；不是 ground truth
+- `weak_label_confidence`
+- `agreement_score`／`vote_entropy`
+- `abstained`／`abstention_reason`
+- `encoder_version`
+- `labeling_protocol_version`
+- `model_revision`／`prompt_sha256`／`input_sha256`
+- `generated_at`
 
-此表不得要求未驗證的正式中文 sentiment score。事件類型與 impact 是獨立欄位，避免將語氣中性的重大訊息強迫解讀成情緒。
+此表不得保存或暗示人工驗證的正式中文 sentiment。官方 category、自動 normalized event、weak label 與 market reaction 必須分欄保存。
 
-#### `market_reaction_targets`（規劃）
+#### `market_reaction_labels`（規劃）
 
 - `ticker`
-- `event_time`
+- `article_id`／`event_group_id`
+- `event_timestamp`
 - `information_cutoff`
-- `reaction_start`
-- `reaction_end`
-- `return_horizon`
-- `stock_return`
+- `effective_session`／`anchor_session`／`reaction_end_session`
+- `reaction_horizon`
+- `raw_return`
 - `benchmark_return`
 - `abnormal_return`
-- `target_version`
+- `reaction_class`：`POSITIVE_REACTION`／`NEUTRAL_REACTION`／`NEGATIVE_REACTION`
+- `threshold_config`／`neutral_band`
+- `protocol_version`
 - `market_snapshot_sha256`
+- `missing_reason`
 
 此表是離線研究 target 與歷史統計，不是事件發生當下可直接使用的未來資訊。
 
@@ -348,7 +355,7 @@ news / disclosures
 - `ticker`
 - `feature_date`
 - 價格、成交量、波動度、技術指標
-- 全語言新聞數量、英文情緒、台灣事件／impact 與歷史市場反應統計；各群組可獨立缺值與消融
+- 全語言新聞數量、英文情緒、台灣 text representation、event metadata、weak supervision 與 past-only 歷史市場反應統計；各群組可獨立缺值與消融
 - feature pipeline version
 
 #### `predictions`
@@ -463,7 +470,7 @@ announcement timestamp
 - 每筆 prediction 保存 information cutoff。
 - 事件發生後的 future／abnormal return 只能是歷史 training target、label，或由 prediction timestamp 之前已完成事件計算的歷史統計。
 - future return 絕對不能成為該事件當下的 input feature；target 建構、feature availability 與 prediction cutoff 必須保存可稽核 lineage。
-- 台灣標註資料按時間、來源事件與近似文本群組切分；不可讓同一公告或近似改寫跨 train／validation／test。
+- 台灣自動訊號資料按時間、來源事件與近似文本群組切分；不可讓同一公告或近似改寫跨 train／validation／test。
 
 ---
 
@@ -475,12 +482,13 @@ announcement timestamp
 |---|---|
 | Baseline 0 | 前一日方向或多數類別 |
 | Baseline 1 | 價格＋成交量＋技術指標 |
-| Model 2 | Baseline 1＋新聞數量 |
+| Model 2 | Baseline 1＋新聞數量／deterministic metadata |
 | Model 3 | Baseline 1＋英文 FinBERT sentiment |
-| Model 4 | Baseline 1＋台灣金融 event／impact signal |
-| Model 5 | Baseline 1＋歷史 market-reaction features |
-| Model 6 | Baseline 1＋所有已驗證文字／事件／反應訊號 |
-| Ablation | 分別移除英文情緒、台灣事件、市場反應與各 rolling feature group |
+| Model 4 | Baseline 1＋台灣 frozen text representation |
+| Model 5 | Baseline 1＋official／inferred event metadata 與台灣 weak-supervision signals |
+| Model 6 | Baseline 1＋past-only historical market-reaction features |
+| Model 7 | Baseline 1＋所有可用文字／事件／weak／reaction 訊號 |
+| Ablation | 分別移除英文情緒、台灣 text representation、weak supervision、historical reaction 與 event metadata |
 
 ### 候選模型
 
@@ -506,6 +514,16 @@ MVP 不因追求複雜度而強制使用 LSTM／Transformer 做價格預測。�
 - ROC-AUC
 - Brier score／probability calibration
 - Directional accuracy
+
+### 無人工標籤的台灣訊號評估
+
+- **Consistency**：跨模型／規則 agreement、vote entropy、coverage、abstention 與重跑一致性。
+- **Predictive utility**：在相同期間與下游模型下，相對 Baseline 1 的 out-of-sample 增益。
+- **Market-reaction prediction**：預測自動產生且完全隔離於事件當下 feature 的 reaction targets。
+- **Robustness**：依股票、事件類別、來源、時期與 market regime 分層，並使用 walk-forward 與 bootstrap／block bootstrap。
+- **Out-of-sample backtest**：只使用封存期預測，納入交易成本、turnover 與 benchmark。
+
+上述評估衡量的是自動訊號的穩定性與預測用途；**predictive improvement 不等於 linguistic correctness，也不等於中文 sentiment 正確或因果成立**。
 
 ### 回測指標
 
@@ -645,7 +663,7 @@ financial-ai-assistant/
 
 ---
 
-## 13. Milestones 0–12
+## 13. Milestones 0–17
 
 ### M0 — 安全處理與專案初始化
 
@@ -737,9 +755,9 @@ financial-ai-assistant/
 - 同一模型與輸入可重現結果。
 - 有人工抽樣 error analysis。
 - sentiment 結果可依股票與日期查詢。
-- 12 筆人工英文樣本約 83.33% accuracy 只標示為 sanity／pipeline validation，不作正式 benchmark。
+- 12 筆既有人工英文樣本約 83.33% accuracy 只標示為 **pipeline sanity check only**，不作正式 benchmark。
 
-### M5.1 — Taiwan／Chinese Model Diagnostic（已完成）
+### M5.5 — Taiwan／Chinese Model Diagnostic（已完成）
 
 工作：
 
@@ -757,92 +775,85 @@ financial-ai-assistant/
 - 沒有候選通過 gate；這些結果是模型拒絕證據，必須保留，不得隱藏、覆寫或偽造改善。
 - 正式中文 sentiment 維持 unsupported；30 筆診斷集不是 training dataset 或可發表 benchmark。
 
-### M6 — Feature 與 Label Foundation（已完成工程骨架）
+### M6 — Taiwan Dataset & Corpus Audit（進行中）
 
 工作：
 
-- 建立價格、成交量、技術與已驗證英文情緒特徵。
-- 建立 `t+1` label。
-- 固定 information cutoff。
-- 產出版本化 modeling dataset。
+- 依治理表稽核 `tw-finance-159M`、FSC、MOPS／TWSE、FinMind-linked metadata、字典與其他候選來源。
+- 對每個來源記錄 purpose、language、Taiwan relevance、labels、provenance、licence、可存取性、duplicate、split leakage 與 domain purity。
+- 決策只使用 `ACCEPT`、`CONDITIONAL`、`HOLD`、`REJECT`；可下載不等於可訓練。
+- 保留 Eland `HOLD / EXCLUDED FROM ACTIVE MODELING PIPELINE` 與全部拒絕證據；不得重審、救援或用於任何主動實驗。
 
 驗收：
 
-- leakage tests 通過。
-- feature definition 與資料字典完成。
-- 任一 dataset snapshot 可由設定重建。
-- 未驗證中文 sentiment 不填 neutral 或零；後續 M6.4 再納入通過 gate 的台灣訊號。
+- `research/evaluation/taiwan_dataset_governance.md` 欄位完整且未知事項明確標示未驗證。
+- 未通過來源、授權、重複與 leakage 稽核的資料不得進入訓練 corpus。
+- 原文與大型資料只放在 Git 忽略路徑，公開報告只含統計、hash 與決策。
 
-### M6.1 — Taiwan Financial Annotation Protocol（進行中）
+### M7 — Taiwan Financial Domain Adaptation
 
 工作：
 
-- 撰寫 annotation guideline、inclusion／exclusion criteria 與合法短文本保存規則。
-- 版本化 event taxonomy 與 `POSITIVE`／`NEUTRAL`／`NEGATIVE`／`AMBIGUOUS` impact rules。
-- 收錄明確、模糊、需上下文與不可判斷案例；允許 abstain，不強迫三分類。
-- 定義 reviewer／adjudication／quality-control 流程與標註一致性指標。
-- 保存 source metadata、label version 與 licensing／copyright lineage。
-- 定義依時間、事件群組與近似文本去重的 leakage-safe train／validation／sealed-test protocol。
-- 稽核候選公開繁中金融資料；不得因資料卡聲明而跳過來源、重複與 split leakage 檢查。
+- 在 `ACCEPT` 或符合條件的 `CONDITIONAL` 無標籤台灣金融文本上進行 domain-adaptive pretraining 候選實驗。
+- 比較 MacBERT 與其他適當中文 encoder；不預設 MacBERT 勝出。
+- 保存 corpus snapshot hash、tokenizer／model revision、seed、訓練設定、licence 與成本。
 
 驗收：
 
-- 標註規範、schema、taxonomy version 與 QC checklist 可獨立審查。
-- 30 筆 TWSE 診斷集維持 frozen diagnostic artifact，不作訓練或調參。
-- 沒有生成假人工標籤，沒有啟動昂貴模型訓練。
-- 下一階段資料需求、人工 review 範圍與授權風險有明確 go／no-go 結論。
+- 不使用人工標籤。
+- 先以小型 feasibility run 驗證可重現性與資源需求，再批准大型訓練。
+- domain-adapted encoder 只代表文字 representation，不宣稱 sentiment 正確性。
 
-### M6.2 — Taiwan Financial Text Model
+### M8 — Automatic Market-Reaction Labeling
 
 工作：
 
-- 以 MacBERT 或 validation 選出的適合中文 encoder 建立 event／impact baseline；不得預設 MacBERT 成功。
-- 只在 training split fine-tune，在 validation 選模型、threshold 與 calibration。
-- 最終 test 完全封存，保存 model／tokenizer revision、taxonomy version、dataset hash、seed 與訓練設定。
-- 與 M5.1 所有被拒絕模型進行公平比較，保留失敗結果。
+- 依 `docs/market_reaction_labeling_protocol.md` 對公告 timestamp 做時區與交易日對齊。
+- 建立 next-session、1-day、3-day raw return、benchmark return、abnormal return 與 reaction class。
+- 保存 event group、market snapshot、benchmark、threshold／neutral-band 與 protocol version。
 
 驗收：
 
-- 正式 adoption gate 至少維持 Macro-F1 ≥ 0.70 且必要類別 recall ≥ 0.60；若 taxonomy 改變，需先版本化並重新核准對應 gate。
-- 報告每類 precision／recall／F1、confusion matrix、calibration、coverage／abstention 與 error analysis。
-- 未通過時維持 unsupported，不輸出假正式中文 sentiment score。
+- future prices 只存在 target／historical weak-label 端，絕不成為事件當下 feature。
+- threshold、beta、neutral band 與 normalization 只由 train／validation 決定，final test 封存。
+- corporate action、缺價、同日多事件與 duplicate policy 均有自動化處理或明確 abstain。
 
-### M6.3 — Historical Market Reaction Signal
+### M9 — Weak-Supervision Signal Construction
 
 工作：
 
-- 依公告 timestamp 與交易日 cutoff 建立 next-session、1-day、3-day return 候選 target。
-- 優先比較 benchmark／market-adjusted abnormal return。
-- 以 ticker／session information set 處理同日多事件歸因限制。
-- 保存 target version、reaction window、market snapshot hash 與完整 timestamp lineage。
+- 建立字典、deterministic event rules、官方 category mapping、多語模型、翻譯＋FinBERT 與選配 LLM structured extraction labeling functions。
+- 分開保存 official source category 與 automatically inferred normalized event type。
+- 比較 reproducible weighted voting、confidence weighting 與 probabilistic／Snorkel-style aggregation。
+- 輸出 weak label、confidence、coverage、agreement、vote entropy 與 abstention reason。
 
 驗收：
 
-- future return 只存在 label／target 端，leakage audit 證明不會流入事件當下 features。
-- 所有 threshold、beta 或 normalisation 只由 train fit。
-- market reaction 與 textual sentiment 在資料模型、報告與產品文案中明確分離。
+- 任一 weak source 不得被當成真值；衝突不人工裁決。
+- aggregation protocol、labeling-function revision、prompt hash 與 input hash 全部版本化。
+- 付費 LLM 不作逐篇日常預設；大量處理優先 deterministic 或本機模型。
 
-### M6.4 — Integrated Feature Dataset Revision
+### M10 — Feature & Label Pipeline（市場／英文 v1 已完成，台灣延伸待完成）
 
 工作：
 
-- 延伸 M6 dataset，分別加入全語言新聞數量、英文 FinBERT、台灣 event／impact 與歷史 reaction feature groups。
-- 加入 language／scored coverage、missing reason 與各訊號 availability indicators。
-- 重新產生版本化 modeling snapshot；保留 M6 `features-v1` 作基準，不覆寫歷史資料集。
+- 保留已完成的價格、成交量、技術、英文 FinBERT、next-session label 與 `features-v1` snapshot。
+- 新增台灣 frozen text representation、event metadata、weak-supervision signal 與 past-only reaction features。
+- 加入 language、coverage、confidence、abstention、missing reason 與 availability indicators。
 
 驗收：
 
-- 每個 signal group 可獨立啟用、缺值、查核與消融。
-- 相同 config 與 upstream snapshots 可重現 dataset hash。
-- 所有 feature timestamp 不晚於 information cutoff。
+- 既有 13:30 cutoff、盤後／週末歸下一 session、rolling shift 與 future-price mutation leakage tests 持續通過。
+- announcement timestamp、future return、rolling window、duplicate article、same-event split 與 train／validation／test contamination 均有測試。
+- 每個 feature group 可獨立啟用與消融，相同 config／snapshot 可重現 dataset hash。
 
-### M7 — Downstream Prediction Experiments
+### M11 — Downstream Prediction Experiments
 
 工作：
 
 - 訓練 majority／previous-direction baseline。
 - 訓練只含市場特徵的模型。
-- 依實驗矩陣分別加入新聞數量、英文情緒、台灣事件／impact、歷史市場反應與組合訊號。
+- 依實驗矩陣分別加入新聞數量、英文情緒、台灣 text representation／event metadata、weak supervision、past-only market reaction 與組合訊號。
 - 執行時間切分與 walk-forward validation。
 - 保存參數、指標與特徵重要性。
 
@@ -851,9 +862,9 @@ financial-ai-assistant/
 - 有公平的同期間比較表。
 - Test set 在模型選定前保持封存。
 - 結果不只報 Accuracy。
-- 可回答 RQ1–RQ5，並對市場 regime 與 signal-group ablation 提供結果。
+- 可回答 RQ1–RQ5，並對股票、事件類別、來源、期間與市場 regime 提供 robustness／ablation 結果。
 
-### M8 — 回測與研究結論
+### M12 — Backtesting & Research Conclusions
 
 工作：
 
@@ -867,10 +878,11 @@ financial-ai-assistant/
 
 - 回測無 look-ahead bias。
 - 回測只使用 out-of-sample prediction。
-- 研究結論能回答英文情緒、台灣事件與市場反應是否各自有增益。
+- 研究結論能回答英文情緒、台灣 representation、weak supervision 與 market reaction 是否各自有增益。
 - 不因結果不顯著而隱藏負面結果。
+- 明確聲明下游預測改善不等於中文語意或 sentiment 正確性。
 
-### M9 — Prediction 與 Research API
+### M13 — Prediction & Research API
 
 工作：
 
@@ -885,7 +897,7 @@ financial-ai-assistant/
 - 同 ticker／時間範圍可命中快取。
 - LLM 失敗不影響既有行情與模型結果。
 
-### M10 — LINE 整合與 GAS 瘦身
+### M14 — LINE Integration & GAS Slimming
 
 工作：
 
@@ -901,7 +913,7 @@ financial-ai-assistant/
 - 不再從 GAS 直接呼叫 Perplexity。
 - 不再於 GAS 原始碼保存 secrets。
 
-### M11 — 公開 Demo 與受控 Beta
+### M15 — Public Demo & Controlled Beta
 
 工作：
 
@@ -916,7 +928,21 @@ financial-ai-assistant/
 - Demo 不需要真實持股或私人 API key。
 - 超過額度不會繼續產生付費呼叫。
 
-### M12 — 最終封存、報告與部署
+### M16 — Error Analysis & Robustness
+
+工作：
+
+- 分股票、事件類別、來源、期間與市場 regime 分析 coverage、abstention、錯誤與增益。
+- 檢查 weak-source dominance、label-function correlation、embedding drift 與資料供應變動。
+- 使用 bootstrap／block bootstrap 報告不確定性，保留所有失敗與不穩定期間。
+
+驗收：
+
+- 不依賴人工標籤宣稱語意 accuracy。
+- 結果能指出訊號何時失效、缺值或應 abstain。
+- robustness 報告可重現並連結 dataset／model／protocol hash。
+
+### M17 — Final Portfolio / Report / Deployment
 
 工作：
 
@@ -953,7 +979,7 @@ financial-ai-assistant/
 
 - Market provider → database。
 - News provider → dedup → sentiment。
-- Taiwan annotation import → validation → split isolation。
+- Taiwan automated-signal import → provenance validation → split isolation。
 - Event timestamp → market-reaction target → leakage audit。
 - OCR preview → confirm → holdings。
 - Scheduled job → prediction → daily brief。
@@ -966,7 +992,7 @@ financial-ai-assistant/
 - Train-only preprocessing assertion。
 - Backtest signal lag assertion。
 - Dataset and artifact checksum。
-- Annotation agreement／duplicate-group split assertion。
+- Automated-label agreement／duplicate-group split assertion。
 - Future reaction target excluded from contemporaneous feature assertion。
 - Signal-group availability／ablation schema assertion。
 
@@ -986,7 +1012,7 @@ financial-ai-assistant/
 - 日常新聞抓取不使用 Perplexity逐篇搜尋。
 - FinBERT 優先批次執行。
 - 台灣 NLP 優先使用可本機批次執行的 encoder；大型 generative model 只作受控比較，不作逐篇日常預設。
-- 標註先做 protocol、公開資料稽核與小型 pilot，再決定是否擴充，避免先投入大量人工或 GPU 成本。
+- 自動文字訊號先做 protocol、公開資料稽核與小型 pilot，再決定是否擴充，避免不受控的 API 或 GPU 成本。
 - 相同 ticker／日期的研究結果共用快取。
 - 每人每日研究次數有限制。
 - 每日摘要使用聚合結果，只進行一次 LLM synthesis。
@@ -1001,9 +1027,9 @@ financial-ai-assistant/
 |---|---|
 | 新聞授權或全文不能保存 | 優先保存 metadata、必要摘要與原始連結 |
 | Yahoo 來源不穩定 | Provider adapter、快取與替代來源 |
-| 中文新聞與英文 FinBERT 語言／領域不符 | 保留英文路線；M5.1 拒絕未過 gate 候選，另建台灣 event／impact protocol 與 encoder 實驗 |
+| 中文新聞與英文 FinBERT 語言／領域不符 | 保留英文路線；M5.5 保留未過 gate 候選的拒絕證據，另建台灣 event／impact protocol 與 encoder 實驗 |
 | 正式公告語氣中性但事件具金融意義 | 將 event type、financial impact、textual sentiment 與 market reaction 拆成不同版本化概念 |
-| 台灣標註不足或主觀 | 允許 AMBIGUOUS、建立 reviewer／QC／agreement 流程，sealed test 與 training 分離 |
+| AI proxy 主觀、彼此不一致或自我驗證 | 允許 AMBIGUOUS／ABSTAIN、保存多模型 provenance 與 agreement；以 sealed market test 驗證下游增益，不宣稱語意真值 |
 | 公開訓練資料來源或授權不明 | 使用前稽核來源、再利用權、重複與 leakage；不提交未確認授權的全文 |
 | 用未來報酬造成 target leakage | future return 僅作離線 target；保存 reaction window 與 cutoff lineage，建立自動 leakage assertion |
 | 新聞發布時間造成 leakage | 保存原始時區、定義 cutoff、盤後新聞歸下一交易日 |
@@ -1020,8 +1046,8 @@ financial-ai-assistant/
 專案完成必須同時符合：
 
 - 資料：歷史行情、新聞、英文情緒、台灣事件／impact、market reaction 與 features 可重現；不適用訊號有明確 unsupported／missing reason。
-- 研究：英文 sentiment 的驗證限制有文件；台灣支援通過 gate，或被明確標示 unsupported 且保留拒絕證據。
-- 協定：台灣 event／impact taxonomy、標註／review、版本與 leakage-safe split 完整可稽核。
+- 研究：英文 sentiment 的驗證限制有文件；台灣自動訊號通過 leakage-safe out-of-sample 增益 gate，或被明確標示 experimental／unsupported 且保留拒絕證據。
+- 協定：台灣 event／impact proxy taxonomy、模型／prompt provenance、consensus／abstention、版本與 leakage-safe split 完整可稽核。
 - 實驗：價格 baseline 與新聞數量、英文情緒、台灣事件、市場反應及組合訊號做公平同期間比較與消融。
 - 回測：無前視偏誤，只使用 out-of-sample predictions，包含成本與 benchmark。
 - 產品：LINE 能顯示個人持股、來源可追溯的研究訊號；文字情緒、事件 impact 與歷史市場反應不可混稱投資建議。
@@ -1034,16 +1060,25 @@ financial-ai-assistant/
 
 ## 18. 當前執行邊界
 
-M0～M5.1 已完成並保留結果；M6 feature／label 工程骨架已完成驗證。現階段不得直接跳入 M7，也不得因中文模型不成熟而把所有中文資料填成 neutral。
+M0～M5.5 已完成並保留結果；既有市場／英文 `features-v1` 工程骨架已完成驗證。M6 是目前進行中的台灣資料集與 corpus 稽核；現階段不得直接跳入 M7，也不得因中文模型不成熟而把所有中文資料填成 neutral。
 
-目前執行中的最小里程碑是 **M6.1 Taiwan Financial Annotation Protocol**：
+台灣路線的最終研究決策是 **Zero-Manual-Label Taiwan Financial Learning Protocol**：全程不使用人工標注、人工覆核、人工裁決或人工 sentiment ground-truth 建置。
 
 1. 建立 event taxonomy v1、impact label guide 與 AMBIGUOUS／abstain 規則。
 2. 定義 inclusion／exclusion、來源／授權 metadata 與合法文本 retention。
-3. 設計 reviewer、QC、agreement 與 label versioning。
+3. 設計 model/prompt provenance、QC、agreement、consensus、abstention 與 signal versioning。
 4. 定義時間、事件群組及近似文本隔離的 train／validation／sealed-test protocol。
 5. 稽核候選公開資料的來源、標籤、重複與 split leakage；不先訓練 MacBERT。
 
-event taxonomy v1、impact／ambiguous guideline、版本化 schema、QC／split protocol 與資料稽核 CLI 已建立。Eland 候選資料的公開 viewer 初步顯示非金融內容混入，且官方 raw split 在本次環境下載回傳 HTTP 401；因此目前是 **HOLD／不得訓練**，仍須取得原始 split 後完成重複、標籤、來源與授權稽核。
+event taxonomy v1、impact／ambiguous guideline、版本化 schema、QC／split protocol 與資料稽核 CLI 已建立；正式自動訊號契約見 `docs/automated_chinese_text_signal_protocol.md`。Eland 的公開 viewer 初步顯示非金融內容混入，官方 raw split 下載回傳 HTTP 401，後續即時頁面檢查回傳 404；其永久文件角色為 **歷史候選資料集—HOLD／排除於主動建模流程**。不得重審、救援、使用快取或不明 mirror，也不得用於訓練、領域自適應、weak supervision、正式評估、特徵或 corpus 合併。
 
-M6.1 完成完整資料稽核並取得 reviewer go／no-go 決策後，才可進入 M6.2。若來源追溯或授權無法確認，必須維持 no-go 並更換資料來源。GAS 在此期間維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。
+M6 不設人工 gold-label 門檻。最低門檻改為：來源與時間可追溯、授權／保存用途可核對、去重與 cutoff 稽核通過、模型／prompt／input hash 完整、無效輸出不偽裝 neutral、每個 feature group 可獨立消融，並以 chronological validation、sealed market test 與 walk-forward 驗證增益。所有 preprocessing、consensus rule 與 threshold 只能由 train／validation 決定。
+
+第一批 60 筆 TWSE calibration 已以 60 個不同 ticker 建立。2026-08-26 完成一輪
+Gemini 3.1 Pro Reviewer A 與 Codex Reviewer B 的獨立 AI-to-AI 診斷：impact raw agreement 0.766667、
+kappa 0.640411；event raw agreement 0.650000、kappa 0.533679。因 event 未達 0.60，決策為
+歷史 agreement CLI 產生 `PAUSE_AND_REVISE_GUIDELINE`，但專案已改採零人工路線。這一輪只
+作模型穩定性與 prompt/taxonomy 診斷，不是 gold set，也不作 supervised truth。衝突不人工
+裁決，而是保留為 disagreement／AMBIGUOUS／ABSTAIN metadata。
+
+下一個最小可執行里程碑是完成 M6 主動來源的 metadata-first 稽核：依序確認 `tw-finance-159M`、MOPS／TWSE、FinMind、選配 FSC／監理語料與歷史股票／benchmark 價格的 provenance、licence、access、duplicate、leakage、domain purity 與目的限定。此步不下載大型 corpus、不訓練、不產生下游結果；只有通過目的限定 gate 的來源才可進入 M7 小型 domain-adaptation feasibility run。Eland 不在工作佇列，只保留 HOLD／排除記錄。GAS 在此期間維持既有功能，只作 LINE 過渡 adapter，不加入 NLP／ML 邏輯。

@@ -84,27 +84,44 @@ The information cutoff is Asia/Taipei 13:30 for the first Taiwan-market contract
 
 M6 currently accepts validated English sentiment and keeps unsupported Chinese probability/score values missing. It is a versioned engineering foundation, not evidence that Taiwan-domain text modeling has been solved.
 
-## Planned Taiwan NLP and market-reaction boundaries
+## Planned zero-manual-label Taiwan NLP and market-reaction boundaries
 
 ```text
                                   ┌→ English financial text
 news_articles + article_tickers ──┤   → pinned ProsusAI/finbert
                                   │   → sentiment_results
                                   │
-                                  └→ Taiwan financial text
-                                      → versioned event taxonomy
-                                      → POSITIVE / NEUTRAL / NEGATIVE / AMBIGUOUS impact
-                                      → taiwan_financial_text_results
+                                  └→ accepted/audited Taiwan financial text
+                                      ├→ domain-adapted frozen text representation
+                                      ├→ official source category (unaltered)
+                                      ├→ inferred normalized event type
+                                      └→ deterministic / model weak signals
+                                          + agreement / entropy / confidence / abstention
+                                          → taiwan_text_signals
 
-event timestamp + historical prices
+event timestamp + historical stock/benchmark prices
+  → exchange-calendar + cutoff alignment
   → leakage-safe reaction window
-  → benchmark-adjusted historical target
-  → market_reaction_targets
+  → raw / benchmark / abnormal return + reaction class
+  → market_reaction_labels
 
 validated English sentiment ──────┐
-Taiwan event / impact ────────────┼→ M6.4 versioned integrated dataset
-past-only reaction statistics ────┤   → M7 signal-group experiments
+Taiwan representation / metadata ├→ versioned integrated dataset
+weak-supervision signals ─────────┤   → chronological downstream experiments
+past-completed reaction stats ────┤   → walk-forward ablation / backtest
 price / volume / technical ───────┘
 ```
 
-Textual sentiment, Taiwan event impact and historical price reaction are separate contracts. Future returns may train or evaluate a reaction model, but never enter a feature available at the event timestamp. GAS remains outside these pipelines and only routes LINE interactions to Python during migration.
+The Taiwan track performs no manual annotation, manual label review or human adjudication. It uses
+audited unlabelled domain text, structured official metadata, deterministic rules, versioned weak
+supervision and automatically generated market-reaction targets. Official source categories are
+stored separately from inferred normalized event types and are never silently rewritten.
+
+English sentiment, Taiwan text signals and historical market reaction are separate contracts.
+Future returns may train or evaluate a reaction model, but never enter a feature available at the
+event timestamp. Predictive improvement does not establish linguistic or sentiment correctness.
+GAS remains outside these pipelines and only routes LINE interactions to Python during migration.
+
+Active Taiwan source audits prioritize `tw-finance-159M`, MOPS/TWSE, FinMind, optional FSC
+regulatory text and historical stock/benchmark prices. Eland is excluded from the active modeling
+pipeline and appears only in historical rejection documentation.

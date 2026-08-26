@@ -13,7 +13,8 @@ Runtime: CPU, PyTorch 2.13.0, Transformers 4.57.6
 - Negative: 4/4 correct
 - Neutral: 2/4 correct
 
-This is a regression and qualitative error-analysis sample, not a representative benchmark and not evidence of investment performance.
+This is a **pipeline sanity check only** and qualitative error-analysis sample, not a
+representative benchmark and not evidence of investment performance.
 
 ## Errors
 

@@ -99,7 +99,7 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `error_code`: exception class only; response bodies are not stored.
 - `started_at`, `completed_at`: UTC lifecycle timestamps.
 
-### sentiment_results
+### sentiment_results (physical M5 table; logical English sentiment output)
 
 - `article_id`, `ticker`, `model_version`: composite identity; permits multiple pinned models without overwriting prior research.
 - `positive_prob`, `neutral_prob`, `negative_prob`: softmax probabilities stored to eight decimal places.
@@ -107,6 +107,10 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `predicted_label`: probability argmax; downstream research should still use all probabilities.
 - `input_hash`: SHA-256 of exact inference text plus model version.
 - `scored_at`: UTC inference timestamp.
+
+Only the pinned English FinBERT track writes probability outputs to this table. The longer-term
+logical contract is named `english_sentiment_results`; Chinese/Taiwan weak signals must not be
+inserted here or presented as comparable human-validated sentiment.
 
 ### daily_sentiment_aggregates
 
@@ -153,3 +157,50 @@ For an existing row, adjusted-close changes of `0.005` or less are treated as pr
 - `label_up`: `1` for a strictly positive forward return, otherwise `0`.
 
 Prediction and research-request definitions remain reserved for their corresponding milestones.
+
+## Planned zero-manual-label Taiwan research tables
+
+These are logical contracts for M7–M10, not implemented database migrations in the current
+milestone.
+
+### english_sentiment_results
+
+- `article_id`, `ticker`, `model_version`: stable identity, compatible with the existing physical
+  `sentiment_results` table.
+- `positive_prob`, `neutral_prob`, `negative_prob`, `sentiment_score`, `predicted_label`: pinned
+  English FinBERT outputs only.
+- `input_hash`, `scored_at`: exact-input lineage and operational time.
+
+### taiwan_text_signals
+
+- `article_id`, `event_group_id`, `ticker`: traceable text/event identity.
+- `official_source_category`: source-provided category retained exactly; never replaced by model
+  inference.
+- `normalized_event_type`: automatically inferred taxonomy value, stored separately from the
+  official category.
+- `source_type`, `language`, `effective_session`: availability and alignment metadata.
+- `representation_model_version`, `representation_vector_ref`: pinned encoder identity and
+  immutable vector artifact reference; vectors are not human labels.
+- `weak_label`, `weak_confidence`: aggregated automated signal and confidence, never ground truth.
+- `labeling_function_versions`, `agreement`, `vote_entropy`: reproducible weak-source provenance.
+- `abstained`, `abstention_reason`, `coverage_state`: explicit missing/disagreement behavior.
+- `encoder_revision`, `protocol_version`, `model_versions`, `prompt_hashes`, `input_hash`: complete
+  reproducibility contract.
+- `generated_at`: operational timestamp; excluded from semantic snapshot identity.
+
+### market_reaction_labels
+
+- `event_group_id`, `ticker`, `published_at`: event-side identity and original availability time.
+- `timezone`, `information_cutoff`, `effective_session`, `anchor_session`, `end_session`, `horizon`:
+  exchange-calendar alignment contract.
+- `raw_return`, `benchmark_return`, `abnormal_return`: mechanically calculated continuous targets.
+- `reaction_class`, `neutral_threshold`, `threshold_version`: automatic class and frozen rule.
+- `benchmark_id`, `market_snapshot_sha256`: benchmark and immutable price lineage.
+- `ticker_session_information_set`: groups same-ticker same-session events when individual causal
+  attribution is impossible.
+- `split_assignment`, `protocol_version`: chronological isolation and calculation version.
+- `abstention_reason`, `missing_reason`: timestamp, price, corporate-action or quality failures;
+  missing values are never silently filled.
+
+Future reaction values are target-side data. A downstream row may use only reaction statistics for
+older events whose complete reaction window ended before that row's information cutoff.

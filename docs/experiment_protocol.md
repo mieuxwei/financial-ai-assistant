@@ -10,33 +10,36 @@ Experiments will compare a price/volume/technical baseline with otherwise matche
 - Probabilities are stored to eight decimal places; the continuous score is `positive_prob - negative_prob`.
 - English is supported. Chinese input is excluded rather than translated or assigned neutral.
 - Calendar-day sentiment uses Asia/Taipei dates. Trading-session cutoffs are deferred to M6.
-- The manual sample is a small synthetic regression/error-analysis set, not a performance benchmark.
+- The pre-existing 12-item manual sample is a pipeline sanity check only, not a performance benchmark.
 
-## M5.1 Chinese adoption gate
+## M5.5 historical Chinese adoption gate
 
 Chinese model selection uses both a balanced synthetic regression set and a separate TWSE announcement-derived context set. A candidate must reach macro-F1 ≥ 0.70 and recall ≥ 0.60 for positive, neutral and negative on the TWSE set. Timing is diagnostic only and excluded from reproducibility hashes.
 
-No tested M5.1 candidate passed. Chinese results remain missing-by-design rather than neutral. Future model training must use a separate train split; the current TWSE sample becomes evaluation-only and must not be used to tune lexicons, thresholds or model weights.
+No tested historical M5.5 candidate passed. Chinese results remain missing-by-design rather than
+neutral. The current TWSE sample remains historical model-rejection evidence only and must not be
+used as formal ground truth or to tune lexicons, thresholds or model weights.
 
 The explicit rejection evidence is retained: lexicon macro-F1 0.320, yiyang 0.357, bards.ai 0.442, translation plus English FinBERT 0.592, and Kenpache multilingual-v2 0.640. The gate remains macro-F1 ≥ 0.70 and recall ≥ 0.60 for every required class.
 
-## M6.1 Taiwan annotation protocol contract
+## M6 Taiwan data/corpus and automated-signal contract
 
 - The target concepts are a versioned event type and entity-specific financial impact: positive, neutral, negative or ambiguous.
 - Linguistic tone, financial impact and observed future price reaction must not be treated as interchangeable labels.
-- Inclusion, exclusion, abstention, reviewer, adjudication, agreement and copyright/source rules must be approved before annotation scale-up.
+- The project performs no human annotation or human label review. AI outputs are versioned silver signals, never expert truth.
+- Model agreement, confidence and abstention are features and diagnostics; disagreements are not manually adjudicated.
 - Near-duplicate disclosures and their rewrites belong to the same split. Train is earlier, validation is used for selection, and final test remains sealed.
 - The 30-item TWSE-derived set stays a frozen diagnostic artifact and is not sufficient for training or a publishable benchmark.
 - Candidate public data must pass provenance, licence, label, duplicate and split-leakage audits before use.
 
-## M6.2 Taiwan model adoption contract
+## M9 Taiwan weak-signal adoption contract
 
-- MacBERT is a candidate encoder, not a preselected winner.
-- Fine-tuning uses training data only; model, threshold and calibration choices use validation only.
-- A candidate must meet the approved gate on a sealed Taiwan-domain test before formal inference is enabled.
-- Failed candidates and negative findings remain in the report. Unsupported text never receives fabricated probabilities or a neutral placeholder.
+- Frozen embeddings and structured AI event/impact proxies are candidates; none is a preselected winner.
+- No model is fine-tuned on AI labels and then evaluated against the same label-generation process as proof of semantic accuracy.
+- Adoption depends on incremental chronological out-of-sample prediction value, coverage, abstention and regime stability.
+- Failed candidates and negative findings remain in the report. Unsupported or invalid text never receives fabricated probabilities or a neutral placeholder.
 
-## M6.3 historical market-reaction contract
+## M8 historical market-reaction contract
 
 - Candidate targets include next-session, 1-day and 3-day returns, preferably adjusted by a benchmark or market return.
 - The publication timestamp and market cutoff determine the reaction window; same-session article collections are treated as one information set when causal attribution is not identifiable.
@@ -44,9 +47,14 @@ The explicit rejection evidence is retained: lexicon macro-F1 0.320, yiyang 0.35
 - Any reaction-derived input at prediction time must use only events whose reaction windows finished before that prediction cutoff.
 - Target thresholds, beta estimates and normalisation are fit on train only and then frozen.
 
-## M7 downstream comparison contract
+## M11 downstream comparison contract
 
-The comparison matrix includes majority/previous-direction, market-only, market plus news count, market plus English FinBERT, market plus Taiwan event/impact, market plus historical reaction, and the combined model. Signal-group ablations remove each group independently. Model selection uses chronological validation, the final test stays sealed, and walk-forward analysis checks regime stability.
+The comparison matrix includes Baseline 0 majority/previous-direction, Baseline 1 market-only,
+Model 2 news count/metadata, Model 3 English FinBERT, Model 4 Taiwan frozen representation,
+Model 5 official/inferred event metadata plus weak supervision, Model 6 eligible past-completed
+reaction features, and Model 7 combined signals. Signal-group ablations remove each group
+independently. Model selection uses chronological validation, the final test stays sealed, and
+walk-forward analysis checks regime stability.
 
 ## M6 feature and label contract
 
@@ -56,7 +64,7 @@ The comparison matrix includes majority/previous-direction, market-only, market 
 - News at or before the cutoff enters session `t`; news after the cutoff or on a non-trading day enters the next observed session.
 - Sentiment rolling windows use 1, 3 and 5 observed trading sessions. No-article probability and score fields are null, not zero or neutral; article counts are zero.
 - The modeling dataset records exact configuration, pipeline version, market snapshot hash, sentiment snapshot hash and dataset hash. Rebuilding identical database inputs must reproduce the hash.
-- M7 preprocessing, imputation, scaling, feature selection and threshold selection must fit on the training period only. M6 intentionally performs none of those steps.
+- M11 preprocessing, imputation, scaling, feature selection and threshold selection must fit on the training period only. The feature builder intentionally performs none of those steps.
 
 M3 market snapshots are ordered by ticker and trading date and include a deterministic SHA-256. Research configurations must record the snapshot checksum, provider, requested range, and canonical universe. `ingested_at` is intentionally excluded from the checksum because it is operational metadata rather than market information.
 

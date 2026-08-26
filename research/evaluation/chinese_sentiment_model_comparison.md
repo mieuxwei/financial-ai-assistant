@@ -6,7 +6,8 @@ Decision: **No Chinese model is approved for M6 features yet.**
 
 ## Evaluation contract
 
-Two manually labelled sets are versioned with this report:
+Two pre-existing labelled diagnostic sets are versioned with this historical report. They are
+retained as rejection evidence; the project will not create, extend or manually review labels:
 
 1. `chinese_financial_sentiment_samples.json`: 36 balanced synthetic Traditional Chinese finance sentences, 12 per class. This is a regression set with explicit language and is intentionally easy.
 2. `twse_announcement_sentiment_samples.json`: 30 public TWSE announcement-derived title/context samples, labelled for event-aware market sentiment: 8 positive, 17 neutral and 5 negative. Text is shortened and excludes personal names.
@@ -63,18 +64,22 @@ Two cached runs of all five profiles on the TWSE-derived set produced byte-ident
 SHA-256 fa1d793fe2395aee9fa6ba4efa5ce324ec64446e6aad5ceb8fee60940014772c
 ```
 
-## Decision and next research requirement
+## Decision and zero-manual-label research direction
 
 M5 continues to score English only. `zh-TW` records remain explicitly skipped and receive no neutral placeholder.
 
-Before enabling Chinese sentiment:
+The failed candidates remain rejected. The Taiwan track now proceeds without manual annotation,
+manual label review or human adjudication:
 
-1. Define an annotation guide that separates linguistic tone, event impact and expected price impact.
-2. Have at least two human annotators label 150–300 retained title/context samples and report agreement.
-3. Evaluate event-type features alongside sentiment; dividends, buybacks, approvals, legal actions and routine disclosures should not be forced into one latent concept.
-4. Fine-tune or calibrate only on a train split, then apply the same sealed validation gate.
+1. Learn text representations from accepted, audited, unlabelled Taiwan financial corpora.
+2. Use structured official metadata, deterministic event rules and versioned weak-supervision sources.
+3. Generate market-reaction targets mechanically under the temporal protocol.
+4. Evaluate event-type and representation features with chronological, sealed out-of-sample
+   downstream experiments; do not force every disclosure into one latent sentiment concept.
 
-This decision preserves the core experiment: M6 may build the price-only baseline and feature contracts, but Chinese sentiment-enhanced results must not be claimed until the language gate passes.
+This decision preserves the core experiment: the recorded gate remains failed, formal Chinese
+sentiment remains unsupported, and any future Taiwan text signal must be described as automated
+weak/reaction supervision rather than human-validated sentiment ground truth.
 
 ## Primary model documentation
 

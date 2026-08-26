@@ -26,6 +26,8 @@ financial-ai-sentiment-audit = "research.evaluation.sentiment_error_analysis:mai
 financial-ai-chinese-sentiment-benchmark = "research.evaluation.chinese_sentiment_benchmark:main"
 financial-ai-features = "jobs.features:main"
 financial-ai-taiwan-dataset-audit = "research.evaluation.taiwan_dataset_audit:main"
+financial-ai-taiwan-calibration-batch = "jobs.annotation_batch:main"
+financial-ai-taiwan-annotation-agreement = "jobs.annotation_agreement:main"
 
 [project.optional-dependencies]
 dev = [
@@ -40,6 +42,9 @@ nlp = [
 ]
 audit = [
   "pyarrow>=18.0,<22.0",
+]
+annotation = [
+  "openpyxl>=3.1,<4.0",
 ]
 
 [tool.setuptools.packages.find]

@@ -1,15 +1,16 @@
 # Eland Sentiment ZH Preliminary Dataset Audit
 
 Audit date: 2026-08-26  
-Candidate: `p988744/eland-sentiment-zh`  
-Decision: **HOLD — not approved for M6.2 training**
+Historical candidate: `p988744/eland-sentiment-zh`
+Decision: **HOLD / EXCLUDED FROM ACTIVE MODELING PIPELINE**
 
 ## Scope and evidence boundary
 
-This is a preliminary metadata and public-viewer review, not the required full raw-data
-audit. The official Hugging Face page was inspected, but the raw split files could not be
-downloaded from the available environment because the official download endpoints returned
-HTTP 401. No alternate mirror was used and no dataset text was committed.
+This is a preliminary metadata and public-viewer review, not a full raw-data audit. The raw
+split files could not be downloaded from the available environment because the official
+download endpoints returned HTTP 401. A live browser check on 2026-08-26 subsequently returned
+HTTP 404 for both the dataset root and file tree. The repository may have been removed, renamed
+or made private. No alternate mirror was used and no dataset text was committed.
 
 The [official dataset card](https://huggingface.co/datasets/p988744/eland-sentiment-zh)
 declares Apache-2.0 and describes:
@@ -42,28 +43,21 @@ raw splits, the following remain unverified:
 - full finance-domain and Traditional-Chinese coverage;
 - per-record source provenance and retention rights.
 
-## Go/no-go decision
+## Final project decision
 
-**No-go for training; hold for full audit.** The dataset may be reconsidered only after all
-official raw splits are available locally, their immutable revision/hash is recorded, and the
-automated report plus manual provenance/domain review pass. The `chat` configuration must not
-be used as a shortcut because it expands and reformats the data without solving traceability or
-domain-quality concerns.
+**Historical candidate — HOLD / excluded from active modeling.** The dataset is not an active
+candidate and will not be rescued or re-audited during this milestone. It is retained only as
+historical dataset-audit and rejection evidence. Cached search results, unknown mirrors and the
+`chat` configuration are not acceptable substitutes for the unavailable raw source.
 
-If the raw files become available, keep them under the ignored
-`.tools/datasets/eland-sentiment-zh/` path and run:
+Eland is prohibited from all active project uses, including:
 
-```bash
-python -m pip install -e ".[audit]"
-financial-ai-taiwan-dataset-audit \
-  --split train=.tools/datasets/eland-sentiment-zh/raw/train.parquet \
-  --split validation=.tools/datasets/eland-sentiment-zh/raw/validation.parquet \
-  --split test=.tools/datasets/eland-sentiment-zh/raw/test.parquet \
-  --dataset-id p988744/eland-sentiment-zh \
-  --dataset-revision "<immutable-revision>" \
-  --declared-license apache-2.0 \
-  --output artifacts/eland-sentiment-zh-audit.json
-```
+- model training or MacBERT fine-tuning;
+- domain-adaptive pretraining or corpus merging;
+- weak-supervision voting or feature construction;
+- formal evaluation, ground-truth labels or future active dataset experiments.
 
-The output contains aggregate counts and hashes, not raw text. An automated pass is necessary
-but never replaces manual source, copyright and domain review.
+The preserved rejection rationale is: mixed-domain public samples, non-financial contamination,
+abnormal or inconsistent markup, unavailable full raw splits, and unverified full label
+distribution, duplicate rate, cross-split leakage, provenance and financial-domain purity. This
+record does not authorize any future active use.

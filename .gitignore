@@ -54,6 +54,7 @@ imports/
 # Generated model and research artifacts
 artifacts/*
 !artifacts/README.md
+outputs/
 models/*.bin
 models/*.pt
 models/*.pth

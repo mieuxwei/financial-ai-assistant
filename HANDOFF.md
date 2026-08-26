@@ -4,9 +4,21 @@ Last revised: 2026-08-26
 
 ## Current boundary
 
-M0–M6 are complete and their evidence is retained. M6.1 is in progress: the annotation protocol, taxonomy v1, versioned schema, dataset-audit CLI and unit tests are implemented locally. Check Git status before any work because M6.1 changes are uncommitted. Do not jump to M6.2 or M7 yet.
+M0–M5.5 are complete and their evidence is retained. M6 is the active Taiwan dataset/corpus-audit
+milestone under a hard zero-human-label constraint: no manual annotation, label review or human
+adjudication. The taxonomy, automated-signal protocol, market-reaction protocol, logical schema,
+dataset-governance register, dataset-audit CLI, calibration exporter, agreement CLI and tests are
+implemented locally. A 60-item Gemini-versus-Codex diagnostic is retained under ignored local
+directories as model-stability evidence only. Check Git status because these changes are
+uncommitted. Do not start M7 training until an active corpus receives purpose-specific approval.
 
-The remaining M6.1 blocker is a full audit of candidate raw splits and a reviewed go/no-go decision. The Eland candidate is **HOLD / not approved for training** because official raw downloads returned HTTP 401 and the public viewer shows domain contamination. Do not train MacBERT, fabricate annotations, run downstream prediction, backtest, deploy, or modify working GAS code.
+There is no human gold-set objective. Eland is a **historical candidate — HOLD / excluded from the
+active modeling pipeline** because official raw downloads returned HTTP 401, a later live check
+returned 404, and the earlier public viewer showed domain contamination. Preserve the rejection
+record only: do not rescue, re-audit, train, adapt, vote, evaluate, merge or construct features from
+Eland. Do not train a model against AI labels and present agreement with the same label process as
+semantic accuracy. Do not deploy, modify working GAS code or make investment-performance claims
+before the automated signal experiments pass leakage-safe out-of-sample evaluation.
 
 ## Verified findings that must not change
 
@@ -47,7 +59,7 @@ Taiwan labels use a versioned event taxonomy and `POSITIVE`, `NEUTRAL`, `NEGATIV
 
 Future return is allowed as a historical reaction target, never as an input available at the event timestamp. A reaction-derived prediction feature may only use older events whose reaction windows completed before the current information cutoff.
 
-## M6.1 delivered locally
+## Historical diagnostic tooling delivered locally
 
 Implemented:
 
@@ -56,17 +68,35 @@ Implemented:
 3. `research/annotation/schema.py`
 4. `research/evaluation/taiwan_dataset_audit.py`
 5. `research/evaluation/eland_dataset_preliminary_audit.md`
-6. Unit tests for schema invariants, taxonomy parity, leakage checks and raw-text omission.
+6. `research/evaluation/taiwan_data_source_decisions.md`
+7. `research/evaluation/twse_calibration_batch_preparation.md`
+8. `jobs/annotation_batch.py` and calibration-selection tests.
+9. `jobs/annotation_agreement.py` and Cohen's-kappa tests.
+10. Unit tests for schema invariants, taxonomy parity, leakage checks and raw-text omission.
+11. `research/evaluation/twse_calibration_round_1_result.md` and protocol v1.1 boundary clarifications.
+12. `docs/automated_chinese_text_signal_protocol.md` as the operative zero-human research contract.
 
-## Next task: finish M6.1 data review
+## Next minimum milestone: complete the M6 active-source audit
 
-Obtain the official Eland raw splits without bypassing access controls, record an immutable
-revision and file hashes, place them only under ignored `.tools/`, run the audit CLI, and conduct
-a documented manual domain/provenance review. If access or source lineage remains unresolved,
-retain the no-go decision and evaluate another legally traceable candidate or build a small
-reviewed TWSE event dataset under the annotation protocol.
+Round 1 is complete as an AI-to-AI diagnostic: Gemini 3.1 Pro Reviewer A versus Codex Reviewer B.
+Impact raw agreement was 0.766667 with kappa 0.640411; event raw agreement was 0.650000 with kappa
+0.533679. Preserve these as stability evidence without human adjudication.
 
-Do not create fake labels. Keep external/full text and large model/data caches in ignored locations. Do not automatically commit or push.
+The next executable unit is a metadata-first, no-training audit of active sources in this order:
+
+1. confirm access, provenance, licence/retention terms and corpus manifest boundaries for
+   `tw-finance-159M` and MOPS/TWSE;
+2. audit FinMind endpoints and underlying-source rights for news/market timestamp alignment;
+3. define an optional bounded FSC/regulatory corpus manifest;
+4. select and audit a Taiwan benchmark price series for the automatic market-reaction protocol;
+5. record only aggregate counts, hashes, decisions and unknowns in the governance register.
+
+Do not download a large corpus, start domain adaptation or generate active model features until the
+relevant source moves through its purpose-specific gate. Eland is not part of this work queue.
+After M6 approval, M7 may begin with a small reproducible domain-adaptation feasibility run.
+
+Do not create fake labels. Keep external/full text and large model/data caches in ignored locations.
+Do not automatically commit or push.
 
 ## Architecture and safety
 
