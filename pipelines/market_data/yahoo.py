@@ -126,25 +126,30 @@ class YahooFinanceProvider:
             try:
                 close = self._decimal(values["close"])
                 adjusted_raw = self._at(adjusted_values, index)
-                bars.append(
-                    MarketBar(
-                        ticker=request.ticker,
-                        trading_date=(
-                            datetime.fromtimestamp(timestamp, UTC).astimezone(TAIPEI).date()
-                        ),
-                        open=self._decimal(values["open"]),
-                        high=self._decimal(values["high"]),
-                        low=self._decimal(values["low"]),
-                        close=close,
-                        adjusted_close=(
-                            self._decimal(adjusted_raw, ADJUSTED_PRICE_QUANTUM)
-                            if adjusted_raw is not None
-                            else close.quantize(ADJUSTED_PRICE_QUANTUM)
-                        ),
-                        volume=int(values["volume"]),
-                        source=self.name,
-                    )
+                candidate = MarketBar(
+                    ticker=request.ticker,
+                    trading_date=(
+                        datetime.fromtimestamp(timestamp, UTC).astimezone(TAIPEI).date()
+                    ),
+                    open=self._decimal(values["open"]),
+                    high=self._decimal(values["high"]),
+                    low=self._decimal(values["low"]),
+                    close=close,
+                    adjusted_close=(
+                        self._decimal(adjusted_raw, ADJUSTED_PRICE_QUANTUM)
+                        if adjusted_raw is not None
+                        else close.quantize(ADJUSTED_PRICE_QUANTUM)
+                    ),
+                    volume=int(values["volume"]),
+                    source=self.name,
                 )
+                if not self._is_structurally_valid(candidate):
+                    warnings.append(
+                        "skipped structurally invalid bar at timestamp index "
+                        f"{index}"
+                    )
+                    continue
+                bars.append(candidate)
             except (InvalidOperation, TypeError, ValueError) as error:
                 warnings.append(
                     "skipped invalid numeric bar at timestamp index "
@@ -161,6 +166,17 @@ class YahooFinanceProvider:
     @staticmethod
     def _decimal(value: Any, quantum: Decimal = RAW_PRICE_QUANTUM) -> Decimal:
         return Decimal(str(value)).quantize(quantum)
+
+    @staticmethod
+    def _is_structurally_valid(bar: MarketBar) -> bool:
+        prices = (bar.open, bar.high, bar.low, bar.close, bar.adjusted_close)
+        return (
+            min(prices) > 0
+            and bar.high >= max(bar.open, bar.close)
+            and bar.low <= min(bar.open, bar.close)
+            and bar.high >= bar.low
+            and bar.volume >= 0
+        )
 
     @staticmethod
     def _epoch_at_taipei_midnight(value) -> int:

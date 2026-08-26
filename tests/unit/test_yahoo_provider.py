@@ -78,3 +78,17 @@ def test_yahoo_provider_retries_transient_status() -> None:
     assert attempts == 2
     assert sleeps == [0.5]
     client.close()
+
+
+def test_yahoo_provider_quarantines_structurally_invalid_bar() -> None:
+    payload = yahoo_payload()
+    payload["chart"]["result"][0]["indicators"]["quote"][0]["open"] = [0.0]
+    transport = httpx.MockTransport(lambda incoming: httpx.Response(200, json=payload))
+    client = httpx.Client(transport=transport)
+    provider = YahooFinanceProvider(client=client)
+
+    result = provider.fetch_daily(request())
+
+    assert result.bars == []
+    assert result.warnings == ["skipped structurally invalid bar at timestamp index 0"]
+    client.close()

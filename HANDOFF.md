@@ -48,10 +48,13 @@ NLP intelligence, optional NLP ablation, risk validation, API, LINE/GAS slimming
 portfolio finalization. `docs/research_direction_migration.md` maps the legacy milestones without
 deleting their evidence.
 
-Current task boundary: documentation migration only. Do not train a volatility or NLP model, open
-any sealed test, modify working GAS, deploy, commit or push. The next minimum executable unit after
-user approval is **new M1 — Market Dataset**: freeze an auditable market universe/period/split
-coverage and extend immutable OHLCV + TAIEX snapshots and quality tests without model training.
+M1 Market Dataset was completed on 2026-08-27 after explicit user approval. The fixed ten-ticker
+universe, chronological split contract, immutable local OHLCV/TAIEX snapshots, integrity tests and
+raw-free audit summary are now present. The audit passed with 40,691 stock rows and 4,080 benchmark
+sessions. Generated provider rows remain Git-ignored because redistribution rights are not assumed.
+No risk label was generated, no model was trained, and no sealed-test outcome or performance was
+opened. The next minimum unit is **M2 — Risk Label Protocol**. Continue to avoid GAS changes,
+deployment, commit and push unless the user separately authorizes them.
 
 ## Preserved one-week TEJ/NLP context — secondary Track B
 

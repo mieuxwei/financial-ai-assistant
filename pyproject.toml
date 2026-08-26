@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "financial-ai-assistant"
 version = "0.1.0"
-description = "Research platform for financial news sentiment and short-term stock direction modeling."
+description = "Research platform for stock volatility-risk prediction and financial NLP intelligence."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -37,6 +37,7 @@ financial-ai-benchmark-data = "jobs.benchmark_data:main"
 financial-ai-reaction-labels = "jobs.reaction_labels:main"
 financial-ai-m8-market-data = "jobs.m8_market_data:main"
 financial-ai-finmind-news-audit = "research.evaluation.finmind_news_audit:main"
+financial-ai-risk-market-dataset = "jobs.risk_market_dataset:main"
 
 [project.optional-dependencies]
 dev = [

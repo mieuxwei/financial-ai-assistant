@@ -372,7 +372,11 @@ Git。`.env`、`.tools/`、`data/raw/`、`data/private/`、`artifacts/`、import
 與品質報告；確認 warm-up、train、validation、test 均有足夠資料。相同 input/config 重建 hash
 一致，duplicate、missing session、OHLC invariant、volume、corporate action/provider revision 有測試。
 
-**這是下一個最小可執行單元。**
+**狀態：完成（2026-08-27）。** 已凍結 10 檔 universe、2010-01-01 起始快照、
+2011–2022 train、2023–2024 validation 與 2025-01-01–2026-08-26 sealed test。M1 audit 包含
+40,691 筆個股列與 4,080 個 TAIEX session，所有缺漏比率低於 3% 且無 fatal issue。資料快照與
+machine report 位於 Git 忽略路徑；公開只保留 raw-free 摘要。M1 未產生風險標籤、未訓練模型、
+未查看 sealed-test outcome 或績效。下一個單元是 M2 Risk Label Protocol。
 
 ### M2 — Risk Label Protocol
 
@@ -497,10 +501,9 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-本次任務只執行 M0 文件遷移：更新 plan、handoff、README 與 migration mapping，保留全部 code／
-evidence。禁止啟動 volatility model training、打開任何 sealed test、刪除 NLP、修改 working GAS、
-deploy、commit 或 push。
+M0 文件遷移與 M1 Market Dataset 已完成。禁止打開任何 sealed-test outcome／performance、刪除
+NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M1 Market Dataset**：在不訓練模型、不讀 sealed test 的前提下，定義
-固定 market universe／歷史期間／split coverage，擴充可重現 OHLCV + TAIEX snapshot 與品質稽核，
-並以 tests 驗證交易日、OHLC、duplicate、missing-session、provider revision 與 warm-up contract。
+下一個最小可執行單元是 **M2 Risk Label Protocol**：先以 train-only 規則版本化 continuous
+next-session outcomes、異常門檻 estimator 與 binary label contract，完成 temporal mutation／leakage
+tests；在 M2 設計與測試通過前不訓練模型，也不計算或揭露 validation/test label distribution。

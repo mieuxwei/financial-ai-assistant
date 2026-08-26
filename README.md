@@ -27,7 +27,13 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M0 core-direction migration / next: M1 market dataset / no new model training**。
+目前狀態：**M1 market dataset complete / next: M2 risk-label protocol / no model training**。
+
+M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
+train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
+忽略路徑，不會隨公開 repository 散布。詳見
+[M1 protocol](docs/risk_market_dataset_protocol.md) 與
+[raw-free audit summary](research/evaluation/m1_market_dataset_audit.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

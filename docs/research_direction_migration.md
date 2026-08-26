@@ -125,7 +125,7 @@ Chinese sentiment performance and NLP incremental value are explicitly not manda
 
 ## Immediate next unit
 
-After explicit user approval, execute **new M1 — Market Dataset** only:
+M1 was executed after explicit user approval on 2026-08-27:
 
 1. freeze a bounded ticker universe and historical period;
 2. predeclare warm-up, train, validation and sealed-test date coverage;
@@ -134,4 +134,5 @@ After explicit user approval, execute **new M1 — Market Dataset** only:
    and benchmark alignment;
 5. add tests and a raw-free quality report.
 
-Do not train a model or open any sealed test during M1.
+The immutable local audit passed. No model was trained, no risk label was generated, and no sealed
+test outcome or performance was opened. The next unit is M2 Risk Label Protocol.

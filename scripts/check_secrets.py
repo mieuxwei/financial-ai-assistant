@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,7 +31,25 @@ PATTERNS = {
 
 
 def candidate_files(root: Path):
-    for path in root.rglob("*"):
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(root),
+                "ls-files",
+                "--cached",
+                "--others",
+                "--exclude-standard",
+                "-z",
+            ],
+            check=True,
+            capture_output=True,
+        )
+        paths = (root / item for item in result.stdout.decode().split("\0") if item)
+    except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
+        paths = root.rglob("*")
+    for path in paths:
         if not path.is_file() or any(part in EXCLUDED_PARTS for part in path.parts):
             continue
         if path.name == ".env.example" or path.stat().st_size > 1_000_000:
