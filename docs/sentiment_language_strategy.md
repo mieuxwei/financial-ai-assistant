@@ -40,6 +40,19 @@ returns can never be an event-time feature.
 The active audit queue is `tw-finance-159M`, MOPS/TWSE, FinMind, optional FSC/regulatory text and
 historical stock/benchmark prices. Eland is excluded and retained only as a historical HOLD record.
 
+## F8 unified product contract
+
+F8 now enforces this language boundary in the product-facing assembler. English text accepts
+polarity only when a caller supplies a prediction from the exact pinned FinBERT revision; otherwise
+it is eligible but unscored. Chinese/Taiwan text always abstains with null polarity outputs, while
+official source metadata and deterministic event/impact proxies remain separately identified
+research signals. No-match rules abstain. The assembler never calls an LLM or stores full article
+content, and its generated-summary field defaults to null.
+
+The F8 audit did not rerun the historical Chinese diagnostic, download a model or create new
+performance claims. Eland remains historical rejection evidence only. See
+`research/evaluation/f8_financial_nlp_intelligence_result.md`.
+
 References:
 
 - [ProsusAI/finbert model card](https://huggingface.co/ProsusAI/finbert)

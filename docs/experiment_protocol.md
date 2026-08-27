@@ -116,6 +116,12 @@ The historical NLP contracts below remain valid Track B evidence. Comparing othe
 market-only and market+NLP models is optional F9 work and is not part of the main definition of
 done. See `PROJECT_PLAN.md` and `docs/final_study_migration.md`.
 
+F8 implementation status: the unified intelligence contract preserves the exact pinned English
+FinBERT revision, returns `ELIGIBLE_NOT_SCORED` when that optional model has not run, and requires
+Chinese/Taiwan polarity to abstain with null probabilities. Official metadata and deterministic
+event/impact proxies are separate research signals, not sentiment truth. The F8 contract audit
+uses controlled routing fixtures only and performs no accuracy evaluation, inference or training.
+
 ## M5 sentiment reproducibility contract
 
 - Model: `ProsusAI/finbert` at revision `4556d13015211d73dccd3fdd39d39232506f3e43`.

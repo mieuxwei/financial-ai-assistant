@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation complete through F7; protocol unchanged**
+Status: **FROZEN — implementation complete through F8; protocol unchanged**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -372,3 +372,18 @@ reference, empirical percentile and frozen 50/80/95 communication bands. Artifac
 Artifact inference reproduced fitted Ridge predictions within `5.01e-13`. The model is frozen but
 not deployed and does not claim prospective accuracy. See
 `research/evaluation/f7_final_research_model_result.md`.
+
+## 22. F8 implementation record
+
+After separate approval, F8 froze a unified Financial NLP Intelligence output contract. English
+polarity accepts only the pinned ProsusAI/finbert revision; without optional runtime inference it
+returns `ELIGIBLE_NOT_SCORED`. Chinese/Taiwan polarity always returns explicit abstention and null
+probabilities. Official TWSE metadata and deterministic event/impact proxies remain separate and
+are never labeled sentiment ground truth.
+
+The audit verified seven pre-existing evidence-file hashes and three controlled routing cases. It
+ran no model download/inference/training, external API, LLM, manual annotation/review or deployment,
+and persisted no source rows. Config SHA-256 is
+`de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4`; aggregate analysis
+SHA-256 is `8994a66e2fef70da2ad16d54cb3698ac8e2f14badad4e9237a03e2669b97ab42`. F9 remains
+optional/non-blocking; F10 may follow directly after review.

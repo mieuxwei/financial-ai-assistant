@@ -1,0 +1,103 @@
+{
+  "schema_version": "financial-nlp-intelligence-config-v1",
+  "intelligence_version": "financial-nlp-intelligence-v1",
+  "analysis_version": "f8-financial-nlp-intelligence-analysis-v1",
+  "report_version": "f8-financial-nlp-intelligence-report-v1",
+  "english_sentiment": {
+    "status": "SUPPORTED_PINNED_OPTIONAL_RUNTIME",
+    "model_id": "ProsusAI/finbert",
+    "model_revision": "4556d13015211d73dccd3fdd39d39232506f3e43",
+    "supported_language_prefixes": ["en"],
+    "output_type": "ENGLISH_FINANCIAL_POLARITY",
+    "probability_fields": ["positive", "neutral", "negative"],
+    "score_formula": "positive_probability_minus_negative_probability",
+    "model_download_required_for_contract_audit": false
+  },
+  "taiwan_sentiment": {
+    "status": "UNSUPPORTED_ABSTAIN",
+    "language_prefixes": ["zh"],
+    "probabilities_must_be_null": true,
+    "automatic_translation_allowed": false,
+    "generic_llm_polarity_allowed": false,
+    "abstention_reason": "CHINESE_SENTIMENT_NOT_VALIDATED"
+  },
+  "taiwan_event_intelligence": {
+    "official_metadata_status": "SUPPORTED_PASS_THROUGH",
+    "deterministic_event_proxy_status": "SUPPORTED_RESEARCH_SIGNAL",
+    "weak_supervision_status": "RESEARCH_CORE_ONLY",
+    "event_proxy_is_sentiment_ground_truth": false,
+    "manual_labels_used": false,
+    "manual_review_used": false,
+    "no_rule_match_policy": "ABSTAIN",
+    "conflict_policy": "AMBIGUOUS_OR_ABSTAIN"
+  },
+  "product_capabilities": {
+    "news_and_twse_retrieval": "IMPLEMENTED",
+    "ticker_matching": "IMPLEMENTED",
+    "english_finbert_adapter": "IMPLEMENTED_OPTIONAL_DEPENDENCY",
+    "official_announcement_metadata": "IMPLEMENTED",
+    "deterministic_event_cues": "IMPLEMENTED_RESEARCH_ONLY",
+    "source_excerpt": "IMPLEMENTED_NO_GENERATION",
+    "embeddings_related_event_retrieval": "RESEARCH_CANDIDATE_NOT_PRODUCT_INTEGRATED",
+    "llm_daily_brief": "ON_DEMAND_ONLY_NOT_EXECUTED_IN_F8",
+    "perplexity": "OPTIONAL_ON_DEMAND_ONLY_DISABLED_BY_DEFAULT"
+  },
+  "active_source_roles": {
+    "tw_finance_159m": "UNLABELED_DOMAIN_LANGUAGE_ADAPTATION_ONLY",
+    "mops_twse": "OFFICIAL_DISCLOSURE_TEXT_TIMESTAMPS_METADATA",
+    "finmind": "NEWS_MARKET_TIMESTAMP_ALIGNMENT",
+    "taiwan_fsc": "OPTIONAL_REGULATORY_LANGUAGE_ADAPTATION",
+    "historical_market_prices": "AUTOMATIC_MARKET_REACTION_TARGETS"
+  },
+  "eland": {
+    "status": "HOLD_EXCLUDED_FROM_ACTIVE_MODELING",
+    "allowed_role": "HISTORICAL_REJECTION_EVIDENCE_ONLY",
+    "prohibited_uses": [
+      "training",
+      "domain_adaptation",
+      "weak_supervision",
+      "evaluation",
+      "ground_truth",
+      "feature_construction",
+      "corpus_merge",
+      "active_reaudit"
+    ]
+  },
+  "historical_evidence_files": {
+    "research/evaluation/finbert_manual_samples.json": "bab31cd1b77ef660dd0c77a9085471fd28bf9ed704ad57811acb03dd16d28da1",
+    "research/evaluation/finbert_manual_error_analysis.md": "6d91627a7c38946080fc397c373d887457f6cafc5c3a6a1b449f36b7dc7a940e",
+    "research/evaluation/chinese_sentiment_model_comparison.md": "56c32db7cce3f70f5a4794020b6df56990a85a8084e7b779e3dfd687f58619da",
+    "research/evaluation/fsc_official_archive_audit.md": "ccb4ddbfa4a8d331f001c318ee7ddb7649eb98892534c85fe0ec4e78573d12b5",
+    "research/evaluation/m9_weak_supervision_core.md": "bf3f33245b84f128336a89199ddb74540393f4e3f27c6b35af219ed761ee9acf",
+    "research/evaluation/eland_dataset_preliminary_audit.md": "ddc804ecec24683b2cf8eb69855be7842e82ec025bf99be0da2318feb5d1f545",
+    "research/evaluation/taiwan_dataset_governance.md": "ee28c1dfb66b24fa73147907582dbe0475d2ae6ada96f12f36bf173e027662fd"
+  },
+  "output_contract": {
+    "required_fields": [
+      "schema_version",
+      "item_id",
+      "source",
+      "source_type",
+      "published_at",
+      "language",
+      "ticker_matches",
+      "sentiment",
+      "official_metadata",
+      "event_intelligence",
+      "deterministic_cue_terms",
+      "source_excerpt",
+      "generated_summary",
+      "lineage",
+      "claim_boundary"
+    ],
+    "full_article_content_stored": false,
+    "generated_summary_default": null,
+    "llm_called_by_assembler": false
+  },
+  "manual_annotation_allowed": false,
+  "manual_label_review_allowed": false,
+  "track_a_dependency_on_nlp_success": false,
+  "model_training_performed_in_f8": false,
+  "external_api_called_by_contract_audit": false,
+  "deploy_in_f8": false
+}

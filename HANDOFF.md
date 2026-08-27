@@ -1,11 +1,11 @@
 # Financial AI Assistant — Authoritative Handoff
 
-Last revised: 2026-08-27
+Last revised: 2026-08-28
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F7 final research model freeze complete**
-Next executable unit: **F8 only after user review/approval**
+Current unit: **F8 Financial NLP Intelligence complete**
+Next decision: **optional F9 or F10, only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -223,7 +223,7 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F5:** nested rolling-origin evaluation and OOF predictions — complete; no final winner selected.
 - **F6:** ranking/decile/lift/robustness — complete; no final winner selected.
 - **F7:** final research artifact and inference freeze — complete; Ridge alpha 100, not deployed.
-- **F8:** Financial NLP Intelligence.
+- **F8:** Financial NLP Intelligence — complete; abstention-safe contract, no model inference.
 - **F9:** optional NLP incremental-value study.
 - **F10:** FastAPI/backend integration.
 - **F11:** LINE/dashboard demo.
@@ -309,10 +309,30 @@ first applicable tie-break, lower mean outer MAE. Temporal validation over 2023/
 alpha 100. The final research fit used all 32,357 eligible rows and persisted scaler/model state plus
 20,637 Ridge OOF reference scores as safe JSON. It was not deployed and makes no prospective claim.
 
+## F8 ARTIFACTS AND RESULT
+
+- Frozen config: `research/configs/financial_nlp_intelligence.v1.json`.
+- Contract assembler: `pipelines/intelligence/financial_nlp.py`.
+- CLI: `jobs/financial_nlp_intelligence.py` / `financial-ai-nlp-intelligence`.
+- Safety tests: `tests/unit/test_financial_nlp_intelligence.py`.
+- Public result: `research/evaluation/f8_financial_nlp_intelligence_result.md`.
+- Local aggregate analysis: `.tools/evaluation/f8-financial-nlp-intelligence-v1/analysis.json`.
+- Canonical F8 config SHA-256:
+  `de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4`.
+- Canonical F8 analysis SHA-256:
+  `8994a66e2fef70da2ad16d54cb3698ac8e2f14badad4e9237a03e2669b97ab42`.
+
+Seven historical NLP evidence files passed byte-hash verification. English text is either scored
+with the exact pinned FinBERT revision or remains `ELIGIBLE_NOT_SCORED`; Chinese/Taiwan polarity
+always abstains with null probabilities. Official metadata and deterministic event/impact proxies
+are separate from sentiment and are not ground truth. The controlled audit ran no model, API, LLM,
+manual review, training or deployment, and persisted no fixture rows/private text.
+
 ## SAFETY AND NEXT ACTION
 
-Do not rewrite F5/F6/F7 evidence, retune the frozen Ridge from subgroup results, rerun M7, create a
-fake sealed test, modify working GAS, deploy, commit or push during the F7 stop boundary.
+Do not rewrite F5/F6/F7/F8 evidence, retune the frozen Ridge from subgroup results, rerun M7,
+fabricate Chinese sentiment, create a fake sealed test, modify working GAS, deploy, commit or push
+during the F8 stop boundary.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
@@ -327,6 +347,6 @@ F4 implemented 1 persistence, 4 Ridge and 16 HGB parameterized candidates under 
 grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection and deterministic
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
-After user review, the next minimum executable unit is
-**F8 — Financial NLP Intelligence**. Preserve existing English FinBERT and Taiwan NLP evidence,
-keep unsupported Chinese polarity abstention-safe, and do not make Track A depend on NLP lift.
+After user review, choose either **F9 — Optional NLP Incremental-Value Study** only when suitable
+timestamp-safe historical NLP features already exist, or skip to **F10 — Backend Integration**.
+F9 is non-blocking; Track A completion never depends on positive NLP lift.

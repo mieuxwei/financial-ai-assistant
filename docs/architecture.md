@@ -256,3 +256,13 @@ event backfill must precede threshold fitting and downstream model work.
 Active Taiwan source audits prioritize `tw-finance-159M`, MOPS/TWSE, FinMind, optional FSC
 regulatory text and historical stock/benchmark prices. Eland is excluded from the active modeling
 pipeline and appears only in historical rejection documentation.
+
+## F8 Financial NLP Intelligence boundary
+
+The unified assembler consumes normalized `NewsItem` records plus ticker matches. It may attach a
+prediction only for English text and only from the pinned FinBERT revision. Unsupported Chinese
+polarity returns explicit abstention and null probabilities; TWSE company/clause/fact-date metadata
+and deterministic event/impact cues occupy separate fields and are never treated as sentiment
+ground truth. The assembler performs no retrieval, external API call, model inference or LLM
+generation itself. This keeps ingestion/model runtimes optional and preserves a deterministic,
+testable product contract for later F10 integration.
