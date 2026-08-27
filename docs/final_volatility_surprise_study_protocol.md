@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation and training have not started**  
+Status: **FROZEN — implementation complete through F5; protocol unchanged**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -238,7 +238,7 @@ insufficient rather than hidden.
 
 ## 12. Product score and communication bands
 
-The model outputs a continuous predicted volatility-surprise score. After F5 model selection, the
+The model outputs a continuous predicted volatility-surprise score. After F7 model selection, the
 historical reference distribution is the selected model's pooled outer-fold OOF predictions.
 Frozen percentiles define presentation bands:
 
@@ -323,4 +323,21 @@ Every fit requires an explicit temporal context and rejects target overlap, non-
 duplicate identities, non-finite data and parameters outside the F1 grid. Synthetic repeated fits
 produced identical manifests and predictions. F4 ran no historical outer evaluation, selected no
 hyperparameters/winner and persisted no final model. See
-`research/evaluation/f4_regression_candidates_result.md`. F5 has not started.
+`research/evaluation/f4_regression_candidates_result.md`. At the F4 stop boundary, F5 had not
+started.
+
+## 19. F5 implementation record
+
+After separate approval, F5 ran the seven frozen outer periods. Every candidate setting was scored
+only on the three inner temporal validations contained in the corresponding outer training
+history; the selected setting was refitted on full outer training and evaluated once on the later
+outer block. Fold-local preprocessing and temporal-boundary guards remained active.
+
+The run produced 20,637 unique historical OOS rows and 61,911 immutable OOF prediction rows across
+persistence, Ridge and HGB. Canonical OOF SHA-256 is
+`b693476dba45c2aefcbf556d1ba79a21602c34da2321808d3ec0512d7c65b4a7`. Mean outer Spearman was
+0.0608, 0.1940 and 0.1863 respectively. Ridge and HGB are within the frozen `0.01` practical-tie
+margin, while their mean R-squared values remain near zero/slightly negative. F5 therefore records
+a modest ranking signal and selects no final model. F6 must analyze the immutable OOF predictions
+without retuning; F7 remains responsible for final selection. See
+`research/evaluation/f5_nested_temporal_evaluation_result.md`.

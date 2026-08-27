@@ -1,0 +1,38 @@
+{
+  "schema_version": "final-nested-temporal-evaluation-config-v1",
+  "experiment_version": "final-nested-temporal-evaluation-v1",
+  "oof_dataset_version": "final-regression-oof-predictions-v1",
+  "report_version": "f5-final-nested-temporal-evaluation-report-v1",
+  "f1_protocol_config_sha256": "4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66",
+  "f4_config_sha256": "88ff58b4510cec94c0f0b5a1c895cad3bafc126bf61048d01facdfb1dbfae726",
+  "final_dataset_sha256": "2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c",
+  "outer_fold_names": [
+    "outer_2017_2018",
+    "outer_2019_2020",
+    "outer_2021_2022",
+    "outer_2023",
+    "outer_2024",
+    "outer_2025",
+    "outer_2026_partial"
+  ],
+  "inner_validation_blocks": 3,
+  "inner_primary_metric": "spearman",
+  "inner_secondary_metric": "mae",
+  "inner_tie_breakers": [
+    "higher_worst_inner_spearman",
+    "lower_model_complexity",
+    "lexicographic_parameter_json"
+  ],
+  "outer_metrics": ["mae", "rmse", "r2", "spearman"],
+  "prediction_quantum": "0.000000000001",
+  "minimum_inner_validation_rows": 100,
+  "minimum_outer_evaluation_rows": 100,
+  "constant_prediction_spearman_policy": "ZERO_AND_REPORT",
+  "random_split_allowed": false,
+  "global_preprocessing_allowed": false,
+  "inner_rows_may_use_outer_evaluation": false,
+  "outer_evaluation_may_select_hyperparameters": false,
+  "final_model_selection_performed_in_f5": false,
+  "f6_analysis_performed_in_f5": false,
+  "model_artifact_persisted_in_f5": false
+}

@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-27  
-Status: F1–F4 complete; F5 not started
+Status: F1–F5 complete; F6 pending review
 
 ## Migration principle
 
@@ -66,7 +66,8 @@ result or used to claim prospective confirmation.
    v1 unless a separately approved protocol amendment justifies it. **Implementation complete;
    historical evaluation not run.**
 5. **F5 — Nested / Rolling-Origin Evaluation:** inner temporal tuning, seven outer historical
-   folds and reproducible OOF predictions.
+   folds and reproducible OOF predictions. **Complete:** 20,637 evaluation rows and 61,911
+   three-model OOF predictions; no final winner selected.
 6. **F6 — Ranking & Robustness Analysis:** regression/ranking metrics, deciles, lift,
    ticker/time/regime diagnostics and uncertainty.
 7. **F7 — Final Research Model Freeze:** frozen winner, full-history research fit, artifact and

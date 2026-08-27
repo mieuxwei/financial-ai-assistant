@@ -4,8 +4,8 @@ Last revised: 2026-08-27
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F4 regression candidates complete**
-Next executable unit: **F5 only after user review/approval**
+Current unit: **F5 nested temporal evaluation complete**
+Next executable unit: **F6 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -219,8 +219,8 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F1:** protocol/config/schema/safety-test freeze — planning scope complete.
 - **F2:** historical continuous dataset rebuild — complete.
 - **F3:** final target, feature and coverage-bias audit — complete with temporal concentration.
-- **F4:** persistence/Ridge/HGB regressors — implementation complete; no historical evaluation.
-- **F5:** nested rolling-origin evaluation and OOF predictions — next after approval.
+- **F4:** persistence/Ridge/HGB regressors — implementation complete.
+- **F5:** nested rolling-origin evaluation and OOF predictions — complete; no final winner selected.
 - **F6:** ranking/decile/lift/robustness.
 - **F7:** final research artifact and inference freeze.
 - **F8:** Financial NLP Intelligence.
@@ -254,10 +254,29 @@ profitability.
 - Dataset SHA-256:
   `2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`.
 
+## F5 ARTIFACTS AND RESULT
+
+- Evaluation config: `research/configs/final_nested_temporal_evaluation.v1.json`.
+- Evaluator: `research/modeling/final_temporal_evaluation.py`.
+- CLI: `jobs/final_temporal_evaluation.py` / `financial-ai-final-temporal-evaluation`.
+- Safety tests: `tests/unit/test_final_temporal_evaluation.py`.
+- Public result: `research/evaluation/f5_nested_temporal_evaluation_result.md`.
+- Local immutable OOF: `.tools/evaluation/f5-final-regression-oof-v1/predictions.json`.
+- Canonical F5 config SHA-256:
+  `3ebf45f6054d40724970f1be2f1c0bbf6588cb085b7bafe0196077cc304256af`.
+- Canonical OOF SHA-256:
+  `b693476dba45c2aefcbf556d1ba79a21602c34da2321808d3ec0512d7c65b4a7`.
+
+Seven folds produced 20,637 unique historical evaluation rows and 61,911 three-model OOF
+predictions. Mean outer Spearman was 0.0608 for persistence, 0.1940 for Ridge and 0.1863 for HGB.
+Ridge and HGB are inside the frozen 0.01 practical-tie margin. Their average R-squared values were
+near zero/slightly negative, so the current evidence supports a modest ranking signal more than
+accurate magnitude prediction. F5 intentionally selected no final model.
+
 ## SAFETY AND NEXT ACTION
 
-Do not train regression models, generate F5 results, choose an F7 winner, rerun M7, create a fake
-sealed test, modify working GAS, deploy, commit or push during F2.
+Do not rewrite F5 OOF predictions, tune on F6 subgroups, choose an F7 winner, rerun M7, create a
+fake sealed test, modify working GAS, deploy, commit or push during the F5 stop boundary.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
@@ -273,5 +292,5 @@ grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection 
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
 After user review, the next minimum executable unit is
-**F5 — Nested / Rolling-Origin Evaluation**. F4 has not automatically run historical outer folds,
-selected hyperparameters or persisted a final model.
+**F6 — Ranking & Robustness Analysis**. F6 must use the immutable F5 OOF predictions, may not
+retune candidates, and must not select or persist the F7 final model.

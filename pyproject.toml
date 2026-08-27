@@ -52,6 +52,7 @@ financial-ai-regime-thresholds = "jobs.regime_thresholds:main"
 financial-ai-final-study-dataset = "jobs.final_study_dataset:main"
 financial-ai-final-study-feature-audit = "jobs.final_study_feature_audit:main"
 financial-ai-final-regression-candidates = "jobs.final_regression_candidates:main"
+financial-ai-final-temporal-evaluation = "jobs.final_temporal_evaluation:main"
 
 [project.optional-dependencies]
 dev = [

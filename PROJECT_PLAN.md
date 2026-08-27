@@ -3,7 +3,7 @@
 Plan version: `final-volatility-surprise-study-v1`
 
 Last revised: 2026-08-27
-Active milestone: **F4 complete; next review unit is F5**
+Active milestone: **F5 complete; next review unit is F6**
 
 ## 1. Final Project Identity
 
@@ -340,6 +340,7 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
 4. **F4 — Baselines & Candidate Models：**persistence、Ridge、HGB regression，全部 fold-local。
    **完成實作與 synthetic reproducibility tests；尚未跑歷史 outer evaluation。**
 5. **F5 — Nested / Rolling-Origin Evaluation：**inner selection、七個 outer folds、immutable OOF。
+   **完成；20,637 個 historical OOS rows、61,911 個三模型 OOF predictions，未選 final model。**
 6. **F6 — Ranking & Robustness Analysis：**metrics、deciles、lift、ticker/time/regime、bootstrap。
 7. **F7 — Final Research Model Freeze：**依 frozen rule 選 model、full-history research fit、artifact
    與 inference contract；不宣稱 prospective accuracy。
@@ -373,9 +374,10 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-F1–F4 已完成；F5 尚未開始。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把
-2025–2026 稱為新 sealed test，不得訓練 regression models、生成 F5 results、選 HGB winner、修改
-working GAS、deploy、commit 或 push。
+F1–F5 已完成。F5 的 nested temporal evaluation 已產生 immutable OOF predictions；Ridge 與 HGB
+mean outer Spearman 差 `0.0078`，落在 `0.01` practical-tie boundary 內，因此尚未選 final model。
+M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把 2025–2026 稱為新 sealed test，
+不得利用 F6 subgroup 結果重新調參、選 F7 winner、修改 working GAS、deploy、commit 或 push。
 
 經使用者 review/approval 後，下一個最小執行單元是
-**F5 — Nested / Rolling-Origin Evaluation**。
+**F6 — Ranking & Robustness Analysis**。

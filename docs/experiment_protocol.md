@@ -21,9 +21,14 @@ top-decile/top-quintile lift and predicted-score decile tables. NLP incremental 
 
 F4 implementation status: normalized-move persistence, Ridge and HistGradientBoostingRegressor
 candidate interfaces are complete. Ridge scaling is training-only; HGB internal early stopping is
-disabled. Hyperparameters are restricted to the frozen F1 grids. F4 used synthetic tests only and
-did not run historical inner/outer evaluation, select a winner or persist a final model. See
+disabled. Hyperparameters are restricted to the frozen F1 grids. F4 used synthetic tests only. See
 `research/evaluation/f4_regression_candidates_result.md`.
+
+F5 implementation status: seven nested rolling-origin outer folds are complete. Inner selection
+used only each outer training history and produced 61,911 immutable OOF predictions for 20,637
+unique evaluation rows. Ridge and HGB mean Spearman values are within the frozen practical-tie
+margin; F5 selected no final model. See
+`research/evaluation/f5_nested_temporal_evaluation_result.md`.
 
 ## Exploratory binary-risk contract (historical M1–M11; frozen)
 

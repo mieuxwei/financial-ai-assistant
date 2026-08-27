@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F4 regression candidates implemented / next: F5 nested evaluation / no historical model evaluation yet**。
+目前狀態：**F5 nested temporal evaluation complete / next: F6 ranking and robustness / no final model selected**。
 
 ## 研究演進
 
@@ -125,8 +125,7 @@ outer folds，每折 hyperparameters 只由 outer training history 內最近三�
 [final study migration](docs/final_study_migration.md)。F2 已從 38,290 candidate rows 建立 32,357
 eligible rows，dataset SHA-256 為
 `2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`；完整 coverage/exclusion
-結果見 [F2 report](research/evaluation/f2_historical_dataset_result.md)。目前沒有任何 regression
-model 或虛構 evaluation 結果。
+結果見 [F2 report](research/evaluation/f2_historical_dataset_result.md)。
 
 F3 已驗證全部 32,357 rows 的 exact-next-session、target 重算、23-feature availability、lineage 與
 hash。Coverage-bias audit 顯示 ticker 與已知 volatility regimes 沒有異常集中，但
@@ -136,8 +135,14 @@ hash。Coverage-bias audit 顯示 ticker 與已知 volatility regimes 沒有異�
 
 F4 已實作 normalized persistence、4 個 Ridge alpha 與 16 個 HGB parameter combinations。Ridge
 scaler 僅能 fit training rows，HGB 關閉 internal early stopping；合成資料重建 manifest 與 predictions
-均 deterministic。F4 尚未執行歷史 outer evaluation、選 winner 或保存 final artifact。詳見
+均 deterministic。詳見
 [F4 result](research/evaluation/f4_regression_candidates_result.md)。
+
+F5 已依 frozen nested temporal protocol 跑完七個 historical outer folds，共 20,637 個 evaluation
+rows 與 61,911 個三模型 OOF predictions。Mean outer Spearman 為 persistence 0.0608、Ridge
+0.1940、HGB 0.1863；Ridge/HGB 落在 0.01 practical-tie boundary 內。兩者平均 R² 皆接近零且略負，
+因此現階段證據較支持 modest ranking signal，不支持精準 magnitude prediction。F5 沒有選 winner
+或建立 final artifact；詳見 [F5 result](research/evaluation/f5_nested_temporal_evaluation_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
