@@ -1,0 +1,69 @@
+{
+  "schema_version": "post-m8-operating-point-config-v1",
+  "protocol_version": "post-m8-risk-extension-v1",
+  "milestone": "M10",
+  "status": "PROTOCOL_FROZEN_SEARCH_NOT_RUN",
+  "historical_m7_threshold": 0.10,
+  "historical_threshold_replacement_allowed": false,
+  "development_prediction_source": {
+    "status": "NOT_MATERIALIZED_FOR_M10",
+    "method": "deterministic_reconstruction_of_m6_walk_forward_oof",
+    "allowed_splits": ["train", "validation"],
+    "evaluation_period_start": "2017-01-01",
+    "evaluation_period_end": "2024-12-31",
+    "latest_allowed_target_session": "2024-12-31",
+    "risk_temporal_validation_config_sha256": "9f221c5d36cf3611ed8894b4630b12f221d398cd21afe7f91d05156b08c3e276",
+    "candidate_manifest_sha256": "951a5f627fe2bf67e318cb35e48f76f538aa1931a71c16c6052ada297c641c81",
+    "sealed_test_rows_allowed": false,
+    "m7_or_m8_labels_allowed": false
+  },
+  "forbidden_evidence_sha256": [
+    "4598e92edd7e441c7d8138c8228f1cb5cac77626241d3b668f6ab8f29a925bfe",
+    "c7e82d99f6e0ea922d93eaba1069b28d5cdad84c1f0a6d01fb4b3cc6cc20d56b"
+  ],
+  "threshold_grid": {
+    "type": "inclusive_decimal_grid",
+    "start": 0.01,
+    "stop": 0.50,
+    "step": 0.01
+  },
+  "operating_modes": {
+    "screening": {
+      "primary_objective": "maximize_recall",
+      "constraints": {
+        "minimum_specificity": 0.50,
+        "minimum_precision": 0.12
+      },
+      "tie_breakers": ["higher_mcc", "higher_precision", "higher_threshold"]
+    },
+    "balanced": {
+      "primary_objective": "maximize_mcc",
+      "constraints": {
+        "minimum_recall": 0.40,
+        "minimum_specificity": 0.50
+      },
+      "tie_breakers": ["higher_f1", "higher_balanced_accuracy", "higher_threshold"]
+    },
+    "precision": {
+      "primary_objective": "maximize_precision",
+      "constraints": {
+        "minimum_recall": 0.30,
+        "minimum_specificity": 0.70
+      },
+      "tie_breakers": ["higher_mcc", "higher_recall", "higher_threshold"]
+    }
+  },
+  "required_outputs": [
+    "threshold",
+    "precision",
+    "recall",
+    "specificity",
+    "f1",
+    "mcc",
+    "predicted_positive_rate",
+    "calibration_table",
+    "alerts_per_252_sessions"
+  ],
+  "no_eligible_candidate_outcome": "INCONCLUSIVE_NO_POLICY_SELECTED",
+  "results_status_until_m12": "DEVELOPMENT_ONLY"
+}

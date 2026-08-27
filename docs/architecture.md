@@ -69,8 +69,9 @@ rerun M7.
 
 M8 verifies that chain before reading rows, derives volatility-regime cutoffs only from the
 pre-test feature dataset, and writes aggregate ticker/time/regime/probability/error summaries. It
-does not expose rows, refit the model or feed subgroup results back into Track A. M9 begins the NLP
-intelligence layer as a separate downstream boundary.
+does not expose rows, refit the model or feed subgroup results back into Track A. Post-M8 M9–M13
+test new conditional/operating-policy hypotheses under a separate frozen protocol; the NLP
+intelligence layer moves to M14.
 
 ## Legacy first-iteration application boundary
 
@@ -85,7 +86,7 @@ Transitional trusted caller
   → SQLite (local) / PostgreSQL (deployment target)
 ```
 
-`X-User-ID` exists only to exercise ownership during the transition. It must not be exposed as standalone authentication. M10 replaces it with identity derived from a verified LINE webhook or another authenticated service boundary.
+`X-User-ID` exists only to exercise ownership during the transition. It must not be exposed as standalone authentication. M18 replaces it with identity derived from a verified LINE webhook or another authenticated service boundary.
 
 Portfolio sync uses a short-lived preview operation. Confirm applies additions, updates, and removals in one database transaction and is idempotent.
 

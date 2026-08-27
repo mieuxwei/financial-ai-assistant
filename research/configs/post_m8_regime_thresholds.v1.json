@@ -1,0 +1,67 @@
+{
+  "schema_version": "post-m8-regime-threshold-config-v1",
+  "protocol_version": "post-m8-risk-extension-v1",
+  "milestone": "M11",
+  "status": "PROTOCOL_FROZEN_SEARCH_NOT_RUN",
+  "model_policy": "ONE_FROZEN_MODEL_WITH_REGIME_AWARE_THRESHOLDS",
+  "separate_models_allowed": false,
+  "development_prediction_source": {
+    "method": "deterministic_reconstruction_of_m6_walk_forward_oof",
+    "allowed_splits": ["train", "validation"],
+    "latest_allowed_target_session": "2024-12-31",
+    "sealed_test_rows_allowed": false,
+    "m7_or_m8_labels_allowed": false
+  },
+  "forbidden_evidence_sha256": [
+    "4598e92edd7e441c7d8138c8228f1cb5cac77626241d3b668f6ab8f29a925bfe",
+    "c7e82d99f6e0ea922d93eaba1069b28d5cdad84c1f0a6d01fb4b3cc6cc20d56b"
+  ],
+  "regime_definition": {
+    "feature": "volatility_log_return_20",
+    "feature_available_at": "post_close_t",
+    "lookback_sessions": 20,
+    "future_or_target_values_allowed": false,
+    "development_cutoff_method": "expanding_training_history_tertiles_per_fold",
+    "final_policy_cutoff_fit_period_end": "2024-12-31",
+    "quantiles": [0.3333333333333333, 0.6666666666666666],
+    "labels": ["LOW", "MIDDLE", "HIGH"]
+  },
+  "threshold_grid_per_regime": {
+    "type": "inclusive_decimal_grid",
+    "start": 0.01,
+    "stop": 0.50,
+    "step": 0.01
+  },
+  "eligibility_constraints": {
+    "minimum_overall_recall": 0.50,
+    "minimum_overall_specificity": 0.50,
+    "minimum_each_regime_recall": 0.35,
+    "minimum_each_regime_specificity": 0.35,
+    "minimum_rows_per_regime": 500,
+    "minimum_positive_rows_per_regime": 50
+  },
+  "selection_rule": {
+    "primary": "minimize_max_of_recall_range_and_specificity_range_across_regimes",
+    "secondary": "maximize_overall_mcc",
+    "tie_breakers": ["higher_overall_f1", "lower_alert_rate_dispersion", "lexicographically_higher_thresholds"]
+  },
+  "required_comparisons": [
+    "historical_global_threshold_0.10",
+    "m10_development_calibrated_global_policies",
+    "m11_regime_aware_threshold_policy"
+  ],
+  "required_outputs": [
+    "recall",
+    "precision",
+    "specificity",
+    "mcc",
+    "f1",
+    "pr_auc",
+    "alert_rate",
+    "calibration_table",
+    "recall_dispersion_across_regimes",
+    "specificity_dispersion_across_regimes"
+  ],
+  "no_eligible_candidate_outcome": "INCONCLUSIVE_NO_POLICY_SELECTED",
+  "results_status_until_m12": "DEVELOPMENT_ONLY"
+}

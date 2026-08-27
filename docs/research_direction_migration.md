@@ -29,7 +29,7 @@ invalidated by this migration.
 
 ### New status of the previous question
 
-The previous question becomes Track B exploratory research and new M10 optional incremental-value
+The previous question becomes Track B exploratory research and new M15 optional incremental-value
 ablation. Chinese sentiment quality or NLP incremental value is not part of the main definition of
 done.
 
@@ -44,30 +44,30 @@ done.
 ## Legacy-to-new milestone mapping
 
 Legacy milestone numbers below refer to the plan that existed before 2026-08-27. New milestone
-numbers refer to `PROJECT_PLAN.md` version `core-direction-migration-v2`.
+numbers refer to `PROJECT_PLAN.md` version `post-m8-risk-extension-v3`.
 
 | Legacy milestone / work | Preserved status | New destination |
 | --- | --- | --- |
 | Legacy M0 security and repository initialization | Complete foundation; unchanged | New M0 evidence freeze; Track C security baseline |
-| Legacy M1 FastAPI/database foundation | Complete foundation; unchanged | New M12 API and Track C foundation |
-| Legacy M2 multi-user portfolio service | Complete foundation; unchanged | New M12/M13 product integration |
+| Legacy M1 FastAPI/database foundation | Complete foundation; unchanged | New M17 API and Track C foundation |
+| Legacy M2 multi-user portfolio service | Complete foundation; unchanged | New M17/M18 product integration |
 | Legacy M3 historical market-data pipeline | Reusable core engineering | New M1 Market Dataset |
-| Legacy M4 news/announcement pipeline | Preserved product/NLP ingestion | New M9 NLP Intelligence and M12 API |
-| Legacy M5 English FinBERT | Preserved pipeline sanity evidence | New M9 NLP Intelligence |
-| Legacy M5.5 Chinese-model diagnostic | Preserved failed-gate evidence; not formal benchmark | New M9 Exploratory Taiwan Financial NLP |
-| Legacy M6 source/corpus audit and zero-manual-label governance | Preserved in full | New M0 evidence freeze and M9 NLP Intelligence |
+| Legacy M4 news/announcement pipeline | Preserved product/NLP ingestion | New M14 NLP Intelligence and M17 API |
+| Legacy M5 English FinBERT | Preserved pipeline sanity evidence | New M14 NLP Intelligence |
+| Legacy M5.5 Chinese-model diagnostic | Preserved failed-gate evidence; not formal benchmark | New M14 Exploratory Taiwan Financial NLP |
+| Legacy M6 source/corpus audit and zero-manual-label governance | Preserved in full | New M0 evidence freeze and M14 NLP Intelligence |
 | Legacy M6 direction feature/label dataset (`features-v1`, `label_up`) | Preserved legacy foundation; direction label no longer core | Market features/cutoff/hash/tests reused in new M1/M3; label replaced by new M2 |
-| Legacy M7 FSC domain adaptation feasibility and 200-step pilot | Preserved; no further training authorized by migration | New M9 exploratory representation evidence |
-| Legacy M8 automatic market-reaction engine | Preserved target/lineage engine; bounded snapshot remains all-test and sealed | New M9 exploratory evidence; possible M10 feature research only if eligible |
-| Legacy M9 weak-supervision aggregation core | Preserved synthetic-tested core | New M9 exploratory announcement intelligence |
-| Legacy M10 integrated direction feature pipeline plan | Market feature pieces reused; Taiwan signal expansion optional | New M3 Feature Pipeline and optional M10 NLP ablation |
-| Legacy M11 direction-prediction experiment matrix | No longer mandatory | Replaced by new M4–M7 risk-model sequence; text comparison moves to optional M10 |
-| Legacy M12 trading-oriented backtest/conclusions | Reframed away from mandatory strategy | New M11 HIGH_RISK-vs-NORMAL realized-risk validation; exposure reduction optional |
-| Legacy M13 Prediction & Research API | Preserved product intent | New M12 Prediction / Intelligence API |
-| Legacy M14 LINE integration and GAS slimming | Preserved unchanged | New M13 LINE Integration & GAS Slimming |
-| Legacy M15 public demo and controlled beta | Preserved, risk-focused UX | New M14 Public Demo |
+| Legacy M7 FSC domain adaptation feasibility and 200-step pilot | Preserved; no further training authorized by migration | New M14 exploratory representation evidence |
+| Legacy M8 automatic market-reaction engine | Preserved target/lineage engine; bounded snapshot remains all-test and sealed | New M14 exploratory evidence; possible M15 feature research only if eligible |
+| Legacy M9 weak-supervision aggregation core | Preserved synthetic-tested core | New M14 exploratory announcement intelligence |
+| Legacy M10 integrated direction feature pipeline plan | Market feature pieces reused; Taiwan signal expansion optional | New M3 Feature Pipeline and optional M15 NLP ablation |
+| Legacy M11 direction-prediction experiment matrix | No longer mandatory | Replaced by new M4–M7 risk-model sequence; text comparison moves to optional M15 |
+| Legacy M12 trading-oriented backtest/conclusions | Reframed away from mandatory strategy | New M16 HIGH_RISK-vs-NORMAL realized-risk validation; exposure reduction optional |
+| Legacy M13 Prediction & Research API | Preserved product intent | New M17 Prediction / Intelligence API |
+| Legacy M14 LINE integration and GAS slimming | Preserved unchanged | New M18 LINE Integration & GAS Slimming |
+| Legacy M15 public demo and controlled beta | Preserved, risk-focused UX | New M19 Public Demo |
 | Legacy M16 error analysis and robustness | Reframed around risk errors/calibration | New M8 Risk Error Analysis & Robustness |
-| Legacy M17 final report/deployment | Preserved finalization intent | New M15 Portfolio Finalization |
+| Legacy M17 final report/deployment | Preserved finalization intent | New M20 Portfolio Finalization |
 
 ## Preserved NLP and source-governance evidence
 
@@ -145,4 +145,5 @@ manifest. M7 then opened the sealed test once under explicit approval and preser
 result: modest normalized-risk discrimination but no raw absolute-volatility separation. The test
 is permanently closed to further evaluation or selection. M8 then completed read-only robustness,
 error, drift and bootstrap-uncertainty analysis of that immutable evaluation. The next unit is M9
-Financial NLP Intelligence; M8 subgroup results may not alter Track A.
+Conditional Risk / Simpson Analysis under the post-M8 protocol; M8 subgroup results may motivate
+the question but may not alter or tune Track A.

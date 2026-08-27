@@ -42,11 +42,12 @@ valid, Brier/calibration and confusion matrices. The primary validation compares
 HIGH_RISK and NORMAL sessions on subsequent realized absolute return, high-low range and a fixed
 realized-volatility proxy. It does not require a buy/sell strategy.
 
-The milestone sequence is now M0–M15: existing-work freeze/migration, market dataset, risk-label
+The milestone sequence is now M0–M20: existing-work freeze/migration, market dataset, risk-label
 protocol, feature pipeline, baselines, tree models, temporal validation, sealed test, robustness,
-NLP intelligence, optional NLP ablation, risk validation, API, LINE/GAS slimming, public demo and
-portfolio finalization. `docs/research_direction_migration.md` maps the legacy milestones without
-deleting their evidence.
+conditional-risk analysis, operating-point calibration, regime-aware thresholds, prospective
+validation, optional regime-specific modeling, NLP intelligence, optional NLP ablation, risk
+validation, API, LINE/GAS slimming, public demo and portfolio finalization.
+`docs/research_direction_migration.md` maps legacy milestones without deleting their evidence.
 
 M1 Market Dataset was completed on 2026-08-27 after explicit user approval. The fixed ten-ticker
 universe, chronological split contract, immutable local OHLCV/TAIEX snapshots, integrity tests and
@@ -120,8 +121,48 @@ heterogeneous: quarterly recall ranges from 0.310 to 0.656, ticker recall from 0
 the low-stock-volatility regime exchanges high recall for very low specificity. Normalized-risk
 separation remains positive, but raw outcome separation changes with conditioning. This supports
 only modest normalized surprise-risk discrimination. No M7 rerun, refit, threshold change or
-test-based selection occurred. The next unit is **M9 — Financial NLP Intelligence**; it must not
-use M8 subgroup evidence to alter Track A.
+test-based selection occurred. M8 is immutable historical evidence and its subgroup outcomes may
+motivate—but never tune—new policies.
+
+## Post-M8 risk-research extension — frozen planning boundary
+
+The post-M8 protocol/config migration is complete, but M9–M12 have not run. Historical threshold
+0.10 remains the M7 operating point. M7 evaluation SHA-256 remains
+`4598e92edd7e441c7d8138c8228f1cb5cac77626241d3b668f6ab8f29a925bfe`, M8 analysis SHA-256 remains
+`c7e82d99f6e0ea922d93eaba1069b28d5cdad84c1f0a6d01fb4b3cc6cc20d56b`, and the M7 prediction
+count remains 3,647.
+
+- **M9 Conditional Risk / Simpson Analysis:** analysis-only use of the unchanged M7 predictions.
+  It separates aggregate raw outcomes, within-regime outcomes and normalized volatility surprise;
+  it may describe a supported pattern as a Simpson-type composition effect, not a causal proof.
+- **M10 Operating-Point Calibration Study:** reconstruct the frozen M6 2017–2024 walk-forward OOF
+  development evidence and search only the predeclared Screening/Balanced/Precision rules. M7/M8
+  labels and outcomes are forbidden inputs. Results remain development-only.
+- **M11 Regime-Aware Threshold Study:** retain one frozen model; define each fold's LOW/MIDDLE/HIGH
+  state from trailing stock volatility and cutoffs fit only from earlier training history. Test
+  regime thresholds before considering separate models.
+- **M12 Prospective / New-Holdout Validation:** currently unavailable and unopened. Freeze all
+  policy/config hashes before accessing future outcomes, then compare original 0.10, global and
+  regime-aware policies on the same new holdout. Small samples are exploratory only.
+- **M13 Optional Regime-Specific Modeling:** must not start automatically. It requires explicit
+  approval plus a complexity justification based on M11 and independent M12 evidence.
+
+Machine-readable specifications are `research/configs/post_m8_*.v1.json`; boundary assertions are
+in `research/evaluation/post_m8_research_boundaries.py`. Do not run threshold search, materialize a
+new holdout, refit the M7 candidate or expose multi-mode UX during this planning task. The next
+authorized research unit, if requested, is M9 analysis only. Existing NLP/product work is shifted
+to M14–M20 without deleting legacy evidence.
+
+Frozen specification file SHA-256 values before commit are:
+
+- M9 conditional-risk config:
+  `32bcefcebba138cf020b6f33392e9cb9f40564bf7eefa170cabbfff2142884c8`
+- M10 operating-point config:
+  `199c34ce3e4a8e6142a40b2b304468eca565e3538249b59aedd9f2a30895b989`
+- M11 regime-threshold config:
+  `082a09d89b88d444500a7c660aeff9690338e364a5975c1916a81b20a00abd56`
+- M12 prospective-validation config:
+  `397e1e00134e4c7865e4916229b21acc2f4a4e3c2179c0becf66d1eeb1544d26`
 
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
@@ -135,7 +176,7 @@ The former blocking question was:
 > generated Chinese financial-text signals add out-of-sample predictive value beyond price, volume
 > and technical features alone?
 
-It is now an optional Track B/M10 question rather than the definition of done. The zero-manual-label constraint remains absolute: no manual annotation, manual label review,
+It is now an optional Track B/M15 question rather than the definition of done. The zero-manual-label constraint remains absolute: no manual annotation, manual label review,
 human adjudication or manually constructed sentiment truth. Eland remains a historical rejected
 candidate only and must not re-enter any active experiment.
 
@@ -262,7 +303,7 @@ for:
 This optional conclusion must distinguish `no demonstrated incremental value`, `inconclusive` and
 `positive exploratory evidence`. It must not claim human-validated Chinese sentiment truth,
 causality, production trading readiness or generalisation across unseen market regimes. A paid TEJ
-AP11 subscription is not part of either Track A or M10 completion.
+AP11 subscription is not part of either Track A or M15 completion.
 
 ## Preserved legacy NLP boundary
 
@@ -323,7 +364,7 @@ Keep these signal groups distinct:
 2. Taiwan financial event type and entity-specific impact.
 3. Historical market reaction derived from future/abnormal returns as offline targets.
 4. Price, volume and technical features.
-5. Optional downstream short-horizon direction or new M10 risk-prediction ablation.
+5. Optional downstream short-horizon direction or new M15 risk-prediction ablation.
 
 Taiwan labels use a versioned event taxonomy and `POSITIVE`, `NEUTRAL`, `NEGATIVE`, `AMBIGUOUS` impact. Linguistic tone, financial impact and observed price reaction are not interchangeable. MacBERT is a candidate encoder only.
 

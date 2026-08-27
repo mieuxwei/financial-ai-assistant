@@ -51,7 +51,7 @@ separation, so no general absolute-volatility claim is made. See
 `docs/risk_robustness_protocol.md`.
 
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
-market-only and market+NLP models is now optional M10 work and is not part of the main definition
+market-only and market+NLP models is now optional M15 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.
 
 ## M5 sentiment reproducibility contract

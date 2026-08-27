@@ -27,7 +27,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M8 risk robustness complete / next: M9 Financial NLP Intelligence / M7 test may not reopen**。
+目前狀態：**M8 immutable / post-M8 protocol frozen / next: M9 conditional-risk analysis / M7 test may not reopen**。
 
 M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
 train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
@@ -123,7 +123,7 @@ uvicorn backend.app.main:app --reload
 - `POST /users/{user_id}/portfolio-sync/preview`
 - `POST /users/{user_id}/portfolio-sync/{operation_id}/confirm`
 
-過渡期 API 要求 `X-User-ID` 與路徑中的 `user_id` 相同，以測試 ownership 隔離。這不是公開環境的最終身份驗證；依 PROJECT_PLAN，M10 必須改由通過 LINE signature 驗證的 backend 身分提供 user context。
+過渡期 API 要求 `X-User-ID` 與路徑中的 `user_id` 相同，以測試 ownership 隔離。這不是公開環境的最終身份驗證；依 PROJECT_PLAN，M18 必須改由通過 LINE signature 驗證的 backend 身分提供 user context。
 
 批次同步先建立 15 分鐘有效的一次性 operation，再由 confirm 原子套用。重複 confirm 不會重複新增持股。
 

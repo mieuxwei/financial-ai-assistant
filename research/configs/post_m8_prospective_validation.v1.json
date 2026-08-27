@@ -1,0 +1,54 @@
+{
+  "schema_version": "post-m8-prospective-validation-config-v1",
+  "protocol_version": "post-m8-risk-extension-v1",
+  "milestone": "M12",
+  "status": "PROTOCOL_FROZEN_HOLDOUT_NOT_AVAILABLE_NOT_OPENED",
+  "historical_evidence_only": {
+    "m7_sealed_evaluation_sha256": "4598e92edd7e441c7d8138c8228f1cb5cac77626241d3b668f6ab8f29a925bfe",
+    "m8_analysis_sha256": "c7e82d99f6e0ea922d93eaba1069b28d5cdad84c1f0a6d01fb4b3cc6cc20d56b",
+    "m7_prediction_count": 3647,
+    "eligible_for_policy_selection": false
+  },
+  "holdout_enrollment": {
+    "type": "prospective_exchange_sessions",
+    "starts_with": "first_exchange_session_after_2026-08-26",
+    "minimum_completed_sessions": 126,
+    "minimum_eligible_rows": 1000,
+    "minimum_high_risk_rows": 50,
+    "holdout_features_or_labels_materialized": false,
+    "accessible_to_tuning_code": false
+  },
+  "pre_opening_gate": {
+    "policy_manifest_required": true,
+    "policy_manifest_status": "NOT_CREATED",
+    "must_freeze": [
+      "base_model",
+      "feature_pipeline",
+      "risk_label_protocol",
+      "historical_threshold_0.10",
+      "m10_global_policies",
+      "m11_regime_aware_policy",
+      "regime_definitions",
+      "evaluation_metrics"
+    ]
+  },
+  "policies_to_compare": [
+    "original_m7_threshold_0.10",
+    "development_calibrated_global_policy",
+    "development_calibrated_regime_aware_policy"
+  ],
+  "required_metrics": [
+    "high_risk_recall",
+    "precision",
+    "specificity",
+    "f1",
+    "mcc",
+    "pr_auc",
+    "roc_auc",
+    "brier_score",
+    "alert_frequency"
+  ],
+  "subgroup_results_used_for_retuning": false,
+  "insufficient_sample_conclusion": "PROSPECTIVE_EXPLORATORY_VALIDATION",
+  "repeat_or_adaptive_opening_allowed": false
+}

@@ -1,6 +1,6 @@
 # Financial AI Assistant — Project Plan
 
-Plan version: `core-direction-migration-v2`
+Plan version: `post-m8-risk-extension-v3`
 Last revised: 2026-08-27
 
 ## 1. 專案名稱與定位
@@ -40,7 +40,7 @@ FSC、BERT/MacBERT、weak supervision、market reaction、TEJ/TWSE/FinMind 稽�
 > next-session abnormal volatility / large-move risk under strict leakage-safe temporal evaluation?
 
 原核心問題「自動中文金融文字訊號能否改善價格／成交量／技術特徵的短期方向預測」不再是
-專案完成的必要條件，改列 Track B 探索研究與 M10 選配消融。
+專案完成的必要條件，改列 Track B 探索研究與 M15 選配消融。
 
 ### Track A — Core Research
 
@@ -65,7 +65,7 @@ Track A 必須能在 Track B 沒有正式中文 sentiment 的情況下獨立完�
 - 台灣公告可提供 entity mapping、官方事件分類、關鍵詞、embedding、相似度、檢索、分群、
   摘要與選配 weak event signal。
 - 不支援的中文文本不強迫輸出 Positive／Neutral／Negative，也不偽造機率。
-- NLP 是否改善 Track A 只在 timestamp-safe 資料就緒時做 M10 選配實驗；零或負結果必須保留。
+- NLP 是否改善 Track A 只在 timestamp-safe 資料就緒時做 M15 選配實驗；零或負結果必須保留。
 
 ### Track C — Product
 
@@ -267,6 +267,36 @@ absolute return、high-low range、realized-volatility proxy 及適用時的 dra
 成功表示風險訊號能分離較高與較低 realized-risk 群組，不表示可獲利。選配 reduced-exposure
 backtest 必須晚於核心風險驗證，納入成本，且不可成為 MVP 必要條件。
 
+## 8A. Post-M8 Risk Research Extensions
+
+M7 與 M8 是 immutable historical evidence。M7 只有一份 3,647-row evaluation，歷史 operating
+threshold 固定為 0.10；M8 只讀該 evaluation 並揭露 regime、ticker 與 period 異質性。兩者不得
+再用於 model／calibrator／threshold selection，也不得把 M8 subgroup 結果當 validation data。
+
+### Motivation from M8
+
+M8 顯示 aggregate predicted HIGH_RISK 的 normalized outcome 較高，但 aggregate raw absolute
+return、range 與 Parkinson proxy 較低；依 stock-volatility regime 分層後，三個 raw comparisons
+卻都轉為正值。這可能是 composition／Simpson-type effect，但不是已證明的因果悖論。固定 0.10
+同時呈現 screening 性質：recall 0.508、precision 0.180，且 LOW/HIGH stock-volatility regimes 的
+recall／specificity 分別為 0.811/0.377 與 0.383/0.822。
+
+### Extension research questions
+
+- **RQ-A — Conditional interpretation：**模型主要辨識 absolute future volatility，還是相對個股
+  自身歷史 regime 異常的 volatility surprise？
+- **RQ-B — Operating-point calibration：**只用 pre-test development evidence，能否建立適合不同
+  產品用途的 precision／recall operating points？
+- **RQ-C — Regime-aware policy：**one frozen model + regime-aware thresholds 能否降低跨 regime
+  sensitivity／specificity instability？
+- **RQ-D — Model complexity：**只有 threshold policy 仍不足時，regime-specific modeling 的增益
+  是否足以抵銷複雜度與過度擬合風險？
+
+執行順序固定為 M9 conditional analysis → M10 development operating points → M11 regime-aware
+thresholds → M12 new untouched holdout → 選配 M13 regime-specific modeling。M13 不得自動開始。
+完整方法與機器規格見 `docs/post_m8_risk_research_extension_protocol.md` 及
+`research/configs/post_m8_*.v1.json`。
+
 ## 9. Track B — Financial NLP Intelligence
 
 ### English FinBERT
@@ -295,7 +325,7 @@ summaries 與 optional weak event signals。無支援時輸出 `unsupported`／`
 ### Optional NLP ablation contract
 
 只在 timestamp-safe NLP features 不阻塞主線時，以相同期間、target、preprocessing 與 downstream
-model 比較 market-only 和 market+NLP。Null／negative 結果仍需保留；Track A 不因 M10 缺資料或無
+model 比較 market-only 和 market+NLP。Null／negative 結果仍需保留；Track A 不因 M15 缺資料或無
 增益而不完整。
 
 ## 10. Track C — Product Architecture
@@ -355,7 +385,7 @@ intelligence 與 AI Daily Brief。介面只使用 risk/research signal，不使�
 Git。`.env`、`.tools/`、`data/raw/`、`data/private/`、`artifacts/`、imports/uploads/user_data
 保持忽略。公開結果只包含合法欄位、統計、hash、設定、模型指標與匿名示例。
 
-## 12. Milestones M0–M15
+## 12. Milestones M0–M20
 
 ### M0 — Existing Work Freeze & Plan Migration
 
@@ -364,7 +394,7 @@ Git。`.env`、`.tools/`、`data/raw/`、`data/private/`、`artifacts/`、import
 - 更新 PROJECT_PLAN、HANDOFF、README 與 migration note。
 - 不訓練、不開 sealed test、不刪 NLP、不改 GAS。
 
-驗收：新核心問題、三軌、M0–M15 與 Definition of Done 一致；舊證據仍可追溯。
+驗收：新核心問題、三軌、M0–M20 與 Definition of Done 一致；舊證據仍可追溯。
 
 ### M1 — Market Dataset
 
@@ -469,38 +499,74 @@ FN／FP 與 normalized/raw realized outcomes 分析；1,000 次 feature-session 
 95% interval 為 0.441–0.576、MCC 為 0.109–0.202。季度與 ticker 異質性及 raw outcome 的
 conditioning dependence 均已揭露；沒有重跑 M7、重新 fit、改 threshold 或 test-based selection。
 
-### M9 — Financial NLP Intelligence
+### M9 — Conditional Risk / Simpson Analysis
+
+**狀態：protocol frozen，尚未執行。** 只讀既有 M7 predictions；不 refit、不改 prediction、不改
+0.10 threshold。比較 aggregate、pre-test-fit stock-volatility regime、ticker 與 quarter 的 raw／
+normalized outcomes，並量化 predicted groups 的 regime／ticker／period composition。選配透明的
+OLS/HC3 conditional diagnostic，不回饋 classifier。結論必須分開 aggregate absolute-volatility、
+within-regime 與 normalized surprise evidence，只能在統計結構支持時稱 Simpson-type effect。
+
+### M10 — Operating-Point Calibration Study
+
+**狀態：protocol frozen，threshold search 尚未執行。** 只使用 M6 2017–2024 walk-forward OOF
+development evidence 的 deterministic reconstruction；M7/M8 labels 禁止進入。預先凍結
+0.01–0.50 grid、Screening／Balanced／Precision objectives、constraints 與 tie-breakers。所有輸出
+仍是 development-only，不回溯取代歷史 0.10。
+
+### M11 — Regime-Aware Threshold Study
+
+**狀態：protocol frozen，threshold search 尚未執行。** 優先測試 one frozen model + LOW/MIDDLE/HIGH
+thresholds，不建立 separate models。Regime 由 `t` 已知的 trailing 20-session volatility 定義；每個
+development fold cutoff 只 fit earlier training history。以降低跨 regime recall／specificity dispersion
+為主要目的，並與 0.10 及 M10 global policies 比較。
+
+### M12 — Prospective / New-Holdout Validation
+
+**狀態：protocol frozen，holdout 尚不可得且未開啟。** 從 2026-08-26 後第一個交易日起 prospectively
+收集；opening 前先以 immutable manifest 凍結 model、features、label、三類 policies、regimes 與
+metrics。三類 policy 必須在同一 holdout 評估，subgroup 結果不得再調參；樣本不足時只稱
+prospective exploratory validation。
+
+### M13 — Optional Regime-Specific Modeling
+
+**選配；不得自動開始。** 只有 M11/M12 顯示 threshold policy 仍不足且有明確 incremental evidence，
+並經使用者另行批准後，才評估 separate classifiers、regime interactions 或 mixture-of-experts。
+必須先提出 sample-size、overfitting、transition stability、multiplicity、deployment 與 explainability
+的 complexity justification。
+
+### M14 — Financial NLP Intelligence
 
 維持 English FinBERT，將既有台灣 NLP 定位為 exploratory；實作不依賴 polarity 的公告
-normalization、entity/event metadata、embedding/retrieval/summary contract。既有 M5–M9 evidence
-全保留，unsupported／abstain 語意明確；不訓練新模型除非另行批准。
+normalization、entity/event metadata、embedding/retrieval/summary contract。既有 legacy M5–M9
+evidence 全保留，unsupported／abstain 語意明確；不訓練新模型除非另行批准。
 
-### M10 — Optional NLP Incremental-Value Experiment
+### M15 — Optional NLP Incremental-Value Experiment
 
 在 timestamp-safe 資料可用時做 market-only vs market+NLP paired ablation。相同期間、target、model
 budget；null/negative 結果保留。**選配且不阻塞。**
 
-### M11 — Risk Backtest / Validation
+### M16 — Risk Backtest / Validation
 
 比較 predicted HIGH_RISK 與 NORMAL 的後續 realized outcomes；可選 reduced-exposure experiment。
 主要結果不依賴自動買賣策略；若有 exposure backtest，使用 OOS prediction、成本與非投資建議聲明。
 
-### M12 — Prediction / Intelligence API
+### M17 — Prediction / Intelligence API
 
 提供 risk snapshot、probability、factors、announcements/news、NLP intelligence、model/cutoff version
-contract。輸出可追溯至 dataset/model/config hash；LLM 失敗不影響風險結果。
+contract。未經 M12 驗證前只暴露歷史 0.10 research configuration，不提供多 operating modes。
 
-### M13 — LINE Integration & GAS Slimming
+### M18 — LINE Integration & GAS Slimming
 
 GAS 呼叫 backend、保留 Flex UX、逐步移出重複邏輯、最終 webhook signature 驗證。GAS 無 secrets
 與重 ML；每位使用者資料隔離；本次 migration 不修改既有 GAS。
 
-### M14 — Public Demo
+### M19 — Public Demo
 
 以範例／匿名資料展示 market snapshot、risk signal、factor explanation、announcements 與 research
-limitations。無私人持股、restricted raw data、API key 或 buy/sell 文案。
+limitations。無私人持股、restricted raw data、API key 或 buy/sell 文案；M12 前不顯示未驗證 modes。
 
-### M15 — Portfolio Finalization
+### M20 — Portfolio Finalization
 
 完成 README、architecture、model comparison、research summary、graduate-application abstract、demo、
 limitations、CI/reproducibility evidence。Track A conclusion、Track B boundary、Track C demo 清楚分離。
@@ -551,7 +617,7 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 12. 無 secrets、私人持股、券商截圖或 restricted raw dataset 被公開。
 13. 無 buy/sell、automatic trading 或 guaranteed-return claim。
 
-中文文字訊號是否改善 Track A **不是** Definition of Done。M10 可以沒有結果、得到 null／negative
+中文文字訊號是否改善 Track A **不是** Definition of Done。M15 可以沒有結果、得到 null／negative
 結果，或因 timestamp-safe 資料不足而不執行；主專案仍可完成。
 
 ## 16. Immediate Execution Boundary
@@ -560,7 +626,8 @@ M0 文件遷移與 M1–M8 已完成。Sealed test 已評估一次，永久禁�
 後續里程碑不得重新產生 sealed-test outcome／performance、刪除既有 NLP 證據、修改 working
 GAS、deploy、commit 或 push，除非使用者另行明確授權。
 
-下一個最小可執行單元是 **M9 Financial NLP Intelligence**：保留 pinned English FinBERT，建立
-不依賴 polarity 的公告 normalization、entity/event metadata、embedding/retrieval/summary contract，
-並維持中文 sentiment unsupported／abstain 邊界。不得以 M8 test subgroup 結果重新 fit 或調整
-Track A candidate，也不得呼叫 M7 job、修改 working GAS、deploy、commit 或 push。
+本次只完成 post-M8 protocol/config migration，尚未執行 M9–M12。下一個最小可執行單元是
+**M9 Conditional Risk / Simpson Analysis**：只能讀既有 M7 immutable predictions 做 diagnostic，
+不得 refit、改 prediction、改 0.10 threshold 或回饋 classifier。M10/M11 只能使用 2024-12-31
+以前的 development evidence；M12 holdout 仍不可得且未開啟。不得呼叫 M7 job、修改 working GAS、
+deploy、commit 或 push。

@@ -1,0 +1,72 @@
+{
+  "schema_version": "post-m8-conditional-risk-config-v1",
+  "protocol_version": "post-m8-risk-extension-v1",
+  "milestone": "M9",
+  "status": "PROTOCOL_FROZEN_NOT_EXECUTED",
+  "historical_evidence": {
+    "m7_sealed_evaluation_sha256": "4598e92edd7e441c7d8138c8228f1cb5cac77626241d3b668f6ab8f29a925bfe",
+    "m8_analysis_sha256": "c7e82d99f6e0ea922d93eaba1069b28d5cdad84c1f0a6d01fb4b3cc6cc20d56b",
+    "m8_config_sha256": "3cd94110b8ac78d60dff51637b7a1b5b243178ec7568937cbb8716a94bb225d4",
+    "m7_prediction_count": 3647,
+    "m7_evaluation_sequence": 1,
+    "historical_decision_threshold": 0.10
+  },
+  "analysis_input": ".tools/evaluations/risk-sealed-test-v1/evaluation.json",
+  "analysis_only": true,
+  "model_refit_allowed": false,
+  "prediction_mutation_allowed": false,
+  "threshold_change_allowed": false,
+  "classifier_feedback_allowed": false,
+  "outcomes": [
+    "next_abs_log_return",
+    "next_high_low_log_range",
+    "next_parkinson_volatility",
+    "continuous_risk_outcome"
+  ],
+  "stock_volatility_regime": {
+    "feature": "volatility_log_return_20",
+    "feature_available_at": "post_close_t",
+    "lookback_sessions": 20,
+    "future_or_target_values_allowed": false,
+    "cutoff_fit_source": "pretest_2011_2024_only",
+    "cutoff_fit_dataset_sha256": "a9898ce18a2497efaa98d22dc5e99f40bae446f175781c3c47bde92972d26bb0",
+    "quantiles": [0.3333333333333333, 0.6666666666666666]
+  },
+  "required_stratification": [
+    "aggregate",
+    "stock_volatility_regime",
+    "ticker",
+    "calendar_quarter"
+  ],
+  "composition_axes": [
+    "stock_volatility_regime",
+    "ticker",
+    "calendar_quarter"
+  ],
+  "minimum_stratum_rows": 50,
+  "minimum_stratum_positive_rows": 5,
+  "conditional_regression": {
+    "status": "OPTIONAL_PREDECLARED_DIAGNOSTIC",
+    "estimator": "ols_hc3",
+    "dependent_variables": [
+      "next_abs_log_return",
+      "next_high_low_log_range",
+      "next_parkinson_volatility",
+      "continuous_risk_outcome"
+    ],
+    "risk_signal": "frozen_predicted_high_risk_indicator",
+    "controls": [
+      "volatility_log_return_20",
+      "ticker_fixed_effects",
+      "calendar_quarter_fixed_effects"
+    ],
+    "used_for_classifier_selection_or_tuning": false
+  },
+  "permitted_conclusion_terms": [
+    "aggregate_absolute_volatility_separation",
+    "within_regime_separation",
+    "normalized_volatility_surprise_separation",
+    "simpson_type_composition_effect"
+  ],
+  "definitive_causal_simpsons_paradox_claim_allowed": false
+}
