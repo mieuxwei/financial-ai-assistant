@@ -25,3 +25,13 @@ class ConflictError(AppError):
 class ExpiredOperationError(AppError):
     status_code = 409
     code = "operation_expired"
+
+
+class InvalidRequestError(AppError):
+    status_code = 400
+    code = "invalid_request"
+
+
+class ServiceUnavailableError(AppError):
+    status_code = 503
+    code = "service_unavailable"

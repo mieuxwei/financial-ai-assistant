@@ -122,6 +122,12 @@ Chinese/Taiwan polarity to abstain with null probabilities. Official metadata an
 event/impact proxies are separate research signals, not sentiment truth. The F8 contract audit
 uses controlled routing fixtures only and performs no accuracy evaluation, inference or training.
 
+F10 implementation status: optional F9 was not run. The prediction API exposes the already-frozen
+F7 inference contract and cannot tune/retrain the model. Its controlled smoke input is contract
+validation, not new performance evidence. The intelligence API is database-only and may return
+only an existing pinned English result; Chinese remains abstained. No request-time source fetch,
+NLP/LLM inference or future market target is allowed.
+
 ## M5 sentiment reproducibility contract
 
 - Model: `ProsusAI/finbert` at revision `4556d13015211d73dccd3fdd39d39232506f3e43`.

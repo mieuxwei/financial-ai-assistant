@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F8 Financial NLP Intelligence complete / next decision: optional F9 or F10 / not deployed**。
+目前狀態：**F10 FastAPI integration complete / optional F9 not run / next: F11 / not deployed**。
 
 ## 研究演進
 
@@ -161,6 +161,12 @@ deterministic event cues 統一為 abstention-safe intelligence contract。英�
 時不生成分數；中文 sentiment 一律 abstain 且 probabilities 為 null；event/impact proxy 另列且不是
 sentiment ground truth。F8 驗證 7/7 歷史證據 hash，未下載/推論/訓練模型、呼叫 API/LLM 或部署。
 詳見 [F8 result](research/evaluation/f8_financial_nlp_intelligence_result.md)。
+
+F10 已提供 versioned research API：`POST /api/v1/research/volatility-surprise/predict` 驗證完整
+23-feature contract 後回傳 score、historical percentile、band 與 lineage；
+`GET /api/v1/research/intelligence/{ticker}` 只讀已入庫新聞、ticker 關聯及既有 pinned English
+FinBERT 結果，中文仍 abstain。API 不即時抓新聞、執行 NLP/LLM 或回傳私人持股；尚未部署。
+詳見 [F10 result](research/evaluation/f10_backend_integration_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

@@ -4,8 +4,8 @@ Last revised: 2026-08-28
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F8 Financial NLP Intelligence complete**
-Next decision: **optional F9 or F10, only after user review/approval**
+Current unit: **F10 FastAPI / Backend Integration complete**
+Next executable unit: **F11 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -224,8 +224,8 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F6:** ranking/decile/lift/robustness — complete; no final winner selected.
 - **F7:** final research artifact and inference freeze — complete; Ridge alpha 100, not deployed.
 - **F8:** Financial NLP Intelligence — complete; abstention-safe contract, no model inference.
-- **F9:** optional NLP incremental-value study.
-- **F10:** FastAPI/backend integration.
+- **F9:** optional NLP incremental-value study — not run; non-blocking.
+- **F10:** FastAPI/backend integration — complete; local only, not deployed.
 - **F11:** LINE/dashboard demo.
 - **F12:** portfolio finalization.
 
@@ -328,9 +328,32 @@ always abstains with null probabilities. Official metadata and deterministic eve
 are separate from sentiment and are not ground truth. The controlled audit ran no model, API, LLM,
 manual review, training or deployment, and persisted no fixture rows/private text.
 
+## F10 ARTIFACTS AND RESULT
+
+- Frozen config: `research/configs/backend_integration.v1.json`.
+- Config guards: `research/planning/backend_integration.py`.
+- Prediction service: `backend/app/services/research_prediction.py`.
+- Intelligence service/repository: `backend/app/services/intelligence.py` and
+  `backend/app/repositories/intelligence.py`.
+- API/schema: `backend/app/api/research.py` and `backend/app/schemas/research.py`.
+- Audit CLI: `jobs/backend_integration.py` / `financial-ai-backend-integration`.
+- Tests: `tests/unit/test_backend_integration_protocol.py` and
+  `tests/integration/test_research_api.py`.
+- Public result: `research/evaluation/f10_backend_integration_result.md`.
+- Canonical F10 config SHA-256:
+  `b4367815b484352375b6693d91b44298b8e4dc3b84bf0a3c69f956f97175a4f2`.
+- Canonical F10 analysis SHA-256:
+  `dc26d6f13e07c27e8ec32b6da8d06ac6fb1fed9b5fff32040a9d69221394b5fb`.
+
+The POST prediction endpoint validates the exact 23-feature F7 contract and returns score,
+percentile, band and lineage. The GET intelligence endpoint reads only stored news/ticker/pinned
+English sentiment rows and preserves Chinese abstention. F10 makes no external request, trains no
+model, exposes no private portfolio data, modifies no GAS and performs no deployment. F9 was not
+run and no NLP-lift claim exists.
+
 ## SAFETY AND NEXT ACTION
 
-Do not rewrite F5/F6/F7/F8 evidence, retune the frozen Ridge from subgroup results, rerun M7,
+Do not rewrite F5/F6/F7/F8/F10 evidence, retune the frozen Ridge from subgroup results, rerun M7,
 fabricate Chinese sentiment, create a fake sealed test, modify working GAS, deploy, commit or push
 during the F8 stop boundary.
 
@@ -347,6 +370,6 @@ F4 implemented 1 persistence, 4 Ridge and 16 HGB parameterized candidates under 
 grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection and deterministic
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
-After user review, choose either **F9 — Optional NLP Incremental-Value Study** only when suitable
-timestamp-safe historical NLP features already exist, or skip to **F10 — Backend Integration**.
-F9 is non-blocking; Track A completion never depends on positive NLP lift.
+After user review, the next minimum executable unit is **F11 — LINE / Dashboard Demo**. It may use
+the F10 API contract but must not modify or deploy working GAS without separate approval. F9 remains
+optional and non-blocking; Track A completion does not depend on NLP lift.

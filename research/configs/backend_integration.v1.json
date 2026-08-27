@@ -1,0 +1,39 @@
+{
+  "schema_version": "backend-integration-config-v1",
+  "api_version": "financial-research-api-v1",
+  "prediction_response_version": "volatility-surprise-prediction-response-v1",
+  "intelligence_response_version": "financial-intelligence-response-v1",
+  "prediction_endpoint": "/api/v1/research/volatility-surprise/predict",
+  "intelligence_endpoint": "/api/v1/research/intelligence/{ticker}",
+  "f7_artifact_path": ".tools/models/f7-final-ridge-research-v1/model.json",
+  "f7_artifact_sha256": "279472ab0794d093cbff0ab5a171b43be16abc3a7abed56d938938235505d4de",
+  "f8_config_path": "research/configs/financial_nlp_intelligence.v1.json",
+  "f8_config_sha256": "de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4",
+  "prediction_input": {
+    "feature_contract": "risk-features-v1",
+    "exact_feature_set_required": true,
+    "timezone_aware_cutoff_required": true,
+    "server_computes_features_in_f10": false
+  },
+  "intelligence_retrieval": {
+    "database_only": true,
+    "external_fetch_on_request": false,
+    "model_inference_on_request": false,
+    "llm_on_request": false,
+    "default_limit": 10,
+    "maximum_limit": 50
+  },
+  "claim_boundary": {
+    "research_signal_only": true,
+    "prospective_accuracy": false,
+    "price_direction_forecast": false,
+    "investment_advice": false,
+    "guaranteed_future_volatility": false
+  },
+  "artifact_loading": "LAZY_FAIL_CLOSED",
+  "authentication_scope": "PUBLIC_RESEARCH_NO_PRIVATE_PORTFOLIO_DATA",
+  "modify_gas_in_f10": false,
+  "external_api_calls_in_f10_audit": false,
+  "model_training_in_f10": false,
+  "deploy_in_f10": false
+}

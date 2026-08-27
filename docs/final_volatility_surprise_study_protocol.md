@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation complete through F8; protocol unchanged**
+Status: **FROZEN — implementation complete through F8 and F10; optional F9 not run**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -387,3 +387,17 @@ and persisted no source rows. Config SHA-256 is
 `de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4`; aggregate analysis
 SHA-256 is `8994a66e2fef70da2ad16d54cb3698ac8e2f14badad4e9237a03e2669b97ab42`. F9 remains
 optional/non-blocking; F10 may follow directly after review.
+
+## 23. F10 implementation record
+
+After separate approval, F10 skipped the non-blocking F9 and integrated F7/F8 into two versioned
+FastAPI research endpoints. Prediction requires the exact 23 finite F7 features plus a timezone-
+aware cutoff and verifies the safe JSON artifact SHA before returning score, OOF percentile, band
+and lineage. Intelligence reads stored database rows only; it performs no request-time provider,
+FinBERT or LLM call and preserves Chinese polarity abstention.
+
+The controlled audit registered both required routes and validated one synthetic contract input
+without treating it as performance evidence or persisting its features/prediction. F10 config
+SHA-256 is `b4367815b484352375b6693d91b44298b8e4dc3b84bf0a3c69f956f97175a4f2`; analysis
+SHA-256 is `dc26d6f13e07c27e8ec32b6da8d06ac6fb1fed9b5fff32040a9d69221394b5fb`.
+No external API, training, GAS change, M7 rerun or deployment occurred.

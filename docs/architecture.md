@@ -266,3 +266,21 @@ and deterministic event/impact cues occupy separate fields and are never treated
 ground truth. The assembler performs no retrieval, external API call, model inference or LLM
 generation itself. This keeps ingestion/model runtimes optional and preserves a deterministic,
 testable product contract for later F10 integration.
+
+## F10 research API boundary
+
+```text
+validated 23-feature request
+  → lazy load + verify F7 safe JSON artifact
+  → continuous score + OOF percentile + communication band + lineage
+
+stored news_articles + article_tickers + optional pinned sentiment_result
+  → F8 assembler
+  → database-only intelligence response with abstention and claim boundaries
+```
+
+The prediction endpoint does not build current features in F10; callers must supply the exact
+frozen contract. The intelligence endpoint never fetches providers or runs models/LLMs during a
+request. Both endpoints are public-research surfaces and exclude portfolio/private data. Existing
+portfolio ownership controls remain separate. Artifact absence/tampering fails closed; production
+authentication, rate limiting, scheduling and deployment remain outside F10.

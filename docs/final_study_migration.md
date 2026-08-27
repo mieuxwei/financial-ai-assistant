@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-28
-Status: F1–F8 complete; next decision is optional F9 or F10
+Status: F1–F8 and F10 complete; optional F9 not run; F11 pending review
 
 ## Migration principle
 
@@ -78,9 +78,10 @@ result or used to claim prospective confirmation.
    intelligence with all prior NLP evidence preserved. **Complete:** frozen product contract,
    Chinese polarity abstention, separate event proxy and 7/7 evidence-hash verification; no model
    inference or deployment.
-9. **F9 — Optional NLP Incremental-Value Study:** non-blocking paired ablation.
+9. **F9 — Optional NLP Incremental-Value Study:** non-blocking paired ablation. **Not run.**
 10. **F10 — FastAPI / Backend Integration:** continuous score, percentile, band and intelligence
-    endpoints with lineage.
+    endpoints with lineage. **Complete:** local research endpoints, strict lineage and
+    database-only intelligence; not deployed.
 11. **F11 — LINE / Dashboard Demo:** relative-risk score plus traceable intelligence and research
     disclaimers.
 12. **F12 — Portfolio Finalization:** final narrative, comparisons, ranking visuals, limitations,

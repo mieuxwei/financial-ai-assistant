@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     perplexity_api_key: str = ""
     market_data_provider: str = "yahoo"
     news_provider: str = ""
+    final_model_artifact_path: str = ".tools/models/f7-final-ridge-research-v1/model.json"
+    backend_integration_config_path: str = "research/configs/backend_integration.v1.json"
 
     @property
     def resolved_database_url(self) -> str:

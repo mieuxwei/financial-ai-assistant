@@ -5,6 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from backend.app.api.portfolios import router as portfolio_router
+from backend.app.api.research import router as research_router
 from backend.app.core.config import get_settings
 from backend.app.core.errors import AppError
 from backend.app.core.logging import configure_logging
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 def create_app() -> FastAPI:
     application = FastAPI(title=settings.service_name)
     application.include_router(portfolio_router)
+    application.include_router(research_router)
 
     @application.exception_handler(AppError)
     async def handle_app_error(request: Request, error: AppError) -> JSONResponse:
