@@ -407,6 +407,13 @@ Validation label distribution 未檢視、sealed-test features 未生成、prepr
 實作 naive historical-risk/persistence baseline 與 Logistic Regression，建立 train-fit preprocessing。
 Validation 報告 HIGH_RISK recall、calibration、confusion matrix；test 未開。
 
+**狀態：完成（2026-08-27）。** 以 23,890 training rows 單獨 fit `StandardScaler`、balanced class
+weights 與 Logistic Regression，固定 decision threshold 0.5，不做 imputation、resampling、
+hyperparameter／threshold selection。Historical-risk、previous-period persistence 與 Logistic
+Regression 均在 4,800 validation rows 評估；validation 不參與 fit。Logistic baseline 的
+HIGH_RISK recall 0.582、PR-AUC 0.172、ROC-AUC 0.645、MCC 0.122、Brier 0.224；結果只作基線，
+不宣告 final candidate。Sealed test 未 materialize 或開啟。
+
 ### M5 — Tree Models
 
 實作 Random Forest 與 HistGradientBoosting／XGBoost，以同一資料、target、split 公平比較；不以 test
@@ -514,10 +521,11 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1–M3 已完成。禁止打開任何 sealed-test
+M0 文件遷移與 M1–M4 已完成。禁止打開任何 sealed-test
 outcome／performance、刪除
 NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M4 Baselines**：以 M3 training rows fit 所有 preprocessing，建立
-historical-risk／persistence naive baseline 與 Logistic Regression；只在 validation 報告候選指標，
-不得產生或打開 sealed test，也不得用 validation fit scaler、imputer、class weight 或模型參數。
+下一個最小可執行單元是 **M5 Tree Models**：在同一 M3 train／validation dataset 與固定 target
+contract 下建立 Random Forest 與 HistGradientBoosting／XGBoost 候選，採 predeclared parameters
+公平比較，保存 feature importance 與 resource cost。不得以 sealed test 選模型；validation 只能用於
+候選評估，不得回頭改寫 M1–M4 evidence。

@@ -18,6 +18,11 @@ M3 implementation status: 23 finite market-only features are complete for train/
 fixed 35-session `t`-only window. No preprocessing is fit and sealed-test features remain
 unmaterialized. See `docs/risk_feature_protocol.md`.
 
+M4 implementation status: training-only scaling and three fixed baselines are complete. Validation
+metrics and uniform calibration bins are reported without model or threshold selection. The
+class-balanced Logistic Regression is explicitly a baseline; its probabilities are not claimed to
+be calibrated. Sealed test remains unopened. See `docs/risk_baseline_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

@@ -71,6 +71,15 @@ bridging. Stock and benchmark `t+1` mutation tests leave `t` features unchanged.
 were not summarized and sealed-test features remain unmaterialized. The next unit is
 **M4 — Baselines**.
 
+M4 Baselines was completed on 2026-08-27. It fit `StandardScaler`, balanced class weights, and
+Logistic Regression on 23,890 training rows only, then evaluated historical-risk-rate,
+previous-period persistence, and Logistic Regression on 4,800 validation rows. The Logistic
+baseline reached HIGH_RISK recall 0.582, PR-AUC 0.172, ROC-AUC 0.645, MCC 0.122, and Brier 0.224.
+Its class-balanced 0.5 threshold also generated 1,657 false positives, so it is a comparison
+baseline rather than a selected final model. No validation row was used for fitting or threshold
+tuning; no prediction rows were persisted; the sealed test remains unopened. The next unit is
+**M5 — Tree Models**.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text

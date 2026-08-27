@@ -9,7 +9,7 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## Active Track A M1–M3 boundary
+## Active Track A M1–M4 boundary
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -22,6 +22,8 @@ fixed universe + Yahoo OHLCV + FinMind TAIEX
   → 35-session t-only market feature window
   → 23 price / volume / volatility / technical / TAIEX features
   → immutable train/validation risk-feature dataset
+  → training-only StandardScaler + Logistic Regression
+  → validation-only baseline metrics and calibration bins
 ```
 
 M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
@@ -32,6 +34,12 @@ rows stay in ignored local storage.
 M3 keeps the `features` mapping structurally separate from the target object, verifies M2's
 feature-state commitment, and refuses gaps in its fixed 35-session lookback. It fits no
 preprocessing and materializes no sealed-test feature.
+
+M4 fits the scaler, balanced class weights, and Logistic Regression only from training rows.
+Historical prevalence and previous-period persistence provide naive comparisons. Validation is
+read only to calculate metrics; it does not tune the fixed 0.5 threshold or any model parameter.
+The learned model is a versioned JSON artifact in ignored local storage. Sealed-test features and
+outcomes remain unopened.
 
 ## Legacy first-iteration application boundary
 
