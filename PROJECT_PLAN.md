@@ -3,7 +3,7 @@
 Plan version: `final-volatility-surprise-study-v1`
 
 Last revised: 2026-08-27
-Active milestone: **F1 complete at planning scope; F2 not started**
+Active milestone: **F3 complete; next review unit is F4**
 
 ## 1. Final Project Identity
 
@@ -159,8 +159,12 @@ Secondary robustness outcomes 固定為：
 - 既有 pre-2025 feature snapshot：28,690 rows，2011-01-03–2024-12-30；
 - stock provider：Yahoo research adapter；benchmark：FinMind TAIEX total-return index。
 
-F2 會使用相同 raw snapshot lineage 重建涵蓋所有 eligible history 的 final-study dataset。2025–2026
-的實際 final row counts、near-zero exclusions 與 per-fold counts 必須由 F2 計算；F1 不製造數字。
+F2 已使用相同 raw snapshot lineage 重建涵蓋所有 eligible history 的 final-study dataset：38,290
+candidate rows 中 32,357 eligible、5,933 明確排除，feature dates 為
+2011-01-03–2026-08-25。Dataset SHA-256 為
+`2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`。排除以 provider/benchmark
+缺 bar 為主，沒有 near-zero/non-finite target；完整 raw-free 結果見
+`research/evaluation/f2_historical_dataset_result.md`。
 
 ### Final dataset row contract
 
@@ -329,9 +333,10 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
 1. **F1 — Final Research Protocol Freeze：**凍結 questions、target、features、outer/inner
    protocol、models、metrics、ranking、claims、schema/tests。**本次 planning scope 完成。**
 2. **F2 — Historical Dataset Rebuild：**使用 existing snapshot 重建 all-eligible continuous
-   dataset；保存 lineage、coverage、quality、exclusions、hash 與 fold counts。
+   dataset；保存 lineage、coverage、quality、exclusions、hash 與 fold counts。**完成。**
 3. **F3 — Volatility-Surprise Target & Feature Audit：**final target builder、secondary outcomes、
-   feature dictionary、mutation/duplicate/next-session/leakage tests。
+   feature dictionary、mutation/duplicate/next-session/leakage tests。**完成；coverage audit 發現
+   calendar-year／2017–2018 fold 時間集中，屬需保留的資料限制。**
 4. **F4 — Baselines & Candidate Models：**persistence、Ridge、HGB regression，全部 fold-local。
 5. **F5 — Nested / Rolling-Origin Evaluation：**inner selection、七個 outer folds、immutable OOF。
 6. **F6 — Ranking & Robustness Analysis：**metrics、deciles、lift、ticker/time/regime、bootstrap。
@@ -367,8 +372,9 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-F1 planning 已完成；F2 尚未開始。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把
+F1–F3 已完成；F4 尚未開始。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把
 2025–2026 稱為新 sealed test，不得訓練 regression models、生成 F5 results、選 HGB winner、修改
 working GAS、deploy、commit 或 push。
 
-經使用者 review/approval 後，下一個最小執行單元是 **F2 — Historical Dataset Rebuild**。
+經使用者 review/approval 後，下一個最小執行單元是
+**F4 — Baselines & Candidate Models**。

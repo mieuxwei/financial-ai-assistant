@@ -1,12 +1,12 @@
 # Data Dictionary
 
-## Planned final-study snapshot (F2; not yet materialized)
+## Final-study snapshot (F2 complete)
 
-The F2 snapshot will contain one row per eligible ticker/feature session and keep predictors
+The F2 snapshot contains one row per eligible ticker/feature session and keeps predictors
 structurally separate from outcomes:
 
 - `ticker`: canonical Taiwan ticker.
-- `feature_date`: exchange session whose close completes the feature vector.
+- `feature_session`: exchange session whose close completes the feature vector.
 - `target_session`: immediate next benchmark session; never substituted with a later available row.
 - `information_cutoff`: timezone-aware point after which no predictor may enter the row.
 - `features`: the fixed F1 market-only feature mapping, computed from information available by the
@@ -16,9 +16,16 @@ structurally separate from outcomes:
 - `dataset_version`: immutable F2 dataset contract version.
 - `source_lineage`: source snapshot/config identifiers and cryptographic hashes.
 
-The snapshot is planned but has not been built during F1. The exact active target and temporal
-contracts are in `docs/final_volatility_surprise_study_protocol.md`. Historical binary fields later
-in this dictionary remain exploratory M-series records, not final-study training labels.
+The immutable local snapshot contains 32,357 eligible rows and has SHA-256
+`2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`. The exact active target and
+temporal contracts are in `docs/final_volatility_surprise_study_protocol.md`; aggregate F2 evidence
+is in `research/evaluation/f2_historical_dataset_result.md`. Historical binary fields later in this
+dictionary remain exploratory M-series records, not final-study training labels.
+
+F3 independently reproduced every target from immutable market bars and verified all feature/row
+hashes. The coverage audit found no ticker-specific or known-volatility-regime concentration, but
+did find calendar-year and 2017–2018 outer-fold concentration. This remains a documented temporal
+data limitation; see `research/evaluation/f3_target_feature_coverage_audit_result.md`.
 
 ## M1–M2 tables
 

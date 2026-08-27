@@ -1,0 +1,16 @@
+{
+  "schema_version": "final-study-coverage-bias-audit-config-v1",
+  "audit_version": "final-study-target-feature-coverage-audit-v1",
+  "dataset_version": "final-volatility-surprise-dataset-v1",
+  "axes": ["ticker", "calendar_year", "outer_fold", "volatility_regime"],
+  "minimum_group_candidate_rows": 100,
+  "abnormal_absolute_excess_rate": 0.05,
+  "abnormal_rate_ratio": 1.5,
+  "unavailable_regime_warning_rate": 0.05,
+  "volatility_regime_quantiles": [0.333333333333, 0.666666666667],
+  "volatility_regime_cutoff_fit": "outer_training_rows_only",
+  "unknown_regime_label": "UNAVAILABLE_DUE_TO_COVERAGE_GAP",
+  "downgraded_conclusion": "DOCUMENTED_DATA_LIMITATION_NOT_DETECTED_AS_COVERAGE_BIAS",
+  "concentrated_conclusion": "DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION",
+  "no_missing_at_random_claim": true
+}

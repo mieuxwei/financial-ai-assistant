@@ -286,3 +286,27 @@ F1 creates only plans, schemas and safety tests. It authorizes no dataset rebuil
 outer evaluation, final result, API integration, deployment, GAS change, commit or push. The next
 minimum executable unit after review is **F2 — Historical Dataset Rebuild**.
 
+## 16. F2 implementation record
+
+After separate user approval, F2 rebuilt the immutable historical dataset without changing this
+F1 protocol. It produced 32,357 eligible rows from 38,290 candidates for feature dates
+2011-01-03–2026-08-25. The dataset SHA-256 is
+`2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`.
+
+The rebuild fitted no preprocessing/model and created no binary label. It documented 5,933 strict
+session-availability exclusions, including systematic provider/benchmark gaps, rather than
+imputing or substituting later bars. See `research/evaluation/f2_historical_dataset_result.md`.
+At the F2 stop boundary, F3 had not started.
+
+## 17. F3 implementation record
+
+After separate approval, F3 independently reproduced all 32,357 targets from immutable market
+bars, verified exact next-session alignment, the complete 23-feature availability contract and all
+dataset/feature/row hashes. It fitted no preprocessing or model.
+
+The predeclared coverage-bias audit found no abnormal ticker or known-volatility-regime
+concentration. It did find abnormal exclusion concentration in calendar years 2012, 2013, 2016,
+2017 and 2019, plus `outer_2017_2018`; 7.10% of evaluation candidates also lacked enough bars for a
+regime assignment. The coverage warning therefore cannot be fully downgraded. Its frozen
+classification is `DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION`, documented in
+`research/evaluation/f3_target_feature_coverage_audit_result.md`. F4 has not started.

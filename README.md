@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F1 final-study protocol frozen / next: F2 historical dataset rebuild / no model training yet**。
+目前狀態：**F3 target/feature/coverage audit complete / next: F4 models / no model training yet**。
 
 ## 研究演進
 
@@ -122,8 +122,17 @@ outer folds，每折 hyperparameters 只由 outer training history 內最近三�
 
 完整 frozen protocol 見
 [final study protocol](docs/final_volatility_surprise_study_protocol.md)，舊 M→新 F 對照見
-[final study migration](docs/final_study_migration.md)。F2 尚未開始，README 不包含任何虛構 regression
-結果。
+[final study migration](docs/final_study_migration.md)。F2 已從 38,290 candidate rows 建立 32,357
+eligible rows，dataset SHA-256 為
+`2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`；完整 coverage/exclusion
+結果見 [F2 report](research/evaluation/f2_historical_dataset_result.md)。目前沒有任何 regression
+model 或虛構 evaluation 結果。
+
+F3 已驗證全部 32,357 rows 的 exact-next-session、target 重算、23-feature availability、lineage 與
+hash。Coverage-bias audit 顯示 ticker 與已知 volatility regimes 沒有異常集中，但
+2012/2013/2016/2017/2019 與 2017–2018 outer fold 有時間集中，因此正確狀態是「有時間集中現象的
+資料限制」，不能宣稱 exclusions 無偏。詳見
+[F3 audit](research/evaluation/f3_target_feature_coverage_audit_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

@@ -4,8 +4,8 @@ Last revised: 2026-08-27
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F1 protocol freeze complete at planning scope**
-Next executable unit: **F2 only after user review/approval**
+Current unit: **F3 target/feature/coverage audit complete**
+Next executable unit: **F4 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -96,8 +96,11 @@ Read-only local inspection found:
 - existing pre-2025 feature dataset 28,690 rows, 2011-01-03–2024-12-30;
 - stock provider Yahoo research adapter and FinMind TAIEX total-return benchmark.
 
-F2 must calculate actual final-study row counts, exclusions and per-fold coverage. Do not infer or
-invent them from prior binary datasets.
+F2 produced 32,357 eligible rows from 38,290 candidates and excluded 5,933 rows under the frozen
+strict-session contract. Feature coverage is 2011-01-03–2026-08-25 and the immutable dataset
+SHA-256 is `2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`.
+No preprocessing/model/binary label was created. See
+`research/evaluation/f2_historical_dataset_result.md`.
 
 ## FROZEN TEMPORAL DESIGN
 
@@ -214,9 +217,9 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 ## ACTIVE F-SERIES
 
 - **F1:** protocol/config/schema/safety-test freeze — planning scope complete.
-- **F2:** historical continuous dataset rebuild — next, not started.
-- **F3:** final target and feature audit.
-- **F4:** persistence/Ridge/HGB regressors.
+- **F2:** historical continuous dataset rebuild — complete.
+- **F3:** final target, feature and coverage-bias audit — complete with temporal concentration.
+- **F4:** persistence/Ridge/HGB regressors — next after approval.
 - **F5:** nested rolling-origin evaluation and OOF predictions.
 - **F6:** ranking/decile/lift/robustness.
 - **F7:** final research artifact and inference freeze.
@@ -241,14 +244,29 @@ profitability.
 - Canonical F1 config SHA-256:
   `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`.
 
+## F2 ARTIFACTS
+
+- Builder: `pipelines/features/final_study_builder.py`.
+- CLI: `jobs/final_study_dataset.py` / `financial-ai-final-study-dataset`.
+- Safety tests: `tests/unit/test_final_study_dataset_builder.py`.
+- Public result: `research/evaluation/f2_historical_dataset_result.md`.
+- Local dataset: `.tools/datasets/final-volatility-surprise-dataset-v1/dataset.json`.
+- Dataset SHA-256:
+  `2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`.
+
 ## SAFETY AND NEXT ACTION
 
 Do not train regression models, generate F5 results, choose an F7 winner, rerun M7, create a fake
-sealed test, modify working GAS, deploy, commit or push during F1.
+sealed test, modify working GAS, deploy, commit or push during F2.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
 preprocessing and exact hashes.
 
-After user review, the next minimum executable unit is **F2 — Historical Dataset Rebuild**. F2 must
-stop after dataset/quality evidence and must not automatically begin F3 or train a model.
+F3 found no ticker or known-volatility-regime concentration, but calendar years
+2012/2013/2016/2017/2019 and outer fold 2017–2018 triggered the predeclared coverage rule. The
+warning therefore remains `DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION`; it is not a
+target/leakage/code defect. See `research/evaluation/f3_target_feature_coverage_audit_result.md`.
+
+After user review, the next minimum executable unit is **F4 — Baselines & Candidate Models**. F3
+has not automatically begun F4 or trained a model.

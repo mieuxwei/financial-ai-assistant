@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-27  
-Status: F1 planning complete; F2 not started
+Status: F1–F3 complete; F4 not started
 
 ## Migration principle
 
@@ -57,9 +57,11 @@ result or used to claim prospective confirmation.
 1. **F1 — Final Research Protocol Freeze:** continuous target, folds, inner selection, models,
    metrics, claims and safety tests. **Complete at planning scope.**
 2. **F2 — Historical Dataset Rebuild:** rebuild all eligible existing history with lineage,
-   cutoffs, duplicate and quality audits.
+   cutoffs, duplicate and quality audits. **Complete:** 32,357 eligible rows; dataset SHA-256
+   `2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c`.
 3. **F3 — Volatility-Surprise Target & Feature Audit:** implement/freeze final dataset builder,
-   target near-zero policy, feature dictionary and mutation tests.
+   target near-zero policy, feature dictionary, mutation tests and coverage-bias audit.
+   **Complete with documented temporal coverage concentration.**
 4. **F4 — Baselines & Candidate Models:** persistence, Ridge and HGB regressors; XGBoost excluded in
    v1 unless a separately approved protocol amendment justifies it.
 5. **F5 — Nested / Rolling-Origin Evaluation:** inner temporal tuning, seven outer historical
@@ -90,4 +92,3 @@ result or used to claim prospective confirmation.
 
 Prospective validation after naturally future data accumulates remains valuable **future external
 validation**, but it is not represented as completed and is not required for F12.
-
