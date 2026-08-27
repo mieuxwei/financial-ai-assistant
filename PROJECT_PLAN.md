@@ -3,7 +3,7 @@
 Plan version: `final-volatility-surprise-study-v1`
 
 Last revised: 2026-08-27
-Active milestone: **F3 complete; next review unit is F4**
+Active milestone: **F4 complete; next review unit is F5**
 
 ## 1. Final Project Identity
 
@@ -338,6 +338,7 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
    feature dictionary、mutation/duplicate/next-session/leakage tests。**完成；coverage audit 發現
    calendar-year／2017–2018 fold 時間集中，屬需保留的資料限制。**
 4. **F4 — Baselines & Candidate Models：**persistence、Ridge、HGB regression，全部 fold-local。
+   **完成實作與 synthetic reproducibility tests；尚未跑歷史 outer evaluation。**
 5. **F5 — Nested / Rolling-Origin Evaluation：**inner selection、七個 outer folds、immutable OOF。
 6. **F6 — Ranking & Robustness Analysis：**metrics、deciles、lift、ticker/time/regime、bootstrap。
 7. **F7 — Final Research Model Freeze：**依 frozen rule 選 model、full-history research fit、artifact
@@ -372,9 +373,9 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-F1–F3 已完成；F4 尚未開始。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把
+F1–F4 已完成；F5 尚未開始。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把
 2025–2026 稱為新 sealed test，不得訓練 regression models、生成 F5 results、選 HGB winner、修改
 working GAS、deploy、commit 或 push。
 
 經使用者 review/approval 後，下一個最小執行單元是
-**F4 — Baselines & Candidate Models**。
+**F5 — Nested / Rolling-Origin Evaluation**。

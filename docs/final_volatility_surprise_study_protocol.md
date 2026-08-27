@@ -309,4 +309,18 @@ concentration. It did find abnormal exclusion concentration in calendar years 20
 2017 and 2019, plus `outer_2017_2018`; 7.10% of evaluation candidates also lacked enough bars for a
 regime assignment. The coverage warning therefore cannot be fully downgraded. Its frozen
 classification is `DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION`, documented in
-`research/evaluation/f3_target_feature_coverage_audit_result.md`. F4 has not started.
+`research/evaluation/f3_target_feature_coverage_audit_result.md`. At the F3 stop boundary, F4 had
+not started.
+
+## 18. F4 implementation record
+
+After separate approval, F4 implemented the three frozen candidate families: parameter-free
+normalized persistence, four Ridge alphas with training-only StandardScaler, and sixteen HGB
+parameter combinations with internal early stopping disabled. Trainable candidates fit `log1p(y)`
+and invert to the nonnegative original scale.
+
+Every fit requires an explicit temporal context and rejects target overlap, non-training rows,
+duplicate identities, non-finite data and parameters outside the F1 grid. Synthetic repeated fits
+produced identical manifests and predictions. F4 ran no historical outer evaluation, selected no
+hyperparameters/winner and persisted no final model. See
+`research/evaluation/f4_regression_candidates_result.md`. F5 has not started.

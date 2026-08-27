@@ -19,6 +19,12 @@ HistGradientBoostingRegressor.
 Primary reporting includes MAE, RMSE, R-squared, Spearman rank correlation, frozen ratio-based
 top-decile/top-quintile lift and predicted-score decile tables. NLP incremental value is optional.
 
+F4 implementation status: normalized-move persistence, Ridge and HistGradientBoostingRegressor
+candidate interfaces are complete. Ridge scaling is training-only; HGB internal early stopping is
+disabled. Hyperparameters are restricted to the frozen F1 grids. F4 used synthetic tests only and
+did not run historical inner/outer evaluation, select a winner or persist a final model. See
+`research/evaluation/f4_regression_candidates_result.md`.
+
 ## Exploratory binary-risk contract (historical M1–M11; frozen)
 
 The mandatory experiment predicts next-session `NORMAL` versus `HIGH_RISK` abnormal-volatility /

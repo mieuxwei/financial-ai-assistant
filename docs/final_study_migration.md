@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-27  
-Status: F1–F3 complete; F4 not started
+Status: F1–F4 complete; F5 not started
 
 ## Migration principle
 
@@ -63,7 +63,8 @@ result or used to claim prospective confirmation.
    target near-zero policy, feature dictionary, mutation tests and coverage-bias audit.
    **Complete with documented temporal coverage concentration.**
 4. **F4 — Baselines & Candidate Models:** persistence, Ridge and HGB regressors; XGBoost excluded in
-   v1 unless a separately approved protocol amendment justifies it.
+   v1 unless a separately approved protocol amendment justifies it. **Implementation complete;
+   historical evaluation not run.**
 5. **F5 — Nested / Rolling-Origin Evaluation:** inner temporal tuning, seven outer historical
    folds and reproducible OOF predictions.
 6. **F6 — Ranking & Robustness Analysis:** regression/ranking metrics, deciles, lift,

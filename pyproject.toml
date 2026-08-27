@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "financial-ai-assistant"
 version = "0.1.0"
-description = "Research platform for stock volatility-risk prediction and financial NLP intelligence."
+description = "Research platform for stock-normalized volatility-surprise forecasting and financial NLP intelligence."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -51,6 +51,7 @@ financial-ai-operating-points = "jobs.operating_points:main"
 financial-ai-regime-thresholds = "jobs.regime_thresholds:main"
 financial-ai-final-study-dataset = "jobs.final_study_dataset:main"
 financial-ai-final-study-feature-audit = "jobs.final_study_feature_audit:main"
+financial-ai-final-regression-candidates = "jobs.final_regression_candidates:main"
 
 [project.optional-dependencies]
 dev = [

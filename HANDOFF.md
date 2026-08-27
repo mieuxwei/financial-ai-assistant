@@ -4,8 +4,8 @@ Last revised: 2026-08-27
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F3 target/feature/coverage audit complete**
-Next executable unit: **F4 only after user review/approval**
+Current unit: **F4 regression candidates complete**
+Next executable unit: **F5 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -219,8 +219,8 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F1:** protocol/config/schema/safety-test freeze — planning scope complete.
 - **F2:** historical continuous dataset rebuild — complete.
 - **F3:** final target, feature and coverage-bias audit — complete with temporal concentration.
-- **F4:** persistence/Ridge/HGB regressors — next after approval.
-- **F5:** nested rolling-origin evaluation and OOF predictions.
+- **F4:** persistence/Ridge/HGB regressors — implementation complete; no historical evaluation.
+- **F5:** nested rolling-origin evaluation and OOF predictions — next after approval.
 - **F6:** ranking/decile/lift/robustness.
 - **F7:** final research artifact and inference freeze.
 - **F8:** Financial NLP Intelligence.
@@ -268,5 +268,10 @@ F3 found no ticker or known-volatility-regime concentration, but calendar years
 warning therefore remains `DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION`; it is not a
 target/leakage/code defect. See `research/evaluation/f3_target_feature_coverage_audit_result.md`.
 
-After user review, the next minimum executable unit is **F4 — Baselines & Candidate Models**. F3
-has not automatically begun F4 or trained a model.
+F4 implemented 1 persistence, 4 Ridge and 16 HGB parameterized candidates under the frozen F1
+grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection and deterministic
+fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
+
+After user review, the next minimum executable unit is
+**F5 — Nested / Rolling-Origin Evaluation**. F4 has not automatically run historical outer folds,
+selected hyperparameters or persisted a final model.

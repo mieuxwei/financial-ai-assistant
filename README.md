@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F3 target/feature/coverage audit complete / next: F4 models / no model training yet**。
+目前狀態：**F4 regression candidates implemented / next: F5 nested evaluation / no historical model evaluation yet**。
 
 ## 研究演進
 
@@ -133,6 +133,11 @@ hash。Coverage-bias audit 顯示 ticker 與已知 volatility regimes 沒有異�
 2012/2013/2016/2017/2019 與 2017–2018 outer fold 有時間集中，因此正確狀態是「有時間集中現象的
 資料限制」，不能宣稱 exclusions 無偏。詳見
 [F3 audit](research/evaluation/f3_target_feature_coverage_audit_result.md)。
+
+F4 已實作 normalized persistence、4 個 Ridge alpha 與 16 個 HGB parameter combinations。Ridge
+scaler 僅能 fit training rows，HGB 關閉 internal early stopping；合成資料重建 manifest 與 predictions
+均 deterministic。F4 尚未執行歷史 outer evaluation、選 winner 或保存 final artifact。詳見
+[F4 result](research/evaluation/f4_regression_candidates_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

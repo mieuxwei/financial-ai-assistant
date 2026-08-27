@@ -1,0 +1,30 @@
+{
+  "schema_version": "final-regression-model-config-v1",
+  "experiment_version": "final-regression-candidates-v1",
+  "fit_manifest_version": "final-regression-fit-manifest-v1",
+  "dataset_version": "final-volatility-surprise-dataset-v1",
+  "f1_protocol_config_sha256": "4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66",
+  "target_version": "next_session_stock_normalized_abs_log_return_v1",
+  "target_field": "primary",
+  "target_transform": "log1p",
+  "inverse_transform": "maximum_zero_expm1",
+  "feature_names_source": "risk-features-v1",
+  "minimum_training_rows": 100,
+  "ridge": {
+    "fit_intercept": true,
+    "solver": "auto",
+    "tolerance": 0.0001,
+    "scaler_with_mean": true,
+    "scaler_with_std": true
+  },
+  "hist_gradient_boosting": {
+    "loss": "squared_error",
+    "early_stopping": false,
+    "validation_fraction_used": false
+  },
+  "training_rows_only": true,
+  "validation_or_outer_rows_used_for_fitting": false,
+  "hyperparameter_selection_performed_in_f4": false,
+  "model_artifact_persisted_in_f4": false,
+  "random_split_allowed": false
+}
