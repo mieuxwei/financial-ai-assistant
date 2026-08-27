@@ -4,8 +4,8 @@ Last revised: 2026-08-27
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F6 ranking and robustness complete**
-Next executable unit: **F7 only after user review/approval**
+Current unit: **F7 final research model freeze complete**
+Next executable unit: **F8 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -222,7 +222,7 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F4:** persistence/Ridge/HGB regressors — implementation complete.
 - **F5:** nested rolling-origin evaluation and OOF predictions — complete; no final winner selected.
 - **F6:** ranking/decile/lift/robustness — complete; no final winner selected.
-- **F7:** final research artifact and inference freeze.
+- **F7:** final research artifact and inference freeze — complete; Ridge alpha 100, not deployed.
 - **F8:** Financial NLP Intelligence.
 - **F9:** optional NLP incremental-value study.
 - **F10:** FastAPI/backend integration.
@@ -291,10 +291,28 @@ had positive ranking and lift above one in every outer period, ticker and traini
 Their pooled outer-assigned deciles were 9/9 non-decreasing, but individual folds reached only 5–9
 steps and the model-level bootstrap intervals overlap. F6 did not select a final model.
 
+## F7 ARTIFACTS AND RESULT
+
+- Freeze config: `research/configs/final_model_freeze.v1.json`.
+- Model/inference implementation: `research/modeling/final_research_model.py`.
+- CLI: `jobs/final_model_freeze.py` / `financial-ai-final-model-freeze`.
+- Safety tests: `tests/unit/test_final_research_model.py`.
+- Public result: `research/evaluation/f7_final_research_model_result.md`.
+- Local safe JSON artifact: `.tools/models/f7-final-ridge-research-v1/model.json`.
+- Canonical F7 config SHA-256:
+  `d87b335e3a03382ca7f0e45bb80fdb862e9017b93756a40171d61936410dc167`.
+- Canonical model artifact SHA-256:
+  `279472ab0794d093cbff0ab5a171b43be16abc3a7abed56d938938235505d4de`.
+
+Ridge/HGB were a practical tie under the frozen 0.01 Spearman margin. Ridge was selected by the
+first applicable tie-break, lower mean outer MAE. Temporal validation over 2023/2024/2025 selected
+alpha 100. The final research fit used all 32,357 eligible rows and persisted scaler/model state plus
+20,637 Ridge OOF reference scores as safe JSON. It was not deployed and makes no prospective claim.
+
 ## SAFETY AND NEXT ACTION
 
-Do not rewrite F5/F6 evidence, tune on F6 subgroups, choose outside the frozen F7 rule, rerun M7,
-create a fake sealed test, modify working GAS, deploy, commit or push during the F6 stop boundary.
+Do not rewrite F5/F6/F7 evidence, retune the frozen Ridge from subgroup results, rerun M7, create a
+fake sealed test, modify working GAS, deploy, commit or push during the F7 stop boundary.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
@@ -310,5 +328,5 @@ grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection 
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
 After user review, the next minimum executable unit is
-**F7 — Final Research Model Freeze**. F7 must apply the already-frozen selection order, document
-the practical tie honestly, freeze the inference contract and avoid any prospective claim.
+**F8 — Financial NLP Intelligence**. Preserve existing English FinBERT and Taiwan NLP evidence,
+keep unsupported Chinese polarity abstention-safe, and do not make Track A depend on NLP lift.

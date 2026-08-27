@@ -1,0 +1,71 @@
+{
+  "schema_version": "final-model-freeze-config-v1",
+  "artifact_version": "final-ridge-research-model-v1",
+  "report_version": "f7-final-research-model-report-v1",
+  "inference_contract_version": "volatility-surprise-inference-v1",
+  "f1_protocol_config_sha256": "4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66",
+  "f4_config_sha256": "88ff58b4510cec94c0f0b5a1c895cad3bafc126bf61048d01facdfb1dbfae726",
+  "final_dataset_sha256": "2db2b0e52ddca85b1578ef0e1438b12e2df5c3617b573d014e5bfe736aaae88c",
+  "f5_oof_sha256": "b693476dba45c2aefcbf556d1ba79a21602c34da2321808d3ec0512d7c65b4a7",
+  "f6_analysis_sha256": "8fd2fdc84f65fb47b6bc87df4b662c4bbd5a9ec8c82d41de4cdd3825b6364e70",
+  "selection_rule": {
+    "primary": "highest_mean_outer_spearman",
+    "practical_tie_margin_spearman": 0.01,
+    "within_tie_preference": [
+      "lower_mean_outer_mae",
+      "higher_worst_outer_spearman",
+      "lower_implementation_complexity"
+    ],
+    "single_period_or_subgroup_selection_allowed": false,
+    "expected_selected_model": "ridge_regression"
+  },
+  "final_hyperparameter_selection": {
+    "method": "latest_three_complete_calendar_years_expanding_window",
+    "validation_years": [2023, 2024, 2025],
+    "training_start": "2011-01-01",
+    "selection_primary": "mean_inner_spearman",
+    "selection_secondary": "mean_inner_mae",
+    "tie_breakers": [
+      "higher_worst_inner_spearman",
+      "lower_model_complexity",
+      "lexicographic_parameter_json"
+    ],
+    "expected_selected_hyperparameters": {"alpha": 100.0}
+  },
+  "final_fit": {
+    "training_feature_start": "2011-01-01",
+    "training_feature_end": "2026-08-25",
+    "training_target_end": "2026-08-26",
+    "next_unseen_session_boundary": "2026-08-27",
+    "use_all_eligible_rows": true,
+    "previous_outer_period_rows_included_as_historical_training": true,
+    "oof_predictions_or_evaluation_metrics_used_for_fitting": false
+  },
+  "historical_reference": {
+    "source": "selected_model_pooled_historical_outer_oof_predictions",
+    "expected_row_count": 20637,
+    "quantile_method": "linear",
+    "percentile_method": "empirical_cdf_right_inclusive",
+    "percentile_output_decimals": 6,
+    "band_quantiles": [0.5, 0.8, 0.95],
+    "band_labels": ["LOW", "MODERATE", "HIGH", "VERY_HIGH"],
+    "boundary_rule": "LOW_LT_P50_MODERATE_LT_P80_HIGH_LT_P95_VERY_HIGH_GE_P95"
+  },
+  "prediction_quantum": "0.000000000001",
+  "artifact_format": "SAFE_JSON_NO_PICKLE",
+  "required_output_fields": [
+    "ticker",
+    "as_of_date",
+    "information_cutoff",
+    "predicted_volatility_surprise",
+    "historical_percentile",
+    "risk_band",
+    "model_version",
+    "feature_pipeline_version"
+  ],
+  "claim_as_prospective_accuracy": false,
+  "direction_forecast": false,
+  "investment_advice": false,
+  "m7_rerun_allowed": false,
+  "deploy_in_f7": false
+}

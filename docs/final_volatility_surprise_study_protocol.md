@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation complete through F6; protocol unchanged**
+Status: **FROZEN — implementation complete through F7; protocol unchanged**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -356,3 +356,19 @@ showed 5–9 steps; model bootstrap intervals overlapped. F6 therefore preserves
 performs no retuning and selects no final model. Canonical analysis SHA-256 is
 `8fd2fdc84f65fb47b6bc87df4b662c4bbd5a9ec8c82d41de4cdd3825b6364e70`. See
 `research/evaluation/f6_ranking_robustness_result.md`.
+
+## 21. F7 implementation record
+
+After separate approval, F7 applied the frozen practical-tie sequence to immutable F6 evidence.
+Ridge and HGB were within `0.01` mean outer Spearman; Ridge was selected by the first applicable
+tie-break, lower mean outer MAE. No individual fold, ticker or regime drove selection.
+
+The same temporal rule over 2023–2025 selected Ridge alpha 100. The final research model fitted all
+32,357 eligible F2 rows through feature date 2026-08-25/target session 2026-08-26. It was serialized
+as safe JSON—not pickle—with exact scaler/coefficient lineage, a 20,637-row Ridge historical OOF
+reference, empirical percentile and frozen 50/80/95 communication bands. Artifact SHA-256 is
+`279472ab0794d093cbff0ab5a171b43be16abc3a7abed56d938938235505d4de`.
+
+Artifact inference reproduced fitted Ridge predictions within `5.01e-13`. The model is frozen but
+not deployed and does not claim prospective accuracy. See
+`research/evaluation/f7_final_research_model_result.md`.

@@ -54,6 +54,7 @@ financial-ai-final-study-feature-audit = "jobs.final_study_feature_audit:main"
 financial-ai-final-regression-candidates = "jobs.final_regression_candidates:main"
 financial-ai-final-temporal-evaluation = "jobs.final_temporal_evaluation:main"
 financial-ai-final-ranking-robustness = "jobs.final_ranking_robustness:main"
+financial-ai-final-model-freeze = "jobs.final_model_freeze:main"
 
 [project.optional-dependencies]
 dev = [

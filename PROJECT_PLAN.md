@@ -3,7 +3,7 @@
 Plan version: `final-volatility-surprise-study-v1`
 
 Last revised: 2026-08-27
-Active milestone: **F6 complete; next review unit is F7**
+Active milestone: **F7 complete; next review unit is F8**
 
 ## 1. Final Project Identity
 
@@ -345,7 +345,8 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
    **完成；Ridge/HGB pooled deciles 皆 9/9 上升，所有 outer folds/tickers/regimes ranking 為正，
    但年度 monotonicity 與 magnitude fit 仍有限，未選 final model。**
 7. **F7 — Final Research Model Freeze：**依 frozen rule 選 model、full-history research fit、artifact
-   與 inference contract；不宣稱 prospective accuracy。
+   與 inference contract；不宣稱 prospective accuracy。**完成：Ridge alpha 100、32,357 rows、
+   safe JSON artifact、historical percentile/bands；尚未部署。**
 8. **F8 — Financial NLP Intelligence：**English FinBERT 與 abstention-safe Taiwan intelligence。
 9. **F9 — Optional NLP Incremental-Value Study：**same folds/budget paired ablation；不阻塞。
 10. **F10 — FastAPI / Backend Integration：**score、percentile、band、lineage、intelligence APIs。
@@ -376,10 +377,10 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-F1–F6 已完成。F6 的 ranking/robustness analysis 使用 immutable F5 OOF，沒有重新調參；Ridge 與
-HGB mean outer Spearman 仍在 `0.01` practical-tie boundary 內，bootstrap intervals 重疊，因此尚未
-選 final model。M7 evaluation sequence 永久為 1，禁止呼叫或重跑 M7。不得把 2025–2026 稱為新
-sealed test，不得回頭利用 F6 subgroup 結果調參、修改 working GAS、deploy、commit 或 push。
+F1–F7 已完成。F7 依 frozen practical-tie rule 以較低 mean outer MAE 選 Ridge，再以 2023–2025
+training-history-only validation 選 alpha 100，並以 32,357 rows 建立 safe JSON artifact。這不代表
+prospective accuracy 或精準 magnitude prediction。M7 evaluation sequence 永久為 1，禁止呼叫或
+重跑 M7。不得回頭利用 F6 subgroup 結果調參、修改 working GAS、deploy、commit 或 push。
 
 經使用者 review/approval 後，下一個最小執行單元是
-**F7 — Final Research Model Freeze**。
+**F8 — Financial NLP Intelligence**。

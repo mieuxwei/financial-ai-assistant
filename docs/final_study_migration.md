@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-27  
-Status: F1–F6 complete; F7 pending review
+Status: F1–F7 complete; F8 pending review
 
 ## Migration principle
 
@@ -72,7 +72,8 @@ result or used to claim prospective confirmation.
    ticker/time/regime diagnostics and uncertainty. **Complete:** immutable F5 OOF only, 1,000
    clustered bootstrap replicates, no retuning/final selection.
 7. **F7 — Final Research Model Freeze:** frozen winner, full-history research fit, artifact and
-   inference contract without prospective claim.
+   inference contract without prospective claim. **Complete:** Ridge alpha 100 safe-JSON research
+   artifact, historical percentile/bands, not deployed.
 8. **F8 — Financial NLP Intelligence:** English FinBERT and abstention-safe Taiwan announcement
    intelligence with all prior NLP evidence preserved.
 9. **F9 — Optional NLP Incremental-Value Study:** non-blocking paired ablation.

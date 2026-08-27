@@ -36,6 +36,12 @@ bootstrap are complete on immutable F5 OOF predictions. Ridge/HGB remain inside 
 boundary and no final model was selected. See
 `research/evaluation/f6_ranking_robustness_result.md`.
 
+F7 implementation status: the frozen practical-tie rule selected Ridge by lower mean outer MAE;
+2023–2025 expanding temporal validation selected alpha 100. A full-history 32,357-row research fit
+was exported as verified safe JSON with empirical OOF percentile and 50/80/95 communication bands.
+No deployment or prospective accuracy claim was made. See
+`research/evaluation/f7_final_research_model_result.md`.
+
 ## Exploratory binary-risk contract (historical M1–M11; frozen)
 
 The mandatory experiment predicts next-session `NORMAL` versus `HIGH_RISK` abnormal-volatility /

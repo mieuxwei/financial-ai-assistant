@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F6 ranking and robustness complete / next: F7 model freeze / no final model selected**。
+目前狀態：**F7 final Ridge research model frozen / next: F8 NLP Intelligence / not deployed**。
 
 ## 研究演進
 
@@ -149,6 +149,12 @@ F6 已使用 immutable F5 OOF 完成 decile、top-decile/quintile lift、ticker/
 pooled outer-assigned deciles 皆為 9/9 上升，且兩者在所有 outer periods、tickers 與 regimes 的
 ranking 都為正；但個別年度只有 5–9 個 monotonic steps，bootstrap intervals 亦重疊。F6 未重新
 調參或選 final model；詳見 [F6 result](research/evaluation/f6_ranking_robustness_result.md)。
+
+F7 已依 frozen selection rule 正式選定 Ridge：Ridge/HGB 為 practical tie，再由較低 mean outer
+MAE 決勝；2023–2025 temporal validation 選出 alpha 100。最終 fit 使用全部 32,357 eligible rows，
+並建立包含 scaler、coefficients、20,637 筆 OOF percentile reference 與 LOW/MODERATE/HIGH/
+VERY HIGH band policy 的 safe JSON artifact。模型尚未部署，也不宣稱 prospective accuracy；詳見
+[F7 result](research/evaluation/f7_final_research_model_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
