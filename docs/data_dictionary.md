@@ -158,6 +158,49 @@ inserted here or presented as comparable human-validated sentiment.
 
 Prediction and research-request definitions remain reserved for their corresponding milestones.
 
+## Track A M1–M2 local artifact contracts
+
+These immutable research artifacts live in Git-ignored `.tools/` storage and are not database
+migrations or public raw datasets.
+
+### risk-market-dataset-v1
+
+- `config`: fixed universe, provider identities, timezone, and chronological date boundaries.
+- `benchmark_rows`, `stock_rows`: normalized local provider observations with split metadata.
+- `benchmark_snapshot_sha256`, `sha256`: upstream and complete-dataset lineage.
+- `sealed_test_outcomes_inspected`, `risk_labels_generated`, `models_trained`: false in M1.
+
+### next-session-volatility-risk-labels-v1
+
+- `ticker`, `feature_session`, `information_cutoff`: post-close prediction identity at `t`.
+- `target_session`: exact next benchmark exchange session `t+1`.
+- `split`: train or validation only in M2; test is not materialized.
+- `feature_state_sha256`: commitment to the complete `t`-known history used for the trailing scale.
+- `trailing_volatility_scale`: population standard deviation of 20 consecutive one-session
+  adjusted-close log returns ending at `t`.
+- `continuous_risk_outcome`: absolute `t` to `t+1` adjusted-close log return divided by the trailing
+  scale.
+- `next_abs_log_return`, `next_high_low_log_range`, `next_parkinson_volatility`: secondary
+  continuous robustness outcomes.
+- `risk_threshold`, `risk_threshold_sha256`: training-only candidate threshold and immutable
+  artifact identity.
+- `risk_label`: `NORMAL` or `HIGH_RISK`; not direction, causation, or investment advice.
+- `market_dataset_sha256`, `protocol_config_sha256`, `sha256`: complete input/config/output lineage.
+
+### risk-feature-dataset-v1
+
+- `ticker`, `feature_session`, `information_cutoff`, `split`: prediction identity; M3 contains
+  train/validation only.
+- `features`: exactly 23 finite fields defined by `docs/risk_feature_protocol.md`, all ending at
+  `t`; no target-side field is allowed inside this mapping.
+- `feature_values_sha256`: hash of ticker/session/cutoff and the complete ordered feature mapping.
+- `label_row_sha256`: commitment to the separately stored M2 target row.
+- `target`: target session, continuous risk/robustness outcomes, risk label and threshold artifact
+  hash; structurally separate from features.
+- `config_sha256`, `market_dataset_sha256`, `risk_label_dataset_sha256`, `sha256`: reconstruction
+  lineage.
+- `sealed_test_features_materialized`, `preprocessing_fitted`, `models_trained`: false in M3.
+
 ## Planned zero-manual-label Taiwan research tables
 
 These are logical contracts for M7–M10, not implemented database migrations in the current

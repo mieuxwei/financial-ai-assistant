@@ -2,8 +2,14 @@
 
 Status: **preserved legacy direction-prediction foundation**. The cutoff alignment, market-feature
 formulas, snapshot hashing and leakage tests may be reused by new Track A. `forward_return_1d` and
-`label_up` do not define the new volatility-risk target. New M2 will introduce a separate versioned,
-train-only `NORMAL` / `HIGH_RISK` label protocol without overwriting this document or `features-v1`.
+`label_up` do not define the new volatility-risk target. M2 now provides the separate versioned,
+train-only `NORMAL` / `HIGH_RISK` contract in `docs/risk_label_protocol.md` without overwriting this
+legacy document or `features-v1`. M3 must build a new risk-feature dataset rather than relabeling
+the legacy direction dataset in place.
+
+M3 is now implemented as `risk-features-v1`; its authoritative formulas and leakage boundary are
+in `docs/risk_feature_protocol.md`. The definitions below remain the preserved legacy `features-v1`
+contract.
 
 ## Row and time contract
 

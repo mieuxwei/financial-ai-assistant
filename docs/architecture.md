@@ -9,7 +9,31 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## First iteration boundary
+## Active Track A M1–M3 boundary
+
+```text
+fixed universe + Yahoo OHLCV + FinMind TAIEX
+  → immutable M1 market snapshot + quality audit
+  → exact benchmark-session alignment
+  → t-known 20-session volatility scale
+  → train/validation next-session continuous outcomes
+  → training-only 90th-percentile candidate threshold
+  → NORMAL / HIGH_RISK labels + immutable hashes
+  → 35-session t-only market feature window
+  → 23 price / volume / volatility / technical / TAIEX features
+  → immutable train/validation risk-feature dataset
+```
+
+M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
+requires `t` and `t+1` inside training; validation is materialized but not used to fit the target
+threshold. Sealed-test outcomes/labels remain unmaterialized until M7. Detailed provider and label
+rows stay in ignored local storage.
+
+M3 keeps the `features` mapping structurally separate from the target object, verifies M2's
+feature-state commitment, and refuses gaps in its fixed 35-session lookback. It fits no
+preprocessing and materializes no sealed-test feature.
+
+## Legacy first-iteration application boundary
 
 The M0–M2 implementation establishes FastAPI, SQLAlchemy/Alembic, user-owned portfolios, and atomic portfolio synchronization. It deliberately does not implement market data, news, sentiment, models, or backtesting.
 

@@ -384,10 +384,23 @@ machine report 位於 Git 忽略路徑；公開只保留 raw-free 摘要。M1 �
 mutation leakage tests。改動 `t+1` 只能改 outcome/label，不得改 `t` features；validation/test 不參與
 threshold fit。
 
+**狀態：完成（2026-08-27）。** 主要 outcome 為下一交易日絕對 adjusted-close log return 除以
+`t` 時可得的 20-session trailing volatility；次要保留 absolute log return、high-low log range 與
+Parkinson proxy。候選 threshold 為 25,990 筆 training rows 的 linear 90th percentile
+`1.807988011793`，training HIGH_RISK prevalence 為 10%。共 materialize 25,990 train 與 4,800
+validation rows；validation distribution 未檢視，sealed-test outcome／label 未生成，且未訓練模型。
+Temporal mutation、exact-next-session、cross-split、snapshot hash 與 immutable-output tests 均通過。
+
 ### M3 — Feature Pipeline
 
 重用現有 price/volume/technical foundation，新增 10-session return、gap、ATR/range、market
 volatility、stock-minus-market 與必要 availability metadata；所有 rolling window 截止於 `t`。
+
+**狀態：完成（2026-08-27）。** `risk-features-v1` 固定 23 個 market-only features：price 7、
+volume 3、volatility/range 5、compact technical 3、TAIEX context 5。共 materialize 23,890 train
+與 4,800 validation rows，0 null／non-finite；2,100 rows 因 35-session 連續歷史不完整而明確
+abstain，未補值或跨缺漏。Stock／TAIEX `t+1` mutation tests 證明同日 feature values/hash 不變。
+Validation label distribution 未檢視、sealed-test features 未生成、preprocessing 未 fit、模型未訓練。
 
 ### M4 — Baselines
 
@@ -501,9 +514,10 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1 Market Dataset 已完成。禁止打開任何 sealed-test outcome／performance、刪除
+M0 文件遷移與 M1–M3 已完成。禁止打開任何 sealed-test
+outcome／performance、刪除
 NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M2 Risk Label Protocol**：先以 train-only 規則版本化 continuous
-next-session outcomes、異常門檻 estimator 與 binary label contract，完成 temporal mutation／leakage
-tests；在 M2 設計與測試通過前不訓練模型，也不計算或揭露 validation/test label distribution。
+下一個最小可執行單元是 **M4 Baselines**：以 M3 training rows fit 所有 preprocessing，建立
+historical-risk／persistence naive baseline 與 Logistic Regression；只在 validation 報告候選指標，
+不得產生或打開 sealed test，也不得用 validation fit scaler、imputer、class weight 或模型參數。

@@ -56,6 +56,21 @@ No risk label was generated, no model was trained, and no sealed-test outcome or
 opened. The next minimum unit is **M2 — Risk Label Protocol**. Continue to avoid GAS changes,
 deployment, commit and push unless the user separately authorizes them.
 
+M2 Risk Label Protocol was then completed on 2026-08-27. The primary target is next-session
+absolute adjusted-close log return normalized by the 20-session trailing volatility known at `t`.
+The candidate threshold is the training-only linear 90th percentile (`1.807988011793`), fit on
+25,990 rows; training prevalence is 10%. M2 materialized 25,990 training and 4,800 validation rows.
+It did not summarize validation labels, materialize sealed-test outcomes/labels, or train a model.
+Mutation tests prove a changed `t+1` affects outcome/label but not the `t` state hash or numeric
+train threshold. The next unit is **M3 — Feature Pipeline**.
+
+M3 Market-Only Risk Feature Pipeline was completed on 2026-08-27. It materialized 23,890 training
+and 4,800 validation rows with 23 fixed finite features and no imputation, preprocessing fit, NLP,
+or model training. A strict 35-session window caused 2,100 explicit abstentions rather than gap
+bridging. Stock and benchmark `t+1` mutation tests leave `t` features unchanged. Validation labels
+were not summarized and sealed-test features remain unmaterialized. The next unit is
+**M4 — Baselines**.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text

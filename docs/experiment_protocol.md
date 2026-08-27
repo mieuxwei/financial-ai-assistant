@@ -10,6 +10,14 @@ the final test remains sealed until the candidate manifest is frozen. Required r
 HIGH_RISK recall and false negatives, Balanced Accuracy, F1, MCC, PR-AUC, ROC-AUC when valid,
 Brier/calibration and confusion matrices.
 
+M2 implementation status: the primary normalized outcome, train-only 90th-percentile candidate
+threshold, train/validation-only labels and leakage tests are complete. Sealed-test outcomes and
+labels remain unmaterialized. See `docs/risk_label_protocol.md`.
+
+M3 implementation status: 23 finite market-only features are complete for train/validation with a
+fixed 35-session `t`-only window. No preprocessing is fit and sealed-test features remain
+unmaterialized. See `docs/risk_feature_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

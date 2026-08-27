@@ -1,0 +1,24 @@
+{
+  "schema_version": "next-session-volatility-risk-config-v1",
+  "protocol_version": "next-session-volatility-risk-v1",
+  "market_timezone": "Asia/Taipei",
+  "information_cutoff": "13:30:00",
+  "primary_outcome": "next_normalized_abs_log_return",
+  "trailing_volatility_sessions": 20,
+  "trailing_volatility_ddof": 0,
+  "threshold_fit_split": "train",
+  "threshold_quantile": "0.90",
+  "quantile_method": "linear",
+  "label_comparison": "greater_than_or_equal",
+  "high_risk_label": "HIGH_RISK",
+  "normal_label": "NORMAL",
+  "materialized_splits": ["train", "validation"],
+  "minimum_training_rows": 20000,
+  "minimum_training_rows_per_ticker": 2500,
+  "minimum_validation_rows_per_ticker": 400,
+  "secondary_outcomes": [
+    "next_abs_log_return",
+    "next_high_low_log_range",
+    "next_parkinson_volatility"
+  ]
+}

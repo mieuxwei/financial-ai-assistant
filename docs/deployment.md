@@ -1,5 +1,21 @@
 # Deployment
 
+## macOS local virtualenv note
+
+On the current macOS/Python 3.12.14 workspace, Finder metadata may mark files under the conventional
+`.venv` directory as `hidden`. This Python build then reports `Skipping hidden .pth file`, which can
+make editable-install console scripts fail with `ModuleNotFoundError` even though tests launched
+from the repository still work. This is local environment metadata, not repository corruption.
+
+After an editable install, verify a console command from outside the repository. If verbose Python
+startup confirms hidden `.pth` files, clear only the virtualenv metadata with:
+
+```bash
+/usr/bin/chflags -R nohidden .venv
+```
+
+Do not apply this recursively to the repository, user home, or unrelated directories.
+
 Production deployment remains out of scope for the first M0–M2 iteration. The checked-in `docker-compose.yml` is only a local PostgreSQL option and requires values from an ignored `.env` file.
 
 Before any public deployment:
