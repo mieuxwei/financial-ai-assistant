@@ -144,6 +144,7 @@ Platt calibration and threshold 0.10 under predeclared rules, and froze the pre-
 manifest. M7 then opened the sealed test once under explicit approval and preserved the final mixed
 result: modest normalized-risk discrimination but no raw absolute-volatility separation. The test
 is permanently closed to further evaluation or selection. M8 then completed read-only robustness,
-error, drift and bootstrap-uncertainty analysis of that immutable evaluation. The next unit is M9
-Conditional Risk / Simpson Analysis under the post-M8 protocol; M8 subgroup results may motivate
-the question but may not alter or tune Track A.
+error, drift and bootstrap-uncertainty analysis of that immutable evaluation. M9 then confirmed a
+descriptive raw-outcome aggregate/within-regime composition reversal without refit or threshold
+change. The next unit is M10 development-only operating-point calibration; M7/M8/M9 results may not
+select its thresholds.

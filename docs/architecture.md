@@ -73,6 +73,11 @@ does not expose rows, refit the model or feed subgroup results back into Track A
 test new conditional/operating-policy hypotheses under a separate frozen protocol; the NLP
 intelligence layer moves to M14.
 
+M9 has now completed the first post-M8 diagnostic without changing the prediction boundary. The
+raw outcome reversal disappears after common stock-volatility-regime standardization, supporting a
+stock-normalized surprise interpretation. M10 remains a separate development-only policy layer and
+may not read M7/M8/M9 labels or outcomes for threshold selection.
+
 ## Legacy first-iteration application boundary
 
 The M0–M2 implementation establishes FastAPI, SQLAlchemy/Alembic, user-owned portfolios, and atomic portfolio synchronization. It deliberately does not implement market data, news, sentiment, models, or backtesting.

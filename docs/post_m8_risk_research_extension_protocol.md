@@ -1,7 +1,7 @@
 # Post-M8 Risk Research Extension Protocol
 
 Protocol version: `post-m8-risk-extension-v1`  
-Status: **planning/specification complete; M9–M12 not executed**
+Status: **M9 complete; M10–M12 not executed**
 
 ## 1. Historical evidence boundary
 
@@ -42,6 +42,12 @@ separation. The preferred term is `Simpson-type composition effect`; definitive 
 `Simpson's paradox` language requires stronger statistical support.
 
 Configuration: `research/configs/post_m8_conditional_risk.v1.json`.
+
+Implementation result: M9 found a complete aggregate/within-regime direction reversal for all
+three raw volatility outcomes. Common-regime standardization and the predeclared OLS/HC3 diagnostic
+support a conditional relative-surprise interpretation, while ticker raw outcomes remain mixed.
+See `research/evaluation/m9_conditional_risk_result.md`. This evidence does not alter M7/M8 or tune
+any later policy.
 
 ## 4. M10 — Operating-Point Calibration Study
 

@@ -149,9 +149,20 @@ count remains 3,647.
 
 Machine-readable specifications are `research/configs/post_m8_*.v1.json`; boundary assertions are
 in `research/evaluation/post_m8_research_boundaries.py`. Do not run threshold search, materialize a
-new holdout, refit the M7 candidate or expose multi-mode UX during this planning task. The next
-authorized research unit, if requested, is M9 analysis only. Existing NLP/product work is shifted
-to M14–M20 without deleting legacy evidence.
+new holdout, refit the M7 candidate or expose multi-mode UX during the planning migration. Existing
+NLP/product work is shifted to M14–M20 without deleting legacy evidence.
+
+M9 Conditional Risk / Simpson Analysis was completed on 2026-08-27. It reused the unchanged 3,647
+M7 predictions and historical 0.10 threshold. All three raw outcomes are lower for predicted
+HIGH_RISK in aggregate but higher inside every LOW/MIDDLE/HIGH stock-volatility regime; common
+regime reweighting makes the raw differences positive. Predicted HIGH_RISK contains 32.9% LOW and
+42.7% HIGH-regime rows versus 7.7% and 75.6% for NORMAL, producing regime-composition TVD 0.329.
+OLS/HC3 coefficients remain positive after prior-volatility, ticker and quarter controls, while raw
+ticker directions remain mixed. The supported interpretation is modest heterogeneous
+stock-normalized volatility-surprise discrimination and a descriptive Simpson-type composition
+effect—not a causal paradox or general absolute-volatility prediction. M9 analysis SHA-256 is
+`5135925bf36fc5698d07fe31a19524f0a50944fcd9cd56132341cabe91f13da2`. The next unit is M10 using
+M6 development OOF evidence only; M7/M8/M9 evidence is forbidden for threshold selection.
 
 Frozen specification file SHA-256 values before commit are:
 

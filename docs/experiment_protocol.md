@@ -50,6 +50,13 @@ uncertainty. Positive normalized-risk separation coexists with conditioning-depe
 separation, so no general absolute-volatility claim is made. See
 `docs/risk_robustness_protocol.md`.
 
+M9 implementation status: analysis-only composition, common-regime standardization, ticker/quarter
+stratification and OLS/HC3 diagnostics are complete. All raw outcomes reverse direction between the
+aggregate and every stock-volatility regime; normalized/additive surprise evidence remains
+positive, while ticker raw directions are mixed. This is documented as a descriptive Simpson-type
+composition effect, not causal proof. M7/M8/M9 evidence cannot enter M10/M11 selection. See
+`docs/post_m8_risk_research_extension_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M15 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

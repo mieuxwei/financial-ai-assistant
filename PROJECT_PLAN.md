@@ -501,11 +501,13 @@ conditioning dependence 均已揭露；沒有重跑 M7、重新 fit、改 thresh
 
 ### M9 — Conditional Risk / Simpson Analysis
 
-**狀態：protocol frozen，尚未執行。** 只讀既有 M7 predictions；不 refit、不改 prediction、不改
-0.10 threshold。比較 aggregate、pre-test-fit stock-volatility regime、ticker 與 quarter 的 raw／
-normalized outcomes，並量化 predicted groups 的 regime／ticker／period composition。選配透明的
-OLS/HC3 conditional diagnostic，不回饋 classifier。結論必須分開 aggregate absolute-volatility、
-within-regime 與 normalized surprise evidence，只能在統計結構支持時稱 Simpson-type effect。
+**狀態：完成（2026-08-27）。** 只讀既有 3,647 筆 M7 predictions 與 M8 pre-test-fit regimes，沒有
+refit、prediction／0.10 threshold 變更或 classifier feedback。三個 raw outcomes 的 aggregate 差異皆
+為負，但 LOW/MIDDLE/HIGH regimes 內皆為正；共同 regime 權重標準化後也皆轉正。Regime composition
+TVD 為 0.329，且 OLS/HC3 在控制 prior volatility、ticker、quarter 後的 risk-indicator coefficients
+皆為正。Ticker raw direction 仍混合，因此結論是 descriptive Simpson-type composition effect 與
+modest stock-normalized volatility-surprise discrimination，不是 causal paradox 或 absolute-volatility
+predictor。
 
 ### M10 — Operating-Point Calibration Study
 
@@ -626,8 +628,8 @@ M0 文件遷移與 M1–M8 已完成。Sealed test 已評估一次，永久禁�
 後續里程碑不得重新產生 sealed-test outcome／performance、刪除既有 NLP 證據、修改 working
 GAS、deploy、commit 或 push，除非使用者另行明確授權。
 
-本次只完成 post-M8 protocol/config migration，尚未執行 M9–M12。下一個最小可執行單元是
-**M9 Conditional Risk / Simpson Analysis**：只能讀既有 M7 immutable predictions 做 diagnostic，
-不得 refit、改 prediction、改 0.10 threshold 或回饋 classifier。M10/M11 只能使用 2024-12-31
-以前的 development evidence；M12 holdout 仍不可得且未開啟。不得呼叫 M7 job、修改 working GAS、
-deploy、commit 或 push。
+Post-M8 protocol/config migration 與 M9 conditional analysis 已完成。下一個最小可執行單元是
+**M10 Operating-Point Calibration Study**：只能 deterministic reconstruction M6 的 2017–2024
+walk-forward OOF development evidence，並執行已凍結的 Screening／Balanced／Precision 規則。
+M7/M8/M9 labels/outcomes 均不得進入 threshold selection；歷史 0.10 不回溯替換。M12 holdout 仍
+不可得且未開啟。不得呼叫 M7 job、修改 working GAS、deploy、commit 或 push。
