@@ -143,5 +143,6 @@ recall or ranking metrics. M6 then completed five expanding-window folds, select
 Platt calibration and threshold 0.10 under predeclared rules, and froze the pre-test candidate
 manifest. M7 then opened the sealed test once under explicit approval and preserved the final mixed
 result: modest normalized-risk discrimination but no raw absolute-volatility separation. The test
-is permanently closed to further evaluation or selection. The next unit is M8 robustness analysis
-of the existing immutable evaluation.
+is permanently closed to further evaluation or selection. M8 then completed read-only robustness,
+error, drift and bootstrap-uncertainty analysis of that immutable evaluation. The next unit is M9
+Financial NLP Intelligence; M8 subgroup results may not alter Track A.

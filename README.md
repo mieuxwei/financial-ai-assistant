@@ -27,7 +27,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M7 one-time sealed test complete / next: M8 robustness analysis / test may not reopen**。
+目前狀態：**M8 risk robustness complete / next: M9 Financial NLP Intelligence / M7 test may not reopen**。
 
 M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
 train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
@@ -69,6 +69,13 @@ Predicted HIGH_RISK 的 normalized outcome 較高，但 raw absolute return／ra
 模型預測的是相對波動異常而非絕對價格振幅；此限制不隱藏。Evaluation counter 已固定為 1，禁止
 重跑或依 test 改模型。詳見 [M7 protocol](docs/risk_sealed_test_protocol.md) 與
 [M7 final result](research/evaluation/m7_risk_sealed_test_result.md)。
+
+M8 已只讀既有 M7 immutable evaluation，完成 ticker、quarter、pre-test-fit volatility regime、
+probability bucket、FN／FP 與 1,000 次 feature-session cluster bootstrap 分析。Recall 的 95% 區間為
+0.441–0.576，MCC 為 0.109–0.202；但 2026-Q2 recall 僅 0.310，且不同股票與 regime 的
+sensitivity／specificity 差異明顯。Normalized risk separation 持續存在，raw outcome 則高度依賴
+conditioning，不能宣稱一般絕對波動預測。詳見 [M8 protocol](docs/risk_robustness_protocol.md) 與
+[M8 result](research/evaluation/m8_risk_robustness_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

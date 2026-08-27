@@ -112,6 +112,17 @@ volatility separation, direction prediction or investment utility. Do not rerun 
 candidate based on test. The next unit is **M8 — Risk Error Analysis & Robustness**, using the one
 existing immutable evaluation only.
 
+M8 Risk Error Analysis & Robustness was completed on 2026-08-27 without reopening M7. The runner
+verified the complete M6/M7 hash chain and retained evaluation sequence 1. A 1,000-sample
+feature-session cluster bootstrap gave 95% intervals of 0.441–0.576 for recall, 0.109–0.202 for
+MCC, 0.151–0.242 for PR-AUC, 0.650–0.724 for ROC-AUC and 0.0792–0.1067 for Brier. Performance is
+heterogeneous: quarterly recall ranges from 0.310 to 0.656, ticker recall from 0.326 to 0.794, and
+the low-stock-volatility regime exchanges high recall for very low specificity. Normalized-risk
+separation remains positive, but raw outcome separation changes with conditioning. This supports
+only modest normalized surprise-risk discrimination. No M7 rerun, refit, threshold change or
+test-based selection occurred. The next unit is **M9 — Financial NLP Intelligence**; it must not
+use M8 subgroup evidence to alter Track A.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text

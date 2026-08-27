@@ -45,6 +45,7 @@ financial-ai-risk-baselines = "jobs.risk_baselines:main"
 financial-ai-risk-tree-models = "jobs.risk_tree_models:main"
 financial-ai-risk-temporal-validation = "jobs.risk_temporal_validation:main"
 financial-ai-risk-sealed-test = "jobs.risk_sealed_test:main"
+financial-ai-risk-robustness = "jobs.risk_robustness:main"
 
 [project.optional-dependencies]
 dev = [

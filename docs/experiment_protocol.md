@@ -43,6 +43,13 @@ Normalized-risk separation is positive, while raw absolute-move/range separation
 facts are retained. Evaluation sequence is permanently 1 and M7 cannot be rerun. See
 `docs/risk_sealed_test_protocol.md`.
 
+M8 implementation status: the existing M7 evaluation was analyzed without rerun or selection.
+Ticker, quarter, pre-test-fit stock/market volatility regimes, fixed probability buckets and error
+types expose material heterogeneity. Feature-session cluster bootstrap intervals quantify overall
+uncertainty. Positive normalized-risk separation coexists with conditioning-dependent raw outcome
+separation, so no general absolute-volatility claim is made. See
+`docs/risk_robustness_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

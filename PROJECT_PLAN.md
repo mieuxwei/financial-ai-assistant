@@ -462,6 +462,13 @@ evaluation、completion 三個 hashes 已保存，model/threshold selection perf
 依 ticker、time、regime、probability bucket 分析，檢查 FN/FP 與 calibration drift；分層樣本數與
 不確定性透明，失敗期間不隱藏。
 
+**狀態：完成（2026-08-27）。** M8 只讀唯一一份 M7 immutable evaluation，先驗證
+candidate/opening/evaluation/completion/report hash chain 與 evaluation sequence 1，再以 pre-test-only
+tertiles 建立 stock／market volatility regimes。完成 10 ticker、7 quarter、fixed probability bins、
+FN／FP 與 normalized/raw realized outcomes 分析；1,000 次 feature-session cluster bootstrap 的 recall
+95% interval 為 0.441–0.576、MCC 為 0.109–0.202。季度與 ticker 異質性及 raw outcome 的
+conditioning dependence 均已揭露；沒有重跑 M7、重新 fit、改 threshold 或 test-based selection。
+
 ### M9 — Financial NLP Intelligence
 
 維持 English FinBERT，將既有台灣 NLP 定位為 exploratory；實作不依賴 polarity 的公告
@@ -549,11 +556,11 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1–M7 已完成。Sealed test 已評估一次，永久禁止重跑、重開或依 test 改參數。
-outcome／performance、刪除
-NLP、修改 working GAS、deploy、commit 或 push。
+M0 文件遷移與 M1–M8 已完成。Sealed test 已評估一次，永久禁止重跑、重開或依 test 改參數。
+後續里程碑不得重新產生 sealed-test outcome／performance、刪除既有 NLP 證據、修改 working
+GAS、deploy、commit 或 push，除非使用者另行明確授權。
 
-下一個最小可執行單元是 **M8 Risk Error Analysis & Robustness**：只讀既有 M7 immutable
-evaluation，依 ticker、time、market regime、probability bucket、FN／FP 與 realized-risk proxy 分層；
-報告樣本數、drift 與 normalized-versus-raw outcome 差異。不得呼叫 M7 job、重新 fit、重新預測、
-改 threshold 或產生第二份 test evaluation。
+下一個最小可執行單元是 **M9 Financial NLP Intelligence**：保留 pinned English FinBERT，建立
+不依賴 polarity 的公告 normalization、entity/event metadata、embedding/retrieval/summary contract，
+並維持中文 sentiment unsupported／abstain 邊界。不得以 M8 test subgroup 結果重新 fit 或調整
+Track A candidate，也不得呼叫 M7 job、修改 working GAS、deploy、commit 或 push。

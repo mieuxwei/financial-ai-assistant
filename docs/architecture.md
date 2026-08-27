@@ -9,7 +9,7 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## Active Track A M1–M7 boundary
+## Active Track A M1–M8 boundary
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -30,6 +30,8 @@ fixed universe + Yahoo OHLCV + FinMind TAIEX
   → prequential Platt calibration + recall-constrained threshold
   → frozen pre-test candidate manifest
   → one-time immutable sealed-test evaluation
+  → read-only robustness/error analysis with pre-test-fit regimes
+  → session-cluster bootstrap uncertainty and raw-free M8 report
 ```
 
 M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
@@ -64,6 +66,11 @@ storage, and completion record. The opening record is created before test data a
 existence makes every future execution fail before evaluation. Public documentation contains only
 aggregate evidence. M8 must analyze the existing evaluation artifact and may not reconstruct or
 rerun M7.
+
+M8 verifies that chain before reading rows, derives volatility-regime cutoffs only from the
+pre-test feature dataset, and writes aggregate ticker/time/regime/probability/error summaries. It
+does not expose rows, refit the model or feed subgroup results back into Track A. M9 begins the NLP
+intelligence layer as a separate downstream boundary.
 
 ## Legacy first-iteration application boundary
 
