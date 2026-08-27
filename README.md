@@ -27,7 +27,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M4 leakage-safe baselines complete / next: M5 tree models / sealed test unopened**。
+目前狀態：**M5 fixed tree-model comparison complete / next: M6 temporal validation / sealed test unopened**。
 
 M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
 train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
@@ -50,6 +50,12 @@ class-balanced Logistic Regression 基線，並只在 validation 評估。Logist
 HIGH_RISK recall 為 0.582、PR-AUC 為 0.172、ROC-AUC 為 0.645；這是候選基線結果，不代表已選定
 final model，且 sealed test 完全未開啟。詳見 [M4 protocol](docs/risk_baseline_protocol.md) 與
 [M4 raw-free result](research/evaluation/m4_risk_baseline_result.md)。
+
+M5 已在相同資料、target、split 與固定 threshold 下評估 Random Forest 與
+HistGradientBoosting。兩個 tree model 都未超過 M4 Logistic Regression 的 HIGH_RISK recall、
+PR-AUC 或 ROC-AUC；此負面比較結果完整保留，尚未選定 final model。詳見
+[M5 protocol](docs/risk_tree_model_protocol.md) 與
+[M5 raw-free result](research/evaluation/m5_risk_tree_model_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

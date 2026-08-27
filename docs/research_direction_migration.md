@@ -137,5 +137,7 @@ M1 was executed after explicit user approval on 2026-08-27:
 The immutable M1 audit passed. M2 then produced a training-only 90th-percentile candidate threshold
 and train/validation risk labels with temporal mutation tests. M3 produced 23 fixed market-only
 features with strict `t` cutoffs. M4 then fit training-only scaling and historical-risk,
-persistence, and Logistic Regression baselines and evaluated them on validation without tuning.
-Sealed-test outcomes/labels/features remain unopened. The next unit is M5 Tree Models.
+persistence, and Logistic Regression baselines and evaluated them on validation without tuning. M5
+compared fixed Random Forest and HistGradientBoosting candidates; neither exceeded Logistic on
+recall or ranking metrics, and no candidate was selected. Sealed-test outcomes/labels/features
+remain unopened. The next unit is M6 Temporal Validation.

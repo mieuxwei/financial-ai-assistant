@@ -80,6 +80,16 @@ baseline rather than a selected final model. No validation row was used for fitt
 tuning; no prediction rows were persisted; the sealed test remains unopened. The next unit is
 **M5 — Tree Models**.
 
+M5 Tree Models was completed on 2026-08-27 using the identical 23,890 training and 4,800 validation
+rows. Fixed Random Forest and HistGradientBoosting candidates were trained without preprocessing,
+early stopping, search, resampling, or threshold tuning. Neither tree model exceeded the M4
+Logistic baseline: Random Forest PR-AUC/ROC-AUC/recall were 0.156/0.613/0.307 and HGB were
+0.151/0.614/0.338, versus Logistic 0.172/0.645/0.582. The negative result is preserved; no final
+model was selected. A first parallel Random Forest run produced tiny nondeterministic training
+probability hashes on repeat. Diagnostic manifests were retained locally, and the frozen config
+was changed to single-thread Random Forest; two immutable rebuilds then matched. The sealed test
+remains unopened. The next unit is **M6 — Temporal Validation**.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text

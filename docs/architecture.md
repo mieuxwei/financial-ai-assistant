@@ -9,7 +9,7 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## Active Track A M1–M4 boundary
+## Active Track A M1–M5 boundary
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -24,6 +24,8 @@ fixed universe + Yahoo OHLCV + FinMind TAIEX
   → immutable train/validation risk-feature dataset
   → training-only StandardScaler + Logistic Regression
   → validation-only baseline metrics and calibration bins
+  → fixed Random Forest + HistGradientBoosting comparison
+  → validation permutation importance + resource evidence
 ```
 
 M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
@@ -40,6 +42,12 @@ Historical prevalence and previous-period persistence provide naive comparisons.
 read only to calculate metrics; it does not tune the fixed 0.5 threshold or any model parameter.
 The learned model is a versioned JSON artifact in ignored local storage. Sealed-test features and
 outcomes remain unopened.
+
+M5 fits both tree models directly on the same unscaled M3 training matrix. HGB internal early
+stopping is disabled so it cannot create an implicit validation carve-out. Fixed-seed validation
+permutation importance is evaluation evidence only and is not used to refit or select features.
+The first parallel Random Forest diagnostic exposed non-identical floating-point prediction hashes;
+the accepted configuration is single-threaded and passes repeated immutable reconstruction.
 
 ## Legacy first-iteration application boundary
 

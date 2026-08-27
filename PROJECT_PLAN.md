@@ -419,6 +419,15 @@ HIGH_RISK recall 0.582、PR-AUC 0.172、ROC-AUC 0.645、MCC 0.122、Brier 0.224�
 實作 Random Forest 與 HistGradientBoosting／XGBoost，以同一資料、target、split 公平比較；不以 test
 選模型，保存參數、feature importance 與 resource cost。
 
+**狀態：完成（2026-08-27）。** Random Forest 與 HistGradientBoosting 使用同一組 23,890 train／
+4,800 validation rows、23 features、binary target 與固定 threshold 0.5；參數預先固定，未搜尋、
+未 resample、未用 validation early stopping。Random Forest 的 recall／PR-AUC／ROC-AUC 為
+0.307／0.156／0.613，HGB 為 0.338／0.151／0.614，均未超過 M4 Logistic 的
+0.582／0.172／0.645。此負面結果保留，未選 final model。兩模型的 validation permutation
+importance 都以 `volatility_log_return_20` 為首；resource cost 與完整 lineage 已保存。第一次
+parallel Random Forest 重跑出現 prediction hash 細微不一致，診斷產物保留後改為 single-thread，
+連續兩次 immutable rebuild 通過。Sealed test 未開。
+
 ### M6 — Temporal Validation
 
 執行 chronological validation、walk-forward／rolling-origin、calibration 與 model/threshold selection；
@@ -521,11 +530,11 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1–M4 已完成。禁止打開任何 sealed-test
+M0 文件遷移與 M1–M5 已完成。禁止打開任何 sealed-test
 outcome／performance、刪除
 NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M5 Tree Models**：在同一 M3 train／validation dataset 與固定 target
-contract 下建立 Random Forest 與 HistGradientBoosting／XGBoost 候選，採 predeclared parameters
-公平比較，保存 feature importance 與 resource cost。不得以 sealed test 選模型；validation 只能用於
-候選評估，不得回頭改寫 M1–M4 evidence。
+下一個最小可執行單元是 **M6 Temporal Validation**：以 expanding-window／rolling-origin folds
+比較 Logistic、Random Forest 與 HistGradientBoosting 的跨時間穩定性，所有 fold preprocessing、
+class weight 與 calibration train-fit only；建立 purge／embargo 與 candidate-selection contract，
+最後凍結 final candidate manifest。不得開 sealed test，不得因 M5 tree result 較差而刪除失敗結果。

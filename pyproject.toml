@@ -42,6 +42,7 @@ financial-ai-risk-market-dataset = "jobs.risk_market_dataset:main"
 financial-ai-risk-labels = "jobs.risk_labels:main"
 financial-ai-risk-features = "jobs.risk_features:main"
 financial-ai-risk-baselines = "jobs.risk_baselines:main"
+financial-ai-risk-tree-models = "jobs.risk_tree_models:main"
 
 [project.optional-dependencies]
 dev = [

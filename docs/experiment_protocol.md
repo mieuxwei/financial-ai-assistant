@@ -23,6 +23,13 @@ metrics and uniform calibration bins are reported without model or threshold sel
 class-balanced Logistic Regression is explicitly a baseline; its probabilities are not claimed to
 be calibrated. Sealed test remains unopened. See `docs/risk_baseline_protocol.md`.
 
+M5 implementation status: fixed Random Forest and HistGradientBoosting candidates are evaluated on
+the identical validation rows. Neither exceeded the Logistic baseline's recall or ranking metrics;
+the negative comparison remains part of the record and no model was selected. Feature importance
+is validation permutation importance scored by PR-AUC and is not used for fitting. Repeated
+single-thread reconstruction passes; sealed test remains unopened. See
+`docs/risk_tree_model_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

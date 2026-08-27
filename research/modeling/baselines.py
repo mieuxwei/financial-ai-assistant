@@ -12,21 +12,13 @@ import numpy as np
 import sklearn
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    balanced_accuracy_score,
-    brier_score_loss,
-    confusion_matrix,
-    f1_score,
-    matthews_corrcoef,
-    precision_score,
-    recall_score,
-    roc_auc_score,
-)
 from sklearn.preprocessing import StandardScaler
 
 from pipelines.features.risk_builder import FEATURE_NAMES
+from research.modeling.metrics import (
+    binary_classification_metrics,
+    uniform_calibration_bins,
+)
 
 CONFIG_VERSION = "risk-baseline-config-v1"
 EXPERIMENT_VERSION = "risk-baselines-v1"
@@ -91,7 +83,7 @@ def run_risk_baselines(
     config: RiskBaselineConfig,
     feature_dataset: dict[str, object],
 ) -> tuple[dict[str, object], dict[str, object]]:
-    rows = _verify_feature_dataset(config, feature_dataset)
+    rows = verify_feature_dataset(config, feature_dataset)
     train_rows = [row for row in rows if row["split"] == config.train_split]
     validation_rows = [row for row in rows if row["split"] == config.evaluation_split]
     if len(train_rows) < config.minimum_training_rows:
@@ -99,10 +91,10 @@ def run_risk_baselines(
     if len(validation_rows) < config.minimum_validation_rows:
         raise ValueError("validation row count is below the configured minimum")
 
-    x_train = _feature_matrix(train_rows)
-    y_train = _labels(train_rows, config)
-    x_validation = _feature_matrix(validation_rows)
-    y_validation = _labels(validation_rows, config)
+    x_train = feature_matrix(train_rows)
+    y_train = binary_labels(train_rows, config.high_risk_label)
+    x_validation = feature_matrix(validation_rows)
+    y_validation = binary_labels(validation_rows, config.high_risk_label)
     positives = int(y_train.sum())
     if positives < config.minimum_training_positive_rows:
         raise ValueError("training HIGH_RISK row count is below the configured minimum")
@@ -182,30 +174,30 @@ def run_risk_baselines(
         "decision_threshold": config.decision_threshold,
         "persistence_fallback_count": persistence_fallback_count,
         "metrics": {
-            "historical_risk_rate": _classification_metrics(
+            "historical_risk_rate": binary_classification_metrics(
                 y_validation,
                 historical_probability,
-                config,
+                config.decision_threshold,
             ),
-            "previous_period_persistence": _classification_metrics(
+            "previous_period_persistence": binary_classification_metrics(
                 y_validation,
                 persistence_probability,
-                config,
+                config.decision_threshold,
             ),
-            "logistic_regression": _classification_metrics(
+            "logistic_regression": binary_classification_metrics(
                 y_validation,
                 logistic_probability,
-                config,
+                config.decision_threshold,
             ),
         },
         "calibration": {
-            "historical_risk_rate": _calibration_bins(
+            "historical_risk_rate": uniform_calibration_bins(
                 y_validation, historical_probability, config.calibration_bins
             ),
-            "previous_period_persistence": _calibration_bins(
+            "previous_period_persistence": uniform_calibration_bins(
                 y_validation, persistence_probability, config.calibration_bins
             ),
-            "logistic_regression": _calibration_bins(
+            "logistic_regression": uniform_calibration_bins(
                 y_validation, logistic_probability, config.calibration_bins
             ),
         },
@@ -221,7 +213,7 @@ def run_risk_baselines(
     return artifact, report
 
 
-def _verify_feature_dataset(
+def verify_feature_dataset(
     config: RiskBaselineConfig,
     dataset: dict[str, object],
 ) -> list[dict[str, object]]:
@@ -278,16 +270,16 @@ def _verify_feature_dataset(
     return sorted(verified, key=lambda row: (str(row["feature_session"]), str(row["ticker"])))
 
 
-def _feature_matrix(rows: list[dict[str, object]]) -> np.ndarray:
+def feature_matrix(rows: list[dict[str, object]]) -> np.ndarray:
     return np.asarray(
         [[float(row["features"][name]) for name in FEATURE_NAMES] for row in rows],
         dtype=np.float64,
     )
 
 
-def _labels(rows: list[dict[str, object]], config: RiskBaselineConfig) -> np.ndarray:
+def binary_labels(rows: list[dict[str, object]], high_risk_label: str) -> np.ndarray:
     return np.asarray(
-        [int(row["target"]["risk_label"] == config.high_risk_label) for row in rows],
+        [int(row["target"]["risk_label"] == high_risk_label) for row in rows],
         dtype=np.int8,
     )
 
@@ -323,60 +315,6 @@ def _persistence_probabilities(
         dtype=np.float64,
     )
     return ordered, fallback_count
-
-
-def _classification_metrics(
-    y_true: np.ndarray,
-    probabilities: np.ndarray,
-    config: RiskBaselineConfig,
-) -> dict[str, object]:
-    predicted = (probabilities >= config.decision_threshold).astype(np.int8)
-    tn, fp, fn, tp = (
-        int(value)
-        for value in confusion_matrix(y_true, predicted, labels=[0, 1]).ravel()
-    )
-    positives = tp + fn
-    negatives = tn + fp
-    return {
-        "accuracy_supplemental": float(accuracy_score(y_true, predicted)),
-        "balanced_accuracy": float(balanced_accuracy_score(y_true, predicted)),
-        "precision_high_risk": float(precision_score(y_true, predicted, zero_division=0)),
-        "recall_high_risk": float(recall_score(y_true, predicted, zero_division=0)),
-        "f1_high_risk": float(f1_score(y_true, predicted, zero_division=0)),
-        "macro_f1": float(f1_score(y_true, predicted, average="macro", zero_division=0)),
-        "mcc": float(matthews_corrcoef(y_true, predicted)),
-        "pr_auc": float(average_precision_score(y_true, probabilities)),
-        "roc_auc": float(roc_auc_score(y_true, probabilities)),
-        "brier_score": float(brier_score_loss(y_true, probabilities)),
-        "false_negative_count": fn,
-        "false_negative_rate": float(fn / positives) if positives else None,
-        "specificity": float(tn / negatives) if negatives else None,
-        "confusion_matrix": {"tn": tn, "fp": fp, "fn": fn, "tp": tp},
-    }
-
-
-def _calibration_bins(
-    y_true: np.ndarray,
-    probabilities: np.ndarray,
-    count: int,
-) -> list[dict[str, object]]:
-    indexes = np.minimum((probabilities * count).astype(int), count - 1)
-    bins = []
-    for index in range(count):
-        mask = indexes == index
-        sample_count = int(mask.sum())
-        bins.append(
-            {
-                "lower": index / count,
-                "upper": (index + 1) / count,
-                "count": sample_count,
-                "mean_predicted_probability": (
-                    float(probabilities[mask].mean()) if sample_count else None
-                ),
-                "observed_high_risk_rate": float(y_true[mask].mean()) if sample_count else None,
-            }
-        )
-    return bins
 
 
 def _float_list(values: np.ndarray) -> list[float]:
