@@ -146,5 +146,6 @@ result: modest normalized-risk discrimination but no raw absolute-volatility sep
 is permanently closed to further evaluation or selection. M8 then completed read-only robustness,
 error, drift and bootstrap-uncertainty analysis of that immutable evaluation. M9 then confirmed a
 descriptive raw-outcome aggregate/within-regime composition reversal without refit or threshold
-change. The next unit is M10 development-only operating-point calibration; M7/M8/M9 results may not
-select its thresholds.
+change. M10 then selected three development-only global operating candidates using reconstructed
+M6 OOF evidence and no post-M6 outcomes. The next unit is M11 one-model regime-aware thresholding;
+none of these policies is holdout-validated or product-ready.

@@ -78,6 +78,10 @@ raw outcome reversal disappears after common stock-volatility-regime standardiza
 stock-normalized surprise interpretation. M10 remains a separate development-only policy layer and
 may not read M7/M8/M9 labels or outcomes for threshold selection.
 
+M10 materializes a private, immutable development OOF dataset only under `.tools/`. It reconstructs
+fold Logistic/Platt evidence and stops before M6 final fit. Selected global policies remain an
+offline development-policy layer; only M12 can authorize a future product operating-mode contract.
+
 ## Legacy first-iteration application boundary
 
 The M0–M2 implementation establishes FastAPI, SQLAlchemy/Alembic, user-owned portfolios, and atomic portfolio synchronization. It deliberately does not implement market data, news, sentiment, models, or backtesting.

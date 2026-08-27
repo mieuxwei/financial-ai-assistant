@@ -511,10 +511,11 @@ predictor。
 
 ### M10 — Operating-Point Calibration Study
 
-**狀態：protocol frozen，threshold search 尚未執行。** 只使用 M6 2017–2024 walk-forward OOF
-development evidence 的 deterministic reconstruction；M7/M8 labels 禁止進入。預先凍結
-0.01–0.50 grid、Screening／Balanced／Precision objectives、constraints 與 tie-breakers。所有輸出
-仍是 development-only，不回溯取代歷史 0.10。
+**狀態：development study 完成（2026-08-27）。** Deterministic reconstruction 得到 13,550 筆
+2019–2024 selection OOF rows；2017–2018 只作 calibration history。五個 Logistic states、四個
+prequential Platt 參數與 M6 pooled metrics 全匹配。Frozen rules 選出 Screening 0.09（recall 0.681）、
+Balanced 0.11（MCC 0.148）與 Precision 0.13（precision 0.193）。三者皆為 development-only，沒有
+M7/M8/M9 evidence、M7 final refit 或 retrospective replacement of 0.10；未經 M12 不得產品化。
 
 ### M11 — Regime-Aware Threshold Study
 
@@ -628,8 +629,9 @@ M0 文件遷移與 M1–M8 已完成。Sealed test 已評估一次，永久禁�
 後續里程碑不得重新產生 sealed-test outcome／performance、刪除既有 NLP 證據、修改 working
 GAS、deploy、commit 或 push，除非使用者另行明確授權。
 
-Post-M8 protocol/config migration 與 M9 conditional analysis 已完成。下一個最小可執行單元是
-**M10 Operating-Point Calibration Study**：只能 deterministic reconstruction M6 的 2017–2024
-walk-forward OOF development evidence，並執行已凍結的 Screening／Balanced／Precision 規則。
-M7/M8/M9 labels/outcomes 均不得進入 threshold selection；歷史 0.10 不回溯替換。M12 holdout 仍
-不可得且未開啟。不得呼叫 M7 job、修改 working GAS、deploy、commit 或 push。
+Post-M8 protocol/config migration、M9 與 M10 development study 已完成。下一個最小可執行單元是
+**M11 Regime-Aware Threshold Study**：使用相同 13,550-row development OOF dataset、one frozen
+model，以及每 fold earlier-history-fit volatility regimes，依已凍結 stability rule 比較 historical
+0.10、M10 global candidates 與 regime-aware thresholds。不得建立 separate models，也不得讀
+M7/M8/M9 labels/outcomes。M12 holdout 仍不可得且未開啟。不得呼叫 M7 job、修改 working GAS、
+deploy、commit 或 push。

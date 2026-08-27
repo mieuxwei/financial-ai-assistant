@@ -1,7 +1,7 @@
 # Post-M8 Risk Research Extension Protocol
 
 Protocol version: `post-m8-risk-extension-v1`  
-Status: **M9 complete; M10–M12 not executed**
+Status: **M9–M10 complete; M11–M12 not executed**
 
 ## 1. Historical evidence boundary
 
@@ -68,6 +68,11 @@ If a mode has no eligible threshold, its outcome is `INCONCLUSIVE_NO_POLICY_SELE
 results remain development-only. M7/M8 labels and metrics are forbidden selection inputs.
 
 Configuration: `research/configs/post_m8_operating_points.v1.json`.
+
+Implementation result: exact M6 development reconstruction produced 13,550 selection rows through
+2024. Frozen rules selected 0.09 Screening, 0.11 Balanced and 0.13 Precision candidates. All remain
+development-only; none replaces historical 0.10 or enables product modes. See
+`research/evaluation/m10_operating_point_result.md`.
 
 ## 5. M11 — Regime-Aware Threshold Study
 

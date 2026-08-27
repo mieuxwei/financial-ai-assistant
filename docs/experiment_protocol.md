@@ -57,6 +57,12 @@ positive, while ticker raw directions are mixed. This is documented as a descrip
 composition effect, not causal proof. M7/M8/M9 evidence cannot enter M10/M11 selection. See
 `docs/post_m8_risk_research_extension_protocol.md`.
 
+M10 implementation status: 13,550 M6 prequential development rows were deterministically
+reconstructed with matching fold/model/calibration evidence. The predeclared grid selected 0.09,
+0.11 and 0.13 for Screening, Balanced and Precision objectives. Results are development-only and
+historical 0.10 remains frozen. No post-M6 labels/outcomes entered selection. See
+`research/evaluation/m10_operating_point_result.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M15 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

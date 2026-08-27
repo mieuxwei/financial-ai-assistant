@@ -164,6 +164,17 @@ effect—not a causal paradox or general absolute-volatility prediction. M9 anal
 `5135925bf36fc5698d07fe31a19524f0a50944fcd9cd56132341cabe91f13da2`. The next unit is M10 using
 M6 development OOF evidence only; M7/M8/M9 evidence is forbidden for threshold selection.
 
+M10 Operating-Point Calibration Study was completed on 2026-08-27 using 13,550 reconstructed M6
+development OOF rows through 2024. All five Logistic fold states, all four prequential Platt
+parameter pairs and pooled M6 metrics matched. The frozen rules selected Screening 0.09
+(recall 0.681, specificity 0.541, alert rate 48.2%), Balanced 0.11 (recall 0.499, MCC 0.148,
+alert rate 29.9%) and Precision 0.13 (precision 0.193, recall 0.325, alert rate 17.1%). These are
+development hypotheses, not validated product modes; historical 0.10 remains unchanged. The OOF
+dataset SHA-256 is `975c00f6fd835a6415b0120ab435c1c36bc0d333dbf7b2c95b1f3e8e5d73a4ed` and M10
+analysis SHA-256 is `21b77b55dac40c9c8922f7306a21d474b14fd04a41a584723c4c74098a01f83c`.
+No sealed row or M7/M8/M9 label/outcome was used and the M7 final candidate was not refit. The next
+unit is M11 one-model regime-aware thresholding on this same development evidence.
+
 Frozen specification file SHA-256 values before commit are:
 
 - M9 conditional-risk config:
