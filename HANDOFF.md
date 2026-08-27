@@ -4,8 +4,8 @@ Last revised: 2026-08-27
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F5 nested temporal evaluation complete**
-Next executable unit: **F6 only after user review/approval**
+Current unit: **F6 ranking and robustness complete**
+Next executable unit: **F7 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -221,7 +221,7 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F3:** final target, feature and coverage-bias audit — complete with temporal concentration.
 - **F4:** persistence/Ridge/HGB regressors — implementation complete.
 - **F5:** nested rolling-origin evaluation and OOF predictions — complete; no final winner selected.
-- **F6:** ranking/decile/lift/robustness.
+- **F6:** ranking/decile/lift/robustness — complete; no final winner selected.
 - **F7:** final research artifact and inference freeze.
 - **F8:** Financial NLP Intelligence.
 - **F9:** optional NLP incremental-value study.
@@ -273,10 +273,28 @@ Ridge and HGB are inside the frozen 0.01 practical-tie margin. Their average R-s
 near zero/slightly negative, so the current evidence supports a modest ranking signal more than
 accurate magnitude prediction. F5 intentionally selected no final model.
 
+## F6 ARTIFACTS AND RESULT
+
+- Analysis config: `research/configs/final_ranking_robustness.v1.json`.
+- Analyzer: `research/evaluation/final_ranking_robustness.py`.
+- CLI: `jobs/final_ranking_robustness.py` / `financial-ai-final-ranking-robustness`.
+- Safety tests: `tests/unit/test_final_ranking_robustness.py`.
+- Public result: `research/evaluation/f6_ranking_robustness_result.md`.
+- Local aggregate analysis: `.tools/evaluation/f6-final-ranking-robustness-v1/analysis.json`.
+- Canonical F6 config SHA-256:
+  `d860f42a3e47d8b136d93a652be6952de786bcdd5cfd94131b7069967ce9c939`.
+- Canonical F6 analysis SHA-256:
+  `8fd2fdc84f65fb47b6bc87df4b662c4bbd5a9ec8c82d41de4cdd3825b6364e70`.
+
+Ridge/HGB mean top-decile lift was 1.354/1.361 and mean Spearman was 0.194/0.186. Both candidates
+had positive ranking and lift above one in every outer period, ticker and training-defined regime.
+Their pooled outer-assigned deciles were 9/9 non-decreasing, but individual folds reached only 5–9
+steps and the model-level bootstrap intervals overlap. F6 did not select a final model.
+
 ## SAFETY AND NEXT ACTION
 
-Do not rewrite F5 OOF predictions, tune on F6 subgroups, choose an F7 winner, rerun M7, create a
-fake sealed test, modify working GAS, deploy, commit or push during the F5 stop boundary.
+Do not rewrite F5/F6 evidence, tune on F6 subgroups, choose outside the frozen F7 rule, rerun M7,
+create a fake sealed test, modify working GAS, deploy, commit or push during the F6 stop boundary.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
@@ -292,5 +310,5 @@ grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection 
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
 After user review, the next minimum executable unit is
-**F6 — Ranking & Robustness Analysis**. F6 must use the immutable F5 OOF predictions, may not
-retune candidates, and must not select or persist the F7 final model.
+**F7 — Final Research Model Freeze**. F7 must apply the already-frozen selection order, document
+the practical tie honestly, freeze the inference contract and avoid any prospective claim.

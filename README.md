@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F5 nested temporal evaluation complete / next: F6 ranking and robustness / no final model selected**。
+目前狀態：**F6 ranking and robustness complete / next: F7 model freeze / no final model selected**。
 
 ## 研究演進
 
@@ -143,6 +143,12 @@ rows 與 61,911 個三模型 OOF predictions。Mean outer Spearman 為 persisten
 0.1940、HGB 0.1863；Ridge/HGB 落在 0.01 practical-tie boundary 內。兩者平均 R² 皆接近零且略負，
 因此現階段證據較支持 modest ranking signal，不支持精準 magnitude prediction。F5 沒有選 winner
 或建立 final artifact；詳見 [F5 result](research/evaluation/f5_nested_temporal_evaluation_result.md)。
+
+F6 已使用 immutable F5 OOF 完成 decile、top-decile/quintile lift、ticker/time/regime robustness
+與 1,000 次 feature-session cluster bootstrap。Ridge/HGB mean top-decile lift 分別為 1.354/1.361，
+pooled outer-assigned deciles 皆為 9/9 上升，且兩者在所有 outer periods、tickers 與 regimes 的
+ranking 都為正；但個別年度只有 5–9 個 monotonic steps，bootstrap intervals 亦重疊。F6 未重新
+調參或選 final model；詳見 [F6 result](research/evaluation/f6_ranking_robustness_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

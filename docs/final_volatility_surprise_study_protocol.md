@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation complete through F5; protocol unchanged**
+Status: **FROZEN — implementation complete through F6; protocol unchanged**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -341,3 +341,18 @@ margin, while their mean R-squared values remain near zero/slightly negative. F5
 a modest ranking signal and selects no final model. F6 must analyze the immutable OOF predictions
 without retuning; F7 remains responsible for final selection. See
 `research/evaluation/f5_nested_temporal_evaluation_result.md`.
+
+## 20. F6 implementation record
+
+After separate approval, F6 joined every immutable F5 OOF prediction back to its exact F2 source
+row, fitted stock/market regime tertiles only on the relevant outer training history, assigned
+deciles within model/outer fold and ran 1,000 outer-fold-stratified feature-session cluster
+bootstrap replicates.
+
+Ridge/HGB mean Spearman was 0.1940/0.1863 and mean top-decile lift was 1.3542/1.3611. Both had
+positive ranking and lift above one across every outer period, ticker and historical regime. Their
+pooled outer-assigned realized-target deciles were 9/9 non-decreasing, while individual periods
+showed 5–9 steps; model bootstrap intervals overlapped. F6 therefore preserves the practical tie,
+performs no retuning and selects no final model. Canonical analysis SHA-256 is
+`8fd2fdc84f65fb47b6bc87df4b662c4bbd5a9ec8c82d41de4cdd3825b6364e70`. See
+`research/evaluation/f6_ranking_robustness_result.md`.

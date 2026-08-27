@@ -30,6 +30,12 @@ unique evaluation rows. Ridge and HGB mean Spearman values are within the frozen
 margin; F5 selected no final model. See
 `research/evaluation/f5_nested_temporal_evaluation_result.md`.
 
+F6 implementation status: ranking, within-outer-fold deciles, top-decile/quintile lift,
+ticker/time/training-defined-regime robustness and 1,000-replicate feature-session cluster
+bootstrap are complete on immutable F5 OOF predictions. Ridge/HGB remain inside the practical-tie
+boundary and no final model was selected. See
+`research/evaluation/f6_ranking_robustness_result.md`.
+
 ## Exploratory binary-risk contract (historical M1–M11; frozen)
 
 The mandatory experiment predicts next-session `NORMAL` versus `HIGH_RISK` abnormal-volatility /

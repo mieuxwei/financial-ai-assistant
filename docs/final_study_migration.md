@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-27  
-Status: F1–F5 complete; F6 pending review
+Status: F1–F6 complete; F7 pending review
 
 ## Migration principle
 
@@ -69,7 +69,8 @@ result or used to claim prospective confirmation.
    folds and reproducible OOF predictions. **Complete:** 20,637 evaluation rows and 61,911
    three-model OOF predictions; no final winner selected.
 6. **F6 — Ranking & Robustness Analysis:** regression/ranking metrics, deciles, lift,
-   ticker/time/regime diagnostics and uncertainty.
+   ticker/time/regime diagnostics and uncertainty. **Complete:** immutable F5 OOF only, 1,000
+   clustered bootstrap replicates, no retuning/final selection.
 7. **F7 — Final Research Model Freeze:** frozen winner, full-history research fit, artifact and
    inference contract without prospective claim.
 8. **F8 — Financial NLP Intelligence:** English FinBERT and abstention-safe Taiwan announcement
