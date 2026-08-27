@@ -147,7 +147,7 @@ def run_temporal_validation(
         model_results: dict[str, object] = {}
         for model_name in MODEL_NAMES:
             started = time.perf_counter()
-            probabilities, state = _fit_predict_candidate(
+            probabilities, state = fit_predict_candidate(
                 model_name,
                 x_train,
                 y_train,
@@ -222,7 +222,7 @@ def run_temporal_validation(
         raise ValueError("M6 final-fit boundary does not exactly cover the pre-test dataset")
     final_x = feature_matrix(final_rows)
     final_y = binary_labels(final_rows, config.high_risk_label)
-    final_probability, final_model_state = _fit_predict_candidate(
+    final_probability, final_model_state = fit_predict_candidate(
         selected_model,
         final_x,
         final_y,
@@ -370,7 +370,7 @@ def _verify_fold_rows(
         raise ValueError(f"{fold.name} target overlap was not purged")
 
 
-def _fit_predict_candidate(
+def fit_predict_candidate(
     name: str,
     x_train: np.ndarray,
     y_train: np.ndarray,

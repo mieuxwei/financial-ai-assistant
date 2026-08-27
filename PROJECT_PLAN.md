@@ -448,6 +448,15 @@ candidate manifest SHA-256 為
 確認 candidate manifest/hash 後只開一次 test，產生 final metrics 與 calibration evidence。Test 不參與
 任何選擇，報告包含 HIGH_RISK FN、PR-AUC、MCC、Brier 與 limitations。
 
+**狀態：完成（2026-08-27；evaluation sequence 1，禁止重跑）。** 使用者明確批准後，系統先建立
+immutable opening intent，再以 frozen Logistic／Platt／0.10 recipe 評估 2025-01-01–2026-08-26。
+共 3,647 eligible rows、390 個 HIGH_RISK；recall 0.508、precision 0.180、PR-AUC 0.189、
+ROC-AUC 0.686、MCC 0.155、Balanced Accuracy 0.615、Brier 0.0926，FN 192。Predicted
+HIGH_RISK 的 normalized outcome mean／median 為 1.087／0.876，高於 predicted NORMAL 的
+0.766／0.574；但 raw absolute return 與 high-low range 反而較低，因此只能主張 moderate
+normalized-risk separation，不能主張 general absolute-volatility、方向或投資效益。Opening、
+evaluation、completion 三個 hashes 已保存，model/threshold selection performed=false。
+
 ### M8 — Risk Error Analysis & Robustness
 
 依 ticker、time、regime、probability bucket 分析，檢查 FN/FP 與 calibration drift；分層樣本數與
@@ -540,11 +549,11 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1–M6 已完成。禁止在未確認 frozen candidate manifest 前打開任何 sealed-test
+M0 文件遷移與 M1–M7 已完成。Sealed test 已評估一次，永久禁止重跑、重開或依 test 改參數。
 outcome／performance、刪除
 NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M7 Sealed Test**：先獨立核對 frozen manifest hash、M1/M2/M3 dataset
-lineage、selected Logistic／Platt／0.10 recipe 與 test opening counter，然後只開啟 2025-01-01 至
-2026-08-26 test 一次，產生 final metrics。Test 不得用於任何模型、calibration、feature 或 threshold
-選擇；執行後不得因結果不佳重開、改參數或覆寫 M1–M6 evidence。
+下一個最小可執行單元是 **M8 Risk Error Analysis & Robustness**：只讀既有 M7 immutable
+evaluation，依 ticker、time、market regime、probability bucket、FN／FP 與 realized-risk proxy 分層；
+報告樣本數、drift 與 normalized-versus-raw outcome 差異。不得呼叫 M7 job、重新 fit、重新預測、
+改 threshold 或產生第二份 test evaluation。

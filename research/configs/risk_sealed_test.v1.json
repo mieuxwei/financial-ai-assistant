@@ -1,0 +1,23 @@
+{
+  "schema_version": "risk-sealed-test-config-v1",
+  "protocol_version": "risk-sealed-test-v1",
+  "candidate_manifest_sha256": "951a5f627fe2bf67e318cb35e48f76f538aa1931a71c16c6052ada297c641c81",
+  "market_dataset_sha256": "c257f24d2fab6d2e35a73ef36831776b935a943bafcdbb331e559bfd07564f81",
+  "threshold_artifact_sha256": "7e2aa33fa705c0912358c9775bce05fac5c39cbfa24fae41a5ff50bdfe54aba7",
+  "pretest_feature_dataset_sha256": "a9898ce18a2497efaa98d22dc5e99f40bae446f175781c3c47bde92972d26bb0",
+  "label_config_sha256": "2ff3303b4f49a6eb52d770e93fd78d0571354b2fdafe862477b48a72c5c807f4",
+  "feature_config_sha256": "cf57d71992b2f097217b6b7d9bafcaad742e7def2df176f532ec25f72da7c02e",
+  "baseline_config_sha256": "6627f8c920adf32e9e52bc279df25177f20ed1b806922e03221ca95927aef6ff",
+  "tree_model_config_sha256": "11d68659f67287b2728501dae70224f51f6af766ab57e29c1492382ed484c691",
+  "selected_model": "logistic_regression",
+  "selected_calibration": "platt",
+  "selected_threshold": 0.10,
+  "test_start": "2025-01-01",
+  "test_end": "2026-08-26",
+  "minimum_test_rows": 3000,
+  "minimum_test_rows_per_ticker": 300,
+  "calibration_bins": 10,
+  "evaluation_sequence": 1,
+  "model_or_threshold_selection_allowed": false,
+  "repeat_evaluation_allowed": false
+}

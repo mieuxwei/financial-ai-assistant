@@ -141,5 +141,7 @@ persistence, and Logistic Regression baselines and evaluated them on validation 
 compared fixed Random Forest and HistGradientBoosting candidates; neither exceeded Logistic on
 recall or ranking metrics. M6 then completed five expanding-window folds, selected Logistic plus
 Platt calibration and threshold 0.10 under predeclared rules, and froze the pre-test candidate
-manifest. Sealed-test outcomes/labels/features remain unopened. The next controlled unit is M7
-Sealed Test.
+manifest. M7 then opened the sealed test once under explicit approval and preserved the final mixed
+result: modest normalized-risk discrimination but no raw absolute-volatility separation. The test
+is permanently closed to further evaluation or selection. The next unit is M8 robustness analysis
+of the existing immutable evaluation.

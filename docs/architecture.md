@@ -9,7 +9,7 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## Active Track A M1–M6 boundary
+## Active Track A M1–M7 boundary
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -29,6 +29,7 @@ fixed universe + Yahoo OHLCV + FinMind TAIEX
   → five expanding-window evaluations
   → prequential Platt calibration + recall-constrained threshold
   → frozen pre-test candidate manifest
+  → one-time immutable sealed-test evaluation
 ```
 
 M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
@@ -57,6 +58,12 @@ period. Calibration for a fold is fit only from earlier out-of-fold predictions.
 calibration method and threshold are selected from pre-test evidence, after which the final recipe
 is fit through 2024 and frozen. The manifest contains no test row or test metric; M7 must verify its
 hash before the single authorized sealed-test opening.
+
+M7 now owns a three-record boundary: opening intent, immutable row-level evaluation in ignored
+storage, and completion record. The opening record is created before test data are loaded; its
+existence makes every future execution fail before evaluation. Public documentation contains only
+aggregate evidence. M8 must analyze the existing evaluation artifact and may not reconstruct or
+rerun M7.
 
 ## Legacy first-iteration application boundary
 

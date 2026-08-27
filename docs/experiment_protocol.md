@@ -36,6 +36,13 @@ from earlier fold predictions, and threshold 0.10 is selected by maximum MCC sub
 0.50 HIGH_RISK recall. The final pre-test recipe is frozen after fitting through 2024; sealed-test
 evaluation count remains zero. See `docs/risk_temporal_validation_protocol.md`.
 
+M7 implementation status: the user-authorized sealed test was opened exactly once. The frozen
+Logistic+Platt+0.10 recipe was reconstructed byte-for-byte and evaluated on 3,647 eligible
+2025–2026 rows. Test recall is 0.508, PR-AUC 0.189, ROC-AUC 0.686, MCC 0.155 and Brier 0.0926.
+Normalized-risk separation is positive, while raw absolute-move/range separation is negative; both
+facts are retained. Evaluation sequence is permanently 1 and M7 cannot be rerun. See
+`docs/risk_sealed_test_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

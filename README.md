@@ -27,7 +27,7 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M6 temporal validation and candidate freeze complete / next: controlled M7 sealed test**。
+目前狀態：**M7 one-time sealed test complete / next: M8 robustness analysis / test may not reopen**。
 
 M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
 train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
@@ -62,6 +62,13 @@ prequential Platt calibration 與 threshold 0.10，並以 2011–2024 全部 28,
 凍結 candidate manifest。這仍只是待測候選；sealed test evaluation count 為 0。詳見
 [M6 protocol](docs/risk_temporal_validation_protocol.md) 與
 [M6 raw-free result](research/evaluation/m6_risk_temporal_validation_result.md)。
+
+M7 已依 frozen manifest 唯一一次開啟 2025-01-01–2026-08-26 sealed test。3,647 個 eligible rows
+的 HIGH_RISK recall 為 0.508、PR-AUC 0.189、ROC-AUC 0.686、MCC 0.155、Brier 0.0926。
+Predicted HIGH_RISK 的 normalized outcome 較高，但 raw absolute return／range 未同步較高，顯示
+模型預測的是相對波動異常而非絕對價格振幅；此限制不隱藏。Evaluation counter 已固定為 1，禁止
+重跑或依 test 改模型。詳見 [M7 protocol](docs/risk_sealed_test_protocol.md) 與
+[M7 final result](research/evaluation/m7_risk_sealed_test_result.md)。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak

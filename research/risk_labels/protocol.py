@@ -205,6 +205,37 @@ def build_risk_label_dataset(
     return dataset, threshold_artifact, report
 
 
+def build_sealed_test_drafts(
+    config: RiskLabelConfig,
+    market_dataset: dict[str, object],
+) -> tuple[list[dict[str, object]], dict[str, int]]:
+    """Materialize outcome drafts only for the explicitly authorized M7 test split."""
+    _verify_market_dataset(market_dataset)
+    market_config = RiskMarketDatasetConfig.model_validate(market_dataset["config"])
+    if config.market_timezone != market_config.market_timezone:
+        raise ValueError("risk-label and market-dataset timezones differ")
+    benchmark_sessions = _benchmark_sessions(market_dataset)
+    bars_by_ticker = _stock_bars(market_dataset, market_config)
+    drafts: list[dict[str, object]] = []
+    excluded = Counter()
+    for instrument in market_config.universe:
+        ticker_drafts, ticker_excluded = _build_ticker_drafts(
+            ticker=instrument.ticker,
+            bars=bars_by_ticker.get(instrument.ticker, {}),
+            benchmark_sessions=benchmark_sessions,
+            market_config=market_config,
+            config=config,
+            materialized_splits={"test"},
+            allow_sealed_test=True,
+        )
+        drafts.extend(ticker_drafts)
+        excluded.update(ticker_excluded)
+    ordered = sorted(drafts, key=lambda row: (str(row["feature_session"]), row["ticker"]))
+    if any(row["split"] != "test" for row in ordered):
+        raise ValueError("sealed-test draft builder emitted a non-test row")
+    return ordered, dict(sorted(excluded.items()))
+
+
 def linear_quantile(values: list[Decimal], quantile: Decimal) -> Decimal:
     if not values:
         raise ValueError("quantile requires at least one value")
@@ -244,18 +275,20 @@ def _build_ticker_drafts(
     benchmark_sessions: list[date],
     market_config: RiskMarketDatasetConfig,
     config: RiskLabelConfig,
+    materialized_splits: set[str] | None = None,
+    allow_sealed_test: bool = False,
 ) -> tuple[list[dict[str, object]], Counter[str]]:
     drafts = []
     excluded: Counter[str] = Counter()
     lookback = config.trailing_volatility_sessions
-    materialized = set(config.materialized_splits)
+    materialized = materialized_splits or set(config.materialized_splits)
     timezone = ZoneInfo(config.market_timezone)
     for index in range(lookback, len(benchmark_sessions) - 1):
         feature_session = benchmark_sessions[index]
         target_session = benchmark_sessions[index + 1]
         feature_split = market_config.split_for(feature_session)
         target_split = market_config.split_for(target_session)
-        if feature_split == "test" or target_split == "test":
+        if (feature_split == "test" or target_split == "test") and not allow_sealed_test:
             excluded["sealed_test_not_materialized"] += 1
             continue
         if feature_split not in materialized or target_split != feature_split:

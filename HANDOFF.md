@@ -101,6 +101,17 @@ through 2024 on 28,690 pre-test rows and frozen in candidate manifest SHA-256
 matched. Sealed-test evaluation count remains zero. The next unit is the controlled one-time
 **M7 — Sealed Test**; do not execute it accidentally or use it for further selection.
 
+The user explicitly authorized M7, and the one-time sealed test completed on 2026-08-27. Opening
+intent, immutable evaluation and completion records establish evaluation sequence 1 and permanently
+refuse repeats. On 3,647 eligible 2025-01-01–2026-08-26 rows, the frozen Logistic+Platt+0.10 recipe
+achieved HIGH_RISK recall 0.508, precision 0.180, PR-AUC 0.189, ROC-AUC 0.686, MCC 0.155, Balanced
+Accuracy 0.615 and Brier 0.0926. Predicted HIGH_RISK rows had higher normalized risk outcome
+(mean 1.087 versus 0.766; median 0.876 versus 0.574), but lower raw absolute return and intraday
+range. Therefore evidence supports modest normalized-risk separation, not general absolute-
+volatility separation, direction prediction or investment utility. Do not rerun M7 or alter the
+candidate based on test. The next unit is **M8 — Risk Error Analysis & Robustness**, using the one
+existing immutable evaluation only.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text
