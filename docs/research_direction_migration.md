@@ -139,5 +139,7 @@ and train/validation risk labels with temporal mutation tests. M3 produced 23 fi
 features with strict `t` cutoffs. M4 then fit training-only scaling and historical-risk,
 persistence, and Logistic Regression baselines and evaluated them on validation without tuning. M5
 compared fixed Random Forest and HistGradientBoosting candidates; neither exceeded Logistic on
-recall or ranking metrics, and no candidate was selected. Sealed-test outcomes/labels/features
-remain unopened. The next unit is M6 Temporal Validation.
+recall or ranking metrics. M6 then completed five expanding-window folds, selected Logistic plus
+Platt calibration and threshold 0.10 under predeclared rules, and froze the pre-test candidate
+manifest. Sealed-test outcomes/labels/features remain unopened. The next controlled unit is M7
+Sealed Test.

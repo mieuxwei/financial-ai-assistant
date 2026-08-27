@@ -433,6 +433,16 @@ parallel Random Forest 重跑出現 prediction hash 細微不一致，診斷產�
 執行 chronological validation、walk-forward／rolling-origin、calibration 與 model/threshold selection；
 所有 fold preprocessing train-fit only，通過 purge/embargo，凍結 final candidate manifest。
 
+**狀態：完成（2026-08-27）。** 五個 expanding-window folds 覆蓋 2017–2018、2019–2020、
+2021–2022、2023、2024；每 fold training target 必須在 evaluation 開始前完成，無 outcome overlap。
+Logistic 的 mean-fold PR-AUC 0.180，高於 Random Forest 0.170 與 HGB 0.167，依預先規則入選。
+Prequential Platt 只用先前 folds 的 OOF probability／label fit，pooled Brier 由 0.224 降至 0.089；
+因校準後 0.5 threshold 不適用，再依「recall ≥ 0.50 時最大 MCC」選出 0.10，pooled recall
+0.586、MCC 0.139、PR-AUC 0.184。最終 recipe 以 28,690 個 2011–2024 pre-test rows fit 並凍結，
+candidate manifest SHA-256 為
+`951a5f627fe2bf67e318cb35e48f76f538aa1931a71c16c6052ada297c641c81`；連續兩次 immutable
+重跑通過。Sealed-test evaluation count 為 0。
+
 ### M7 — Sealed Test
 
 確認 candidate manifest/hash 後只開一次 test，產生 final metrics 與 calibration evidence。Test 不參與
@@ -530,11 +540,11 @@ features、cutoff alignment、hash 與 mutation tests；它不再定義新 Track
 
 ## 16. Immediate Execution Boundary
 
-M0 文件遷移與 M1–M5 已完成。禁止打開任何 sealed-test
+M0 文件遷移與 M1–M6 已完成。禁止在未確認 frozen candidate manifest 前打開任何 sealed-test
 outcome／performance、刪除
 NLP、修改 working GAS、deploy、commit 或 push。
 
-下一個最小可執行單元是 **M6 Temporal Validation**：以 expanding-window／rolling-origin folds
-比較 Logistic、Random Forest 與 HistGradientBoosting 的跨時間穩定性，所有 fold preprocessing、
-class weight 與 calibration train-fit only；建立 purge／embargo 與 candidate-selection contract，
-最後凍結 final candidate manifest。不得開 sealed test，不得因 M5 tree result 較差而刪除失敗結果。
+下一個最小可執行單元是 **M7 Sealed Test**：先獨立核對 frozen manifest hash、M1/M2/M3 dataset
+lineage、selected Logistic／Platt／0.10 recipe 與 test opening counter，然後只開啟 2025-01-01 至
+2026-08-26 test 一次，產生 final metrics。Test 不得用於任何模型、calibration、feature 或 threshold
+選擇；執行後不得因結果不佳重開、改參數或覆寫 M1–M6 evidence。

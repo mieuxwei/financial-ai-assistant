@@ -1,0 +1,85 @@
+{
+  "schema_version": "risk-temporal-validation-config-v1",
+  "protocol_version": "risk-temporal-validation-v1",
+  "feature_dataset_version": "risk-feature-dataset-v1",
+  "baseline_config_sha256": "6627f8c920adf32e9e52bc279df25177f20ed1b806922e03221ca95927aef6ff",
+  "tree_model_config_sha256": "11d68659f67287b2728501dae70224f51f6af766ab57e29c1492382ed484c691",
+  "normal_label": "NORMAL",
+  "high_risk_label": "HIGH_RISK",
+  "candidate_models": [
+    "logistic_regression",
+    "random_forest",
+    "hist_gradient_boosting"
+  ],
+  "folds": [
+    {
+      "name": "wf_2017_2018",
+      "train_end": "2016-12-31",
+      "evaluation_start": "2017-01-01",
+      "evaluation_end": "2018-12-31"
+    },
+    {
+      "name": "wf_2019_2020",
+      "train_end": "2018-12-31",
+      "evaluation_start": "2019-01-01",
+      "evaluation_end": "2020-12-31"
+    },
+    {
+      "name": "wf_2021_2022",
+      "train_end": "2020-12-31",
+      "evaluation_start": "2021-01-01",
+      "evaluation_end": "2022-12-31"
+    },
+    {
+      "name": "wf_2023",
+      "train_end": "2022-12-31",
+      "evaluation_start": "2023-01-01",
+      "evaluation_end": "2023-12-31"
+    },
+    {
+      "name": "wf_2024",
+      "train_end": "2023-12-31",
+      "evaluation_start": "2024-01-01",
+      "evaluation_end": "2024-12-31"
+    }
+  ],
+  "minimum_fold_training_rows": 8000,
+  "minimum_fold_evaluation_rows": 2000,
+  "minimum_fold_positive_rows": 100,
+  "purge_target_overlap": true,
+  "embargo_sessions": 0,
+  "calibration_method": "prequential_platt_or_identity",
+  "platt_c": 1.0,
+  "probability_clip": 0.000001,
+  "calibration_bins": 10,
+  "model_selection_primary": "mean_fold_pr_auc",
+  "model_selection_secondary": "mean_fold_mcc",
+  "calibration_selection_metric": "pooled_prequential_brier",
+  "minimum_calibration_brier_improvement": 0.0,
+  "threshold_candidates": [
+    0.05,
+    0.10,
+    0.15,
+    0.20,
+    0.25,
+    0.30,
+    0.35,
+    0.40,
+    0.45,
+    0.50,
+    0.55,
+    0.60,
+    0.65,
+    0.70,
+    0.75,
+    0.80,
+    0.85,
+    0.90,
+    0.95
+  ],
+  "minimum_high_risk_recall": 0.50,
+  "threshold_selection_metric": "mcc_subject_to_minimum_recall",
+  "final_fit_end": "2024-12-31",
+  "sealed_test_start": "2025-01-01",
+  "sealed_test_allowed": false
+}

@@ -30,6 +30,12 @@ is validation permutation importance scored by PR-AUC and is not used for fittin
 single-thread reconstruction passes; sealed test remains unopened. See
 `docs/risk_tree_model_protocol.md`.
 
+M6 implementation status: five expanding windows cover 2017–2024 with target-overlap purging.
+Logistic Regression wins the frozen mean-fold PR-AUC rule. Prequential Platt calibration is fit only
+from earlier fold predictions, and threshold 0.10 is selected by maximum MCC subject to at least
+0.50 HIGH_RISK recall. The final pre-test recipe is frozen after fitting through 2024; sealed-test
+evaluation count remains zero. See `docs/risk_temporal_validation_protocol.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
 market-only and market+NLP models is now optional M10 work and is not part of the main definition
 of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.

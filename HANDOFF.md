@@ -90,6 +90,17 @@ probability hashes on repeat. Diagnostic manifests were retained locally, and th
 was changed to single-thread Random Forest; two immutable rebuilds then matched. The sealed test
 remains unopened. The next unit is **M6 — Temporal Validation**.
 
+M6 Temporal Validation was completed on 2026-08-27 using five expanding windows covering
+2017–2024. Logistic Regression had the highest mean fold PR-AUC (0.180 versus RF 0.170 and HGB
+0.167) and was selected by the predeclared rule. Leakage-safe prequential Platt calibration reduced
+pooled Brier from 0.224 to 0.089. Because calibrated probabilities are prevalence-scaled, the
+predeclared recall-constrained threshold procedure selected 0.10 rather than 0.50; pooled
+prequential recall is 0.586, MCC 0.139 and PR-AUC 0.184 at that threshold. The final recipe was fit
+through 2024 on 28,690 pre-test rows and frozen in candidate manifest SHA-256
+`951a5f627fe2bf67e318cb35e48f76f538aa1931a71c16c6052ada297c641c81`. Two full immutable runs
+matched. Sealed-test evaluation count remains zero. The next unit is the controlled one-time
+**M7 — Sealed Test**; do not execute it accidentally or use it for further selection.
+
 ## Preserved one-week TEJ/NLP context — secondary Track B
 
 The user has a hard delivery deadline of **one week**. Do not wait months for prospective text

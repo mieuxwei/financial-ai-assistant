@@ -9,7 +9,7 @@ existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boun
 preserved and reusable; their historical milestone numbers are mapped in
 `docs/research_direction_migration.md`.
 
-## Active Track A M1–M5 boundary
+## Active Track A M1–M6 boundary
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -26,6 +26,9 @@ fixed universe + Yahoo OHLCV + FinMind TAIEX
   → validation-only baseline metrics and calibration bins
   → fixed Random Forest + HistGradientBoosting comparison
   → validation permutation importance + resource evidence
+  → five expanding-window evaluations
+  → prequential Platt calibration + recall-constrained threshold
+  → frozen pre-test candidate manifest
 ```
 
 M2 never substitutes a later provider row for a missing immediate exchange session. Threshold fit
@@ -48,6 +51,12 @@ stopping is disabled so it cannot create an implicit validation carve-out. Fixed
 permutation importance is evaluation evidence only and is not used to refit or select features.
 The first parallel Random Forest diagnostic exposed non-identical floating-point prediction hashes;
 the accepted configuration is single-threaded and passes repeated immutable reconstruction.
+
+M6 trains each fold only on rows whose next-session target finishes before that fold's evaluation
+period. Calibration for a fold is fit only from earlier out-of-fold predictions. Candidate model,
+calibration method and threshold are selected from pre-test evidence, after which the final recipe
+is fit through 2024 and frozen. The manifest contains no test row or test metric; M7 must verify its
+hash before the single authorized sealed-test opening.
 
 ## Legacy first-iteration application boundary
 
