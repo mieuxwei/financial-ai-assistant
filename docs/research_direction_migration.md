@@ -1,5 +1,12 @@
 # Research Direction Migration Note
 
+> **Historical migration record.** This document preserves the earlier transition from the
+> direction-prediction project to the binary volatility-risk M-series. That binary formulation is
+> now frozen as Exploratory Research History. The active continuous final-study migration is
+> `docs/final_study_migration.md`, and its protocol is
+> `docs/final_volatility_surprise_study_protocol.md`. Nothing below is deleted or retroactively
+> relabelled.
+
 Migration date: 2026-08-27  
 Migration version: `core-direction-migration-v2`
 
@@ -147,5 +154,6 @@ is permanently closed to further evaluation or selection. M8 then completed read
 error, drift and bootstrap-uncertainty analysis of that immutable evaluation. M9 then confirmed a
 descriptive raw-outcome aggregate/within-regime composition reversal without refit or threshold
 change. M10 then selected three development-only global operating candidates using reconstructed
-M6 OOF evidence and no post-M6 outcomes. The next unit is M11 one-model regime-aware thresholding;
-none of these policies is holdout-validated or product-ready.
+M6 OOF evidence and no post-M6 outcomes. M11 then selected a one-model LOW 0.12／MIDDLE 0.10／HIGH
+0.08 threshold policy that reduces regime dispersion but lowers overall MCC. None of these policies
+is holdout-validated or product-ready; M12 cannot run until genuinely prospective evidence accrues.

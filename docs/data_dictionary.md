@@ -1,5 +1,25 @@
 # Data Dictionary
 
+## Planned final-study snapshot (F2; not yet materialized)
+
+The F2 snapshot will contain one row per eligible ticker/feature session and keep predictors
+structurally separate from outcomes:
+
+- `ticker`: canonical Taiwan ticker.
+- `feature_date`: exchange session whose close completes the feature vector.
+- `target_session`: immediate next benchmark session; never substituted with a later available row.
+- `information_cutoff`: timezone-aware point after which no predictor may enter the row.
+- `features`: the fixed F1 market-only feature mapping, computed from information available by the
+  cutoff.
+- `target`: versioned continuous next-session stock-normalized volatility surprise.
+- `target_version`: `next_session_stock_normalized_abs_log_return_v1`.
+- `dataset_version`: immutable F2 dataset contract version.
+- `source_lineage`: source snapshot/config identifiers and cryptographic hashes.
+
+The snapshot is planned but has not been built during F1. The exact active target and temporal
+contracts are in `docs/final_volatility_surprise_study_protocol.md`. Historical binary fields later
+in this dictionary remain exploratory M-series records, not final-study training labels.
+
 ## M1–M2 tables
 
 ### users

@@ -1,6 +1,25 @@
 # Experiment Protocol
 
-## Active Track A contract
+## Active final-study contract
+
+The active study forecasts a continuous next-session stock-normalized volatility-surprise outcome.
+Its target, folds, allowed models, model-selection rule, metrics, ranking analysis and claim boundary
+are frozen in `research/configs/final_volatility_surprise_study.v1.json` and documented in
+`docs/final_volatility_surprise_study_protocol.md`. The study is retrospective, leakage-aware and
+hypothesis-informed; it does not claim a new untouched sealed test or prospective validation.
+
+The primary outcome is the next-session absolute adjusted-close log return divided by the
+population standard deviation of the 20 adjusted-close log-return transitions ending at feature
+session `t`. The denominator uses only information available at `t`; rows with a denominator less
+than or equal to `1e-8` are excluded and counted. Evaluation uses expanding-window outer folds and
+three annual inner temporal validation blocks contained entirely within each outer training
+history. The allowed core models are normalized persistence, Ridge Regression and
+HistGradientBoostingRegressor.
+
+Primary reporting includes MAE, RMSE, R-squared, Spearman rank correlation, frozen ratio-based
+top-decile/top-quintile lift and predicted-score decile tables. NLP incremental value is optional.
+
+## Exploratory binary-risk contract (historical M1–M11; frozen)
 
 The mandatory experiment predicts next-session `NORMAL` versus `HIGH_RISK` abnormal-volatility /
 large-move risk from price, volume, volatility, a compact technical set and market context. The
@@ -63,9 +82,16 @@ reconstructed with matching fold/model/calibration evidence. The predeclared gri
 historical 0.10 remains frozen. No post-M6 labels/outcomes entered selection. See
 `research/evaluation/m10_operating_point_result.md`.
 
+M11 implementation status: fold-specific volatility tertiles were fitted only from earlier
+training history, then 125,000 LOW/MIDDLE/HIGH threshold triplets were compared on the same 13,550
+development OOF rows. The selected 0.12/0.10/0.08 policy sharply reduces cross-regime recall and
+specificity ranges, with lower overall MCC than global 0.10 and M10 Balanced. It is development-only;
+no separate model or post-M6 outcome entered selection. See
+`research/evaluation/m11_regime_threshold_result.md`.
+
 The historical NLP contracts below remain valid Track B evidence. Comparing otherwise matched
-market-only and market+NLP models is now optional M15 work and is not part of the main definition
-of done. See `PROJECT_PLAN.md` and `docs/research_direction_migration.md`.
+market-only and market+NLP models is optional F9 work and is not part of the main definition of
+done. See `PROJECT_PLAN.md` and `docs/final_study_migration.md`.
 
 ## M5 sentiment reproducibility contract
 

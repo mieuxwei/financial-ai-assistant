@@ -2,14 +2,45 @@
 
 ## Active research direction
 
-The core research path is now next-session abnormal-volatility / large-move risk prediction from
-leakage-safe price, volume, volatility, technical and market-context features. Financial NLP is a
-separate intelligence layer and optional ablation, not a dependency for core completion. The
-existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boundaries below are
-preserved and reusable; their historical milestone numbers are mapped in
-`docs/research_direction_migration.md`.
+The active final-study path is continuous next-session stock-normalized volatility-surprise
+forecasting from leakage-safe price, volume, volatility, technical and market-context features.
+Financial NLP is a parallel intelligence layer and an optional timestamp-safe incremental-value
+experiment, not a dependency for core completion. The research model returns a continuous score;
+LOW/MODERATE/HIGH/VERY HIGH are presentation bands fitted from historical development evidence,
+not classifier labels.
 
-## Active Track A M1–M8 boundary
+The canonical active contracts are:
+
+- `research/configs/final_volatility_surprise_study.v1.json`;
+- `docs/final_volatility_surprise_study_protocol.md`;
+- `docs/final_study_migration.md`.
+
+The existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP boundaries below
+remain reusable. The binary M1–M11 architecture is preserved immediately below as immutable
+exploratory research history; it is not the final production-research model.
+
+## Active final-study boundary (F1–F12)
+
+```text
+immutable historical market data + source lineage
+  → feature-date / target-session / information-cutoff dataset snapshot
+  → t-known compact market feature vector
+  → next-session absolute log return
+       / t-only trailing 20-session stock volatility
+  → expanding-window outer evaluation
+  → inner temporal model/hyperparameter selection
+  → persistence + Ridge + HistGradientBoosting comparison
+  → outer-fold OOF scores and regression/ranking evidence
+  → frozen research model + percentile communication bands
+  → FastAPI / LINE presentation with Financial NLP intelligence
+```
+
+Every fold refits preprocessing from its own training history. No random split, global
+preprocessing, future target feature, outer-fold tuning or relabelled historical sealed test is
+allowed. Previously inspected 2025–2026 rows may be historical outer evaluation periods, but are
+not described as untouched or prospective evidence.
+
+## Exploratory binary-risk architecture (historical M1–M11; frozen)
 
 ```text
 fixed universe + Yahoo OHLCV + FinMind TAIEX
@@ -81,6 +112,11 @@ may not read M7/M8/M9 labels or outcomes for threshold selection.
 M10 materializes a private, immutable development OOF dataset only under `.tools/`. It reconstructs
 fold Logistic/Platt evidence and stops before M6 final fit. Selected global policies remain an
 offline development-policy layer; only M12 can authorize a future product operating-mode contract.
+
+M11 consumes that same immutable OOF dataset without reconstructing or fitting another model. Each
+walk-forward fold receives LOW/MIDDLE/HIGH state from trailing stock volatility and tertiles fitted
+only on its earlier training history. The selected 0.12/0.10/0.08 decision layer reduces operating
+dispersion but lowers overall MCC; it remains offline until a new M12 holdout exists.
 
 ## Legacy first-iteration application boundary
 

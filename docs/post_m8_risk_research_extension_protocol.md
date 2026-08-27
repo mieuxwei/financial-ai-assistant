@@ -1,7 +1,13 @@
 # Post-M8 Risk Research Extension Protocol
 
 Protocol version: `post-m8-risk-extension-v1`  
-Status: **M9–M10 complete; M11–M12 not executed**
+Status: **M9–M11 complete; M12 unavailable and unopened**
+
+> **Frozen exploratory protocol.** This document remains the immutable rationale/evidence trail
+> for the binary-risk formulation. M12 is no longer required for current project completion. The
+> active final study is continuous stock-normalized volatility-surprise forecasting under
+> `docs/final_volatility_surprise_study_protocol.md`; genuinely future prospective validation
+> remains optional future external work.
 
 ## 1. Historical evidence boundary
 
@@ -89,6 +95,12 @@ the regime-aware policy. No separate regime model is allowed in M11.
 
 Configuration: `research/configs/post_m8_regime_thresholds.v1.json`.
 
+Implementation result: 73 of 125,000 triplets passed the frozen constraints. The selected
+development policy is LOW 0.12, MIDDLE 0.10 and HIGH 0.08. Relative to global 0.10, recall range
+fell from 0.405 to 0.034 and specificity range from 0.426 to 0.043, while overall MCC fell from
+0.139 to 0.131. This is stability evidence with a performance trade-off, not holdout validation or
+product authorization. See `research/evaluation/m11_regime_threshold_result.md`.
+
 ## 6. M12 — Prospective / New-Holdout Validation
 
 The existing M7 interval cannot validate post-M8 policies. M12 therefore begins with the first
@@ -114,10 +126,10 @@ gating remain optional extensions rather than completion requirements.
 
 ## 8. Product interpretation
 
-Until M9 finishes, the safe name remains `next-session abnormal volatility risk model`. Do not
-claim an absolute-volatility predictor or adopt `stock-normalized volatility surprise risk model`
-as a final conclusion. Screening, Balanced and High-Confidence UX modes are design candidates only;
-none may be exposed until M12 independently validates its frozen policy.
+The supported research framing is `next-session stock-normalized volatility surprise risk model`.
+Do not claim a general absolute-volatility predictor. Screening, Balanced, Precision and
+regime-aware policies are development candidates only; none may be exposed until M12 independently
+validates its frozen policy.
 
 ## 9. Automated boundary protection
 

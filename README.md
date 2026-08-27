@@ -1,22 +1,24 @@
 # Financial AI Assistant
 
-**Stock Volatility Risk Prediction with Financial NLP Intelligence**
+**Stock-Normalized Volatility Surprise Forecasting with Financial NLP Intelligence**
 
-中文工作名稱：**股票異常波動風險預警 × 金融 NLP 情報系統**。
+中文研究題目：**基於機器學習之股票相對波動異常程度預測與金融 NLP 情報系統**。
 
-這是一套結合市場資料工程、下一交易日異常波動風險預測、金融 NLP 情報、事件研究與 LINE
+這是一套結合市場資料工程、下一交易日相對波動異常預測、金融 NLP 情報、事件研究與 LINE
 互動介面的研究型 Financial Intelligence Assistant。
 
 ## 核心研究問題
 
-在嚴格避免資料洩漏的時間序列評估下，歷史價格、成交量、波動度、少量技術指標與市場情境
-特徵，能否預測下一交易日的異常波動／大幅移動風險？
+在嚴格避免資料洩漏的時間序列評估下，價格、成交量、波動度與市場情境特徵，能否預測下一交易日
+相對於個股自身歷史波動背景的 volatility surprise？
 
-先前「自動中文金融文字訊號能否改善短期方向預測」的問題保留為次要探索研究，不再阻塞主專案完成。
+本研究是 **retrospective、leakage-aware、hypothesis-informed final study**。歷史資料已影響問題
+形成，因此多段 rolling-origin 結果不會被宣稱為新 sealed test、prospective validation 或 independent
+external validation。
 
 ## 三軌定位
 
-- **Track A — Core Research**：`NORMAL`／`HIGH_RISK` 下一交易日波動風險預測。
+- **Track A — Core Research**：continuous stock-normalized volatility-surprise forecasting。
 - **Track B — NLP Intelligence**：英文 FinBERT 與探索性台灣公告／金融 NLP。
 - **Track C — Product**：整合風險、市場、新聞、公告及摘要的 Financial Intelligence Assistant。
 
@@ -27,7 +29,21 @@
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**M10 development operating points complete / next: M11 regime-aware thresholds / M7 test may not reopen**。
+目前狀態：**F1 final-study protocol frozen / next: F2 historical dataset rebuild / no model training yet**。
+
+## 研究演進
+
+本專案最初把 normalized continuous outcome 轉為 `HIGH_RISK`／`NORMAL`，完成嚴格 temporal
+evaluation、一次 M7 sealed binary evaluation、robustness、conditional analysis 與 threshold studies。
+這些研究不是失敗，也沒有被刪除。
+
+探索性 binary formulation 揭露明顯的 threshold／regime sensitivity。M9 顯示，比起 unconditional
+absolute volatility，更穩定的訊號是 stock-relative volatility surprise；M11 雖改善跨 regime operating
+stability，卻沒有提升 general discrimination。因此最終研究改為直接預測連續 normalized surprise，
+以 regression、Spearman、decile ranking 與 lift 為主。
+
+以下 M1–M11 是完整保留的 **Exploratory Research History**，同時提供 F2/F3 可重用的 data/feature
+engineering foundation。
 
 M1 已凍結 10 檔研究 universe、2010 起始的不可變 OHLCV／TAIEX 本機快照，以及
 train／validation／sealed-test 時間邊界。品質稽核通過；原始市場資料與 machine report 只留在 Git
@@ -88,6 +104,27 @@ M10 只重建 M6 development OOF evidence，選出尚未經新 holdout 驗證的
 precision 仍僅 0.193，因此目前不能作 high-confidence UX。歷史 0.10 未被取代；詳見
 [M10 result](research/evaluation/m10_operating_point_result.md)。
 
+M11 使用相同 13,550 筆 development OOF evidence 與每折 earlier-history volatility tertiles，在
+125,000 組門檻中選出 LOW 0.12／MIDDLE 0.10／HIGH 0.08。相較全域 0.10，跨 regime recall range
+由 0.405 降至 0.034、specificity range 由 0.426 降至 0.043，但 MCC 由 0.139 降至 0.131；這是
+穩定性候選，不是全面性能提升。它尚未經 M12 新 holdout 驗證，不能產品化。詳見
+[M11 result](research/evaluation/m11_regime_threshold_result.md)。
+
+## Active Final Study
+
+F1 已凍結 primary target：下一交易日絕對 adjusted-close log return，除以 `t` 時已知、截至 `t`
+的 20-session population volatility。`sigma20 <= 1e-8` 或 non-finite row 明確 abstain；`t+1` 僅在
+target 端。模型只包含 normalized-move persistence、Ridge 與 HistGradientBoostingRegressor。
+
+歷史評估使用 2017–2018、2019–2020、2021–2022、2023、2024、2025、2026 partial 七個 expanding
+outer folds，每折 hyperparameters 只由 outer training history 內最近三個完整年度 inner folds 選擇。
+必報 MAE、RMSE、R²、Spearman、top-decile/quintile lift、deciles 與 ticker/time/regime robustness。
+
+完整 frozen protocol 見
+[final study protocol](docs/final_volatility_surprise_study_protocol.md)，舊 M→新 F 對照見
+[final study migration](docs/final_study_migration.md)。F2 尚未開始，README 不包含任何虛構 regression
+結果。
+
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
 supervision 與來源治理已重新定位為 Track B 探索研究；其結果與 sealed-test 邊界均未刪除或改寫。
@@ -98,7 +135,7 @@ supervision 與來源治理已重新定位為 Track B 探索研究；其結果�
 ## 預計系統架構
 
 目前 FastAPI 提供健康檢查與具 ownership 邊界的持股 API，SQLite 作為本機預設資料庫，
-PostgreSQL 為部署目標。Python 負責市場／新聞 ingestion、風險特徵、模型、NLP、時間序列評估
+PostgreSQL 為部署目標。Python 負責市場／新聞 ingestion、volatility-surprise features、模型、NLP、時間序列評估
 與排程；LINE/GAS adapter 維持在服務邊界。Track A 可在中文 sentiment 維持 unsupported 時獨立
 完成；Track B 以情報、metadata、embedding、retrieval 與可選消融提供產品研究價值。
 
@@ -221,8 +258,8 @@ financial-ai-chinese-sentiment-benchmark \
 
 原 M6 使用交易日 `t` 收盤時已知的資料建立下一交易日方向資料集。它現在是可重用的 legacy
 engineering foundation：保留 13:30 cutoff、rolling features、snapshot hash 與 future-price mutation
-test；`label_up` 不再是 Track A 的核心 target 或完成門檻。新風險 label 將依新 M2 protocol 另行
-版本化。
+test；`label_up` 不再是 Track A 的核心 target 或完成門檻。F1 已將新的連續 target 版本化，且不再
+建立 `HIGH_RISK`／`NORMAL` 訓練標籤。
 
 ```bash
 alembic upgrade head
