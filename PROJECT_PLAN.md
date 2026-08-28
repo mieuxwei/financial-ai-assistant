@@ -3,7 +3,7 @@
 Plan version: `final-volatility-surprise-study-v1`
 
 Last revised: 2026-08-28
-Active milestone: **F10 complete; optional F9 not run; next review unit is F11**
+Active milestone: **F11 complete; optional F9 not run; next review unit is F12**
 
 ## 1. Final Project Identity
 
@@ -355,6 +355,7 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
     **完成：F7 safe-JSON lazy inference、F8 database-only intelligence、strict schemas、lineage
     guards、structured errors；無外部 API/訓練/部署，F9 未執行。**
 11. **F11 — LINE / Dashboard Demo：**relative-risk score、context、intelligence、disclaimers。
+    **完成：Streamlit 受控離線 fixture＋loopback-only F10 client；未修改 LINE/GAS、未部署。**
 12. **F12 — Portfolio Finalization：**workflow、comparison、visuals、robustness、abstract、demo、limits。
 
 ## 16. Definition of Done
@@ -381,12 +382,11 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-F1–F8 與 F10 已完成；F9 維持 optional/not run。F7 依 frozen practical-tie rule 以較低 mean outer MAE 選 Ridge，再以 2023–2025
+F1–F8、F10 與 F11 已完成；F9 維持 optional/not run。F7 依 frozen practical-tie rule 以較低 mean outer MAE 選 Ridge，再以 2023–2025
 training-history-only validation 選 alpha 100，並以 32,357 rows 建立 safe JSON artifact。這不代表
 prospective accuracy 或精準 magnitude prediction。M7 evaluation sequence 永久為 1，禁止呼叫或
 重跑 M7。不得回頭利用 F6 subgroup 結果調參、修改 working GAS、deploy、commit 或 push。
 
-F10 已把 F7/F8 接到 versioned FastAPI research endpoints。Prediction request 必須提供完整、有限
-且符合 frozen contract 的 23 features；intelligence request 只讀已入庫資料，不即時呼叫 provider、
-model 或 LLM。經 review/approval 後，下一個最小單元是 **F11 — LINE / Dashboard Demo**；不得
-自動修改或部署既有 GAS。
+F10 已把 F7/F8 接到 versioned FastAPI research endpoints。F11 再以 Streamlit 建立受控公開展示，
+預設只讀固定合成 fixture，也可選擇 loopback-only F10 API；兩種模式都不等同即時市場證據。
+下一個最小單元是 **F12 — Portfolio Finalization**。不得自動修改或部署既有 GAS。

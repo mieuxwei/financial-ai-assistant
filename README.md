@@ -29,7 +29,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F10 FastAPI integration complete / optional F9 not run / next: F11 / not deployed**。
+目前狀態：**F11 controlled Streamlit Dashboard complete / optional F9 not run / next: F12 / not deployed**。
 
 ## 研究演進
 
@@ -168,6 +168,12 @@ F10 已提供 versioned research API：`POST /api/v1/research/volatility-surpris
 FinBERT 結果，中文仍 abstain。API 不即時抓新聞、執行 NLP/LLM 或回傳私人持股；尚未部署。
 詳見 [F10 result](research/evaluation/f10_backend_integration_result.md)。
 
+F11 已建立 Streamlit Dashboard，預設讀取固定合成 fixture 且完全離線；也可選擇連接同一台
+電腦上的 F10 API。畫面呈現 continuous score、historical percentile、communication band、合成
+市場情境、中文 abstention 與英文 eligible-not-scored 情報。這不是即時 2330 資料、模型績效或
+投資訊號；F11 沒有修改 LINE/GAS、呼叫外部 provider 或部署。詳見
+[F11 result](research/evaluation/f11_dashboard_demo_result.md)。
+
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
 supervision 與來源治理已重新定位為 Track B 探索研究；其結果與 sealed-test 邊界均未刪除或改寫。
@@ -203,6 +209,16 @@ uvicorn backend.app.main:app --reload
 ```
 
 健康檢查位於 `GET http://127.0.0.1:8000/health`。
+
+## 啟動受控 Dashboard
+
+```bash
+python -m pip install -e ".[dev,demo]"
+streamlit run demo/app.py
+```
+
+預設「受控離線示範」不會發出網路請求；「本機 FastAPI」模式只允許 loopback origin。完整
+使用與安全邊界見 [demo/README.md](demo/README.md)。
 
 ## M2 持股 API
 

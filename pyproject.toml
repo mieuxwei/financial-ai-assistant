@@ -57,6 +57,7 @@ financial-ai-final-ranking-robustness = "jobs.final_ranking_robustness:main"
 financial-ai-final-model-freeze = "jobs.final_model_freeze:main"
 financial-ai-nlp-intelligence = "jobs.financial_nlp_intelligence:main"
 financial-ai-backend-integration = "jobs.backend_integration:main"
+financial-ai-dashboard-fixture = "demo.fixture_builder:main"
 
 [project.optional-dependencies]
 dev = [
@@ -75,9 +76,12 @@ audit = [
 annotation = [
   "openpyxl>=3.1,<4.0",
 ]
+demo = [
+  "streamlit>=1.62,<2.0",
+]
 
 [tool.setuptools.packages.find]
-include = ["backend*", "pipelines*", "research*", "jobs*", "line_adapter*", "scripts*"]
+include = ["backend*", "demo*", "pipelines*", "research*", "jobs*", "line_adapter*", "scripts*"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

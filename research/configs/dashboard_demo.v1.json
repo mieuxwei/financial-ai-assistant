@@ -1,0 +1,17 @@
+{
+  "schema_version": "dashboard-demo-config-v1",
+  "dashboard_version": "financial-ai-dashboard-v1",
+  "streamlit_version_constraint": ">=1.62,<2.0",
+  "app_title": "Financial AI Assistant",
+  "modes": ["CONTROLLED_OFFLINE", "LOCAL_API"],
+  "default_mode": "CONTROLLED_OFFLINE",
+  "fixture_path": "demo/fixtures/controlled_dashboard_demo.v1.json",
+  "local_api_default_base_url": "http://127.0.0.1:8000",
+  "allowed_api_hosts": ["127.0.0.1", "localhost", "::1"],
+  "maximum_intelligence_items": 10,
+  "controlled_data_only": true,
+  "private_holdings_in_demo": false,
+  "external_api_calls_in_offline_mode": false,
+  "automatic_gas_modification": false,
+  "deploy_in_f11": false
+}

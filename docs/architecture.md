@@ -284,3 +284,17 @@ frozen contract. The intelligence endpoint never fetches providers or runs model
 request. Both endpoints are public-research surfaces and exclude portfolio/private data. Existing
 portfolio ownership controls remain separate. Artifact absence/tampering fails closed; production
 authentication, rate limiting, scheduling and deployment remain outside F10.
+
+## F11 controlled dashboard boundary
+
+```text
+controlled synthetic fixture ───────────┐
+                                        ├→ Streamlit presentation
+loopback-only F10 API (optional) ───────┘   → score / percentile / band
+                                             + intelligence / lineage / disclaimers
+```
+
+Offline mode is the default and performs no network request. Local API mode accepts only explicit
+plain-HTTP loopback origins. The demo excludes holdings/private data and does not fetch providers,
+run NLP/LLM inference, modify GAS or deploy. Its fixed synthetic 2330 fixture demonstrates the
+interface contract and is not live data or performance evidence.

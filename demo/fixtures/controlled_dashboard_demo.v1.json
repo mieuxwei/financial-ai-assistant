@@ -1,0 +1,184 @@
+{
+  "schema_version": "controlled-dashboard-fixture-v1",
+  "fixture_id": "synthetic-2330-f11-v1",
+  "controlled_synthetic_data": true,
+  "actual_market_observation": false,
+  "performance_evaluation": false,
+  "private_or_user_data": false,
+  "company_display_name": "2330 台積電（受控示範）",
+  "data_notice": "所有數值與情報均為受控合成展示，不是 2330 的真實即時資料或投資訊號。",
+  "feature_context": {
+    "return_20_session_pct": 8.0,
+    "volatility_20_session_pct": 1.1,
+    "volume_zscore_20": 0.8,
+    "benchmark_return_20_session_pct": 4.0,
+    "benchmark_drawdown_20_session_pct": -2.0
+  },
+  "prediction_request": {
+    "ticker": "2330",
+    "as_of_date": "2026-08-28",
+    "information_cutoff": "2026-08-28T13:30:00+08:00",
+    "features": {
+      "return_log_1": 0.008,
+      "return_log_5": 0.025,
+      "return_log_10": 0.04,
+      "return_log_20": 0.08,
+      "overnight_gap_log_1": 0.002,
+      "close_ma_deviation_5": 0.01,
+      "close_ma_deviation_20": 0.04,
+      "volume_log_change_1p_1": 0.1,
+      "volume_zscore_20": 0.8,
+      "zero_volume_flag": 0.0,
+      "volatility_log_return_5": 0.012,
+      "volatility_log_return_20": 0.011,
+      "high_low_log_range_1": 0.018,
+      "atr_14_normalized": 0.016,
+      "parkinson_mean_5": 0.01,
+      "rsi_14": 58.0,
+      "macd_12_26_normalized": 0.005,
+      "macd_signal_9_normalized": 0.003,
+      "benchmark_return_log_1": 0.003,
+      "benchmark_return_log_20": 0.04,
+      "benchmark_volatility_log_return_20": 0.009,
+      "stock_minus_benchmark_return_log_1": 0.005,
+      "benchmark_drawdown_20": -0.02
+    }
+  },
+  "prediction_response": {
+    "schema_version": "volatility-surprise-prediction-response-v1",
+    "ticker": "2330",
+    "as_of_date": "2026-08-28",
+    "information_cutoff": "2026-08-28T13:30:00+08:00",
+    "predicted_volatility_surprise": "0.798630275062",
+    "historical_percentile": 87.459418,
+    "risk_band": "HIGH",
+    "model_version": "final-ridge-research-model-v1",
+    "feature_pipeline_version": "risk-features-v1",
+    "target_version": "next_session_stock_normalized_abs_log_return_v1",
+    "artifact_sha256": "279472ab0794d093cbff0ab5a171b43be16abc3a7abed56d938938235505d4de",
+    "claim_boundary": {
+      "research_signal_only": true,
+      "prospective_accuracy": false,
+      "price_direction_forecast": false,
+      "investment_advice": false,
+      "guaranteed_future_volatility": false
+    }
+  },
+  "intelligence_version": "financial-nlp-intelligence-v1",
+  "intelligence_items": [
+    {
+      "schema_version": "financial-nlp-intelligence-v1",
+      "item_id": "64d46ceda9df81759f7ba37717a706969c4c73b7e15078309c19ff0fb4500521",
+      "source": "controlled_demo",
+      "source_type": "controlled_official_announcement",
+      "published_at": "2026-08-28T09:00:00+08:00",
+      "language": "zh-TW",
+      "ticker_matches": [
+        {
+          "ticker": "2330",
+          "relevance_score": 1.0,
+          "match_method": "controlled_fixture"
+        }
+      ],
+      "sentiment": {
+        "status": "ABSTAIN",
+        "output_type": null,
+        "label": null,
+        "positive_probability": null,
+        "neutral_probability": null,
+        "negative_probability": null,
+        "score": null,
+        "model_version": null,
+        "input_hash": null,
+        "abstention_reason": "CHINESE_SENTIMENT_NOT_VALIDATED"
+      },
+      "official_metadata": {
+        "company_name": "受控範例公司",
+        "clause": "DEMO",
+        "fact_date": "2026-08-28"
+      },
+      "event_intelligence": {
+        "status": "SIGNAL",
+        "normalized_event_type": "REVENUE",
+        "impact_proxy": "POSITIVE",
+        "confidence": 0.8,
+        "abstention_reason": null,
+        "rule_revision": "taiwan-deterministic-rules-v1",
+        "sentiment_ground_truth": false,
+        "manual_review_used": false
+      },
+      "deterministic_cue_terms": ["取得重大訂單", "月營收", "營收成長"],
+      "source_excerpt": "合成公告摘要，只用於展示中文 abstention 與事件代理。",
+      "generated_summary": null,
+      "lineage": {
+        "external_id": "controlled-f11-zh-1",
+        "input_sha256": "6cfeb4d54b6ed005cdae0eff99671be726b4ad0c0f1b028fdcf558a3609ffda2",
+        "config_sha256": "de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4",
+        "sentiment_model_version": null
+      },
+      "claim_boundary": {
+        "chinese_sentiment_validated": false,
+        "event_proxy_is_sentiment_ground_truth": false,
+        "llm_generated": false,
+        "track_a_dependency": false
+      }
+    },
+    {
+      "schema_version": "financial-nlp-intelligence-v1",
+      "item_id": "ea7940b0ee7a9d8a69288d8f90925d7861faf35abb5516eb4194f7271d515b96",
+      "source": "controlled_demo",
+      "source_type": "controlled_news",
+      "published_at": "2026-08-27T16:00:00+08:00",
+      "language": "en",
+      "ticker_matches": [
+        {
+          "ticker": "2330",
+          "relevance_score": 0.9,
+          "match_method": "controlled_fixture"
+        }
+      ],
+      "sentiment": {
+        "status": "ELIGIBLE_NOT_SCORED",
+        "output_type": "ENGLISH_FINANCIAL_POLARITY",
+        "label": null,
+        "positive_probability": null,
+        "neutral_probability": null,
+        "negative_probability": null,
+        "score": null,
+        "model_version": "ProsusAI/finbert@4556d13015211d73dccd3fdd39d39232506f3e43",
+        "input_hash": null,
+        "abstention_reason": "OPTIONAL_MODEL_NOT_RUN"
+      },
+      "official_metadata": {
+        "company_name": null,
+        "clause": null,
+        "fact_date": null
+      },
+      "event_intelligence": {
+        "status": "ABSTAIN",
+        "normalized_event_type": null,
+        "impact_proxy": null,
+        "confidence": 0.0,
+        "abstention_reason": "NO_RULE_MATCH",
+        "rule_revision": "taiwan-deterministic-rules-v1",
+        "sentiment_ground_truth": false,
+        "manual_review_used": false
+      },
+      "deterministic_cue_terms": [],
+      "source_excerpt": "Synthetic English excerpt for an eligible but unscored FinBERT route.",
+      "generated_summary": null,
+      "lineage": {
+        "external_id": "controlled-f11-en-1",
+        "input_sha256": "7547465693b3c7c7f74e7a8c44003d83940567b0c17598fbef78721bba6dd970",
+        "config_sha256": "de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4",
+        "sentiment_model_version": null
+      },
+      "claim_boundary": {
+        "chinese_sentiment_validated": false,
+        "event_proxy_is_sentiment_ground_truth": false,
+        "llm_generated": false,
+        "track_a_dependency": false
+      }
+    }
+  ]
+}

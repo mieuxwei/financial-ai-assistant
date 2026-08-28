@@ -1,7 +1,7 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-28
-Status: F1–F8 and F10 complete; optional F9 not run; F11 pending review
+Status: F1–F8, F10 and F11 complete; optional F9 not run; F12 pending review
 
 ## Migration principle
 
@@ -83,7 +83,7 @@ result or used to claim prospective confirmation.
     endpoints with lineage. **Complete:** local research endpoints, strict lineage and
     database-only intelligence; not deployed.
 11. **F11 — LINE / Dashboard Demo:** relative-risk score plus traceable intelligence and research
-    disclaimers.
+    disclaimers. **Complete as a controlled Streamlit demo; LINE/GAS remains unchanged.**
 12. **F12 — Portfolio Finalization:** final narrative, comparisons, ranking visuals, limitations,
     abstract and demo script.
 

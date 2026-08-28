@@ -4,8 +4,8 @@ Last revised: 2026-08-28
 
 Direction: **continuous stock-normalized volatility-surprise forecasting**
 
-Current unit: **F10 FastAPI / Backend Integration complete**
-Next executable unit: **F11 only after user review/approval**
+Current unit: **F11 controlled Streamlit Dashboard complete**
+Next executable unit: **F12 only after user review/approval**
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -226,7 +226,7 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F8:** Financial NLP Intelligence — complete; abstention-safe contract, no model inference.
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
-- **F11:** LINE/dashboard demo.
+- **F11:** controlled Streamlit dashboard complete; LINE/GAS unchanged.
 - **F12:** portfolio finalization.
 
 No longer blocking: M12 six-month wait, a new untouched holdout, binary classifier success,
@@ -370,6 +370,25 @@ F4 implemented 1 persistence, 4 Ridge and 16 HGB parameterized candidates under 
 grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection and deterministic
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
-After user review, the next minimum executable unit is **F11 — LINE / Dashboard Demo**. It may use
-the F10 API contract but must not modify or deploy working GAS without separate approval. F9 remains
+## F11 ARTIFACTS AND RESULT
+
+- Dashboard：`demo/app.py`。
+- Strict contracts／safe API client／presentation：`demo/contracts.py`、`demo/client.py`、
+  `demo/presentation.py`。
+- Deterministic builder／controlled fixture：`demo/fixture_builder.py`、
+  `demo/fixtures/controlled_dashboard_demo.v1.json`。
+- Frozen config：`research/configs/dashboard_demo.v1.json`。
+- Tests：`tests/unit/test_dashboard_demo.py`、`tests/unit/test_dashboard_client.py`、
+  `tests/integration/test_streamlit_dashboard.py`。
+- Public result：`research/evaluation/f11_dashboard_demo_result.md`。
+- Canonical config SHA-256：
+  `0f70c88b6ea3b6e21177ae2fce6a4bef17d1b02a89a0dd7d491d425663ebc267`。
+- Canonical fixture SHA-256：
+  `c55f546ebe9ee94f616d518c205c18acb6b35683436dce1a312e7849c2935c06`。
+
+F11 預設完全離線且只顯示合成資料；本機 API 模式限 plain-HTTP loopback origin。合成分數由
+frozen F7 artifact 產生，但不是實際 2330 觀測或 performance evidence。中文 polarity 維持
+abstain，英文範例維持 eligible-not-scored。未修改 GAS、未部署、未呼叫 provider/LLM。
+
+After user review, the next minimum executable unit is **F12 — Portfolio Finalization**. F9 remains
 optional and non-blocking; Track A completion does not depend on NLP lift.

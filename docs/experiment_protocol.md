@@ -128,6 +128,11 @@ validation, not new performance evidence. The intelligence API is database-only 
 only an existing pinned English result; Chinese remains abstained. No request-time source fetch,
 NLP/LLM inference or future market target is allowed.
 
+F11 implementation status: the controlled Streamlit dashboard defaults to a deterministic
+synthetic fixture and may optionally call only a loopback F10 origin. The fixture is interface
+evidence, not a historical or prospective evaluation row. F11 performs no training, retuning,
+external-provider request, GAS modification or deployment.
+
 ## M5 sentiment reproducibility contract
 
 - Model: `ProsusAI/finbert` at revision `4556d13015211d73dccd3fdd39d39232506f3e43`.
