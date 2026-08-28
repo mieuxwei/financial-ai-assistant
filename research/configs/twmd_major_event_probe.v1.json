@@ -1,0 +1,15 @@
+{
+  "probe_version": "twmd-major-event-probe-v1",
+  "endpoint": "https://api.twmarketdata.com/v2/datasets/major-event-taxonomy",
+  "symbol": "2330",
+  "periods": [
+    {"label": "history_2018", "start_date": "2018-01-01", "end_date": "2018-12-31"},
+    {"label": "history_2022", "start_date": "2022-01-01", "end_date": "2022-12-31"},
+    {"label": "history_2024", "start_date": "2024-01-01", "end_date": "2024-12-31"}
+  ],
+  "limit": 1000,
+  "timeout_seconds": 30,
+  "max_response_bytes": 10000000,
+  "api_key_environment_variable": "TWMD_API_KEY",
+  "raw_retention": "ignored_local_cache_only"
+}

@@ -1,6 +1,6 @@
 # Taiwan Financial NLP Data Source Decisions
 
-Last reviewed: 2026-08-26
+Last reviewed: 2026-08-28
 
 ## Decision summary
 
@@ -15,7 +15,7 @@ source decisions are maintained in `research/evaluation/taiwan_dataset_governanc
 | [Taiwan Financial Sentiment Dictionary](https://github.com/RemiMFB/Taiwan-Financial-Sentiment-Dictionary) | Interpretable lexicon baseline | Auxiliary only | A lexicon is not an entity/event-labelled corpus. The historical M5.5 lexicon diagnostic also failed the project adoption gate. |
 | Fin-SoMe academic annotations | Historical/social-media comparison | HOLD | Task/domain differ from official company-event impact and the non-commercial research licence remains unaudited. |
 | Official MOPS/TWSE announcements sampled by time/event group | Structured metadata and automated text signals | ACCEPT for ingestion/metadata; training CONDITIONAL | Live OpenAPI and official fields verified; retention/licence, duplicate and leakage gates still apply to corpus use. |
-| FinMind `TaiwanStockNews` | News discovery/source metadata | CONDITIONAL; reaction events HOLD | Live timestamp/source/link fields verified, but timezone semantics, underlying news rights and duplicates remain unresolved. |
+| FinMind `TaiwanStockNews` | Deduplicated title-level discovery/intelligence | CONDITIONAL; reaction events and rich-text use HOLD | A 2018–2024 ten-ticker stratified audit retrieved 1,547 rows, but 2018–2019 samples were empty, descriptions were absent, exact-link duplicates were 25.21%, and all timestamps were timezone-naive with undocumented semantics. |
 | Official FSC law archives | Optional domain adaptation | ACCEPT for filtered non-commercial unlabelled adaptation feasibility | Five checksummed archives passed automated ZIP/schema/XML audit: 6,047 records, no exact or cross-agency content duplicates, 14 within-agency duplicate-content extra rows, ten unparseable publication dates and one empty content record. Mandatory filtering/deduplication applies; never sentiment truth. |
 | FinMind `TaiwanStockTotalReturnIndex` / `TAIEX` | Automatic market-reaction benchmark | ACCEPT for non-commercial research | Live anonymous bounded request and documented total-return schema verified; snapshot/calendar and deployment re-audit still apply. |
 | Historical individual stock prices | Automatic stock-return targets | CONDITIONAL | Must pass provider licence, calendar, corporate-action, missing-data and sealed-test leakage controls. |

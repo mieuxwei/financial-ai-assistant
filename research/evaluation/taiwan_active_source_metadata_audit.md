@@ -176,3 +176,15 @@ gate. The subsequent M7 builder retained 6,021 family-isolated records. The two-
 two-step CPU feasibility passed, followed by an explicitly approved 200-step bounded pilot. The
 pilot kept test sealed and weights ignored; it recommends BERT-base-Chinese for frozen
 representation only. Any larger/full-corpus run remains a separate future decision.
+
+## 2026-08-28 FinMind longitudinal addendum
+
+The new `finmind-news-longitudinal-audit-v1` expanded the earlier three-date 2330 check to the fixed
+ten-ticker universe over a deterministic 2018–2024 quarterly sample. All 280 requests completed and
+returned 1,547 rows. The 2018–2019 samples were entirely empty, 2020 returned only eight rows,
+descriptions were absent from every row, exact-link duplicates reached 25.21%, and no timestamp
+carried a timezone. Titles were present and 81.71% passed the frozen title-length rule, so
+deduplicated title-level intelligence is conditionally usable from the better-covered later years.
+Direct market-reaction weak supervision remains HOLD because the timestamp's publication-versus-
+ingestion meaning is still undocumented. See
+`research/evaluation/finmind_taiwan_stock_news_longitudinal_audit.md`.

@@ -1,0 +1,46 @@
+{
+  "audit_version": "finmind-news-longitudinal-audit-v1",
+  "endpoint": "https://api.finmindtrade.com/api/v4/data",
+  "dataset_id": "TaiwanStockNews",
+  "tickers": [
+    "0050",
+    "1301",
+    "1303",
+    "2308",
+    "2317",
+    "2330",
+    "2412",
+    "2454",
+    "2881",
+    "2882"
+  ],
+  "start_year": 2018,
+  "end_year": 2024,
+  "sampling_mode": "quarterly_weekday_sample",
+  "sample_months": [2, 5, 8, 11],
+  "sample_weekday": 2,
+  "sample_day_on_or_after": 14,
+  "maximum_requests": 280,
+  "max_workers": 8,
+  "timeout_seconds": 30,
+  "max_response_bytes": 2000000,
+  "required_fields": [
+    "date",
+    "stock_id",
+    "link",
+    "source",
+    "title"
+  ],
+  "optional_fields": ["description"],
+  "token_environment_variable": "FINMIND_API_TOKEN",
+  "raw_retention": "ignored_local_cache_only",
+  "timestamp_semantics_documented": false,
+  "timezone_documented": false,
+  "thresholds": {
+    "minimum_title_characters": 10,
+    "minimum_combined_characters": 30,
+    "minimum_usable_content_rate": 0.8,
+    "minimum_nonempty_description_rate": 0.5,
+    "maximum_exact_link_duplicate_rate": 0.15
+  }
+}
