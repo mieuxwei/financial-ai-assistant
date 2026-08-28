@@ -1,10 +1,13 @@
-# F11 Controlled Streamlit Dashboard Result
+# F11A Controlled Streamlit Dashboard Result
+
+R0 classification note: this immutable result is F11A. Its original post-F11 next-unit guidance is
+superseded by the R0 roadmap; the current next executable unit is B1, while F11B remains pending.
 
 Status: **COMPLETE — local controlled demo, not deployed**
 
 ## Scope
 
-F11 connects the already-frozen F7/F8/F10 product contracts to a Streamlit portfolio interface.
+F11A connects the already-frozen F7/F8/F10 product contracts to a Streamlit portfolio interface.
 It does not train, retune or reevaluate a model and does not change the working GAS adapter.
 
 ## Modes
@@ -38,5 +41,5 @@ examples preserve Chinese sentiment abstention and English eligible-but-not-scor
 - no investment advice, guaranteed future volatility or prospective-accuracy claim;
 - no GAS modification, deployment, automatic commit or push.
 
-F9 was not run and no NLP incremental-value claim is made. The next active unit is F12 portfolio
-finalization after review.
+F9 was not run and no NLP incremental-value claim is made. Under the later R0 rebaseline, F12 is
+last and the next executable unit is B1 Source Candidate Audit.

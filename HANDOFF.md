@@ -1,11 +1,38 @@
 # Financial AI Assistant — Authoritative Handoff
 
-Last revised: 2026-08-28
+Last revised: 2026-08-29
 
-Direction: **continuous stock-normalized volatility-surprise forecasting**
+ACTIVE PHASE: **R0 Project Rebaseline & GAS Safety Freeze — COMPLETE**
 
-Current unit: **F11 controlled Streamlit Dashboard complete**
-Next executable unit: **F12 only after user review/approval**
+NEXT EXECUTABLE UNIT: **B1 — Source Candidate Audit only**
+
+TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
+
+TRACK B: **ACTIVE — B1 → B2 → B3 → B4 → B5 → optional B6/F9**
+
+TRACK C: **F10 complete / F11A Streamlit complete / F11B LINE-GAS pending / F12 last**
+
+AP11: **optional enhancement; not a prerequisite**
+
+eLAND: **permanent historical exclusion; no active use, API call or re-audit**
+
+GAS: **future modification authorized only through the verified immutable backup, migration-copy
+and rollback rules; live behavior was not changed in R0**
+
+Current source decision: **TWMD HOLD — account/API entitlement is not usable; do not depend on it**
+
+## CURRENT REPOSITORY SNAPSHOT
+
+- Branch/remote state at handoff: local `main` and `origin/main` both point to `9eb09c7` (`a1`).
+- Commit `9eb09c7` already contains the FinMind longitudinal audit and TWMD entitlement-probe
+  implementation. R0 documentation changes remain uncommitted.
+- Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
+- The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
+  historical evidence and does not override it.
+- Local secret file `.env` is Git-ignored and untracked. Never display or commit its values.
+- The supplied private GAS originals remain unchanged at the user-provided Desktop paths. Verified
+  private copies now exist under ignored `.tools/private/gas-migration/r0-20260829/`; see
+  `docs/gas_migration_safety_freeze.md`.
 
 ## ACTIVE PROJECT DIRECTION
 
@@ -24,8 +51,31 @@ Primary research question:
 > Can leakage-safe price, volume, volatility and market-context features forecast next-session
 > volatility surprise relative to each stock's own historical volatility context?
 
-Track A now predicts a continuous next-session stock-normalized volatility-surprise score. Track B
-remains Financial NLP Intelligence. Track C remains the Python/FastAPI plus slim LINE/GAS product.
+Track A predicts a continuous next-session stock-normalized volatility-surprise score and is now
+complete/frozen. Track B is the active Taiwan Financial Sentiment / Impact Modeling and Financial
+NLP Intelligence program. Track C is the Python/FastAPI product with F11A Streamlit complete and
+F11B LINE/GAS integration pending.
+
+## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
+
+```text
+R0 Project Rebaseline & GAS Safety Freeze
+  → B1 Source Candidate Audit
+  → B2 Taiwan Financial Text Dataset
+  → B3 Domain Adaptation & Candidate Signals
+  → B4 Validation / Abstention Decision
+  → B5 NLP Intelligence Integration
+  → F11B-0 GAS Immutable Backup & Migration Copy
+  → F11B-1 Controlled LINE Financial AI Integration
+  → F11B-2 Current-Market Feature / Risk Integration (only if separately validated)
+  → B6 / F9 Optional NLP Incremental-Value Study
+  → F12 Portfolio Finalization
+```
+
+R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
+sequence. Track A is not in the active queue because it is frozen. Do not interleave B1–B4, begin
+F12 early or proceed beyond R0 without explicit user instruction. Definitions of Done are frozen in
+`docs/r0_project_rebaseline_protocol.md`.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -211,10 +261,43 @@ Preserve:
 - TWSE/FinMind/TEJ source and licensing audits;
 - Eland permanent `HOLD / excluded from active modeling` record.
 
-Chinese sentiment may abstain. Never fabricate Positive/Neutral/Negative probabilities. Optional
-F9 NLP incremental-value work uses the same outer folds and model budget and cannot block F12.
+Chinese sentiment currently **must abstain**. Never fabricate Positive/Neutral/Negative
+probabilities. Track B now follows exactly:
 
-## ACTIVE F-SERIES
+1. **B1 Source Candidate Audit** — next, no training;
+2. **B2 Taiwan Financial Text Dataset** — only B1-approved sources;
+3. **B3 Domain Adaptation & Candidate Signals** — compact open-source candidate set;
+4. **B4 Validation / Abstention Decision** — frozen gate, no post-result lowering;
+5. **B5 NLP Intelligence Integration** — expose only B4-supported capabilities;
+6. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
+
+The preferred B4 sentiment gate remains macro-F1 `>=0.70` and recall `>=0.60` for every required
+class. Possible outcomes are `VALIDATED`, `AUTOMATED_SIGNAL_ONLY` or `ABSTAIN`. The project retains
+the zero-manual-label, zero-manual-review and no-human-adjudication requirements.
+
+AP11 is an optional future source enhancement, not required before Chinese NLP, F11B or F12. eLAND
+is prohibited permanently from datasets, models, APIs, audits, weak supervision, features,
+training and candidate comparisons; retain only its historical rejection record.
+
+### Taiwan source status at this handoff
+
+- **FinMind `TaiwanStockNews`: CONDITIONAL for deduplicated title-level intelligence; HOLD for
+  market-reaction weak supervision and rich-text modeling.** The 2018–2024 ten-ticker stratified
+  audit made 280 successful requests and observed 1,547 rows. Sampled 2018–2019 were empty,
+  descriptions were absent, timestamps were timezone-naive/semantically undocumented, exact-link
+  duplicates were 25.21% and exact-title duplicates were 20.49%. Raw responses remain only in
+  ignored `.tools/` storage.
+- **TWMD major-event taxonomy: HOLD / currently unavailable.** A safe 2330 entitlement probe for
+  2018, 2022 and 2024 received HTTP 402 for all three periods and returned zero usable rows. This
+  does not establish dataset coverage, quality or licensing fitness. Do not use TWMD for training,
+  evaluation, NLP features, weak supervision or product claims unless access is later activated and
+  a new provenance/licensing/timestamp/duplicate audit passes.
+- The TWMD key, if retained locally, belongs only in ignored `.env`. The public `.env.example`
+  contains an empty variable name, never a value.
+- **Eland remains permanent HOLD / excluded from active modeling.** TWMD being unavailable does not
+  reactivate Eland.
+
+## FROZEN F-SERIES RECORD AND CURRENT PRODUCT STATUS
 
 - **F1:** protocol/config/schema/safety-test freeze — planning scope complete.
 - **F2:** historical continuous dataset rebuild — complete.
@@ -226,12 +309,14 @@ F9 NLP incremental-value work uses the same outer folds and model budget and can
 - **F8:** Financial NLP Intelligence — complete; abstention-safe contract, no model inference.
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
-- **F11:** controlled Streamlit dashboard complete; LINE/GAS unchanged.
-- **F12:** portfolio finalization.
+- **F11A:** controlled Streamlit dashboard complete; not deployed.
+- **F11B:** LINE/GAS integration pending. F11B-0 safety copy exists; F11B-1/2 have not started.
+- **F12:** portfolio finalization pending and last; it is not the next executable unit.
 
 No longer blocking: M12 six-month wait, a new untouched holdout, binary classifier success,
-regime-threshold deployment, validated Chinese sentiment, positive NLP lift, TEJ AP11 or trading
-profitability.
+regime-threshold deployment, validated Chinese sentiment, positive NLP lift, TEJ/AP11 or trading
+profitability. AP11 is optional; no standalone committed AP11/TEJ source-audit report was found in
+R0, so historical wording must not imply that such evidence exists.
 
 ## F1 ARTIFACTS
 
@@ -351,11 +436,131 @@ English sentiment rows and preserves Chinese abstention. F10 makes no external r
 model, exposes no private portfolio data, modifies no GAS and performs no deployment. F9 was not
 run and no NLP-lift claim exists.
 
+## PRIVATE GAS / LINE HANDOFF
+
+Status: **working private prototype; immutable backup/migration copy verified; live behavior
+unchanged; F11B integration pending**.
+
+Authoritative private inputs inspected:
+
+- `/Users/xander/Desktop/code.gs`;
+- `/Users/xander/Desktop/appsscript.json`.
+
+They are not repository artifacts and must not be copied into this public/research repository.
+`gas_legacy/README.md` remains a warning-only placeholder; `line_adapter/` remains a transitional
+boundary, not a deployed integration.
+
+The user now authorizes future Codex modification of the **private migration copy**, but only under
+`docs/gas_migration_safety_freeze.md`. The sole live/original source must remain recoverable. R0
+does not authorize a behavioral edit or deployment.
+
+R0 backup state:
+
+- immutable source: `.tools/private/gas-migration/r0-20260829/immutable-original/` (`0400`);
+- migration copy: `.tools/private/gas-migration/r0-20260829/migration-copy/` (`0600`);
+- both `code.gs` and `appsscript.json` matched the Desktop originals by `cmp` and SHA-256;
+- `.tools/` is Git-ignored; no private source or identifier was added to the public repository.
+
+### Existing GAS functions to preserve at product level
+
+- LINE `doPost` webhook routing for follow, text and image events;
+- authorized-user allowlist and per-user temporary state in Script Properties;
+- LINE reply/push and Flex Message menu, portfolio, report, alert, help and quota cards;
+- Gemini-based text/broker-screenshot extraction with confirmation before writing holdings;
+- single-row add/update and full portfolio synchronization in Google Sheets;
+- holdings freshness warning and last-update timestamp;
+- Yahoo chart lookup for `.TW`/`.TWO`, current price, daily change, ROI, 5-day and 20-day averages;
+- portfolio cards, stop-profit/stop-loss alerts, morning and afternoon report entry points;
+- Perplexity on-demand news/research with citations;
+- usage counters, estimated provider balance and Sheet-based error logging.
+
+The code defines `morningPushReport` and `afternoonPushReport`, but installed Apps Script triggers
+are external project state and cannot be proven from `code.gs` or the manifest. Their schedules and
+last-run status must be checked manually in Apps Script before migration.
+
+### Current GAS storage and external services
+
+- Script Properties hold the main LINE user/token, Gemini key, Perplexity key and Spreadsheet ID.
+- Google Sheets is the live private holdings store and error log.
+- A legacy source-backup helper writes project source into a Google Doc.
+- External calls include LINE Messaging/Data APIs, Gemini, Perplexity, Yahoo Finance and Google
+  Apps Script/Drive/Docs/Sheets services.
+- The manifest uses V8, `Asia/Taipei`, broad Script/Docs/Drive/Sheets/external-request scopes and an
+  anonymously reachable web-app deployment executed as the deploying user.
+
+### GAS security and correctness risks
+
+- The webhook handler does not verify a LINE request signature and processes only the first event.
+- Anonymous web-app access is combined with an allowlist plus a hard-coded shared challenge; this
+  is not adequate public authentication.
+- Mutating `EXECUTE|...` and `SYNC|...` commands carry holdings fields inside LINE message text and
+  are not cryptographically bound to a preview, user, expiry or one-time nonce.
+- Full synchronization clears Sheet rows before rebuilding them and uses no `LockService`, database
+  transaction or idempotency key; concurrent/replayed events can corrupt holdings.
+- The legacy file still contains hard-coded Google resource IDs in backup/authorization helpers.
+  Do not copy them, and move them to private configuration if those helpers remain.
+- Real holdings, cost basis and broker screenshots are sent to external AI services in the private
+  prototype. This is incompatible with the controlled public research edition.
+- Perplexity prompts currently request actionable buy/sell guidance, which conflicts with the final
+  research-only/non-investment-advice claim boundary.
+- Provider calls, Sheet access, presentation, persistence and orchestration are coupled in one large
+  file; retries can repeat side effects and error logs may retain excessive provider details.
+- Credential rotation after any historical exposure was user-reported previously but is not
+  independently verifiable from source. Never record credential values in this handoff.
+
+### Target GAS architecture
+
+Keep GAS deliberately thin:
+
+```text
+LINE webhook
+  → minimal event parsing / routing
+  → signed, authenticated request to Python backend
+  → receive versioned response contract
+  → LINE reply / push / Flex rendering
+```
+
+Keep in GAS during the transition:
+
+- LINE webhook entry point and reply-token timing;
+- minimal command/menu routing;
+- Flex Message rendering and scheduled push trigger entry points;
+- only secrets strictly required for LINE and backend authentication, stored in Script Properties.
+
+Move to Python/FastAPI:
+
+- verified LINE signature processing and identity mapping;
+- portfolio validation, preview/confirm, idempotency, transactions and persistence;
+- screenshot/OCR orchestration and privacy controls;
+- market/news ingestion, price features, NLP/LLM use, F7 inference and intelligence retrieval;
+- scheduling, retries, quotas, observability and audit logs;
+- all research claims, lineage, model versions and abstention rules.
+
+Do not connect the current GAS directly to F10 yet. F10 is local/research-only, the prediction
+endpoint requires an exact 23-feature vector, the intelligence endpoint performs no live fetch,
+and production authentication/rate limiting/deployment are not implemented. The current
+`X-User-ID` portfolio contract is development-only and must never be treated as public auth.
+
+### Safe F11B migration sequence
+
+1. **F11B-0:** immutable backup/migration copy — safety prerequisite completed in R0; trigger and
+   deployment IDs/schedules remain unknown because they are not present in the supplied files.
+2. **F11B-1A:** add only new `risk`/`intel`/optional `news` routing in the migration copy; do not
+   alter holdings, Sheet schema, screenshot writes, legacy commands or schedules.
+3. **F11B-1B:** use deterministic fixture or stored validated snapshot and visibly label
+   `CONTROLLED RESEARCH DEMO`.
+4. **F11B-2:** current-market inference only after audited OHLCV/TAIEX, exact 23-feature parity,
+   cutoff/timezone/missing-data lineage and separate validation.
+5. Portfolio-write migration remains later work and must not be used as the first integration step.
+
+Do not deploy, change the live webhook/trigger schedule or edit live holdings without the
+corresponding future milestone instruction and rollback verification.
+
 ## SAFETY AND NEXT ACTION
 
 Do not rewrite F5/F6/F7/F8/F10 evidence, retune the frozen Ridge from subgroup results, rerun M7,
 fabricate Chinese sentiment, create a fake sealed test, modify working GAS, deploy, commit or push
-during the F8 stop boundary.
+during the R0 stop boundary. Do not start B1 automatically.
 
 Run and preserve automated checks for random-split prohibition, exact next session, `t+1` mutation,
 rolling shift, target-field exclusion, duplicate ticker/date, inner/outer isolation, fold-local
@@ -370,7 +575,7 @@ F4 implemented 1 persistence, 4 Ridge and 16 HGB parameterized candidates under 
 grid. Synthetic tests confirm training-only scaling, temporal-overlap rejection and deterministic
 fit manifests/predictions. See `research/evaluation/f4_regression_candidates_result.md`.
 
-## F11 ARTIFACTS AND RESULT
+## F11A ARTIFACTS AND RESULT
 
 - Dashboard：`demo/app.py`。
 - Strict contracts／safe API client／presentation：`demo/contracts.py`、`demo/client.py`、
@@ -386,9 +591,61 @@ fit manifests/predictions. See `research/evaluation/f4_regression_candidates_res
 - Canonical fixture SHA-256：
   `c55f546ebe9ee94f616d518c205c18acb6b35683436dce1a312e7849c2935c06`。
 
-F11 預設完全離線且只顯示合成資料；本機 API 模式限 plain-HTTP loopback origin。合成分數由
+F11A 預設完全離線且只顯示合成資料；本機 API 模式限 plain-HTTP loopback origin。合成分數由
 frozen F7 artifact 產生，但不是實際 2330 觀測或 performance evidence。中文 polarity 維持
 abstain，英文範例維持 eligible-not-scored。未修改 GAS、未部署、未呼叫 provider/LLM。
 
-After user review, the next minimum executable unit is **F12 — Portfolio Finalization**. F9 remains
-optional and non-blocking; Track A completion does not depend on NLP lift.
+F11A 展示內容包括：next-session relative volatility-surprise score、歷史 percentile、
+LOW/MODERATE/HIGH/VERY HIGH communication band、合成 feature context、近期 intelligence、
+lineage 與研究／非投資建議聲明。它不是持股 Dashboard，也不顯示真實個資。
+
+本機啟動：
+
+```bash
+python -m pip install -e ".[dev,demo]"
+streamlit run demo/app.py
+```
+
+若要使用 `LOCAL_API` 模式，另開終端執行 `uvicorn backend.app.main:app --reload`。F10 提供：
+
+- `POST /api/v1/research/volatility-surprise/predict`；
+- `GET /api/v1/research/intelligence/{ticker}`；
+- `GET /health`。
+
+Dashboard client 只接受帶明確 port 的 `http://127.0.0.1`、`http://localhost` 或
+`http://[::1]`，拒絕外部 host、credentials、path、query 與 fragment。
+
+## R0 GIT / AUDIT SNAPSHOT
+
+Commit `9eb09c7` already tracks:
+
+- FinMind audit files:
+  `research/configs/finmind_news_longitudinal_audit.v1.json`,
+  `research/evaluation/finmind_news_longitudinal_audit.py`,
+  `research/evaluation/finmind_taiwan_stock_news_longitudinal_audit.md`,
+  `tests/unit/test_finmind_news_longitudinal_audit.py`;
+- TWMD HOLD/probe files:
+  `research/configs/twmd_major_event_probe.v1.json`,
+  `research/evaluation/twmd_major_event_probe.py`,
+  `tests/unit/test_twmd_major_event_probe.py`;
+- the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
+
+R0 modifies the three core documents, related architecture/migration/F11A records, GAS boundary
+READMEs, two new R0 safety protocols and one documentation-contract test. It also renames one TWMD
+probe local variable to remove a secret-scanner false positive without changing behavior. Exact
+worktree state must be taken from final `git status`. No commit or push is authorized.
+
+Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
+artifacts and `.env`. Never add them with a forced Git add.
+
+Most recent validation after this handoff update:
+
+- full project suite: 229 tests passed;
+- full Ruff check, `git diff --check` and repository secret scan passed;
+- TWMD live entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
+
+No automatic commit or push is authorized.
+
+After R0 review, the next one executable unit is **B1 — Source Candidate Audit**. Do not begin B1
+automatically. F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and
+must not be reopened.

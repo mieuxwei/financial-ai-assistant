@@ -285,7 +285,7 @@ request. Both endpoints are public-research surfaces and exclude portfolio/priva
 portfolio ownership controls remain separate. Artifact absence/tampering fails closed; production
 authentication, rate limiting, scheduling and deployment remain outside F10.
 
-## F11 controlled dashboard boundary
+## F11A controlled dashboard boundary
 
 ```text
 controlled synthetic fixture ───────────┐

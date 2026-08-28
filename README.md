@@ -18,9 +18,12 @@ external validation。
 
 ## 三軌定位
 
-- **Track A — Core Research**：continuous stock-normalized volatility-surprise forecasting。
-- **Track B — NLP Intelligence**：英文 FinBERT 與探索性台灣公告／金融 NLP。
-- **Track C — Product**：整合風險、市場、新聞、公告及摘要的 Financial Intelligence Assistant。
+- **Track A — COMPLETE / FROZEN**：continuous stock-normalized volatility-surprise forecasting；
+  final Ridge Regression `alpha=100`。
+- **Track B — ACTIVE**：Taiwan Financial Sentiment / Impact Modeling and Financial NLP
+  Intelligence；依 B1→B2→B3→B4→B5→optional B6/F9 執行。
+- **Track C — Product**：F10 FastAPI complete、F11A controlled Streamlit complete、F11B
+  LINE/GAS pending、F12 last。
 
 本系統不是自動交易系統、AI 選股神諭、買賣建議或保證報酬工具。
 
@@ -29,7 +32,16 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F11 controlled Streamlit Dashboard complete / optional F9 not run / next: F12 / not deployed**。
+目前狀態：**R0 rebaseline/safety freeze complete / next: B1 only / not deployed**。
+
+- 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
+- AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
+- eLAND 永久排除於 active work，只保留歷史拒絕證據。
+- GAS 後續只可在 verified private migration copy 上依 rollback 規則演進；R0 未改 live behavior。
+
+單一正式 roadmap 與 Definition of Done 見
+[R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見
+[GAS migration safety freeze](docs/gas_migration_safety_freeze.md)。
 
 ## 研究演進
 
@@ -168,11 +180,16 @@ F10 已提供 versioned research API：`POST /api/v1/research/volatility-surpris
 FinBERT 結果，中文仍 abstain。API 不即時抓新聞、執行 NLP/LLM 或回傳私人持股；尚未部署。
 詳見 [F10 result](research/evaluation/f10_backend_integration_result.md)。
 
-F11 已建立 Streamlit Dashboard，預設讀取固定合成 fixture 且完全離線；也可選擇連接同一台
+F11A 已建立 Streamlit Dashboard，預設讀取固定合成 fixture 且完全離線；也可選擇連接同一台
 電腦上的 F10 API。畫面呈現 continuous score、historical percentile、communication band、合成
 市場情境、中文 abstention 與英文 eligible-not-scored 情報。這不是即時 2330 資料、模型績效或
-投資訊號；F11 沒有修改 LINE/GAS、呼叫外部 provider 或部署。詳見
+投資訊號；F11A 沒有修改 LINE/GAS、呼叫外部 provider 或部署。詳見
 [F11 result](research/evaluation/f11_dashboard_demo_result.md)。
+
+F11B LINE/GAS integration 尚未開始。R0 已建立 private immutable backup 與 migration copy，未改
+live GAS。未來先加入唯讀、受控的 `risk`／`intel` routing；既有持股寫入、Sheet schema、券商截圖
+與排程不在第一階段修改。即時風險必須等 audited current market source 與 exact 23-feature parity
+驗證後才可啟用。
 
 既有安全基礎、FastAPI、持股、市場／新聞／英文 FinBERT 管線與 feature foundation 均保留。原
 M5.5–M9 的中文模型診斷、FSC audit/corpus、BERT/MacBERT pilot、market-reaction engine、weak
@@ -185,8 +202,9 @@ supervision 與來源治理已重新定位為 Track B 探索研究；其結果�
 
 目前 FastAPI 提供健康檢查與具 ownership 邊界的持股 API，SQLite 作為本機預設資料庫，
 PostgreSQL 為部署目標。Python 負責市場／新聞 ingestion、volatility-surprise features、模型、NLP、時間序列評估
-與排程；LINE/GAS adapter 維持在服務邊界。Track A 可在中文 sentiment 維持 unsupported 時獨立
-完成；Track B 以情報、metadata、embedding、retrieval 與可選消融提供產品研究價值。
+與排程；LINE/GAS adapter 維持在服務邊界。Track A 已在中文 sentiment 維持 unsupported 時獨立
+完成並凍結；Track B 依 B1–B5 建立台灣金融文字能力，並以情報、metadata、embedding、retrieval
+與可選 B6/F9 消融提供產品研究價值。
 
 ## 本機安裝
 
@@ -230,7 +248,7 @@ streamlit run demo/app.py
 - `POST /users/{user_id}/portfolio-sync/preview`
 - `POST /users/{user_id}/portfolio-sync/{operation_id}/confirm`
 
-過渡期 API 要求 `X-User-ID` 與路徑中的 `user_id` 相同，以測試 ownership 隔離。這不是公開環境的最終身份驗證；依 PROJECT_PLAN，M18 必須改由通過 LINE signature 驗證的 backend 身分提供 user context。
+過渡期 API 要求 `X-User-ID` 與路徑中的 `user_id` 相同，以測試 ownership 隔離。這不是公開環境的最終身份驗證；F11B 必須改由具服務驗證、replay protection 與可靠 LINE identity mapping 的 backend boundary 提供 user context。
 
 批次同步先建立 15 分鐘有效的一次性 operation，再由 confirm 原子套用。重複 confirm 不會重複新增持股。
 
@@ -296,7 +314,8 @@ financial-ai-sentiment
 
 歷史 M5.5 診斷已比較透明詞典、兩個中文金融 BERT、多語金融模型，以及本機翻譯後接英文 FinBERT。所有候選都未通過 TWSE context set 的採用門檻，因此目前仍不產生中文 sentiment。接下來的台灣 NLP 路線會把 event type、financial impact、textual sentiment 與 historical market reaction 分開研究；MacBERT 只是待驗證候選，不是既定成功模型。比較結果見 `research/evaluation/chinese_sentiment_model_comparison.md`，後續協定見 `PROJECT_PLAN.md`。
 
-執行人工樣本 error analysis：
+以下是歷史英文人工樣本 error-analysis CLI，僅保留為既有工具記錄；**不屬於目前 B1–B6
+zero-manual-label/review 路線，請勿在 active Track B 建立或覆核人工標籤**：
 
 ```bash
 financial-ai-sentiment-audit \

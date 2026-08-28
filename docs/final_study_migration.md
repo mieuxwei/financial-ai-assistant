@@ -1,7 +1,8 @@
 # Final Study Migration Map
 
 Migration date: 2026-08-28
-Status: F1–F8, F10 and F11 complete; optional F9 not run; F12 pending review
+Status: historical F-series mapping; R0 reclassifies F11 as F11A complete / F11B pending and makes
+B1 the next executable unit. See `docs/r0_project_rebaseline_protocol.md`.
 
 ## Migration principle
 
@@ -82,9 +83,10 @@ result or used to claim prospective confirmation.
 10. **F10 — FastAPI / Backend Integration:** continuous score, percentile, band and intelligence
     endpoints with lineage. **Complete:** local research endpoints, strict lineage and
     database-only intelligence; not deployed.
-11. **F11 — LINE / Dashboard Demo:** relative-risk score plus traceable intelligence and research
-    disclaimers. **Complete as a controlled Streamlit demo; LINE/GAS remains unchanged.**
-12. **F12 — Portfolio Finalization:** final narrative, comparisons, ranking visuals, limitations,
+11. **F11A — Controlled Streamlit Dashboard:** relative-risk score plus traceable intelligence and
+    research disclaimers. **Complete; not deployed.**
+12. **F11B — LINE/GAS Integration:** **pending** under the R0 backup/rollback boundary.
+13. **F12 — Portfolio Finalization:** final narrative, comparisons, ranking visuals, limitations,
     abstract and demo script.
 
 ## Explicitly no longer blocking

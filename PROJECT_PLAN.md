@@ -1,9 +1,23 @@
 # Financial AI Assistant — Final Project Plan
 
-Plan version: `final-volatility-surprise-study-v1`
+Plan version: `r0-project-rebaseline-v1`
 
-Last revised: 2026-08-28
-Active milestone: **F11 complete; optional F9 not run; next review unit is F12**
+Last revised: 2026-08-29
+Active milestone: **R0 complete; next executable unit is B1 Source Candidate Audit only**
+
+Authoritative state:
+
+- **Track A:** complete/frozen; Ridge Regression `alpha=100`; do not reopen.
+- **Track B:** active; B1 → B2 → B3 → B4 → B5 → optional B6/F9.
+- **Track C:** F10 complete; F11A Streamlit complete; F11B LINE/GAS pending; F12 last.
+- **AP11:** optional enhancement, not a prerequisite.
+- **eLAND:** permanent historical exclusion; no active use or re-audit.
+- **GAS:** future private migration-copy modification authorized only under the immutable
+  backup/rollback rules in `docs/gas_migration_safety_freeze.md`.
+
+The single canonical execution sequence and Definitions of Done are frozen in
+`docs/r0_project_rebaseline_protocol.md`. Historical milestone documents remain evidence but do not
+override this roadmap.
 
 ## 1. Final Project Identity
 
@@ -89,13 +103,14 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 
 ### Track A — Continuous Volatility-Surprise Forecasting
 
+- **Status: COMPLETE / FROZEN.** Final model is Ridge Regression, alpha 100;
 - 使用 leakage-safe price、volume、volatility、compact technical 與 TAIEX context features；
 - 預測下一交易日 stock-normalized volatility surprise 連續值；
 - 以 nested／rolling-origin historical OOS protocol 評估；
 - 強調 ranking、decile lift、時間與 ticker robustness；
 - 產出 continuous score、historical percentile 與 communication band。
 
-### Track B — Financial NLP Intelligence
+### Track B — Taiwan Financial Sentiment / Impact Modeling and Financial NLP Intelligence
 
 - 保留 pinned English FinBERT polarity pipeline；
 - 保留 Chinese/Taiwan diagnostic failures、FSC corpus、BERT/MacBERT feasibility、TWSE
@@ -103,14 +118,43 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 - 中文 sentiment 不支援時輸出 `unsupported`／`abstain`，不偽造 polarity probability；
 - 可提供 entity/event metadata、keyphrases、embedding、retrieval、related events 與 structured
   summary；
-- optional F9 只在 timestamp-safe features 已可用時執行 paired ablation。
+- active sequence 固定為 B1 source audit → B2 dataset → B3 domain adaptation/signals → B4
+  validation/abstention → B5 integration → optional B6/F9；不得跳階；
+- zero manual annotation/review/adjudication 持續有效；
+- AP11 optional；eLAND 永久禁止 active use；
+- optional B6/F9 只在 timestamp-safe features 已可用時執行 paired ablation。
 
 ### Track C — Financial Intelligence Product
 
+- **F10 complete；F11A Streamlit complete；F11B LINE/GAS pending；F12 pending and last；**
 - Python backend 擁有 ingestion、features、ML、NLP、evaluation、inference、database 與 jobs；
 - GAS／LINE 只作 transitional adapter、event routing、API calls、reply/push/Flex UX；
 - UI 顯示 relative volatility-surprise score、percentile、band、context 與 recent intelligence；
 - 不把 ML、NLP、秘密或多使用者資料邏輯搬回 GAS。
+
+## 5.1 Canonical Active Roadmap and Definition of Done
+
+```text
+R0 → B1 → B2 → B3 → B4 → B5 → F11B-0 → F11B-1 → F11B-2 → optional B6/F9 → F12
+```
+
+R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此跳過 B1–B5 或開始 F11B-1。
+
+| Unit | Status | Definition of Done |
+| --- | --- | --- |
+| R0 | Complete | 文件只有一條 roadmap；Track A frozen；GAS original/immutable/migration copy 通過 byte/hash 驗證；無 live behavior change。 |
+| B1 Source Candidate Audit | Next / not started | 每來源完成 provenance、rights、access、language、ticker mapping、text/timestamp/timezone、coverage、duplicates、revision、delay、missingness、storage/redistribution 稽核；產出 purpose-specific decision 與 frozen source manifest；不訓練。 |
+| B2 Taiwan Financial Text Dataset | Not started | 僅納入 B1-approved sources；凍結 normalized schema、ticker/time normalization、dedup、lineage、availability/retention rules、coverage/rights audit 與 dataset version；未凍結前不訓練 sentiment。 |
+| B3 Domain Adaptation & Candidate Signals | Not started | 使用 compact open-source candidate set、pinned revisions/configs 與 B2 partitions；重用 FSC/BERT/MacBERT 合法證據；不使用 eLAND、未來資料或 model zoo。 |
+| B4 Validation / Abstention | Not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
+| B5 NLP Intelligence Integration | Not started | 只整合 B4 支援能力；unsupported Chinese polarity 保持 null/abstain；event/impact/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
+| F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
+| F11B-1 Controlled LINE integration | Pending | migration copy 只新增 additive `risk`/`intel`/optional `news` routes；legacy holdings/Sheet/screenshots/triggers 不改；使用 fixture/stored snapshot 並標示 controlled demo；service auth/replay/timeout/idempotency/identity/rate/audit tests 通過。 |
+| F11B-2 Current-market integration | Conditional / pending | audited current OHLCV/TAIEX、cutoff/timezone/missingness/lineage 與 exact 23-feature parity tests 全部通過；GAS 不自行拼湊特徵。 |
+| B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
+| F12 Portfolio Finalization | Pending / last | 完成 final workflow、README、visuals、abstract、demo、limitations/security/privacy；如實標明未完成/optional/live limitations；tests/lint/secret/reproducibility 全通過。 |
+
+詳細規格：`docs/r0_project_rebaseline_protocol.md`。
 
 ## 6. Frozen Primary Target
 
@@ -328,7 +372,7 @@ final completion path 或 production model。這些結果是 final continuous fo
 不得宣稱 validated Chinese sentiment、人工 gold truth 或 causal impact。Eland 不得進 training、
 adaptation、voting、evaluation、feature construction 或 corpus merge。
 
-## 15. Final Study Milestones F1–F12
+## 15. Frozen Historical F-Series Record
 
 1. **F1 — Final Research Protocol Freeze：**凍結 questions、target、features、outer/inner
    protocol、models、metrics、ranking、claims、schema/tests。**本次 planning scope 完成。**
@@ -354,9 +398,11 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
 10. **F10 — FastAPI / Backend Integration：**score、percentile、band、lineage、intelligence APIs。
     **完成：F7 safe-JSON lazy inference、F8 database-only intelligence、strict schemas、lineage
     guards、structured errors；無外部 API/訓練/部署，F9 未執行。**
-11. **F11 — LINE / Dashboard Demo：**relative-risk score、context、intelligence、disclaimers。
-    **完成：Streamlit 受控離線 fixture＋loopback-only F10 client；未修改 LINE/GAS、未部署。**
-12. **F12 — Portfolio Finalization：**workflow、comparison、visuals、robustness、abstract、demo、limits。
+11. **F11A — Controlled Streamlit Dashboard：**relative-risk score、context、intelligence、
+    disclaimers。**完成：受控離線 fixture＋loopback-only F10 client；未部署。**
+12. **F11B — LINE/GAS Integration：****PENDING**。F11B-0 私有安全備份已在 R0 完成；
+    F11B-1/2 未開始。
+13. **F12 — Portfolio Finalization：****PENDING AND LAST**；不是 R0 後的下一單元。
 
 ## 16. Definition of Done
 
@@ -378,15 +424,15 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 - inner selection contained inside outer training；
 - dataset/config/model/OOF hashes deterministic where feasible；
 - secrets 只進 ignored `.env`；raw/private/restricted data 保持 ignored；
-- GAS 不修改、ML 不搬入 GAS、無 deploy 或 automatic commit/push。
+- live GAS 在 R0 不修改；後續只可修改 verified migration copy 並遵守 rollback gate；ML/NLP
+  不搬入 GAS；無 automatic deploy/commit/push。
 
 ## 18. Immediate Execution Boundary
 
-F1–F8、F10 與 F11 已完成；F9 維持 optional/not run。F7 依 frozen practical-tie rule 以較低 mean outer MAE 選 Ridge，再以 2023–2025
-training-history-only validation 選 alpha 100，並以 32,357 rows 建立 safe JSON artifact。這不代表
-prospective accuracy 或精準 magnitude prediction。M7 evaluation sequence 永久為 1，禁止呼叫或
-重跑 M7。不得回頭利用 F6 subgroup 結果調參、修改 working GAS、deploy、commit 或 push。
+R0 完成後只能停在 rebaseline/safety-freeze boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
+M7 evaluation sequence 固定為 1。F10 與 F11A 完成但未部署；F11B pending；F12 last；B6/F9
+optional。
 
-F10 已把 F7/F8 接到 versioned FastAPI research endpoints。F11 再以 Streamlit 建立受控公開展示，
-預設只讀固定合成 fixture，也可選擇 loopback-only F10 API；兩種模式都不等同即時市場證據。
-下一個最小單元是 **F12 — Portfolio Finalization**。不得自動修改或部署既有 GAS。
+下一個且唯一 executable unit 是 **B1 — Source Candidate Audit**，必須另有使用者指令才可開始。
+R0 不進行外部 B1 data collection、不訓練、不產生 pseudo labels、不呼叫 eLAND/AP11/TWMD paid
+datasets、不修改 live GAS、webhook、trigger、Sheet 或 holdings，也不 deploy、commit 或 push。

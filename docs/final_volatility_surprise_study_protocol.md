@@ -2,7 +2,7 @@
 
 Protocol version: `stock-normalized-volatility-surprise-final-v1`  
 Milestone: `F1 — Final Research Protocol Freeze`  
-Status: **FROZEN — implementation complete through F8, F10 and F11; optional F9 not run**
+Status: **FROZEN — Track A complete; F8/F10/F11A complete; F11B pending; optional F9 not run**
 Canonical config SHA-256:
 `4ce3b49dc1c353788645e1f0eb7a549a9082e412bb45e7b75468791781d5de66`
 
@@ -402,9 +402,9 @@ SHA-256 is `b4367815b484352375b6693d91b44298b8e4dc3b84bf0a3c69f956f97175a4f2`; a
 SHA-256 is `dc26d6f13e07c27e8ec32b6da8d06ac6fb1fed9b5fff32040a9d69221394b5fb`.
 No external API, training, GAS change, M7 rerun or deployment occurred.
 
-## 24. F11 implementation record
+## 24. F11A implementation record
 
-After separate approval, F11 created a Streamlit dashboard with a deterministic controlled-offline
+After separate approval, F11A created a Streamlit dashboard with a deterministic controlled-offline
 mode and an optional loopback-only F10 API mode. The fixed fixture uses the exact 23-feature contract
 and an F7 artifact prediction over synthetic values; it is explicitly not a real ticker observation
 or evaluation result. Chinese sentiment abstains, English remains eligible-not-scored and event
@@ -412,4 +412,5 @@ proxies remain non-ground-truth metadata.
 
 Config SHA-256 is `0f70c88b6ea3b6e21177ae2fce6a4bef17d1b02a89a0dd7d491d425663ebc267`;
 fixture SHA-256 is `c55f546ebe9ee94f616d518c205c18acb6b35683436dce1a312e7849c2935c06`.
-F11 made no external request in offline mode, modified no GAS, and performed no deployment.
+F11A made no external request in offline mode, modified no GAS, and performed no deployment. R0
+later classified LINE/GAS work as separate pending F11B; this does not alter the F11A evidence.

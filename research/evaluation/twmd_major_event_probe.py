@@ -220,9 +220,9 @@ def run_probe(
     retrieved_at: datetime | None = None,
 ) -> dict[str, object]:
     observed_at = retrieved_at or datetime.now(UTC)
-    api_key = load_api_key(config.api_key_environment_variable)
+    credential_value = load_api_key(config.api_key_environment_variable)
     headers = {
-        "X-API-Key": api_key,
+        "X-API-Key": credential_value,
         "User-Agent": "financial-ai-assistant/0.1 twmd-source-audit",
     }
     results: list[dict[str, object]] = []
