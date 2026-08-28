@@ -1,9 +1,9 @@
 # Financial AI Assistant — Final Project Plan
 
-Plan version: `b1-source-candidate-audit-v1`
+Plan version: `b2-taiwan-financial-text-v1`
 
 Last revised: 2026-08-29
-Active milestone: **B1 complete; next executable unit is B2 Taiwan Financial Text Dataset only**
+Active milestone: **B2 complete; next executable unit is B3 Domain Adaptation & Candidate Signals only**
 
 Authoritative state:
 
@@ -144,8 +144,8 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | --- | --- | --- |
 | R0 | Complete | 文件只有一條 roadmap；Track A frozen；GAS original/immutable/migration copy 通過 byte/hash 驗證；無 live behavior change。 |
 | B1 Source Candidate Audit | Complete | 15 個來源完成 purpose-specific audit；2 primary、2 secondary、1 conditional、2 optional、8 hold（含永久排除 eLAND）、0 reject；四來源 B2 whitelist、preferred/fallback stack、schema guards 與 report 已凍結；無訓練/下載。 |
-| B2 Taiwan Financial Text Dataset | Next / not started | 僅納入 B1 whitelist：FSC filtered corpus、TWSE daily material、TPEx daily material、GDELT GKG/GAL；凍結 normalized schema、ticker/time normalization、dedup、lineage、availability/retention rules、coverage/rights audit 與 dataset version；未凍結前不訓練 sentiment。 |
-| B3 Domain Adaptation & Candidate Signals | Not started | 使用 compact open-source candidate set、pinned revisions/configs 與 B2 partitions；重用 FSC/BERT/MacBERT 合法證據；不使用 eLAND、未來資料或 model zoo。 |
+| B2 Taiwan Financial Text Dataset | Complete | 四來源 whitelist 保持；`b2-financial-document-v1`、identity/version、timestamp、ticker mapping、dedup、rights/retention、lineage、RAW/NORMALIZED/FEATURE layers、retry/reconciliation/model-refresh contract 已凍結；6,021 筆 FSC private snapshot 完成；TPEx 65/65 bounded schema probe 通過；GDELT TLS probe 安全失敗、v1 採 fallback；無等待期、訓練或部署。 |
+| B3 Domain Adaptation & Candidate Signals | Next / not started | 使用 compact open-source candidate set、pinned revisions/configs 與 B2 partitions；重用 FSC/BERT/MacBERT 合法證據；不使用 eLAND、未來資料或 model zoo。 |
 | B4 Validation / Abstention | Not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
 | B5 NLP Intelligence Integration | Not started | 只整合 B4 支援能力；unsupported Chinese polarity 保持 null/abstain；event/impact/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
@@ -429,12 +429,11 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-B1 完成後停在 source-whitelist boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
+B2 完成後停在 normalized-dataset/update-contract boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
 M7 evaluation sequence 固定為 1。F10 與 F11A 完成但未部署；F11B pending；F12 last；B6/F9
 optional。
 
-下一個且唯一 executable unit 是 **B2 — Taiwan Financial Text Dataset**，必須另有使用者指令才可
-開始。B2 只能使用 `research/configs/b1_source_candidate_manifest.v1.json` 白名單；conditional／
-optional／hold／reject 來源不得靠口頭例外加入。B1 未執行 API/data probe、bulk download、模型訓練
-或標注，也未呼叫 eLAND/AP11/TWMD paid datasets、修改 live GAS、webhook、trigger、Sheet 或
-holdings，亦未 deploy、commit 或 push。
+下一個且唯一 executable unit 是 **B3 — Domain Adaptation & Candidate Signals**，必須另有使用者
+指令才可開始。B3 僅可使用 B2 private snapshot 與已核准來源/候選；不得使用 eLAND、人工標注、
+未來資料或 open-ended model zoo。B2 沒有部署 collector、等待未來資料、訓練模型、修改 live GAS、
+webhook、trigger、Sheet 或 holdings，也未 commit 或 push。

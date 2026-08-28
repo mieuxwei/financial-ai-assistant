@@ -2,9 +2,9 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B1 Source Candidate Audit — COMPLETE**
+ACTIVE PHASE: **B2 Taiwan Financial Text Dataset — COMPLETE**
 
-NEXT EXECUTABLE UNIT: **B2 — Taiwan Financial Text Dataset only**
+NEXT EXECUTABLE UNIT: **B3 — Domain Adaptation & Candidate Signals only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
@@ -23,10 +23,10 @@ Current source decision: **TWMD HOLD — account/API entitlement is not usable; 
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Branch/remote state before B1 edits: local `main` and `origin/main` both point to `3d4b459`
-  (`restart`).
-- Commit `3d4b459` contains the R0 rebaseline/safety-freeze work; its parent history contains the
-  FinMind longitudinal audit and TWMD entitlement probe. B1 changes remain uncommitted.
+- Branch/remote state before the B2 edits: local `main` and `origin/main` both point to `d397cdf`
+  (`B1`).
+- Commit `d397cdf` contains B1; its parent history contains R0, the FinMind longitudinal audit and
+  TWMD entitlement probe. B2 changes remain uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -74,8 +74,8 @@ R0 Project Rebaseline & GAS Safety Freeze
 ```
 
 R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. B1 is now complete; do not interleave B2–B4, begin F12 early or proceed into B2 without
-explicit user instruction. Definitions of Done are frozen in
+sequence. B1 and B2 are now complete; do not interleave B3/B4, begin F12 early or proceed into B3
+without explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
 ## WHY THE FORMULATION CHANGED
@@ -266,8 +266,8 @@ Chinese sentiment currently **must abstain**. Never fabricate Positive/Neutral/N
 probabilities. Track B now follows exactly:
 
 1. **B1 Source Candidate Audit** — complete; source decisions and whitelist frozen;
-2. **B2 Taiwan Financial Text Dataset** — next; only B1-approved sources;
-3. **B3 Domain Adaptation & Candidate Signals** — compact open-source candidate set;
+2. **B2 Taiwan Financial Text Dataset** — complete; normalized snapshot/update contract frozen;
+3. **B3 Domain Adaptation & Candidate Signals** — next; compact open-source candidate set;
 4. **B4 Validation / Abstention Decision** — frozen gate, no post-result lowering;
 5. **B5 NLP Intelligence Integration** — expose only B4-supported capabilities;
 6. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
@@ -300,6 +300,27 @@ Frozen preferred B2 stack: FSC domain text + TWSE/TPEx official announcements + 
 media metadata. Fallback: FSC + TWSE/TPEx only. Official announcements and media news remain
 different source types; GDELT Tone is `MEDIA_TONE_PROXY`, never validated sentiment. Publisher
 article bodies are not approved for fetching, caching, training or redistribution.
+
+### B2 normalized dataset and update contract
+
+- B2 report: `research/evaluation/b2_taiwan_financial_text_dataset_result.md`.
+- Authoritative long-term contract: `docs/b2_data_acquisition_and_update_contract.md`.
+- Machine config: `research/configs/b2_taiwan_financial_text.v1.json`.
+- Schema/builder/idempotency implementation: `pipelines/news/b2_dataset.py`.
+- TPEx official CSV provider: `pipelines/news/tpex_material.py`.
+- Private ignored dataset: `.tools/datasets/b2-taiwan-financial-text-v1/`, 6,021 FSC documents,
+  approximately 27 MB; semantic SHA-256
+  `26489f31ca27e2541c09da5dda86af0cb597c989efeb138a14f66a9f18bdab11`.
+- No sentiment/impact labels or invented ticker mappings exist in the snapshot.
+- TPEx bounded probe passed 65/65 logical rows and nine required fields; response remained in
+  system temp storage only.
+- GDELT max-25 metadata probe stopped on an expired server TLS certificate; verification was not
+  bypassed and zero rows were accepted. B2 v1 therefore uses the official-and-domain fallback
+  dataset while retaining the GDELT metadata contract for a future valid extraction.
+- TWSE/TPEx remain forward streams; zero baseline rows are explicit and do not imply historical
+  no-news observations.
+- No 30/90-day, 126-session or six-month wait is required. Scheduled collection does not trigger
+  automatic retraining.
 
 ### Preserved detailed source findings
 
@@ -344,6 +365,17 @@ article bodies are not approved for fetching, caching, training or redistributio
 - Contract tests: `tests/unit/test_b1_source_audit.py`.
 - B1 performed official-documentation web research only: no API/data probe, article fetch, bulk
   download, model training, pseudo-labeling or manual labeling.
+
+## B2 ARTIFACTS
+
+- Contract: `docs/b2_data_acquisition_and_update_contract.md`.
+- Result: `research/evaluation/b2_taiwan_financial_text_dataset_result.md`.
+- Config: `research/configs/b2_taiwan_financial_text.v1.json`.
+- Builder/schema: `pipelines/news/b2_dataset.py`.
+- TPEx provider: `pipelines/news/tpex_material.py`.
+- CLI: `jobs/b2_dataset.py` / `financial-ai-b2-dataset`.
+- Tests: `tests/unit/test_b2_dataset.py` and `tests/unit/test_twse_news_providers.py`.
+- The local normalized snapshot is ignored; no raw/provider/corpus text is tracked.
 
 No longer blocking: M12 six-month wait, a new untouched holdout, binary classifier success,
 regime-threshold deployment, validated Chinese sentiment, positive NLP lift, TEJ/AP11 or trading
@@ -649,7 +681,7 @@ Dashboard client 只接受帶明確 port 的 `http://127.0.0.1`、`http://localh
 
 ## R0 GIT / AUDIT SNAPSHOT
 
-Commit `3d4b459` already tracks R0 and, through its parent history:
+Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
 
 - FinMind audit files:
   `research/configs/finmind_news_longitudinal_audit.v1.json`,
@@ -662,23 +694,23 @@ Commit `3d4b459` already tracks R0 and, through its parent history:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted B1 work modifies the three core documents and R0 documentation-contract
-test, and adds the B1 report, manifest/schema and contract tests. Exact worktree state must be
-taken from final `git status`. No commit or push is authorized.
+The current uncommitted work contains B2 documents, config, schema/provider, CLI and tests plus
+core-document status updates. Exact worktree state must be taken from final `git status`. No B2
+commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
-Most recent validation after the B1 handoff update:
+Most recent validation after the B2 handoff update:
 
-- full project suite: 235 tests passed;
+- full project suite: 244 tests passed;
 - full Ruff check, `git diff --check` and repository secret scan passed;
 - TWMD live entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
 
 No automatic commit or push is authorized.
 
-After B1 review, the next one executable unit is **B2 — Taiwan Financial Text Dataset**. Do not
-begin B2 automatically. B2 may use only the frozen four-source whitelist and must first freeze its
-schema, time/availability semantics, deduplication, rights/retention, lineage and coverage gates.
+After B2 review, the next one executable unit is **B3 — Domain Adaptation & Candidate Signals**.
+Do not begin B3 automatically. B3 may use the private B2 partitions and already approved compact
+model evidence only; it may not use eLAND, manual labels, future data or an open-ended model zoo.
 F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be
 reopened.

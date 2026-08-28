@@ -60,6 +60,7 @@ financial-ai-final-model-freeze = "jobs.final_model_freeze:main"
 financial-ai-nlp-intelligence = "jobs.financial_nlp_intelligence:main"
 financial-ai-backend-integration = "jobs.backend_integration:main"
 financial-ai-dashboard-fixture = "demo.fixture_builder:main"
+financial-ai-b2-dataset = "jobs.b2_dataset:main"
 
 [project.optional-dependencies]
 dev = [

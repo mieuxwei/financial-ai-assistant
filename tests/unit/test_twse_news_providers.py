@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import httpx
 
+from pipelines.news.tpex_material import TpexMaterialAnnouncementProvider
 from pipelines.news.twse_material import TwseMaterialAnnouncementProvider
 from pipelines.news.twse_rss import TwseNewsRssProvider
 
@@ -50,3 +51,24 @@ def test_twse_rss_keeps_short_excerpt_not_raw_html() -> None:
     assert item.published_at.utcoffset() == timedelta(0)
     assert item.summary == "short public excerpt"
     assert "<p>" not in (item.summary or "")
+
+
+def test_tpex_material_parses_official_csv_without_frontend_scraping() -> None:
+    csv_payload = (
+        "出表日期,發言日期,發言時間,公司代號,公司名稱,主旨,符合條款,事實發生日,說明\n"
+        "1150829,1150829,174501,9999,測試上櫃公司,董事會決議,第14款,1150829,官方說明\n"
+    ).encode("utf-8-sig")
+    client = httpx.Client(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(
+                200, content=csv_payload, headers={"content-type": "text/csv"}
+            )
+        )
+    )
+
+    item = TpexMaterialAnnouncementProvider(client=client, max_retries=1).fetch()[0]
+
+    assert item.source == "tpex_openapi_daily_material"
+    assert item.explicit_tickers == ("9999",)
+    assert item.published_at.isoformat() == "2026-08-29T17:45:01+08:00"
+    assert item.summary == "官方說明"
