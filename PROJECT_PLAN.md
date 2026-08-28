@@ -1,9 +1,9 @@
 # Financial AI Assistant — Final Project Plan
 
-Plan version: `r0-project-rebaseline-v1`
+Plan version: `b1-source-candidate-audit-v1`
 
 Last revised: 2026-08-29
-Active milestone: **R0 complete; next executable unit is B1 Source Candidate Audit only**
+Active milestone: **B1 complete; next executable unit is B2 Taiwan Financial Text Dataset only**
 
 Authoritative state:
 
@@ -143,8 +143,8 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | Unit | Status | Definition of Done |
 | --- | --- | --- |
 | R0 | Complete | 文件只有一條 roadmap；Track A frozen；GAS original/immutable/migration copy 通過 byte/hash 驗證；無 live behavior change。 |
-| B1 Source Candidate Audit | Next / not started | 每來源完成 provenance、rights、access、language、ticker mapping、text/timestamp/timezone、coverage、duplicates、revision、delay、missingness、storage/redistribution 稽核；產出 purpose-specific decision 與 frozen source manifest；不訓練。 |
-| B2 Taiwan Financial Text Dataset | Not started | 僅納入 B1-approved sources；凍結 normalized schema、ticker/time normalization、dedup、lineage、availability/retention rules、coverage/rights audit 與 dataset version；未凍結前不訓練 sentiment。 |
+| B1 Source Candidate Audit | Complete | 15 個來源完成 purpose-specific audit；2 primary、2 secondary、1 conditional、2 optional、8 hold（含永久排除 eLAND）、0 reject；四來源 B2 whitelist、preferred/fallback stack、schema guards 與 report 已凍結；無訓練/下載。 |
+| B2 Taiwan Financial Text Dataset | Next / not started | 僅納入 B1 whitelist：FSC filtered corpus、TWSE daily material、TPEx daily material、GDELT GKG/GAL；凍結 normalized schema、ticker/time normalization、dedup、lineage、availability/retention rules、coverage/rights audit 與 dataset version；未凍結前不訓練 sentiment。 |
 | B3 Domain Adaptation & Candidate Signals | Not started | 使用 compact open-source candidate set、pinned revisions/configs 與 B2 partitions；重用 FSC/BERT/MacBERT 合法證據；不使用 eLAND、未來資料或 model zoo。 |
 | B4 Validation / Abstention | Not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
 | B5 NLP Intelligence Integration | Not started | 只整合 B4 支援能力；unsupported Chinese polarity 保持 null/abstain；event/impact/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
@@ -429,10 +429,12 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-R0 完成後只能停在 rebaseline/safety-freeze boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
+B1 完成後停在 source-whitelist boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
 M7 evaluation sequence 固定為 1。F10 與 F11A 完成但未部署；F11B pending；F12 last；B6/F9
 optional。
 
-下一個且唯一 executable unit 是 **B1 — Source Candidate Audit**，必須另有使用者指令才可開始。
-R0 不進行外部 B1 data collection、不訓練、不產生 pseudo labels、不呼叫 eLAND/AP11/TWMD paid
-datasets、不修改 live GAS、webhook、trigger、Sheet 或 holdings，也不 deploy、commit 或 push。
+下一個且唯一 executable unit 是 **B2 — Taiwan Financial Text Dataset**，必須另有使用者指令才可
+開始。B2 只能使用 `research/configs/b1_source_candidate_manifest.v1.json` 白名單；conditional／
+optional／hold／reject 來源不得靠口頭例外加入。B1 未執行 API/data probe、bulk download、模型訓練
+或標注，也未呼叫 eLAND/AP11/TWMD paid datasets、修改 live GAS、webhook、trigger、Sheet 或
+holdings，亦未 deploy、commit 或 push。

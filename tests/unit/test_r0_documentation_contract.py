@@ -7,14 +7,14 @@ def _read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
 
-def test_core_documents_share_the_r0_execution_boundary() -> None:
+def test_core_documents_share_the_current_execution_boundary() -> None:
     handoff = _read("HANDOFF.md")
     plan = _read("PROJECT_PLAN.md")
     readme = _read("README.md")
 
-    assert "NEXT EXECUTABLE UNIT: **B1 — Source Candidate Audit only**" in handoff
-    assert "next executable unit is B1 Source Candidate Audit only" in plan
-    assert "next: B1 only" in readme
+    assert "NEXT EXECUTABLE UNIT: **B2 — Taiwan Financial Text Dataset only**" in handoff
+    assert "next executable unit is B2 Taiwan Financial Text Dataset only" in plan
+    assert "next: B2 only" in readme
     assert "NEXT EXECUTABLE UNIT: **F12" not in handoff
 
 

@@ -2,9 +2,9 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **R0 Project Rebaseline & GAS Safety Freeze — COMPLETE**
+ACTIVE PHASE: **B1 Source Candidate Audit — COMPLETE**
 
-NEXT EXECUTABLE UNIT: **B1 — Source Candidate Audit only**
+NEXT EXECUTABLE UNIT: **B2 — Taiwan Financial Text Dataset only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
@@ -23,9 +23,10 @@ Current source decision: **TWMD HOLD — account/API entitlement is not usable; 
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Branch/remote state at handoff: local `main` and `origin/main` both point to `9eb09c7` (`a1`).
-- Commit `9eb09c7` already contains the FinMind longitudinal audit and TWMD entitlement-probe
-  implementation. R0 documentation changes remain uncommitted.
+- Branch/remote state before B1 edits: local `main` and `origin/main` both point to `3d4b459`
+  (`restart`).
+- Commit `3d4b459` contains the R0 rebaseline/safety-freeze work; its parent history contains the
+  FinMind longitudinal audit and TWMD entitlement probe. B1 changes remain uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -73,8 +74,8 @@ R0 Project Rebaseline & GAS Safety Freeze
 ```
 
 R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. Track A is not in the active queue because it is frozen. Do not interleave B1–B4, begin
-F12 early or proceed beyond R0 without explicit user instruction. Definitions of Done are frozen in
+sequence. B1 is now complete; do not interleave B2–B4, begin F12 early or proceed into B2 without
+explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
 ## WHY THE FORMULATION CHANGED
@@ -264,8 +265,8 @@ Preserve:
 Chinese sentiment currently **must abstain**. Never fabricate Positive/Neutral/Negative
 probabilities. Track B now follows exactly:
 
-1. **B1 Source Candidate Audit** — next, no training;
-2. **B2 Taiwan Financial Text Dataset** — only B1-approved sources;
+1. **B1 Source Candidate Audit** — complete; source decisions and whitelist frozen;
+2. **B2 Taiwan Financial Text Dataset** — next; only B1-approved sources;
 3. **B3 Domain Adaptation & Candidate Signals** — compact open-source candidate set;
 4. **B4 Validation / Abstention Decision** — frozen gate, no post-result lowering;
 5. **B5 NLP Intelligence Integration** — expose only B4-supported capabilities;
@@ -279,7 +280,28 @@ AP11 is an optional future source enhancement, not required before Chinese NLP, 
 is prohibited permanently from datasets, models, APIs, audits, weak supervision, features,
 training and candidate comparisons; retain only its historical rejection record.
 
-### Taiwan source status at this handoff
+### B1 source decision at this handoff
+
+Authoritative report: `research/evaluation/b1_source_candidate_audit.md`. Machine-readable
+authority: `research/configs/b1_source_candidate_manifest.v1.json`.
+
+- **ACCEPT_PRIMARY:** FSC filtered 6,021-record domain corpus; TWSE daily official material
+  information OpenAPI.
+- **ACCEPT_SECONDARY:** TPEx daily official material information OpenAPI; GDELT GKG/GAL metadata.
+- **CONDITIONAL:** FinMind `TaiwanStockNews` for deduplicated later-period title/link discovery only.
+- **OPTIONAL_FUTURE:** TEJ/AP11 (`OPTIONAL_HIGH_QUALITY_OFFICIAL_SOURCE`); TWSE Data E-Shop MOPS
+  distribution.
+- **HOLD:** interactive historical MOPS automation, TWMD, `tw-finance-159M`, derived `tw-fsc`,
+  Cnyes/Anue, Yahoo Taiwan Finance, WantGoo, and eLAND as a permanent exclusion record.
+- **REJECT:** none; eLAND's historically mandated label remains HOLD/excluded rather than being
+  reclassified.
+
+Frozen preferred B2 stack: FSC domain text + TWSE/TPEx official announcements + bounded GDELT
+media metadata. Fallback: FSC + TWSE/TPEx only. Official announcements and media news remain
+different source types; GDELT Tone is `MEDIA_TONE_PROXY`, never validated sentiment. Publisher
+article bodies are not approved for fetching, caching, training or redistribution.
+
+### Preserved detailed source findings
 
 - **FinMind `TaiwanStockNews`: CONDITIONAL for deduplicated title-level intelligence; HOLD for
   market-reaction weak supervision and rich-text modeling.** The 2018–2024 ten-ticker stratified
@@ -294,8 +316,8 @@ training and candidate comparisons; retain only its historical rejection record.
   a new provenance/licensing/timestamp/duplicate audit passes.
 - The TWMD key, if retained locally, belongs only in ignored `.env`. The public `.env.example`
   contains an empty variable name, never a value.
-- **Eland remains permanent HOLD / excluded from active modeling.** TWMD being unavailable does not
-  reactivate Eland.
+- **eLAND remains `HOLD / excluded from active modeling` and permanently excluded from active
+  work.** TWMD being unavailable does not reactivate eLAND.
 
 ## FROZEN F-SERIES RECORD AND CURRENT PRODUCT STATUS
 
@@ -312,6 +334,16 @@ training and candidate comparisons; retain only its historical rejection record.
 - **F11A:** controlled Streamlit dashboard complete; not deployed.
 - **F11B:** LINE/GAS integration pending. F11B-0 safety copy exists; F11B-1/2 have not started.
 - **F12:** portfolio finalization pending and last; it is not the next executable unit.
+
+## B1 ARTIFACTS
+
+- Authoritative report: `research/evaluation/b1_source_candidate_audit.md`.
+- Frozen decision manifest / B2 whitelist:
+  `research/configs/b1_source_candidate_manifest.v1.json`.
+- Schema and policy guards: `research/planning/b1_source_audit.py`.
+- Contract tests: `tests/unit/test_b1_source_audit.py`.
+- B1 performed official-documentation web research only: no API/data probe, article fetch, bulk
+  download, model training, pseudo-labeling or manual labeling.
 
 No longer blocking: M12 six-month wait, a new untouched holdout, binary classifier success,
 regime-threshold deployment, validated Chinese sentiment, positive NLP lift, TEJ/AP11 or trading
@@ -617,7 +649,7 @@ Dashboard client 只接受帶明確 port 的 `http://127.0.0.1`、`http://localh
 
 ## R0 GIT / AUDIT SNAPSHOT
 
-Commit `9eb09c7` already tracks:
+Commit `3d4b459` already tracks R0 and, through its parent history:
 
 - FinMind audit files:
   `research/configs/finmind_news_longitudinal_audit.v1.json`,
@@ -630,22 +662,23 @@ Commit `9eb09c7` already tracks:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-R0 modifies the three core documents, related architecture/migration/F11A records, GAS boundary
-READMEs, two new R0 safety protocols and one documentation-contract test. It also renames one TWMD
-probe local variable to remove a secret-scanner false positive without changing behavior. Exact
-worktree state must be taken from final `git status`. No commit or push is authorized.
+The current uncommitted B1 work modifies the three core documents and R0 documentation-contract
+test, and adds the B1 report, manifest/schema and contract tests. Exact worktree state must be
+taken from final `git status`. No commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
-Most recent validation after this handoff update:
+Most recent validation after the B1 handoff update:
 
-- full project suite: 229 tests passed;
+- full project suite: 235 tests passed;
 - full Ruff check, `git diff --check` and repository secret scan passed;
 - TWMD live entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
 
 No automatic commit or push is authorized.
 
-After R0 review, the next one executable unit is **B1 — Source Candidate Audit**. Do not begin B1
-automatically. F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and
-must not be reopened.
+After B1 review, the next one executable unit is **B2 — Taiwan Financial Text Dataset**. Do not
+begin B2 automatically. B2 may use only the frozen four-source whitelist and must first freeze its
+schema, time/availability semantics, deduplication, rights/retention, lineage and coverage gates.
+F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be
+reopened.
