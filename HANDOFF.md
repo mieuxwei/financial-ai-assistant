@@ -2,9 +2,9 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B5 NLP Intelligence Integration — COMPLETE**
+ACTIVE PHASE: **F11B-D0 LINE UX + Multi-user + GAS/FastAPI Design Freeze — COMPLETE**
 
-NEXT EXECUTABLE UNIT: **F11B — Controlled LINE Financial AI Integration only**
+NEXT EXECUTABLE UNIT: **F11B-1A — Controlled LINE Routing in Migration Copy only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
@@ -33,9 +33,9 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Local `main` and `origin/main` both point to `136069e` (`B4`).
-- Commit `136069e` contains the corrected B4 work; its parent history contains B3.1, B3, B2.1,
-  B2, B1, R0, the FinMind longitudinal audit and historical TWMD entitlement probe. Current B5
+- Local `main` and `origin/main` both point to `8077d6b` (`B5`).
+- Commit `8077d6b` contains B5; its parent history contains corrected B4, B3.1, B3, B2.1, B2, B1,
+  R0, the FinMind longitudinal audit and historical TWMD entitlement probe. Current F11B-D0
   changes are uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
@@ -65,7 +65,7 @@ Primary research question:
 Track A predicts a continuous next-session stock-normalized volatility-surprise score and is now
 complete/frozen. Track B is the active Taiwan Financial Sentiment / Impact Modeling and Financial
 NLP Intelligence program. Track C is the Python/FastAPI product with F11A Streamlit complete and
-F11B LINE/GAS integration pending.
+F11B-D0 design freeze complete; F11B-1A/1B/2 implementation pending.
 
 ## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
 
@@ -77,19 +77,21 @@ R0 Project Rebaseline & GAS Safety Freeze
   → B3.1 Chinese Sentiment Label Source Audit
   → B4 Validation / Abstention Decision
   → B5 NLP Intelligence Integration
-  → F11B-0 GAS Immutable Backup & Migration Copy
-  → F11B-1 Controlled LINE Financial AI Integration
+  → F11B-D0 LINE UX + Multi-user + GAS/FastAPI Design Freeze
+  → F11B-0 GAS Immutable Backup & Migration Copy (safety prerequisite already complete)
+  → F11B-1A Controlled LINE Routing in Migration Copy
+  → F11B-1B Controlled Read-only Demo
   → F11B-2 Current-Market Feature / Risk Integration (only if separately validated)
   → B6 / F9 Optional NLP Incremental-Value Study
   → F12 Portfolio Finalization
 ```
 
-R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. B1, B2, B2.1, B3, B3.1, B4 and B5 are now complete; do not begin F11B or F12 without
+R0 created the F11B-0 private safety copies early, but this does not begin F11B-1A or alter the
+sequence. B1, B2, B2.1, B3, B3.1, B4, B5 and F11B-D0 are complete; do not begin F11B-1A or F12 without
 explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-B5 is now complete. Do not begin F11B without a separate instruction.
+F11B-D0 is complete. Do not begin F11B-1A without a separate instruction.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -431,6 +433,25 @@ private-beta MOPS endpoint remain HOLD. See
 - Audit analysis SHA-256:
   `99d2fa67a7fd32a76fecbc41cfc0c362f40d5cf06979d92a7d9e11a3bfd856c2`.
 
+### F11B-D0 LINE product and multi-user design freeze
+
+- Authoritative design: `docs/f11b_line_product_design_freeze.md`; machine contract:
+  `research/configs/f11b_line_integration_design.v1.json`.
+- Main menu is exactly 股票分析、持股健檢、金融情報、匯入持股、新聞研究、設定. Reports live
+  only under per-user Settings; quota/debug/admin information is hidden from ordinary users.
+- Stock, portfolio and intelligence Flex field order, Traditional Chinese limitations and Track
+  A/B claim boundaries are frozen.
+- Roles are UNREGISTERED, REGISTERED and ADMIN; all private state is keyed by internal user UUID.
+- LINE ID, allowlist/shared challenge and F10 `X-User-ID` are not public authentication. Production
+  requires a raw-body/header-capable LINE signature verification edge; Apps Script header limits
+  are acknowledged rather than bypassed.
+- GAS is a thin transition adapter; FastAPI owns identity/authorization, portfolio transactions,
+  persistence, models, scheduling policy, privacy, audit and idempotency.
+- Legacy capability preservation and user-data isolation matrices are complete. F11B-1A routes,
+  1B controlled-demo flow, F11B-2 gate and immutable rollback boundary are frozen.
+- No live/migration-copy GAS edit, webhook/trigger/Sheet/holdings change, deployment, model change,
+  secret access or external provider call occurred.
+
 ### B2 normalized dataset and update contract
 
 - B2 report: `research/evaluation/b2_taiwan_financial_text_dataset_result.md`.
@@ -486,7 +507,7 @@ private-beta MOPS endpoint remain HOLD. See
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
 - **F11A:** controlled Streamlit dashboard complete; not deployed.
-- **F11B:** LINE/GAS integration pending. F11B-0 safety copy exists; F11B-1/2 have not started.
+- **F11B:** D0 design complete. F11B-0 safety copy exists; F11B-1A/1B/2 have not started.
 - **F12:** portfolio finalization pending and last; it is not the next executable unit.
 
 ## B1 ARTIFACTS
@@ -827,16 +848,16 @@ Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted work contains only the B5 protocol/config, schema/assembler/API integration,
-audit report, documentation updates and tests. Exact worktree state must be taken from final
+The current uncommitted work contains only the F11B-D0 design document, machine contract,
+documentation status updates and invariant tests. Exact worktree state must be taken from final
 `git status`. No commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
-Most recent validation including B4:
+Most recent validation including F11B-D0:
 
-- full project suite: 277 tests passed (2 dependency/environment warnings only);
+- full project suite: 282 tests passed (2 dependency/environment warnings only);
 - full Ruff check, `git diff --check` and repository secret scan passed;
 - historical TWMD entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
 
@@ -851,7 +872,7 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-After B5 review, the next one executable unit is **F11B — Controlled LINE Financial AI
-Integration**. Do not begin F11B automatically. F11B may consume only the frozen B5 backend
-contract and must preserve legacy GAS behavior plus the immutable backup/rollback boundary. F12
-remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be reopened.
+After F11B-D0 review, the next one executable unit is **F11B-1A — Controlled LINE Routing in
+Migration Copy**. Do not begin it automatically. It may consume only the frozen B5 backend contract,
+must modify only the private migration copy, and must preserve legacy behavior plus immutable
+backup/rollback. F12 remains last; B6/F9 is optional/non-blocking; Track A/B models stay frozen.

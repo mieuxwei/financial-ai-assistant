@@ -13,11 +13,11 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     readme = _read("README.md")
 
     assert (
-        "NEXT EXECUTABLE UNIT: **F11B — Controlled LINE Financial AI Integration only**"
+        "NEXT EXECUTABLE UNIT: **F11B-1A — Controlled LINE Routing in Migration Copy only**"
         in handoff
     )
-    assert "next executable unit is F11B Controlled LINE Financial AI Integration only" in plan
-    assert "next: F11B only" in readme
+    assert "next executable unit is F11B-1A Controlled LINE Routing in Migration Copy only" in plan
+    assert "next: F11B-1A only" in readme
     assert "B3.1" in handoff
     assert "B3.1" in plan
     assert "B3.1" in readme

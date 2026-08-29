@@ -1,0 +1,134 @@
+{
+  "design_version": "f11b-line-integration-design-v1",
+  "milestone": "F11B-D0",
+  "status": "DESIGN_FROZEN_NO_IMPLEMENTATION",
+  "main_menu": [
+    {"id": "stock_analysis", "label": "📊 股票分析"},
+    {"id": "portfolio_check", "label": "💼 持股健檢"},
+    {"id": "financial_intelligence", "label": "📰 金融情報"},
+    {"id": "import_holdings", "label": "📷 匯入持股"},
+    {"id": "news_research", "label": "🔎 新聞研究"},
+    {"id": "settings", "label": "⚙️ 設定"}
+  ],
+  "forbidden_main_menu_capabilities": [
+    "morning_report", "closing_report", "chinese_sentiment", "direction_prediction",
+    "bert_embedding", "gdelt_tone", "model_sha", "quota", "provider_balance", "debug",
+    "developer_status"
+  ],
+  "flex_field_order": {
+    "stock_analysis": [
+      "stock_name_ticker", "track_a_risk_band", "historical_percentile", "risk_explanation",
+      "current_price", "daily_change", "ma5", "ma20", "recent_event_summary",
+      "market_reaction_magnitude", "research_limitations", "intelligence_news_actions"
+    ],
+    "portfolio_check": [
+      "stock_name_ticker", "holding_quantity", "average_cost", "current_price", "unrealized_roi",
+      "track_a_risk_band", "historical_percentile", "recent_event", "market_reaction_magnitude",
+      "ma5", "ma20", "legacy_price_risk_alert", "non_investment_disclaimer",
+      "intelligence_news_actions"
+    ],
+    "financial_intelligence": [
+      "stock_name_ticker", "recent_financial_event", "event_class", "event_timestamp",
+      "event_source", "market_reaction_magnitude", "historical_percentile_if_available",
+      "human_readable_maturity_limitations"
+    ]
+  },
+  "settings": {
+    "notifications": ["morning_report_enabled", "closing_report_enabled"],
+    "preference_scope": "PER_USER",
+    "account": ["user_status", "onboarding_identity_status"],
+    "help": ["research_only", "not_investment_advice", "model_limitations"],
+    "admin_section_visibility": "ADMIN_ONLY"
+  },
+  "roles": {
+    "UNREGISTERED": ["welcome", "onboarding", "public_safe_help"],
+    "REGISTERED": [
+      "stock_analysis", "portfolio_check", "financial_intelligence", "import_holdings",
+      "news_research", "personal_settings", "personal_morning_report", "personal_closing_report"
+    ],
+    "ADMIN": ["registered_capabilities", "system_status", "error_summary", "provider_quota_admin", "maintenance"]
+  },
+  "identity": {
+    "line_user_id_is_public_backend_token": false,
+    "x_user_id_contract": "DEVELOPMENT_ONLY_UNTRUSTED_IDENTITY_ASSERTION",
+    "allowlist": "TRANSITION_SAFETY_LAYER_NOT_AUTHENTICATION",
+    "shared_challenge": "INSUFFICIENT_FOR_PUBLIC_AUTHENTICATION",
+    "required_flow": [
+      "line_signature_verification_edge", "verified_line_subject", "authenticated_internal_request",
+      "backend_identity_mapping", "internal_user_account", "authorization_and_user_scoped_data"
+    ],
+    "gas_header_limitation": "APPS_SCRIPT_WEB_APP_DOPOST_DOES_NOT_RELIABLY_EXPOSE_X_LINE_SIGNATURE",
+    "production_webhook_gate": "TERMINATE_AT_RAW_BODY_AND_HEADER_CAPABLE_VERIFICATION_EDGE"
+  },
+  "gas_to_backend_auth": {
+    "scheme": "HMAC_SERVICE_REQUEST_V1",
+    "signed_fields": ["key_id", "timestamp", "nonce", "method", "path", "body_sha256"],
+    "backend_checks": ["signature", "clock_skew", "nonce_replay", "route_scope", "rate_limit", "audit"],
+    "gas_asserted_line_user_id_trusted_without_verified_origin": false
+  },
+  "user_isolation": {
+    "isolation_key": "INTERNAL_USER_UUID",
+    "per_user_data": [
+      "portfolio", "preferences", "notification_settings", "temporary_state",
+      "confirmation_transactions", "audit_history", "usage_records", "persisted_news_history"
+    ],
+    "global_portfolio_allowed": false,
+    "global_notification_switch_allowed": false,
+    "global_temporary_state_allowed": false
+  },
+  "ownership": {
+    "gas": [
+      "transition_line_entry_or_verified_internal_adapter", "reply_token_handling", "minimal_routing",
+      "flex_rendering", "scheduled_push_entry_points", "line_and_backend_credentials",
+      "transition_compatibility"
+    ],
+    "fastapi": [
+      "identity_mapping", "authorization", "user_preferences", "portfolio_business_rules",
+      "preview_confirm", "idempotency", "transactions", "persistence", "market_news_ingestion",
+      "track_a_inference", "track_b_intelligence", "feature_engineering", "scheduling_logic",
+      "retry_policy", "quotas", "observability", "audit_logs", "privacy_controls",
+      "versioned_research_contracts", "abstention_rules"
+    ],
+    "forbidden_in_gas": [
+      "ai_model_inference", "track_a_feature_engineering", "bert", "nlp_orchestration",
+      "market_data_pipeline", "portfolio_business_logic", "transaction_logic", "idempotency_logic",
+      "full_authentication", "complex_persistence", "retry_orchestration", "model_lineage_rules"
+    ]
+  },
+  "routes_f11b_1a": [
+    {"command": "risk <ticker>", "menu_action": "stock_analysis", "access": "REGISTERED"},
+    {"command": "intel <ticker>", "menu_action": "financial_intelligence", "access": "REGISTERED"},
+    {"command": "portfolio", "menu_action": "portfolio", "access": "REGISTERED"},
+    {"command": "portfolio-check", "menu_action": "portfolio_check", "access": "REGISTERED"},
+    {"command": "import-holdings", "menu_action": "import_holdings", "access": "REGISTERED"},
+    {"command": "news <ticker>", "menu_action": "news_research", "access": "REGISTERED"},
+    {"command": "settings", "menu_action": "settings", "access": "REGISTERED"}
+  ],
+  "controlled_demo": {
+    "label": "CONTROLLED RESEARCH DEMO",
+    "flow": ["line", "gas_migration_copy", "fastapi", "controlled_fixture_or_validated_stored_artifact", "gas_flex", "line"],
+    "live_market_inference_claimed": false,
+    "portfolio_write_allowed": false
+  },
+  "f11b_2_gate": [
+    "current_ohlcv_source_audited", "taiex_source_audited", "exact_23_feature_parity_verified",
+    "cutoff_semantics_verified", "timezone_verified", "missing_data_rules_frozen",
+    "training_inference_feature_parity_verified", "lineage_available", "validation_passed"
+  ],
+  "f11b_2_gate_bypass_allowed": false,
+  "import_target_flow": [
+    "screenshot_upload", "ocr_ai_parse", "structured_preview", "user_confirmation",
+    "one_time_confirmation_token", "transactional_portfolio_write", "result"
+  ],
+  "legacy_replayable_execute_sync_allowed_long_term": false,
+  "implementation_order": [
+    "F11B-D0", "F11B-1A_CONTROLLED_ROUTING", "F11B-1B_CONTROLLED_READ_ONLY_DEMO",
+    "F11B-2_CURRENT_MARKET_AFTER_GATE", "FUTURE_PORTFOLIO_WRITE_MIGRATION"
+  ],
+  "live_gas_modified": false,
+  "deployed": false,
+  "portfolio_mutated": false,
+  "track_a_modified": false,
+  "track_b_models_modified": false,
+  "next_executable_unit": "F11B-1A_CONTROLLED_LINE_ROUTING_IN_MIGRATION_COPY"
+}

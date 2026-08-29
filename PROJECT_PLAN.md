@@ -3,7 +3,7 @@
 Plan version: `b4-market-reaction-validation-v1`
 
 Last revised: 2026-08-29
-Active milestone: **B5 NLP Intelligence Integration complete; next executable unit is F11B Controlled LINE Financial AI Integration only**
+Active milestone: **F11B-D0 design freeze complete; next executable unit is F11B-1A Controlled LINE Routing in Migration Copy only**
 
 Authoritative state:
 
@@ -136,7 +136,7 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 ## 5.1 Canonical Active Roadmap and Definition of Done
 
 ```text
-R0 → B1 → B2 → B3 → B3.1 audit → B4 → B5 → F11B-0 → F11B-1 → F11B-2 → optional B6/F9 → F12
+R0 → B1 → B2 → B3 → B3.1 audit → B4 → B5 → F11B-D0 → F11B-1A → F11B-1B → F11B-2 → optional B6/F9 → F12
 ```
 
 R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此跳過 B1–B5 或開始 F11B-1。
@@ -151,8 +151,10 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | B3.1 Chinese sentiment label-source audit | Complete / audit only | CFSC-ABSA、multilingual Chinese financial sentiment 與 StockSentCN 均為 `HOLD`；目前無可獨立許可的 training 或 evaluation label source；gate answer `NO`，未建立 B3.2、未訓練模型。 |
 | B4 Market Impact / Reaction Validation | Complete / `AUTOMATED_SIGNAL_ONLY` | 更正早期 `limit=2` probe 誤用後，依 B2.1 月批次私有回填 2021–2025：7,582 events、3,433 windows、9 tickers、3 rolling folds。Metadata-only 對 absolute reaction 有穩定但有限的 ranking signal（OOF Spearman 0.2504、top-decile lift 1.623）；BERT text 未提供 incremental value。中文 sentiment 仍獨立 abstain。 |
 | B5 NLP Intelligence Integration | Complete | 版本化 `track_b_intelligence` backward-safe extension 已接入既有 F8/F10 database-only endpoint；Chinese polarity/direction 明確 abstain；B4 magnitude maturity 保持 `AUTOMATED_SIGNAL_ONLY`；event class、media tone、representation 與 lineage 分離；無 request-time provider/model/LLM call。 |
+| F11B-D0 LINE UX + Multi-user + GAS/FastAPI Design Freeze | Complete / design only | 六入口 menu、三種 Flex、import/news/settings/report UX、UNREGISTERED/REGISTERED/ADMIN、signature/auth trust、per-user isolation、ownership、legacy preservation、1A/1B/2 gates 與 rollback 已凍結；無 GAS edit/deploy/持股異動。 |
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
-| F11B-1 Controlled LINE integration | Pending | migration copy 只新增 additive `risk`/`intel`/optional `news` routes；legacy holdings/Sheet/screenshots/triggers 不改；使用 fixture/stored snapshot 並標示 controlled demo；service auth/replay/timeout/idempotency/identity/rate/audit tests 通過。 |
+| F11B-1A Controlled LINE routing | Next / not started | 只修改 private migration copy；新增 frozen routes/Flex actions 與 service-auth/replay/identity boundary，不接 live webhook、不部署、不寫持股。 |
+| F11B-1B Controlled read-only demo | Pending | LINE→migration-copy→FastAPI→fixture/stored artifact→Flex；全程標示 `CONTROLLED RESEARCH DEMO`，不得呈現為 live inference。 |
 | F11B-2 Current-market integration | Conditional / pending | audited current OHLCV/TAIEX、cutoff/timezone/missingness/lineage 與 exact 23-feature parity tests 全部通過；GAS 不自行拼湊特徵。 |
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
 | F12 Portfolio Finalization | Pending / last | 完成 final workflow、README、visuals、abstract、demo、limitations/security/privacy；如實標明未完成/optional/live limitations；tests/lint/secret/reproducibility 全通過。 |
@@ -406,8 +408,8 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
     guards、structured errors；無外部 API/訓練/部署，F9 未執行。**
 11. **F11A — Controlled Streamlit Dashboard：**relative-risk score、context、intelligence、
     disclaimers。**完成：受控離線 fixture＋loopback-only F10 client；未部署。**
-12. **F11B — LINE/GAS Integration：****PENDING**。F11B-0 私有安全備份已在 R0 完成；
-    F11B-1/2 未開始。
+12. **F11B — LINE/GAS Integration：****D0 COMPLETE / implementation pending**。F11B-0 私有
+    安全備份已在 R0 完成；F11B-1A/1B/2 未開始。
 13. **F12 — Portfolio Finalization：****PENDING AND LAST**；不是 R0 後的下一單元。
 
 ## 16. Definition of Done
@@ -442,6 +444,6 @@ absolute reaction 有 modest automated signal；BERT title representation 未提
 value。`MARKET_REACTION_MODEL` 為 `AUTOMATED_SIGNAL_ONLY`；`LINGUISTIC_SENTIMENT` 獨立維持
 `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`。
 
-下一個且唯一 executable unit 是 **F11B — Controlled LINE Financial AI Integration**，必須另有
-使用者指令才可開始。B5 已完成但沒有部署；Track A/F7 Ridge alpha 100、GAS、LINE 與
-Streamlit 均未變更，也未 commit 或 push。
+下一個且唯一 executable unit 是 **F11B-1A — Controlled LINE Routing in Migration Copy**，必須
+另有使用者指令才可開始。D0 只凍結設計；Track A/F7 Ridge alpha 100、Track B models、live
+GAS、LINE、webhook、trigger、Sheet、真實持股與 Streamlit 均未變更，也未部署、commit 或 push。

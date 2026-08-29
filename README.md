@@ -33,7 +33,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**B5 NLP Intelligence Integration complete / next: F11B only / not deployed**。
+目前狀態：**F11B-D0 design freeze complete / next: F11B-1A only / not deployed**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
@@ -68,6 +68,10 @@ external validation。
   proxy status、BERT representation lineage 與限制完全分離；API request 不呼叫 provider、模型
   或 LLM。詳見 [B5 protocol](docs/b5_nlp_intelligence_integration_protocol.md) 與
   [B5 result](research/evaluation/b5_nlp_intelligence_integration_result.md)。
+- F11B-D0 已凍結六入口 LINE menu、股票分析／持股健檢／金融情報 Flex、多使用者角色與
+  資料隔離、LINE signature/auth trust boundary、GAS/FastAPI ownership、legacy preservation、
+  controlled demo 與 current-market gate。只建立設計文件/config/tests，未修改 GAS 或部署。
+  詳見 [F11B-D0 design](docs/f11b_line_product_design_freeze.md)。
 
 單一正式 roadmap 與 Definition of Done 見
 [R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見
