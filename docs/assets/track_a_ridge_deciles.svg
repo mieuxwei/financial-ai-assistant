@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #10243E; }
+  .title { font-size: 30px; font-weight: 700; }
+  .subtitle { font-size: 17px; fill: #607089; }
+  .label { font-size: 16px; font-weight: 600; }
+  .small { font-size: 13px; fill: #607089; }
+</style>
+<text x="64" y="62" class="title">Ridge score deciles rank realized volatility surprise</text>
+<text x="64" y="92" class="subtitle">Pooled outer-fold assigned deciles · 20,637 historical OOS rows · 95% cluster-bootstrap intervals</text>
+<line x1="100" y1="550.00" x2="1130" y2="550.00" stroke="#DCE4EE"/>
+<text x="82" y="555.00" text-anchor="end" class="small">0.4</text>
+<line x1="100" y1="455.88" x2="1130" y2="455.88" stroke="#DCE4EE"/>
+<text x="82" y="460.88" text-anchor="end" class="small">0.6</text>
+<line x1="100" y1="361.76" x2="1130" y2="361.76" stroke="#DCE4EE"/>
+<text x="82" y="366.76" text-anchor="end" class="small">0.8</text>
+<line x1="100" y1="267.65" x2="1130" y2="267.65" stroke="#DCE4EE"/>
+<text x="82" y="272.65" text-anchor="end" class="small">1.0</text>
+<line x1="100" y1="173.53" x2="1130" y2="173.53" stroke="#DCE4EE"/>
+<text x="82" y="178.53" text-anchor="end" class="small">1.2</text>
+<polyline points="100.00,483.50 214.44,427.39 328.89,395.20 443.33,392.53 557.78,347.92 672.22,343.36 786.67,324.22 901.11,286.01 1015.56,251.93 1130.00,201.99" fill="none" stroke="#2563EB" stroke-width="5" stroke-linejoin="round"/>
+<line x1="100.00" y1="498.19" x2="100.00" y2="467.57" stroke="#0891B2" stroke-width="3"/>
+<circle cx="100.00" cy="483.50" r="7" fill="#2563EB"/>
+<text x="100.00" y="582" text-anchor="middle" class="label">D1</text>
+<line x1="214.44" y1="441.99" x2="214.44" y2="412.12" stroke="#0891B2" stroke-width="3"/>
+<circle cx="214.44" cy="427.39" r="7" fill="#2563EB"/>
+<text x="214.44" y="582" text-anchor="middle" class="label">D2</text>
+<line x1="328.89" y1="412.08" x2="328.89" y2="379.73" stroke="#0891B2" stroke-width="3"/>
+<circle cx="328.89" cy="395.20" r="7" fill="#2563EB"/>
+<text x="328.89" y="582" text-anchor="middle" class="label">D3</text>
+<line x1="443.33" y1="408.66" x2="443.33" y2="374.74" stroke="#0891B2" stroke-width="3"/>
+<circle cx="443.33" cy="392.53" r="7" fill="#2563EB"/>
+<text x="443.33" y="582" text-anchor="middle" class="label">D4</text>
+<line x1="557.78" y1="368.06" x2="557.78" y2="325.91" stroke="#0891B2" stroke-width="3"/>
+<circle cx="557.78" cy="347.92" r="7" fill="#2563EB"/>
+<text x="557.78" y="582" text-anchor="middle" class="label">D5</text>
+<line x1="672.22" y1="360.59" x2="672.22" y2="326.79" stroke="#0891B2" stroke-width="3"/>
+<circle cx="672.22" cy="343.36" r="7" fill="#2563EB"/>
+<text x="672.22" y="582" text-anchor="middle" class="label">D6</text>
+<line x1="786.67" y1="343.27" x2="786.67" y2="303.40" stroke="#0891B2" stroke-width="3"/>
+<circle cx="786.67" cy="324.22" r="7" fill="#2563EB"/>
+<text x="786.67" y="582" text-anchor="middle" class="label">D7</text>
+<line x1="901.11" y1="307.49" x2="901.11" y2="262.01" stroke="#0891B2" stroke-width="3"/>
+<circle cx="901.11" cy="286.01" r="7" fill="#2563EB"/>
+<text x="901.11" y="582" text-anchor="middle" class="label">D8</text>
+<line x1="1015.56" y1="274.64" x2="1015.56" y2="230.01" stroke="#0891B2" stroke-width="3"/>
+<circle cx="1015.56" cy="251.93" r="7" fill="#2563EB"/>
+<text x="1015.56" y="582" text-anchor="middle" class="label">D9</text>
+<line x1="1130.00" y1="229.52" x2="1130.00" y2="171.70" stroke="#0891B2" stroke-width="3"/>
+<circle cx="1130.00" cy="201.99" r="7" fill="#2563EB"/>
+<text x="1130.00" y="582" text-anchor="middle" class="label">D10</text>
+<text x="64" y="620" class="subtitle">D1 = lowest predicted score · D10 = highest · pooled monotonic steps: 9/9</text>
+<text x="1136" y="620" text-anchor="end" class="subtitle">Not prospective validation</text>
+</svg>

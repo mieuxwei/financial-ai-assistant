@@ -1,0 +1,80 @@
+{
+  "schema_version": "f12-portfolio-finalization-v1",
+  "milestone": "F12",
+  "status": "COMPLETE",
+  "portfolio_only": true,
+  "research_state": {
+    "track_a": "COMPLETE_FROZEN",
+    "track_b": "COMPLETE_THROUGH_B5",
+    "track_c": "CONTROLLED_LOCAL_DEMOS_COMPLETE_NOT_DEPLOYED",
+    "current_market": "NOT_READY_FOR_F11B_2",
+    "current_market_gate_passed": 6,
+    "current_market_gate_total": 9,
+    "exact_feature_parity_passed": 5,
+    "exact_feature_parity_total": 23
+  },
+  "authoritative_metrics": {
+    "track_a": {
+      "historical_oos_rows": 20637,
+      "outer_folds": 7,
+      "selected_model": "ridge_regression",
+      "selected_alpha": 100.0,
+      "mean_outer_spearman": 0.19404983142697246,
+      "mean_outer_mae": 0.5473175005080211,
+      "mean_top_decile_lift": 1.3542106718702644,
+      "pooled_decile_monotonic_steps": 9,
+      "pooled_decile_step_count": 9
+    },
+    "track_b": {
+      "source_events": 7582,
+      "reaction_windows": 3433,
+      "represented_tickers": 9,
+      "signed_market_only_spearman": 0.0349,
+      "signed_metadata_spearman": 0.0784,
+      "signed_bert_metadata_spearman": 0.0408,
+      "absolute_metadata_spearman": 0.2504,
+      "absolute_metadata_top_decile_lift": 1.623,
+      "market_reaction_maturity": "AUTOMATED_SIGNAL_ONLY"
+    }
+  },
+  "claim_boundaries": {
+    "prospective_validation": false,
+    "live_current_market_inference": false,
+    "price_direction_supported": false,
+    "investment_advice": false,
+    "chinese_sentiment_validated": false,
+    "market_reaction_causal": false,
+    "controlled_demo_label_required": true
+  },
+  "assets": [
+    "docs/assets/system_architecture.svg",
+    "docs/assets/track_a_model_comparison.svg",
+    "docs/assets/track_a_ridge_deciles.svg",
+    "docs/assets/controlled_streamlit_dashboard.jpg",
+    "docs/assets/controlled_streamlit_intelligence.jpg",
+    "docs/assets/controlled_streamlit_limitations.jpg"
+  ],
+  "documents": [
+    "README.md",
+    "docs/portfolio_finalization.md",
+    "docs/architecture.md",
+    "docs/deployment.md",
+    "docs/privacy.md",
+    "demo/README.md"
+  ],
+  "validation": {
+    "pytest_passed": 306,
+    "ruff": "PASS",
+    "secret_scan": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "non_goals": {
+    "model_retrained": false,
+    "target_changed": false,
+    "b6_or_f9_reopened": false,
+    "f11b_2_unlocked": false,
+    "feature_parity_gate_lowered": false,
+    "deployment_performed": false,
+    "live_gas_modified": false
+  }
+}

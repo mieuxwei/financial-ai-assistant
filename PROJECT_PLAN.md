@@ -1,15 +1,16 @@
 # Financial AI Assistant — Final Project Plan
 
-Plan version: `b4-market-reaction-validation-v1`
+Plan version: `r1a-public-web-demo-release-v1`
 
 Last revised: 2026-08-29
-Active milestone: **F11B-2 prerequisite gate audit complete — BLOCKED (2/9 pass); remediation required**
+Active milestone: **R1A READY FOR MANUAL DEPLOY — controlled public web demo; no URL yet**
 
 Authoritative state:
 
 - **Track A:** complete/frozen; Ridge Regression `alpha=100`; do not reopen.
-- **Track B:** active; B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9.
-- **Track C:** F10/F11A/F11B-D0/1A/1B complete; F11B-2 gate audit 2/9, integration blocked; F12 last.
+- **Track B:** complete through B5; optional B6/F9 not run and not required.
+- **Track C:** F10/F11A/F11B-D0/1A/1B/F11B-2A/F12 complete；R1A fixture-only public
+  release is ready for manual deploy；current integration remains blocked at 6/9 gates.
 - **AP11:** optional enhancement, not a prerequisite.
 - **eLAND:** permanent historical exclusion; no active use or re-audit.
 - **GAS:** future private migration-copy modification authorized only under the immutable
@@ -127,7 +128,8 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 
 ### Track C — Financial Intelligence Product
 
-- **F10/F11A/F11B-D0/1A/1B complete；F11B-2 gate audit 2/9、integration blocked；F12 pending and last；**
+- **F10/F11A/F11B-D0/1A/1B/F11B-2A/F12 complete；R1A ready；F11B-2 gate 6/9、
+  integration blocked；**
 - Python backend 擁有 ingestion、features、ML、NLP、evaluation、inference、database 與 jobs；
 - GAS／LINE 只作 transitional adapter、event routing、API calls、reply/push/Flex UX；
 - UI 顯示 relative volatility-surprise score、percentile、band、context 與 recent intelligence；
@@ -155,9 +157,11 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
 | F11B-1A Controlled LINE routing | Complete / private migration copy | 六入口 parser/dispatcher 與 legacy compatibility 已完成；原始/immutable GAS、manifest、webhook、trigger、持股均未變。 |
 | F11B-1B Controlled read-only demo | Complete / not deployed | HMAC-authenticated FastAPI static-fixture endpoint 與 migration-copy Flex 已完成；只接受受控 2330 fixture，全程標示 `CONTROLLED RESEARCH DEMO`，零 provider/model/portfolio access。 |
-| F11B-2 Current-market integration | Blocked / gate audit 2 of 9 pass | TAIEX/timezone pass；OHLCV governance、23-feature current parity、cutoff、missingness、training/inference parity、lineage、end-to-end validation blocked。不得開始 integration。 |
+| F11B-2A Official source/parity resolution | Complete / gate audit 6 of 9 pass | Official TWSE current OHLCV 10/10、TAIEX、cutoff、missingness、timezone、lineage pass；exact feature parity 5/23、training/inference parity fail、E2E not run。Decision B；不得開始 integration。 |
+| F11B-2 Current-market integration | Blocked / not started | `NOT_READY_FOR_F11B_2`；official adjusted-close lineage 未能證明與 frozen Yahoo `adjclose` training-equivalent。 |
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
-| F12 Portfolio Finalization | Pending / last | 完成 final workflow、README、visuals、abstract、demo、limitations/security/privacy；如實標明未完成/optional/live limitations；tests/lint/secret/reproducibility 全通過。 |
+| F12 Portfolio Finalization | Complete / not deployed | README、research story、architecture、Track A/B summaries、model charts、controlled demo assets、F11B-2A blocked result、limitations、installation 與 consistency audit 完成。 |
+| R1A Public Web Demo Release | Ready for manual deploy | Streamlit Community Cloud、`demo/public_app.py`、fixture-only、zero-runtime-secret、no FastAPI/provider call；需使用者 commit/push 與 GitHub/Streamlit 授權後才能取得 HTTPS URL。 |
 
 R0 詳細規格見 `docs/r0_project_rebaseline_protocol.md`；B3.1 的 later-authorized audit decision
 見 `research/evaluation/b3_1_chinese_sentiment_label_source_audit.md`。B4 凍結協定與結果分別見
@@ -408,9 +412,12 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
     guards、structured errors；無外部 API/訓練/部署，F9 未執行。**
 11. **F11A — Controlled Streamlit Dashboard：**relative-risk score、context、intelligence、
     disclaimers。**完成：受控離線 fixture＋loopback-only F10 client；未部署。**
-12. **F11B — LINE/GAS Integration：****D0 COMPLETE / implementation pending**。F11B-0 私有
-    安全備份已在 R0 完成；F11B-1A/1B/2 未開始。
-13. **F12 — Portfolio Finalization：****PENDING AND LAST**；不是 R0 後的下一單元。
+12. **F11B — LINE/GAS Integration：****D0/1A/1B/2A COMPLETE；F11B-2 BLOCKED**。F11B-0 私有
+    安全備份保持不變；controlled demo 未部署，current-market gate 只有 6/9。
+13. **F12 — Portfolio Finalization：****COMPLETE**；README、visuals、demo assets、limitations 與
+    final consistency checks 完成，未部署。
+14. **R1A — Public Web Demo Release：****READY FOR MANUAL DEPLOY**；單一 Streamlit
+    fixture-only topology 已凍結，零 runtime secret、零 provider call、無公開 URL。
 
 ## 16. Definition of Done
 
@@ -444,6 +451,8 @@ absolute reaction 有 modest automated signal；BERT title representation 未提
 value。`MARKET_REACTION_MODEL` 為 `AUTOMATED_SIGNAL_ONLY`；`LINGUISTIC_SENTIMENT` 獨立維持
 `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`。
 
-下一個且唯一 executable unit 是 **F11B-1A — Controlled LINE Routing in Migration Copy**，必須
-另有使用者指令才可開始。D0 只凍結設計；Track A/F7 Ridge alpha 100、Track B models、live
-GAS、LINE、webhook、trigger、Sheet、真實持股與 Streamlit 均未變更，也未部署、commit 或 push。
+R1A 已達 `PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`。目前唯一外部動作是由使用者審查後自行
+commit/push，並在 Streamlit Community Cloud 授權 GitHub repository、選擇 Python 3.12 與
+`demo/public_app.py`，secrets 留空。取得 URL 並完成 bounded smoke test 後，下一個唯一建議
+unit 才是 **R1B — LINE Controlled Demo Release**。Track A/B、F11B-2、live GAS、LINE webhook、
+真實持股均未變更，也未部署、commit 或 push。

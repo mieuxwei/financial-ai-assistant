@@ -1,0 +1,226 @@
+{
+  "schema_version": "f11b-official-current-market-parity-v1",
+  "milestone": "F11B-2A",
+  "audit_date": "2026-08-29",
+  "decision_code": "OFFICIAL_OHLCV_AVAILABLE_BUT_ADJUSTED_PARITY_UNRESOLVED",
+  "read_only_audit": true,
+  "sources": {
+    "twse_current_ohlcv": {
+      "endpoint": "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
+      "status": "AUDITED_CURRENT_SOURCE"
+    },
+    "twse_historical_ohlcv": {
+      "endpoint": "https://www.twse.com.tw/exchangeReport/STOCK_DAY",
+      "status": "AUDITED_WITH_BOUNDED_OVERLAP"
+    },
+    "tpex_current_ohlcv": {
+      "endpoint": "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes",
+      "status": "AUDITED_NOT_REQUIRED_FOR_FROZEN_UNIVERSE"
+    },
+    "twse_corporate_actions": {
+      "endpoint": "https://openapi.twse.com.tw/v1/exchangeReport/TWT48U_ALL",
+      "status": "CURRENT_PREVIEW_ONLY_NOT_TRAINING_EQUIVALENT"
+    },
+    "twse_total_return_index": {
+      "endpoint": "https://openapi.twse.com.tw/v1/indicesReport/MFI94U",
+      "status": "AUDITED"
+    },
+    "finmind_benchmark": {
+      "dataset": "TaiwanStockTotalReturnIndex",
+      "data_id": "TAIEX",
+      "status": "AUDITED_EXISTING_PATH"
+    },
+    "finmind_adjusted_price": {
+      "dataset": "TaiwanStockPriceAdj",
+      "status": "OPTIONAL_PAID_SOURCE"
+    },
+    "yahoo": {
+      "status": "HISTORICAL_PRIVATE_RESEARCH_COMPARISON_ONLY",
+      "production_source_approved": false
+    }
+  },
+  "universe": [
+    {"ticker": "0050", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "1301", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "1303", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2308", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2317", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2330", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2412", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2454", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2881", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"},
+    {"ticker": "2882", "market": "TWSE", "source": "TWSE_STOCK_DAY_ALL"}
+  ],
+  "coverage": {
+    "latest_exchange_session": "2026-08-28",
+    "required_recent_sessions": 35,
+    "covered_tickers": 10,
+    "required_tickers": 10,
+    "all_tickers_fresh": true,
+    "per_ticker": [
+      {"ticker": "0050", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "1301", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "1303", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2308", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2317", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2330", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2412", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2454", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2881", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true},
+      {"ticker": "2882", "latest_source_session": "2026-08-28", "covered_sessions": 35, "stale": false, "usable": true}
+    ],
+    "ticker_0050_finding": "TWSE provided 2026-08-28; the prior missing day was candidate-provider freshness, not an ETF mapping failure"
+  },
+  "overlap_audit": {
+    "intended_period": ["2024-01-01", "2025-12-31"],
+    "full_period_tickers": ["0050", "1301", "1303"],
+    "partial_period_tickers": ["2308"],
+    "current_only_tickers": ["2317", "2330", "2412", "2454", "2881", "2882"],
+    "environment_limit": "TWSE returned HTTP 428 during the bounded monthly collection; no retry loop was used",
+    "aligned_rows_compared": 1483,
+    "sufficient_to_confirm_training_equivalence": false
+  },
+  "adjusted_price_parity": {
+    "historical_source": "Yahoo chart indicators.adjclose",
+    "historical_semantics_proven": "PROVIDER_ADJUSTED_CLOSE_FIELD_ONLY",
+    "official_reconstruction": "NOT_AVAILABLE",
+    "mathematically_reasonable": "POSSIBLE_BUT_NOT_ACCEPTABLE_AS_PARITY",
+    "training_equivalent": false,
+    "row_count": null,
+    "session_alignment": null,
+    "exact_match_count": null,
+    "max_absolute_difference": null,
+    "median_absolute_difference": null,
+    "max_relative_difference": null,
+    "corporate_action_day_difference": null,
+    "non_corporate_action_day_difference": null,
+    "reason": "TWSE OpenAPI exposes a current ex-right/ex-dividend preview but no audited historical action lineage sufficient to reproduce Yahoo adjclose semantics"
+  },
+  "ohlcv_parity": {
+    "normalization": {
+      "prices": "decimal TWD; frozen Yahoo precision 0.000001",
+      "volume": "shares; no lots conversion applied",
+      "tolerance": "exact after frozen quantization; not relaxed after observation"
+    },
+    "overall_status": "FAIL_TRAINING_SOURCE_PARITY",
+    "per_ticker_aligned_rows": {
+      "0050": 480,
+      "1301": 484,
+      "1303": 484,
+      "2308": 35,
+      "2317": 0,
+      "2330": 0,
+      "2412": 0,
+      "2454": 0,
+      "2881": 0,
+      "2882": 0
+    },
+    "key_findings": [
+      "0050 official transaction-day prices diverge materially from the frozen Yahoo rows around corporate-action lineage",
+      "1301 and 1303 have small but non-zero OHLC differences at frozen precision",
+      "volume is not exact for the evaluated ticker-periods",
+      "2308 evaluated price rows matched for the bounded window but volume did not"
+    ]
+  },
+  "feature_parity": {
+    "feature_contract_sha256": "cf57d71992b2f097217b6b7d9bafcaad742e7def2df176f532ec25f72da7c02e",
+    "frozen_tolerance": {"absolute": "0.000000000001", "quantization": "0.000000000001"},
+    "passed": 5,
+    "required": 23,
+    "overall_status": "FAIL",
+    "rows": [
+      {"feature_name": "return_log_1", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "return_log_5", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "return_log_10", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "return_log_20", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "overnight_gap_log_1", "status": "FAIL", "n": 1245, "max_abs_diff": "0.007026725147", "median_abs_diff": "0.000000025706", "max_rel_diff": "1.685085639401880830957108172"},
+      {"feature_name": "close_ma_deviation_5", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "close_ma_deviation_20", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "volume_log_change_1p_1", "status": "FAIL", "n": 1245, "max_abs_diff": "5.037051261237", "median_abs_diff": "0.003425493780", "max_rel_diff": "203.7791887616833440542598193"},
+      {"feature_name": "volume_zscore_20", "status": "FAIL", "n": 1245, "max_abs_diff": "1.890478178350", "median_abs_diff": "0.009928137047", "max_rel_diff": "36.48321901983526500116258026"},
+      {"feature_name": "zero_volume_flag", "status": "PASS", "n": 1245, "max_abs_diff": "0", "median_abs_diff": "0", "max_rel_diff": "0"},
+      {"feature_name": "volatility_log_return_5", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "volatility_log_return_20", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "high_low_log_range_1", "status": "FAIL", "n": 1245, "max_abs_diff": "0.013538347889", "median_abs_diff": "0.000000027624", "max_rel_diff": "13538347889"},
+      {"feature_name": "atr_14_normalized", "status": "FAIL", "n": 1245, "max_abs_diff": "0.000688279599", "median_abs_diff": "0.000000009652", "max_rel_diff": "0.05301864957872495151186573621"},
+      {"feature_name": "parkinson_mean_5", "status": "FAIL", "n": 1245, "max_abs_diff": "0.001626146505", "median_abs_diff": "0.000000008793", "max_rel_diff": "0.3389081739015766424319223070"},
+      {"feature_name": "rsi_14", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "macd_12_26_normalized", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "macd_signal_9_normalized", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "benchmark_return_log_1", "status": "PASS", "n": 1245, "max_abs_diff": "0.000000000000", "median_abs_diff": "0.000000000000", "max_rel_diff": "0"},
+      {"feature_name": "benchmark_return_log_20", "status": "PASS", "n": 1245, "max_abs_diff": "0.000000000000", "median_abs_diff": "0.000000000000", "max_rel_diff": "0"},
+      {"feature_name": "benchmark_volatility_log_return_20", "status": "PASS", "n": 1245, "max_abs_diff": "0.000000000000", "median_abs_diff": "0.000000000000", "max_rel_diff": "0"},
+      {"feature_name": "stock_minus_benchmark_return_log_1", "status": "FAIL_NOT_EVALUABLE", "n": 0, "max_abs_diff": null, "median_abs_diff": null, "max_rel_diff": null},
+      {"feature_name": "benchmark_drawdown_20", "status": "PASS", "n": 1245, "max_abs_diff": "0.0", "median_abs_diff": "0.0", "max_rel_diff": "0"}
+    ]
+  },
+  "benchmark": {
+    "historical_identity": "TAIEX total-return index",
+    "official_identity": "TWSE MFI94U TAIEXTotalReturnIndex",
+    "current_candidate": "FinMind TaiwanStockTotalReturnIndex/TAIEX",
+    "n_compared": 20,
+    "exact_match_count": 20,
+    "max_absolute_difference": "0.00",
+    "status": "PASS"
+  },
+  "cutoff": {
+    "timezone": "Asia/Taipei",
+    "market_close": "13:30:00",
+    "safe_post_close_availability": "18:00:00",
+    "rule": "serve only after 18:00 Asia/Taipei and only when every stock and benchmark latest_source_session equals latest_exchange_session",
+    "historical_13_30_reused_for_serving": false
+  },
+  "freshness": {
+    "formula": "exchange-session count between latest_source_session and latest_exchange_session",
+    "gap_zero": "eligible subject to all other gates",
+    "gap_positive": "ABSTAIN_CURRENT_DATA; no silent fallback"
+  },
+  "missing_data": {
+    "required_sessions": 35,
+    "carry_forward": false,
+    "imputation": false,
+    "rule": "any missing required stock or benchmark session causes abstention"
+  },
+  "lineage": {
+    "required_fields": [
+      "ticker",
+      "market",
+      "source",
+      "endpoint_or_dataset",
+      "retrieved_at",
+      "source_latest_session",
+      "exchange_latest_session",
+      "timezone",
+      "cutoff_semantics",
+      "corporate_action_source",
+      "benchmark_source",
+      "feature_pipeline_version",
+      "feature_contract_sha",
+      "stale_status",
+      "abstain_reason"
+    ],
+    "complete_for_candidate_contract": true,
+    "normalized_snapshot_sha256": "3896304f4982f8a5b69cc642e0416a98574108301a87af4141bd1cc0bd3fe21f",
+    "derived_audit_sha256": "c91360cbd9c0e17c8f3477734c056e0b69de32fe4ce1dd93ca9898c82da7a5a5",
+    "raw_payload_tracked": false
+  },
+  "gate_decisions": [
+    {"gate": "current_ohlcv_source_audited", "status": "PASS"},
+    {"gate": "taiex_source_audited", "status": "PASS"},
+    {"gate": "exact_23_feature_parity", "status": "FAIL"},
+    {"gate": "cutoff_semantics", "status": "PASS"},
+    {"gate": "missing_data_rules", "status": "PASS"},
+    {"gate": "training_inference_feature_parity", "status": "FAIL"},
+    {"gate": "asia_taipei_timezone", "status": "PASS"},
+    {"gate": "current_lineage", "status": "PASS"},
+    {"gate": "end_to_end_validation", "status": "NOT_RUN"}
+  ],
+  "gate_pass_count": 6,
+  "gate_total": 9,
+  "next_action": "NOT_READY_FOR_F11B_2",
+  "next_executable_unit": "F12_PORTFOLIO_FINALIZATION",
+  "f11b_2_started": false,
+  "model_modified": false,
+  "gas_modified": false,
+  "deployment_performed": false
+}

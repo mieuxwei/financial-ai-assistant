@@ -12,21 +12,19 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     plan = _read("PROJECT_PLAN.md")
     readme = _read("README.md")
 
-    assert (
-        "NEXT EXECUTABLE UNIT: **F11B-2 prerequisite remediation — do not begin integration**"
-        in handoff
-    )
-    assert "F11B-2 prerequisite gate audit complete" in plan
-    assert "F11B-2 prerequisite audit complete" in readme
-    assert "2/9" in plan and "blocked" in plan.casefold()
-    assert "2/9" in readme and "blocked" in readme.casefold()
+    assert "NEXT EXECUTABLE UNIT: **R1B" in handoff
+    assert "R1A Public Web Demo Release — READY FOR MANUAL DEPLOY" in handoff
+    assert "F11B-2A/F12 complete" in plan
+    assert "F11B-2A complete" in readme
+    assert "6/9" in plan and "blocked" in plan.casefold()
+    assert "6 of 9" in readme and "blocked" in readme.casefold()
     assert "B3.1" in handoff
     assert "B3.1" in plan
     assert "B3.1" in readme
     assert "AUTOMATED_SIGNAL_ONLY" in handoff
     assert "AUTOMATED_SIGNAL_ONLY" in plan
     assert "AUTOMATED_SIGNAL_ONLY" in readme
-    assert "NEXT EXECUTABLE UNIT: **F12" not in handoff
+    assert "NOT_READY_FOR_F11B_2" in handoff
 
 
 def test_f11b_1b_documentation_preserves_controlled_demo_boundary() -> None:

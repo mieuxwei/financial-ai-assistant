@@ -5,5 +5,14 @@ secondaryBackgroundColor = "#E8F1EE"
 textColor = "#17342E"
 font = "sans-serif"
 
+[client]
+showErrorDetails = "none"
+toolbarMode = "viewer"
+
+[server]
+headless = true
+enableCORS = true
+enableXsrfProtection = true
+
 [browser]
 gatherUsageStats = false

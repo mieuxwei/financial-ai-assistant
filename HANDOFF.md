@@ -2,15 +2,15 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **F11B-2 Prerequisite Gate Audit — COMPLETE / BLOCKED (2 PASS, 7 BLOCKED)**
+ACTIVE PHASE: **R1A Public Web Demo Release — READY FOR MANUAL DEPLOY**
 
-NEXT EXECUTABLE UNIT: **F11B-2 prerequisite remediation — do not begin integration**
+NEXT EXECUTABLE UNIT: **R1B — only after user-controlled R1A commit/push and deployment review**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
-TRACK B: **ACTIVE — B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9**
+TRACK B: **COMPLETE THROUGH B5 — optional B6/F9 not run and not required**
 
-TRACK C: **F10/F11A/F11B-D0/1A/1B complete / F11B-2 gate audit 2/9 / integration blocked / F12 last**
+TRACK C: **F10/F11A/F11B-D0/1A/1B/2A/F12 complete / R1A ready / F11B-2 blocked**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -33,9 +33,9 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Local `main` and `origin/main` both pointed to `d23a5f4` (`F11B-1A`) before this unit.
-- Current uncommitted changes implement F11B-1B only; historical B5, D0 and 1A evidence remains
-  preserved.
+- Local `main` and `origin/main` both point to `cb413a8` (`F11B-2`) at F12 finalization time.
+- Current uncommitted changes preserve F11B-2A/F12 and add the R1A zero-secret, fixture-only
+  Streamlit public release entrypoint, documentation and safety tests. No commit or push was made.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -64,8 +64,8 @@ Primary research question:
 Track A predicts a continuous next-session stock-normalized volatility-surprise score and is now
 complete/frozen. Track B is the active Taiwan Financial Sentiment / Impact Modeling and Financial
 NLP Intelligence program. Track C is the Python/FastAPI product with F11A and F11B-D0/1A/1B
-complete. F11B-1B is deterministic, authenticated, read-only and not deployed; F11B-2 remains
-blocked by the frozen current-market gates.
+complete. F11B-1B is deterministic, authenticated, read-only and not deployed. F11B-2A confirms
+official 10/10 current coverage but only 5/23 exact features; F11B-2 remains gated.
 
 ## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
 
@@ -84,16 +84,19 @@ R0 Project Rebaseline & GAS Safety Freeze
   → F11B-2 Current-Market Feature / Risk Integration (only if separately validated)
   → B6 / F9 Optional NLP Incremental-Value Study
   → F12 Portfolio Finalization
+  → R1A Public Web Demo Release
+  → R1B LINE Controlled Demo Release (only after R1A success or ready/manual release)
 ```
 
 R0 created the F11B-0 private safety copies early without altering the sequence. B1, B2, B2.1, B3,
-B3.1, B4, B5 and F11B-D0/1A/1B are complete; do not begin F11B-2 or F12 without explicit user
-instruction and the applicable gates. Definitions of Done are frozen in
+B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12 are complete. R1A is ready for manual deploy. Do not begin
+F11B-2 unless all applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-F11B-1B is complete and not deployed. The F11B-2 prerequisite audit passed only TAIEX source and
-timezone; seven gates remain blocked. Do not begin F11B-2 integration until a repeat audit reaches
-9/9.
+F11B-1B is complete and not deployed. F11B-2A found official TWSE current OHLCV for all ten frozen
+tickers and exact TAIEX total-return parity, but historical Yahoo `adjclose` cannot be reproduced
+from the audited official corporate-action lineage. Only 5/23 features pass; the updated gate is
+6/9 and `NOT_READY_FOR_F11B_2`. F12 is not blocked by this result.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -509,9 +512,10 @@ private-beta MOPS endpoint remain HOLD. See
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
 - **F11A:** controlled Streamlit dashboard complete; not deployed.
-- **F11B:** D0/1A/1B complete; F11B-0 safety copy remains immutable; F11B-2 integration has not
-  started because its prerequisite audit is 2/9.
-- **F12:** portfolio finalization pending and last; it is not the next executable unit.
+- **F11B:** D0/1A/1B/2A complete; F11B-0 safety copy remains immutable; F11B-2 integration has not
+  started because exact feature and training/serving parity remain failed at 6/9 gates.
+- **F12:** portfolio finalization complete; homepage, evidence-linked story, architecture, charts,
+  controlled screenshots, limitations, installation and consistency checks finalized.
 
 ## B1 ARTIFACTS
 
@@ -875,7 +879,11 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-F11B-1B is complete and not deployed. The bounded F11B-2 gate audit found only 2/9 gates passing:
-FinMind TAIEX and timezone. Current OHLCV governance, current 23-feature parity, cutoff semantics,
-missingness, training/inference parity, lineage and validation remain blocked. The next unit is
-**F11B-2 prerequisite remediation**, not integration. F12 remains last; Track A/B models stay frozen.
+F11B-1B is complete and not deployed. F11B-2A supersedes the earlier 2/9 snapshot: official TWSE
+coverage, TAIEX, cutoff, missingness, timezone and lineage now pass, for 6/9. Exact 23-feature and
+training/inference parity fail because adjusted-price lineage is unresolved and raw-source values
+differ; E2E was not run. Decision:
+`OFFICIAL_OHLCV_AVAILABLE_BUT_ADJUSTED_PARITY_UNRESOLVED` / `NOT_READY_FOR_F11B_2`. F12 remains
+complete. R1A is `PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`: no URL exists until the user reviews,
+commits/pushes and authorizes Streamlit Community Cloud. The next suggested unit is R1B only after
+that release step. Track A/B models stay frozen.

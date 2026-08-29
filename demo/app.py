@@ -8,12 +8,13 @@ from backend.app.schemas.research import (
     FinancialIntelligenceItem,
     VolatilitySurprisePredictionResponse,
 )
-from demo.client import DashboardApiClient, DashboardApiError
 from demo.contracts import (
     ControlledDashboardFixture,
     DashboardDemoConfig,
+    PublicWebDemoReleaseConfig,
     load_controlled_fixture,
     load_dashboard_config,
+    load_public_release_config,
 )
 from demo.presentation import (
     band_color,
@@ -26,6 +27,7 @@ from demo.presentation import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "research/configs/dashboard_demo.v1.json"
+PUBLIC_RELEASE_CONFIG_PATH = ROOT / "research/configs/public_web_demo_release.v1.json"
 
 
 @st.cache_resource
@@ -35,46 +37,64 @@ def load_assets() -> tuple[DashboardDemoConfig, ControlledDashboardFixture]:
     return config, fixture
 
 
-def render() -> None:
+@st.cache_resource
+def load_public_release() -> PublicWebDemoReleaseConfig:
+    return load_public_release_config(PUBLIC_RELEASE_CONFIG_PATH)
+
+
+def render(*, public_release: bool = False) -> None:
     st.set_page_config(
-        page_title="Financial AI Assistant",
+        page_title="Financial AI Assistant | Controlled Research Demo",
         page_icon="📊",
         layout="wide",
         initial_sidebar_state="expanded",
     )
     _apply_theme()
     config, fixture = load_assets()
+    release = load_public_release()
 
     with st.sidebar:
         st.markdown("### Demo 控制台")
-        mode_label = st.radio(
-            "資料模式",
-            ("受控離線示範", "本機 FastAPI"),
-            help="離線模式不會發出任何網路請求。",
-        )
         api_base_url = config.local_api_default_base_url
-        if mode_label == "本機 FastAPI":
-            api_base_url = st.text_input("FastAPI URL", value=api_base_url)
-            st.caption("安全限制：僅允許 localhost／127.0.0.1／::1。")
+        if public_release:
+            mode_label = "受控離線示範"
+            st.success("Controlled Research Demo")
+            st.caption("固定使用受控合成資料；不連接外部資料來源。")
+        else:
+            mode_label = st.radio(
+                "資料模式",
+                ("受控離線示範", "本機 FastAPI"),
+                help="離線模式不會發出任何網路請求。",
+            )
+            if mode_label == "本機 FastAPI":
+                api_base_url = st.text_input("FastAPI URL", value=api_base_url)
+                st.caption("安全限制：僅允許 localhost／127.0.0.1／::1。")
         st.divider()
-        st.caption("F11 · controlled public demo")
+        st.caption("R1A · controlled public research demo")
         st.caption("不含真實持股、LINE token 或個人資料")
 
-    prediction, items, source_label = _resolve_data(
-        mode_label, api_base_url, config, fixture
-    )
-    _render_header(fixture, source_label)
+    if public_release:
+        prediction = fixture.prediction_response
+        items = fixture.intelligence_items
+        source_label = "受控合成離線資料"
+    else:
+        prediction, items, source_label = _resolve_data(
+            mode_label, api_base_url, config, fixture
+        )
+    _render_header(fixture, source_label, public_release=public_release)
     _render_risk_summary(prediction)
 
-    overview_tab, intelligence_tab, lineage_tab = st.tabs(
-        ["風險概覽", "近期情報", "模型與限制"]
+    overview_tab, intelligence_tab, evidence_tab, lineage_tab = st.tabs(
+        ["股票分析", "金融情報", "研究證據", "限制與狀態"]
     )
     with overview_tab:
         _render_feature_context(fixture)
     with intelligence_tab:
         _render_intelligence(items)
+    with evidence_tab:
+        _render_research_evidence(release)
     with lineage_tab:
-        _render_lineage(prediction, fixture, source_label)
+        _render_lineage(prediction, fixture, source_label, release)
 
     st.divider()
     st.caption(
@@ -95,6 +115,8 @@ def _resolve_data(
 ]:
     if mode_label == "受控離線示範":
         return fixture.prediction_response, fixture.intelligence_items, "受控合成離線資料"
+    from demo.client import DashboardApiClient, DashboardApiError
+
     cache_key = f"{api_base_url}|{fixture.prediction_request.ticker}"
     if st.button("重新取得本機資料", width="stretch") or st.session_state.get(
         "live_cache_key"
@@ -122,12 +144,24 @@ def _resolve_data(
     )
 
 
-def _render_header(fixture: ControlledDashboardFixture, source_label: str) -> None:
+def _render_header(
+    fixture: ControlledDashboardFixture,
+    source_label: str,
+    *,
+    public_release: bool,
+) -> None:
+    if public_release:
+        st.markdown(
+            '<div class="release-badge">CONTROLLED RESEARCH DEMO · 受控研究展示</div>',
+            unsafe_allow_html=True,
+        )
     st.markdown(
         '<div class="eyebrow">FINANCIAL INTELLIGENCE RESEARCH</div>',
         unsafe_allow_html=True,
     )
     st.title("Financial AI Assistant")
+    if public_release:
+        st.caption("研究作品集 · 非即時市場預測 · 非投資建議")
     title_col, source_col = st.columns([3, 1])
     with title_col:
         st.subheader(fixture.company_display_name)
@@ -202,16 +236,57 @@ def _render_intelligence(items: list[FinancialIntelligenceItem]) -> None:
             header_col.markdown(f"**{item.source_excerpt or '無摘要'}**")
             time_col.caption(item.published_at.strftime("%Y-%m-%d %H:%M"))
             st.write(sentiment_summary(item))
-            st.write(event_summary(item))
+            if item.track_b_intelligence is None:
+                st.write(event_summary(item))
+            else:
+                track_b = item.track_b_intelligence
+                event = track_b.event_classification
+                reaction = track_b.market_reaction
+                st.write(f"事件分類（受控範例）：{event.event_class or '未分類'}")
+                if reaction.communication_band is not None:
+                    st.write(
+                        "市場反應強度："
+                        f"{band_label(reaction.communication_band)} · "
+                        f"{reaction.communication_band.replace('_', ' ')}"
+                    )
+                    st.caption(
+                        "歷史上此類事件後續市場反應幅度的自動化研究訊號；"
+                        "不代表方向、因果或報酬預測。"
+                    )
+                st.caption("目前證據不足以可靠預測上漲或下跌方向。")
             if item.deterministic_cue_terms:
                 st.caption("事件線索：" + "、".join(item.deterministic_cue_terms))
             st.caption(f"來源類型：{item.source_type} · 語言：{item.language}")
+
+
+def _render_research_evidence(release: PublicWebDemoReleaseConfig) -> None:
+    st.markdown("### Track A 歷史研究證據")
+    metric_a, metric_b, metric_c = st.columns(3)
+    metric_a.metric("Selected model", "Ridge · alpha 100", border=True)
+    metric_b.metric(
+        "Mean outer Spearman", f"{release.track_a_mean_outer_spearman:.3f}", border=True
+    )
+    metric_c.metric(
+        "Mean top-decile lift", f"{release.track_a_top_decile_lift:.3f}×", border=True
+    )
+    st.markdown(
+        f"- {release.track_a_outer_folds} 個 chronological rolling-origin outer periods。\n"
+        "- Retrospective、leakage-aware、hypothesis-informed；不是 prospective validation。\n"
+        "- 主要證據支持相對排序，不支持精準振幅或價格方向預測。"
+    )
+    st.markdown("### Track B 歷史研究證據")
+    st.markdown(
+        "- 中文文字情緒目前尚未通過獨立驗證。\n"
+        "- 市場反應強度僅為歷史關聯的研究型自動訊號。\n"
+        "- BERT 金融表示未被證實可改善 signed market-reaction prediction。"
+    )
 
 
 def _render_lineage(
     prediction: VolatilitySurprisePredictionResponse,
     fixture: ControlledDashboardFixture,
     source_label: str,
+    release: PublicWebDemoReleaseConfig,
 ) -> None:
     st.markdown("### Model lineage")
     st.code(
@@ -235,6 +310,16 @@ def _render_lineage(
         "- 事件代理不是人工標注，也不是 sentiment ground truth。\n"
         "- F9 NLP incremental-value study 尚未執行。"
     )
+    st.warning(
+        "目前公開版本使用受控研究資料展示。即時市場推論尚未啟用，"
+        "因訓練與即時資料的特徵一致性尚未通過完整驗證。"
+    )
+    st.caption(
+        "F11B-2A gate："
+        f"{release.current_market_gate_passed}/{release.current_market_gate_total}；"
+        "exact feature parity："
+        f"{release.exact_feature_parity_passed}/{release.exact_feature_parity_total}。"
+    )
 
 
 def _apply_theme() -> None:
@@ -245,6 +330,9 @@ def _apply_theme() -> None:
         .block-container { max-width: 1240px; padding-top: 2.2rem; }
         .eyebrow { color: #18735f; font-size: .76rem; font-weight: 800;
                    letter-spacing: .16em; margin-bottom: .35rem; }
+        .release-badge { display: inline-block; background: #12362f; color: #ffffff;
+                         border-radius: 999px; font-size: .78rem; font-weight: 800;
+                         letter-spacing: .08em; margin-bottom: .75rem; padding: .45rem .8rem; }
         h1, h2, h3 { color: #12362f; }
         [data-testid="stMetric"] { background: rgba(255,255,255,.82); }
         .band-note { background: rgba(255,255,255,.74); border-left: 5px solid;
@@ -255,4 +343,5 @@ def _apply_theme() -> None:
     )
 
 
-render()
+if __name__ == "__main__":
+    render()

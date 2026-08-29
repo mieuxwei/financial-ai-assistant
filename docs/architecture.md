@@ -1,5 +1,30 @@
 # Architecture
 
+## Final portfolio architecture
+
+![Financial AI Assistant architecture](assets/system_architecture.svg)
+
+F12 is complete as a documentation and controlled-demo milestone. R1A adds a public-release
+boundary around the F11A presentation layer:
+
+```text
+Public browser → Streamlit Community Cloud → demo/public_app.py → synthetic fixture only
+```
+
+The R1A path requires no FastAPI, database, provider, model artifact or runtime secret. It is ready
+for manual deployment but has no public URL yet. F11B-2 current-market serving remains blocked
+after F11B-2A because exact feature parity is 5/23 and the audited official corporate-action
+lineage cannot reproduce the historical Yahoo `adjclose` contract.
+
+The final ownership boundary is:
+
+- FastAPI/Python owns identity, portfolio rules, persistence, data pipelines, Track A/B contracts,
+  lineage, abstention and auditability;
+- Streamlit presents a deterministic controlled fixture or an explicitly selected loopback API;
+- GAS remains a transitional thin LINE adapter and does not own model or portfolio logic;
+- provider calls never occur inside the controlled demo request path;
+- live/current inference must remain unavailable until every frozen serving gate passes.
+
 ## Active research direction
 
 The active final-study path is continuous next-session stock-normalized volatility-surprise
@@ -19,7 +44,7 @@ The existing ingestion, portfolio, English sentiment and exploratory Taiwan NLP 
 remain reusable. The binary M1–M11 architecture is preserved immediately below as immutable
 exploratory research history; it is not the final production-research model.
 
-## Active final-study boundary (F1–F12)
+## Final-study boundary (F1–F12 complete as a research portfolio)
 
 ```text
 immutable historical market data + source lineage

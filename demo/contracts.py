@@ -46,6 +46,40 @@ class DashboardDemoConfig(StrictModel):
         return self
 
 
+class PublicWebDemoReleaseConfig(StrictModel):
+    schema_version: Literal["public-web-demo-release-v1"]
+    release_unit: Literal["R1A"]
+    release_status: Literal["PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY"]
+    hosting_provider: Literal["STREAMLIT_COMMUNITY_CLOUD"]
+    deployment_topology: Literal["STREAMLIT_FIXTURE_ONLY"]
+    entrypoint: Literal["demo/public_app.py"]
+    python_version: Literal["3.12"]
+    controlled_fixture_only: Literal[True]
+    zero_runtime_secret: Literal[True]
+    fastapi_required: Literal[False]
+    request_time_network_calls: Literal[False]
+    current_market_inference_enabled: Literal[False]
+    chinese_sentiment_enabled: Literal[False]
+    price_direction_enabled: Literal[False]
+    portfolio_input_enabled: Literal[False]
+    private_artifacts_packaged: Literal[False]
+    track_a_mean_outer_spearman: Literal[0.194]
+    track_a_top_decile_lift: Literal[1.354]
+    track_a_outer_folds: Literal[7]
+    current_market_gate_passed: Literal[6]
+    current_market_gate_total: Literal[9]
+    exact_feature_parity_passed: Literal[5]
+    exact_feature_parity_total: Literal[23]
+
+    @model_validator(mode="after")
+    def validate_public_release_boundary(self) -> PublicWebDemoReleaseConfig:
+        if self.fastapi_required or self.request_time_network_calls:
+            raise ValueError("public release must remain fixture-only")
+        if self.current_market_inference_enabled or self.price_direction_enabled:
+            raise ValueError("unsupported current-market capability enabled")
+        return self
+
+
 class FeatureContext(StrictModel):
     return_20_session_pct: float
     volatility_20_session_pct: float
@@ -90,6 +124,10 @@ class ControlledDashboardFixture(StrictModel):
 
 def load_dashboard_config(path: Path) -> DashboardDemoConfig:
     return DashboardDemoConfig.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def load_public_release_config(path: Path) -> PublicWebDemoReleaseConfig:
+    return PublicWebDemoReleaseConfig.model_validate_json(path.read_text(encoding="utf-8"))
 
 
 def load_controlled_fixture(path: Path) -> ControlledDashboardFixture:

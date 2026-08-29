@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="675" viewBox="0 0 1220 675" role="img">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>
+  text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #10243E; }
+  .title { font-size: 30px; font-weight: 700; }
+  .subtitle { font-size: 17px; fill: #607089; }
+  .label { font-size: 16px; font-weight: 600; }
+  .small { font-size: 13px; fill: #607089; }
+</style>
+<text x="64" y="62" class="title">Financial AI Assistant — system architecture</text>
+<text x="64" y="92" class="subtitle">Research-first contracts with explicit serving, privacy and abstention boundaries</text>
+<rect x="70" y="170" width="240" height="118" rx="18" fill="#FFFFFF" stroke="#059669" stroke-width="3"/>
+<text x="92" y="205" class="label">LINE / GAS</text>
+<text x="92" y="238" class="small">Thin adapter</text>
+<text x="92" y="260" class="small">Routing · reply · Flex</text>
+<rect x="70" y="360" width="240" height="118" rx="18" fill="#FFFFFF" stroke="#0891B2" stroke-width="3"/>
+<text x="92" y="395" class="label">Streamlit</text>
+<text x="92" y="428" class="small">Controlled offline fixture</text>
+<text x="92" y="450" class="small">or loopback API</text>
+<rect x="465" y="245" width="270" height="150" rx="18" fill="#FFFFFF" stroke="#2563EB" stroke-width="3"/>
+<text x="487" y="280" class="label">FastAPI</text>
+<text x="487" y="313" class="small">Identity · portfolio rules</text>
+<text x="487" y="335" class="small">Track A/B contracts</text>
+<text x="487" y="357" class="small">No request-time providers</text>
+<rect x="890" y="120" width="255" height="125" rx="18" fill="#FFFFFF" stroke="#2563EB" stroke-width="3"/>
+<text x="912" y="155" class="label">Track A</text>
+<text x="912" y="188" class="small">Frozen Ridge model</text>
+<text x="912" y="210" class="small">Volatility-surprise rank</text>
+<rect x="890" y="285" width="255" height="150" rx="18" fill="#FFFFFF" stroke="#D97706" stroke-width="3"/>
+<text x="912" y="320" class="label">Track B</text>
+<text x="912" y="353" class="small">Event intelligence</text>
+<text x="912" y="375" class="small">Reaction magnitude signal</text>
+<text x="912" y="397" class="small">Chinese sentiment abstains</text>
+<rect x="890" y="480" width="255" height="105" rx="18" fill="#FFFFFF" stroke="#607089" stroke-width="3"/>
+<text x="912" y="515" class="label">Storage</text>
+<text x="912" y="548" class="small">Versioned lineage</text>
+<text x="912" y="570" class="small">Private/public boundary</text>
+<line x1="310" y1="229" x2="465" y2="295" stroke="#059669" stroke-width="3"/>
+<circle cx="465" cy="295" r="5" fill="#059669"/>
+<line x1="310" y1="419" x2="465" y2="345" stroke="#0891B2" stroke-width="3"/>
+<circle cx="465" cy="345" r="5" fill="#0891B2"/>
+<line x1="735" y1="285" x2="890" y2="185" stroke="#2563EB" stroke-width="3"/>
+<circle cx="890" cy="185" r="5" fill="#2563EB"/>
+<line x1="735" y1="325" x2="890" y2="355" stroke="#D97706" stroke-width="3"/>
+<circle cx="890" cy="355" r="5" fill="#D97706"/>
+<line x1="735" y1="365" x2="890" y2="530" stroke="#607089" stroke-width="3"/>
+<circle cx="890" cy="530" r="5" fill="#607089"/>
+<rect x="360" y="520" width="420" height="80" rx="14" fill="#FEF2F2" stroke="#DC2626" stroke-dasharray="8 6"/>
+<text x="382" y="551" class="label">Current-market serving: BLOCKED</text>
+<text x="382" y="578" class="small">F11B-2A exact feature parity 5/23 · controlled demo remains valid</text>
+</svg>

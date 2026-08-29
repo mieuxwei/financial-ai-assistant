@@ -121,6 +121,66 @@
         "event_proxy_is_sentiment_ground_truth": false,
         "llm_generated": false,
         "track_a_dependency": false
+      },
+      "track_b_intelligence": {
+        "contract_version": "b5-financial-intelligence-v1",
+        "event_classification": {
+          "status": "INFERRED_STRUCTURED_TAXONOMY",
+          "event_class": "重大契約（受控分類範例）",
+          "confidence": 0.8,
+          "rule_version": "controlled-taxonomy-v1",
+          "source": "TWMD",
+          "sentiment_ground_truth": false,
+          "market_direction": false
+        },
+        "linguistic_sentiment": {
+          "status": "ABSTAIN",
+          "maturity": "ABSTAIN",
+          "polarity": null,
+          "positive_probability": null,
+          "neutral_probability": null,
+          "negative_probability": null,
+          "reason": "CHINESE_SENTIMENT_NOT_VALIDATED"
+        },
+        "market_reaction": {
+          "status": "AVAILABLE_STORED_RESEARCH_SIGNAL",
+          "maturity": "AUTOMATED_SIGNAL_ONLY",
+          "reaction_magnitude_score": 0.013,
+          "historical_percentile": 85.0,
+          "communication_band": "HIGH",
+          "direction": null,
+          "direction_status": "ABSTAIN_DIRECTION_NOT_SUPPORTED",
+          "model_version": "b4-metadata-ridge-alpha100-absolute-reaction-v1",
+          "reference_version": "b4-2021-2025-oof-metadata-magnitude-v1",
+          "availability_timestamp": "2026-08-28T09:01:00+08:00",
+          "disclaimer": "受控合成之歷史關聯訊號；不代表投資建議、因果關係或未來報酬保證。"
+        },
+        "media_tone": {
+          "status": "UNAVAILABLE_OR_CONDITIONAL",
+          "output_type": "MEDIA_TONE_PROXY",
+          "tone": null
+        },
+        "representation": {
+          "encoder": "google-bert/bert-base-chinese",
+          "upstream_revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+          "adapted_weight_sha256": "eaacc66a4993a448e9e9dd7d6aab0fc33290d1f4e4e4e8d209efc1d7a17fd3b9",
+          "supported_use": "FINANCIAL_DOMAIN_REPRESENTATION",
+          "return_direction_prediction_supported": false,
+          "used_for_market_reaction_prediction": false
+        },
+        "lineage": {
+          "b5_config_sha256": "6ea9be0f46b1cf2b7bc7667912a32f8ecd9041a4216450503e268c54547b5b0e",
+          "b4_result_sha256": "9c2cb41b12d0084da84134c2727e494f14a01bd45ab966cb008e42e80aeb8c26",
+          "source": "controlled_demo",
+          "source_type": "CONTROLLED_RESEARCH_FIXTURE",
+          "publication_cutoff": "2026-08-28T09:00:00+08:00",
+          "availability_timestamp": "2026-08-28T09:01:00+08:00"
+        },
+        "limitations": [
+          "Synthetic controlled fixture; not a licensed source row.",
+          "Reaction magnitude is not price direction or causal impact.",
+          "Chinese linguistic sentiment remains unvalidated and abstained."
+        ]
       }
     },
     {
