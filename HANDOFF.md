@@ -1,16 +1,16 @@
 # Financial AI Assistant — Authoritative Handoff
 
-Last revised: 2026-08-29
+Last revised: 2026-08-30
 
-ACTIVE PHASE: **R1A Public Web Demo Release — READY FOR MANUAL DEPLOY / REDEPLOY REQUIRED**
+ACTIVE PHASE: **R1B LINE Public Beta Sandbox — READY FOR MANUAL SETUP / NOT DEPLOYED**
 
-NEXT EXECUTABLE UNIT: **R1B — only after user-controlled R1A commit/push and deployment review**
+NEXT EXECUTABLE UNIT: **R1B Deployment Verification — after external Demo resources are configured**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
 TRACK B: **COMPLETE THROUGH B5 — optional B6/F9 not run and not required**
 
-TRACK C: **F10/F11A/F11B-D0/1A/1B/2A/F12 complete / R1A ready / F11B-2 blocked**
+TRACK C: **F10/F11A/F11B-D0/1A/1B/2A/F12 and R1A complete / R1B code ready / F11B-2 blocked**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -33,9 +33,9 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Local `main` and `origin/main` both point to `cb413a8` (`F11B-2`) at F12 finalization time.
-- Current uncommitted changes preserve F11B-2A/F12 and add the R1A zero-secret, fixture-only
-  Streamlit public release entrypoint, documentation and safety tests. No commit or push was made.
+- R1A is deployed at the documented Streamlit HTTPS URL and its bounded smoke test passed.
+- Current uncommitted work preserves the user's R1A status-document changes and adds the isolated
+  R1B Edge/Demo GAS/FastAPI sandbox implementation, migration, tests and setup documents.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -61,11 +61,11 @@ Primary research question:
 > Can leakage-safe price, volume, volatility and market-context features forecast next-session
 > volatility surprise relative to each stock's own historical volatility context?
 
-Track A predicts a continuous next-session stock-normalized volatility-surprise score and is now
-complete/frozen. Track B is the active Taiwan Financial Sentiment / Impact Modeling and Financial
-NLP Intelligence program. Track C is the Python/FastAPI product with F11A and F11B-D0/1A/1B
-complete. F11B-1B is deterministic, authenticated, read-only and not deployed. F11B-2A confirms
-official 10/10 current coverage but only 5/23 exact features; F11B-2 remains gated.
+Track A predicts a continuous next-session stock-normalized volatility-surprise score and is
+complete/frozen. Track B is complete through B5. Track C now includes the deployed R1A controlled
+web demo and an R1B public-beta implementation ready for external Demo-only setup. R1B adds true
+sandbox portfolio persistence but uses only controlled research output. F11B-2A confirms official
+10/10 current coverage but only 5/23 exact features; F11B-2 remains gated.
 
 ## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
 
@@ -85,12 +85,14 @@ R0 Project Rebaseline & GAS Safety Freeze
   → B6 / F9 Optional NLP Incremental-Value Study
   → F12 Portfolio Finalization
   → R1A Public Web Demo Release
-  → R1B LINE Controlled Demo Release (only after R1A success or ready/manual release)
+  → R1B LINE Public Beta Sandbox
+  → R1B Deployment Verification (after external Demo resources exist)
 ```
 
 R0 created the F11B-0 private safety copies early without altering the sequence. B1, B2, B2.1, B3,
-B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12 are complete. R1A is ready for manual deploy. Do not begin
-F11B-2 unless all applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
+B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12/R1A are complete. R1B code and contracts are ready, but a
+new Demo LINE OA, Demo GAS, Worker, backend and PostgreSQL must be created before deployment
+verification. Do not begin F11B-2 unless all applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
 F11B-1B is complete and not deployed. F11B-2A found official TWSE current OHLCV for all ten frozen
@@ -884,7 +886,9 @@ coverage, TAIEX, cutoff, missingness, timezone and lineage now pass, for 6/9. Ex
 training/inference parity fail because adjusted-price lineage is unresolved and raw-source values
 differ; E2E was not run. Decision:
 `OFFICIAL_OHLCV_AVAILABLE_BUT_ADJUSTED_PARITY_UNRESOLVED` / `NOT_READY_FOR_F11B_2`. F12 remains
-complete. The R1A URL exists, but its first build exposed a nested-entrypoint import error. The
-fixed root-path bootstrap passes a cloud-like regression test and awaits user-controlled
-commit/push/redeploy. The next suggested unit is R1B only after the corrected HTTPS smoke test.
-Track A/B models stay frozen.
+complete. The R1A URL is public and its bounded HTTPS smoke passed. R1B uses a Cloudflare Worker
+security edge, an independent public-safe Demo GAS layer, existing FastAPI plus dedicated `demo_*`
+PostgreSQL tables, HMAC-derived principals, five-holding isolation, transaction-backed idempotency
+and 30-day retention. It is not deployed because the required new external Demo resources and
+secret stores have not been confirmed. Next: complete the manual checklist, then run R1B Deployment
+Verification. Track A/B, F11B-2 and all private resources stay frozen.

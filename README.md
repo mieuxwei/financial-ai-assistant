@@ -18,8 +18,10 @@ FastAPI、Streamlit 與 LINE/GAS controlled demo。
   linguistic sentiment 與方向預測明確 abstain。
 - **Track C — PORTFOLIO COMPLETE**：F10 FastAPI、F11A controlled Streamlit、F11B controlled
   LINE integration 設計與 migration-copy demo 已完成，全部未部署。
-- **R1A — READY FOR MANUAL DEPLOY**：零秘密、fixture-only Streamlit public entrypoint 已完成；
-  尚未 commit/push，沒有公開 URL。
+- **R1A — PUBLIC WEB DEMO DEPLOYED**：零秘密、fixture-only Streamlit public demo 已完成部署；
+  公開 HTTPS smoke test 通過。
+- **R1B — READY FOR MANUAL SETUP**：獨立 LINE Public Beta 的 Security Edge、Demo GAS、FastAPI
+  sandbox portfolio、PostgreSQL migration、Flex、資安測試與 setup/rollback 文件已完成；尚未部署。
 - **F11B-2A complete**：官方 current OHLCV 10/10，但 exact feature parity 僅 5/23；目前
   **6 of 9 gates PASS，current-market integration blocked**。
 - **Research integrity**：最終研究是 retrospective、leakage-aware、hypothesis-informed；
@@ -95,7 +97,7 @@ data、模型績效證據或真實投資訊號。
 
 ### Public Web Demo — R1A
 
-Status：`PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`（等待修正版重新部署）
+Status：`PUBLIC_WEB_DEMO_DEPLOYED`
 
 - Primary hosting：Streamlit Community Cloud。
 - Topology：單一 fixture-only Streamlit app；不需要 FastAPI。
@@ -103,10 +105,26 @@ Status：`PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`（等待修正版重新部署
 - Runtime secrets：零。
 - Request-time provider calls：零。
 - Public URL：[Streamlit controlled demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)；
-  首次部署發現 nested-entrypoint import 問題，本機修正已驗證，待使用者 commit/push 後重建。
+  nested-entrypoint 修正已部署，公開首頁與四個展示分頁的 bounded smoke test 通過。
 
 部署規格、平台比較、資料邊界與 rollback 步驟見
 [R1A Public Web Demo Release](docs/public_web_demo_release.md)。
+
+### LINE Public Beta — R1B
+
+Status：`LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP`（尚未部署）
+
+- 新 Demo LINE OA → Cloudflare Worker raw-signature edge → 新 Demo GAS → FastAPI → managed
+  PostgreSQL sandbox。
+- raw LINE user ID 只在驗證成功的 Edge 中使用，後端僅接收 keyed-HMAC principal。
+- 每位使用者最多 5 檔 frozen-universe Demo 持股，30 天 retention，可自行刪除。
+- 新增、修改、刪除皆需 Preview/Confirm，並以 webhook event ID 做 backend idempotency。
+- 不使用私人 Google Sheet、Gemini、Perplexity、TWMD raw data 或 current-market F7 inference。
+- 只有既有 2330 controlled fixture 有研究數值；其他 ticker 明確 abstain，不製造假分數。
+
+架構與人工建立順序見 [LINE Public Beta Architecture](docs/line_public_beta_architecture.md) 與
+[Manual Setup Checklist](docs/line_public_beta_setup.md)。在新 Demo OA 建立前，QR 狀態為
+`LINE_DEMO_QR_PENDING`。
 
 ### FastAPI
 
@@ -222,5 +240,7 @@ git diff --check
 - [F11B controlled LINE demo](docs/f11b_controlled_line_demo.md)
 - [F11B-2A parity audit](research/evaluation/f11b_official_current_market_parity_result.md)
 - [R1A public web demo release](docs/public_web_demo_release.md)
+- [R1B LINE public beta architecture](docs/line_public_beta_architecture.md)
+- [R1B manual setup](docs/line_public_beta_setup.md)
 - [Privacy](docs/privacy.md)
 - [Deployment boundary](docs/deployment.md)

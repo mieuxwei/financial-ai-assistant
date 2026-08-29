@@ -1,11 +1,11 @@
 # R1A Public Web Demo Release
 
-Date: 2026-08-29  
-Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**  
+Date: 2026-08-30
+Status: **PUBLIC_WEB_DEMO_DEPLOYED**
 Public URL: [mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)
 
-Current release note: the first cloud build exposed a nested-entrypoint import error; the local
-correction is validated but must be committed/pushed before Cloud can redeploy it.
+Current release note: the nested-entrypoint correction is deployed and the bounded public HTTPS
+smoke test passed on 2026-08-30.
 
 ## 1. Release decision
 
@@ -108,17 +108,11 @@ not live market inference or investment advice.
 - Streamlit Community Cloud may override telemetry settings as documented by the platform; the app
   itself emits no provider request.
 
-## 7. Manual deployment steps
+## 7. Deployed configuration
 
-The public app URL now exists, but the corrected entrypoint has not been pushed. After review:
-
-1. The user commits and pushes the validated `demo/public_app.py` correction.
-2. In Streamlit Community Cloud, reboot/redeploy the existing app if it does not rebuild
-   automatically from `main`.
-3. Keep Python 3.12 and the secrets field empty.
-4. Run the bounded HTTPS smoke test in section 8 before sharing the URL.
-
-Repository administrator permission is required for the initial deployment authorization.
+The public app is deployed from `main` with `demo/public_app.py`, Python 3.12 and an empty secrets
+field. The initial nested-entrypoint error was corrected with a fixed repository-root bootstrap;
+the corrected deployment passed the bounded HTTPS smoke test in section 8.
 
 ## 8. Post-deployment smoke test
 
@@ -134,6 +128,10 @@ Verify only:
 8. No stack trace, private data, secret or request-time provider call appears.
 
 Do not perform load testing.
+
+Smoke result on 2026-08-30: **PASS**. The public app loaded over HTTPS; the controlled label,
+score/percentile/band, financial intelligence, research evidence, Chinese sentiment abstention,
+F11B-2A limitations and disclaimers were visible. Browser error logs were empty.
 
 ## 9. Rollback / disable
 

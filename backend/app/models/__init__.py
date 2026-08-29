@@ -4,6 +4,12 @@ from backend.app.models.article_ticker import ArticleTicker
 from backend.app.models.base import Base
 from backend.app.models.daily_feature import DailyFeature
 from backend.app.models.daily_sentiment import DailySentimentAggregate
+from backend.app.models.demo_sandbox import (
+    DemoAuditEvent,
+    DemoHolding,
+    DemoIdempotencyRecord,
+    DemoPrincipal,
+)
 from backend.app.models.feature_dataset_run import FeatureDatasetRun
 from backend.app.models.holding import Holding
 from backend.app.models.market_ingestion_run import MarketIngestionRun
@@ -21,6 +27,10 @@ __all__ = [
     "Base",
     "DailySentimentAggregate",
     "DailyFeature",
+    "DemoAuditEvent",
+    "DemoHolding",
+    "DemoIdempotencyRecord",
+    "DemoPrincipal",
     "FeatureDatasetRun",
     "Holding",
     "MarketIngestionRun",

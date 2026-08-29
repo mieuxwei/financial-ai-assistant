@@ -6,6 +6,9 @@
 *.key
 secrets/
 .streamlit/secrets.toml
+.dev.vars*
+.wrangler/
+.clasp.json
 
 # Python
 __pycache__/

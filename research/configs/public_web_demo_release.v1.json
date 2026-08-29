@@ -1,7 +1,7 @@
 {
   "schema_version": "public-web-demo-release-v1",
   "release_unit": "R1A",
-  "release_status": "PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY",
+  "release_status": "PUBLIC_WEB_DEMO_DEPLOYED",
   "hosting_provider": "STREAMLIT_COMMUNITY_CLOUD",
   "deployment_topology": "STREAMLIT_FIXTURE_ONLY",
   "entrypoint": "demo/public_app.py",

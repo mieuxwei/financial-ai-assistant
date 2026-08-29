@@ -23,6 +23,14 @@ class Settings(BaseSettings):
     f11b_service_key_id: str = ""
     f11b_service_secret: str = ""
     f11b_controlled_fixture_path: str = "demo/fixtures/controlled_dashboard_demo.v1.json"
+    demo_gas_service_token: str = ""
+    demo_universe_config_path: str = "research/configs/risk_market_dataset.v1.json"
+    demo_retention_days: int = 30
+    demo_max_holdings: int = 5
+    demo_max_shares: int = 10_000_000
+    demo_max_average_cost: int = 1_000_000
+    demo_per_user_requests_per_minute: int = 30
+    demo_global_requests_per_minute: int = 300
 
     @property
     def resolved_database_url(self) -> str:

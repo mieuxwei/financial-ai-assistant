@@ -13,8 +13,12 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     readme = _read("README.md")
 
     assert "NEXT EXECUTABLE UNIT: **R1B" in handoff
-    assert "R1A Public Web Demo Release — READY FOR MANUAL DEPLOY" in handoff
-    assert "F11B-2A/F12 complete" in plan
+    assert "R1B LINE Public Beta Sandbox — READY FOR MANUAL SETUP" in handoff
+    assert "PUBLIC_WEB_DEMO_DEPLOYED" in plan
+    assert "PUBLIC_WEB_DEMO_DEPLOYED" in readme
+    assert "LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP" in plan
+    assert "LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP" in readme
+    assert "F11B-2A/F12/R1A complete" in plan
     assert "F11B-2A complete" in readme
     assert "6/9" in plan and "blocked" in plan.casefold()
     assert "6 of 9" in readme and "blocked" in readme.casefold()

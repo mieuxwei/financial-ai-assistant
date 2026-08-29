@@ -66,6 +66,7 @@ financial-ai-b4-market-reaction = "jobs.b4_market_reaction_models:main"
 financial-ai-b4-twmd-backfill = "jobs.b4_twmd_historical_backfill:main"
 financial-ai-b4-models = "jobs.b4_market_reaction_models:main"
 financial-ai-b5-intelligence = "jobs.b5_nlp_intelligence_integration:main"
+financial-ai-demo-cleanup = "jobs.demo_cleanup:main"
 
 [project.optional-dependencies]
 dev = [

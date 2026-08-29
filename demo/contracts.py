@@ -49,7 +49,7 @@ class DashboardDemoConfig(StrictModel):
 class PublicWebDemoReleaseConfig(StrictModel):
     schema_version: Literal["public-web-demo-release-v1"]
     release_unit: Literal["R1A"]
-    release_status: Literal["PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY"]
+    release_status: Literal["PUBLIC_WEB_DEMO_DEPLOYED"]
     hosting_provider: Literal["STREAMLIT_COMMUNITY_CLOUD"]
     deployment_topology: Literal["STREAMLIT_FIXTURE_ONLY"]
     entrypoint: Literal["demo/public_app.py"]

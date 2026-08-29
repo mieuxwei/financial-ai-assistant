@@ -1,0 +1,18 @@
+name = "financial-ai-line-public-beta-edge"
+main = "worker.mjs"
+compatibility_date = "2026-08-30"
+workers_dev = true
+
+[secrets]
+required = [
+  "LINE_DEMO_CHANNEL_SECRET",
+  "DEMO_IDENTITY_SECRET",
+  "DEMO_EDGE_GAS_SHARED_SECRET",
+  "DEMO_GAS_WEB_APP_URL",
+]
+
+# Secrets are configured with the hosting secret store, never in this file:
+# LINE_DEMO_CHANNEL_SECRET
+# DEMO_IDENTITY_SECRET
+# DEMO_EDGE_GAS_SHARED_SECRET
+# DEMO_GAS_WEB_APP_URL

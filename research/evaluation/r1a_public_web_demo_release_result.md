@@ -1,7 +1,7 @@
 # R1A Public Web Demo Release Result
 
-Date: 2026-08-29  
-Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
+Date: 2026-08-30
+Status: **PUBLIC_WEB_DEMO_DEPLOYED**
 
 ## Decision
 
@@ -13,7 +13,8 @@ Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
 - Request-time provider calls: none.
 - Public HTTPS URL: `https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/`.
 - Initial HTTPS smoke: failed at import because the nested entrypoint could not resolve `demo`.
-- Corrected local/cloud-like entrypoint test: passed; correction not pushed yet.
+- Corrected local/cloud-like entrypoint test: passed.
+- Corrected public HTTPS deployment smoke: passed on 2026-08-30.
 
 ## Boundaries preserved
 
@@ -23,7 +24,7 @@ Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
 - Market-reaction magnitude remains a research-only historical-association signal.
 - Track A/B models, target and feature contract were not modified.
 - Live GAS, LINE webhook and portfolio flows were not modified.
-- No deployment, commit or push occurred.
+- The user controlled the deployment commit/push; no automated commit/push was performed.
 
 ## Validation
 
@@ -36,7 +37,8 @@ Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
 - Ruff: PASS.
 - Secret scan: PASS.
 - `git diff --check`: PASS.
-- Public HTTPS smoke test: FAILED on the currently deployed revision; rerun after correction push.
+- Public HTTPS smoke test: PASS; homepage and all four content views rendered without browser
+  errors, stack traces, secrets or private data.
 
 ## Cloud entrypoint correction
 
@@ -44,5 +46,5 @@ The first Streamlit Cloud launch exposed a nested-entrypoint import-path differe
 `demo/public_app.py` could not resolve the top-level `demo` package. The local release now derives
 the repository root from `__file__`, adds only that fixed path to Python module resolution and then
 imports `demo.app`. A regression test executes the nested entrypoint from outside the repository
-and rejects any `ModuleNotFoundError`. The correction still requires a user-controlled commit/push
-before Streamlit Cloud can redeploy it.
+and rejects any `ModuleNotFoundError`. The user pushed the correction and Streamlit Cloud deployed
+it successfully; the bounded public HTTPS smoke test passed.

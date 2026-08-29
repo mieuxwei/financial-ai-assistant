@@ -1,0 +1,69 @@
+{
+  "schema_version": "line-public-beta-release-v1",
+  "release_unit": "R1B",
+  "release_status": "LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP",
+  "deployment_status": "NOT_DEPLOYED",
+  "private_environment_unchanged": true,
+  "architecture": {
+    "line_account": "NEW_DEMO_LINE_OFFICIAL_ACCOUNT_REQUIRED",
+    "security_edge": "CLOUDFLARE_WORKER",
+    "gas": "NEW_DEMO_APPS_SCRIPT_PROJECT_REQUIRED",
+    "backend": "EXISTING_FASTAPI_EXTENDED",
+    "storage": "MANAGED_POSTGRES_REQUIRED",
+    "request_time_providers": []
+  },
+  "identity": {
+    "input": "verified_raw_line_user_id",
+    "derivation": "HMAC_SHA256",
+    "output_prefix": "dp_",
+    "raw_line_user_id_persisted": false
+  },
+  "security": {
+    "line_signature_raw_body_required": true,
+    "line_signature_algorithm": "HMAC_SHA256_BASE64",
+    "edge_to_gas": "HMAC_SHA256_SIGNED_ENVELOPE",
+    "edge_envelope_max_age_seconds": 300,
+    "gas_nonce_cache_seconds": 300,
+    "gas_to_fastapi": "BEARER_SERVICE_AUTH_PLUS_DERIVED_PRINCIPAL",
+    "write_idempotency_source": "LINE_WEBHOOK_EVENT_ID"
+  },
+  "portfolio": {
+    "sandbox_only": true,
+    "universe_config": "research/configs/risk_market_dataset.v1.json",
+    "max_holdings_per_principal": 5,
+    "retention_days": 30,
+    "conversation_state_ttl_seconds": 900,
+    "current_price_enabled": false,
+    "roi_enabled": false,
+    "screenshot_import_enabled": false
+  },
+  "research_boundary": {
+    "controlled_fixture_only": true,
+    "controlled_fixture_ticker": "2330",
+    "other_frozen_tickers_abstain": true,
+    "current_market_f7_enabled": false,
+    "current_feature_parity": "5/23",
+    "current_market_gates": "6/9",
+    "chinese_sentiment_enabled": false,
+    "price_direction_enabled": false
+  },
+  "external_setup": {
+    "line_demo_oa": "PENDING",
+    "demo_gas_project": "PENDING",
+    "security_edge": "PENDING",
+    "fastapi_public_beta": "PENDING",
+    "managed_postgres": "PENDING",
+    "webhook": "PENDING",
+    "line_demo_qr": "LINE_DEMO_QR_PENDING",
+    "cleanup_schedule": "READY_FOR_SCHEDULE_CONFIGURATION"
+  },
+  "required_secret_names": [
+    "LINE_DEMO_CHANNEL_SECRET",
+    "LINE_DEMO_CHANNEL_ACCESS_TOKEN",
+    "DEMO_IDENTITY_SECRET",
+    "DEMO_EDGE_GAS_SHARED_SECRET",
+    "DEMO_GAS_SERVICE_TOKEN",
+    "DATABASE_URL"
+  ],
+  "next_action": "COMPLETE_EXTERNAL_DEMO_SETUP_THEN_RUN_R1B_DEPLOYMENT_VERIFICATION"
+}

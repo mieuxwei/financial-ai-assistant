@@ -15,7 +15,7 @@ DASHBOARD_FIXTURE = ROOT / "demo/fixtures/controlled_dashboard_demo.v1.json"
 def test_public_release_config_is_fixture_only_and_fail_closed() -> None:
     release = load_public_release_config(RELEASE_CONFIG)
 
-    assert release.release_status == "PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY"
+    assert release.release_status == "PUBLIC_WEB_DEMO_DEPLOYED"
     assert release.hosting_provider == "STREAMLIT_COMMUNITY_CLOUD"
     assert release.deployment_topology == "STREAMLIT_FIXTURE_ONLY"
     assert release.entrypoint == "demo/public_app.py"

@@ -38,5 +38,7 @@ Dashboard 只接受帶有明確 port 的 `http://127.0.0.1`、`http://localhost`
 - F11B-2A current-market gate 只有 6/9 通過、exact features 只有 5/23；因此本頁不得描述為
   live current-market inference。
 
-R1A 尚未取得公開 URL；部署步驟見 [Public Web Demo Release](../docs/public_web_demo_release.md)。
+R1A 公開受控展示已部署：
+[Streamlit controlled demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)；部署與資料邊界見
+[Public Web Demo Release](../docs/public_web_demo_release.md)。
 作品集截圖與完整說明見 [Portfolio Guide](../docs/portfolio_finalization.md)。
