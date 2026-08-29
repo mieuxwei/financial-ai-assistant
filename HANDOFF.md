@@ -2,7 +2,7 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **R1A Public Web Demo Release — READY FOR MANUAL DEPLOY**
+ACTIVE PHASE: **R1A Public Web Demo Release — READY FOR MANUAL DEPLOY / REDEPLOY REQUIRED**
 
 NEXT EXECUTABLE UNIT: **R1B — only after user-controlled R1A commit/push and deployment review**
 
@@ -884,6 +884,7 @@ coverage, TAIEX, cutoff, missingness, timezone and lineage now pass, for 6/9. Ex
 training/inference parity fail because adjusted-price lineage is unresolved and raw-source values
 differ; E2E was not run. Decision:
 `OFFICIAL_OHLCV_AVAILABLE_BUT_ADJUSTED_PARITY_UNRESOLVED` / `NOT_READY_FOR_F11B_2`. F12 remains
-complete. R1A is `PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`: no URL exists until the user reviews,
-commits/pushes and authorizes Streamlit Community Cloud. The next suggested unit is R1B only after
-that release step. Track A/B models stay frozen.
+complete. The R1A URL exists, but its first build exposed a nested-entrypoint import error. The
+fixed root-path bootstrap passes a cloud-like regression test and awaits user-controlled
+commit/push/redeploy. The next suggested unit is R1B only after the corrected HTTPS smoke test.
+Track A/B models stay frozen.

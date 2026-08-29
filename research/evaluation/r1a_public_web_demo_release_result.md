@@ -11,8 +11,9 @@ Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
 - FastAPI required: no.
 - Runtime secret required: no.
 - Request-time provider calls: none.
-- Public HTTPS URL: not created because the reviewed changes have not been committed/pushed and
-  repository authorization requires user interaction.
+- Public HTTPS URL: `https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/`.
+- Initial HTTPS smoke: failed at import because the nested entrypoint could not resolve `demo`.
+- Corrected local/cloud-like entrypoint test: passed; correction not pushed yet.
 
 ## Boundaries preserved
 
@@ -30,8 +31,18 @@ Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**
 - Controlled label, score card, intelligence, research evidence and limitation views: PASS.
 - Request-time API/provider path in public mode: not invoked; enforced by automated test.
 - Dependency declaration dry-run: PASS.
-- Full pytest: 310 passed; existing dependency/environment warnings only.
+- Full pytest after Cloud entrypoint regression coverage: 311 passed; existing
+  dependency/environment warnings only.
 - Ruff: PASS.
 - Secret scan: PASS.
 - `git diff --check`: PASS.
-- Public HTTPS smoke test: NOT RUN — no public URL exists.
+- Public HTTPS smoke test: FAILED on the currently deployed revision; rerun after correction push.
+
+## Cloud entrypoint correction
+
+The first Streamlit Cloud launch exposed a nested-entrypoint import-path difference:
+`demo/public_app.py` could not resolve the top-level `demo` package. The local release now derives
+the repository root from `__file__`, adds only that fixed path to Python module resolution and then
+imports `demo.app`. A regression test executes the nested entrypoint from outside the repository
+and rejects any `ModuleNotFoundError`. The correction still requires a user-controlled commit/push
+before Streamlit Cloud can redeploy it.

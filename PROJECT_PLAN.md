@@ -3,7 +3,7 @@
 Plan version: `r1a-public-web-demo-release-v1`
 
 Last revised: 2026-08-29
-Active milestone: **R1A READY FOR MANUAL DEPLOY — controlled public web demo; no URL yet**
+Active milestone: **R1A READY FOR MANUAL DEPLOY — entrypoint correction validated locally**
 
 Authoritative state:
 
@@ -161,7 +161,7 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | F11B-2 Current-market integration | Blocked / not started | `NOT_READY_FOR_F11B_2`；official adjusted-close lineage 未能證明與 frozen Yahoo `adjclose` training-equivalent。 |
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
 | F12 Portfolio Finalization | Complete / not deployed | README、research story、architecture、Track A/B summaries、model charts、controlled demo assets、F11B-2A blocked result、limitations、installation 與 consistency audit 完成。 |
-| R1A Public Web Demo Release | Ready for manual deploy | Streamlit Community Cloud、`demo/public_app.py`、fixture-only、zero-runtime-secret、no FastAPI/provider call；需使用者 commit/push 與 GitHub/Streamlit 授權後才能取得 HTTPS URL。 |
+| R1A Public Web Demo Release | Ready for manual redeploy | Streamlit URL 已建立；首次 build 發現 nested-entrypoint import error。本機固定 root bootstrap 與 cloud-like regression test 已通過，待使用者 commit/push/redeploy。 |
 
 R0 詳細規格見 `docs/r0_project_rebaseline_protocol.md`；B3.1 的 later-authorized audit decision
 見 `research/evaluation/b3_1_chinese_sentiment_label_source_audit.md`。B4 凍結協定與結果分別見

@@ -95,14 +95,15 @@ data、模型績效證據或真實投資訊號。
 
 ### Public Web Demo — R1A
 
-Status：`PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`
+Status：`PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY`（等待修正版重新部署）
 
 - Primary hosting：Streamlit Community Cloud。
 - Topology：單一 fixture-only Streamlit app；不需要 FastAPI。
 - Entrypoint：`demo/public_app.py`。
 - Runtime secrets：零。
 - Request-time provider calls：零。
-- Public URL：尚未建立；必須由使用者審查後自行 commit/push，並完成 Streamlit/GitHub 授權。
+- Public URL：[Streamlit controlled demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)；
+  首次部署發現 nested-entrypoint import 問題，本機修正已驗證，待使用者 commit/push 後重建。
 
 部署規格、平台比較、資料邊界與 rollback 步驟見
 [R1A Public Web Demo Release](docs/public_web_demo_release.md)。

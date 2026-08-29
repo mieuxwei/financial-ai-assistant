@@ -1,3 +1,5 @@
+import subprocess
+import sys
 from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
@@ -95,3 +97,17 @@ def test_public_release_packaging_has_no_secret_or_private_dependency() -> None:
     assert "httpx" not in requirements.casefold()
     assert ".tools/" in gitignore
     assert ".streamlit/secrets.toml" in gitignore
+
+
+def test_nested_entrypoint_resolves_project_package_outside_repository(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "demo/public_app.py")],
+        cwd=tmp_path,
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=20,
+    )
+
+    assert result.returncode == 0
+    assert "ModuleNotFoundError" not in result.stderr

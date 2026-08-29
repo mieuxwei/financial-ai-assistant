@@ -2,7 +2,10 @@
 
 Date: 2026-08-29  
 Status: **PUBLIC_WEB_DEMO_READY_FOR_MANUAL_DEPLOY**  
-Public URL: **not created**
+Public URL: [mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)
+
+Current release note: the first cloud build exposed a nested-entrypoint import error; the local
+correction is validated but must be committed/pushed before Cloud can redeploy it.
 
 ## 1. Release decision
 
@@ -107,14 +110,13 @@ not live market inference or investment advice.
 
 ## 7. Manual deployment steps
 
-R1A cannot obtain a public URL while commit and push are prohibited. After review:
+The public app URL now exists, but the corrected entrypoint has not been pushed. After review:
 
-1. The user creates the desired Git commit and pushes the reviewed release to GitHub.
-2. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) and authorize the repository.
-3. Create an app using `main` and `demo/public_app.py`.
-4. In advanced settings select Python 3.12 and leave the secrets field empty.
-5. Deploy, then set the app to public if the repository/app defaults to private.
-6. Run the bounded HTTPS smoke test in section 8 before sharing the URL.
+1. The user commits and pushes the validated `demo/public_app.py` correction.
+2. In Streamlit Community Cloud, reboot/redeploy the existing app if it does not rebuild
+   automatically from `main`.
+3. Keep Python 3.12 and the secrets field empty.
+4. Run the bounded HTTPS smoke test in section 8 before sharing the URL.
 
 Repository administrator permission is required for the initial deployment authorization.
 
