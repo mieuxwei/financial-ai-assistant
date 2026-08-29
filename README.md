@@ -20,8 +20,8 @@ external validation。
 
 - **Track A — COMPLETE / FROZEN**：continuous stock-normalized volatility-surprise forecasting；
   final Ridge Regression `alpha=100`。
-- **Track B — ACTIVE**：Taiwan Financial Sentiment / Impact Modeling and Financial NLP
-  Intelligence；依 B1→B2→B3→B4→B5→optional B6/F9 執行。
+- **Track B — ACTIVE**：B3 domain adaptation/candidate signals complete；下一步 B4
+  Validation / Abstention Decision，之後 B5→optional B6/F9。
 - **Track C — Product**：F10 FastAPI complete、F11A controlled Streamlit complete、F11B
   LINE/GAS pending、F12 last。
 
@@ -32,7 +32,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**B2 dataset + B2.1 TWMD secondary-source contract complete / next: B3 only / not deployed**。
+目前狀態：**B3 domain adaptation + candidate signals complete / next: B4 only / not deployed**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
@@ -47,6 +47,10 @@ external validation。
   長期 acquisition/reconciliation contract；無最低等待期，也未部署 collector。詳見
   [B2 acquisition contract](docs/b2_data_acquisition_and_update_contract.md) 與
   [B2 result](research/evaluation/b2_taiwan_financial_text_dataset_result.md)。
+- B3 重用並驗證既有 200-step FSC MLM pilot，promote 單一 BERT-base-Chinese representation
+  candidate；沒有 sentiment fine-tuning、pseudo-label training 或人工標注。中文 sentiment
+  仍 `ABSTAIN`。詳見 [B3 protocol](docs/b3_domain_and_candidate_signals_protocol.md) 與
+  [B3 result](research/evaluation/b3_domain_and_candidate_signals_result.md)。
 
 單一正式 roadmap 與 Definition of Done 見
 [R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見

@@ -1,0 +1,152 @@
+{
+  "protocol_version": "b3-domain-and-candidate-signals-v1",
+  "status": "B3_CURRENT_PROTOCOL_FROZEN",
+  "seed": 20260826,
+  "corpus": {
+    "version": "fsc-domain-corpus-v1",
+    "path": ".tools/corpora/fsc-domain-corpus-v1",
+    "corpus_sha256": "389640a2f3232cb95bc8c47032673ba8f90a8d5eb23affc1f01a03971d20366c",
+    "train_sha256": "eee3a7482bc40107a64dbbf9ddc187fe3cd7cc7bb1ee8cddfcbdf2f9250dfc38",
+    "validation_sha256": "cd60343599495e1158912b28e1cec937cf3be79a68bcb2cdba279164b88cca86",
+    "test_sha256_recorded_from_manifest_only": "6e703e22b6168facf3e7a5c6be0c243083adb1e4c4943a9b8b37e11333bc5540",
+    "record_count": 6021,
+    "sentiment_labels_present": false,
+    "manual_labels_used": false,
+    "allowed_objective": "MASKED_LANGUAGE_MODELING_AND_REPRESENTATION_ONLY"
+  },
+  "domain_adaptation": {
+    "evidence_source": "m7-domain-adaptation-pilot-v1",
+    "retrain_in_b3": false,
+    "objective": "MASKED_LANGUAGE_MODELING",
+    "train_examples": 512,
+    "validation_examples": 64,
+    "sealed_test_read": false,
+    "max_length": 128,
+    "batch_size": 2,
+    "train_steps": 200,
+    "learning_rate": 0.00002,
+    "mlm_probability": 0.15,
+    "selection_metric": "final_validation_mlm_loss",
+    "minimum_relative_validation_improvement": 0.01,
+    "candidates": [
+      {
+        "candidate_id": "macbert-base",
+        "model_id": "hfl/chinese-macbert-base",
+        "revision": "a986e004d2a7f2a1c2f5a3edef4e20604a974ed1",
+        "initial_validation_mlm_loss": 1.424986,
+        "final_validation_mlm_loss": 1.162618,
+        "relative_validation_improvement": 0.184120,
+        "weight_sha256": "3be49cf57cc9f6330dee377cd97fbba0749bafea09529093c97735bc3b09fc9b",
+        "promoted": false
+      },
+      {
+        "candidate_id": "bert-base-chinese",
+        "model_id": "google-bert/bert-base-chinese",
+        "revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+        "initial_validation_mlm_loss": 1.135982,
+        "final_validation_mlm_loss": 0.947099,
+        "relative_validation_improvement": 0.166273,
+        "weight_sha256": "eaacc66a4993a448e9e9dd7d6aab0fc33290d1f4e4e4e8d209efc1d7a17fd3b9",
+        "promoted": true
+      }
+    ],
+    "promoted_candidate": "bert-base-chinese",
+    "artifact_directory": ".tools/models/m7-domain-adaptation-pilot-v1/bert-base-chinese",
+    "vocabulary_sha256": "3e594fb37bd9c81abcad66bb4321b1e71bbbb5154784f02bf1533055b506b134",
+    "claim": "DOMAIN_ADAPTED_CHINESE_FINANCIAL_REPRESENTATION_CANDIDATE_NOT_SENTIMENT_MODEL"
+  },
+  "sentiment_training": {
+    "independent_permissible_label_source": null,
+    "new_classifier_trained": false,
+    "pseudo_labels_used_for_training": false,
+    "manual_annotation_used": false,
+    "manual_review_used": false,
+    "circular_validation": false,
+    "current_product_output": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED"
+  },
+  "historical_sentiment_baselines": [
+    {"candidate_id": "deterministic-lexicon-v1", "macro_f1": 0.320, "gate": "FAIL"},
+    {"candidate_id": "yiyang-finbert-tone-chinese", "macro_f1": 0.357, "gate": "FAIL"},
+    {"candidate_id": "bards-finance-sentiment-zh", "macro_f1": 0.442, "gate": "FAIL"},
+    {"candidate_id": "translation-plus-english-finbert", "macro_f1": 0.592, "gate": "FAIL"},
+    {"candidate_id": "finbert-multilingual-v2", "macro_f1": 0.640, "gate": "FAIL"}
+  ],
+  "candidate_output_matrix": [
+    {
+      "candidate_id": "fsc-adapted-bert-representation",
+      "output_category": "DOMAIN_ENCODER",
+      "predicts": "masked-token likelihood and Taiwan financial-domain contextual representation",
+      "maturity": "B3_REPRESENTATION_CANDIDATE",
+      "ground_truth_claim": "NONE"
+    },
+    {
+      "candidate_id": "fsc-adapted-bert-embedding",
+      "output_category": "EMBEDDING",
+      "predicts": "vector similarity for retrieval and related-document ranking",
+      "maturity": "CANDIDATE_NOT_DOWNSTREAM_VALIDATED",
+      "ground_truth_claim": "NONE"
+    },
+    {
+      "candidate_id": "historical-chinese-sentiment-baselines",
+      "output_category": "LINGUISTIC_SENTIMENT",
+      "predicts": "automated positive/neutral/negative textual polarity",
+      "maturity": "HISTORICAL_BASELINES_FAILED_B4_GATE",
+      "ground_truth_claim": "SMALL_HISTORICAL_DIAGNOSTIC_ONLY"
+    },
+    {
+      "candidate_id": "deterministic-event-impact-rules",
+      "output_category": "IMPACT_SIGNAL",
+      "predicts": "rule-matched event impact hypothesis with abstention",
+      "maturity": "AUTOMATED_SIGNAL_ONLY",
+      "ground_truth_claim": "NONE"
+    },
+    {
+      "candidate_id": "twmd-major-event-taxonomy",
+      "output_category": "EVENT_CLASS",
+      "predicts": "TWMD inferred material-event category and classifier confidence",
+      "maturity": "B2_1_CONTRACT_READY_NO_B3_ROWS",
+      "ground_truth_claim": "NOT_SENTIMENT_AND_NOT_HUMAN_VALIDATED"
+    },
+    {
+      "candidate_id": "historical-market-reaction-proxy",
+      "output_category": "MARKET_REACTION",
+      "predicts": "mechanical post-event market movement under a timestamp-safe protocol",
+      "maturity": "PRESERVED_AUTOMATED_TARGET_CANDIDATE",
+      "ground_truth_claim": "NOT_LINGUISTIC_SENTIMENT"
+    },
+    {
+      "candidate_id": "gdelt-media-tone",
+      "output_category": "MEDIA_TONE",
+      "predicts": "GDELT dictionary-derived media tone and metadata intensity",
+      "maturity": "TEMPORARILY_UNAVAILABLE_CONDITIONAL_IMPLEMENTATION",
+      "ground_truth_claim": "MEDIA_TONE_PROXY_ONLY"
+    }
+  ],
+  "twmd": {
+    "source_contract": "b2.1-twmd-secondary-source-v1",
+    "b3_usage": "CONTRACT_AND_CANDIDATE_SCHEMA_ONLY_NO_DATASET_ROWS",
+    "event_class_is_sentiment": false,
+    "timezone_basis": "SOURCE_CONTRACT_ASSUMPTION",
+    "raw_payload_used": false
+  },
+  "gdelt": {
+    "source_status": "ACCEPT_SECONDARY_IN_PRINCIPLE",
+    "implementation_status": "TEMPORARILY_UNAVAILABLE_CONDITIONAL",
+    "recovery_endpoint": "https://data.gdeltproject.org/gdeltv3/gal/feed.rss",
+    "recovery_result": "TLS_VERIFIED_HTTP_PATH_REACHED_BUT_RSS_PARSE_FAILED",
+    "tls_verification_disabled": false,
+    "publisher_pages_fetched": false,
+    "raw_payload_saved": false,
+    "tone_is_sentiment_truth": false
+  },
+  "b4_gate": {
+    "macro_f1_minimum": 0.70,
+    "per_required_class_recall_minimum": 0.60,
+    "allowed_decisions": ["VALIDATED", "AUTOMATED_SIGNAL_ONLY", "ABSTAIN"],
+    "predeclared_in_b3": true
+  },
+  "prohibited_sources": ["eland"],
+  "track_a_modified": false,
+  "track_c_modified": false,
+  "next_executable_unit": "B4_VALIDATION_ABSTENTION_DECISION"
+}

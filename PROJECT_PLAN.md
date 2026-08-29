@@ -3,7 +3,7 @@
 Plan version: `b2-taiwan-financial-text-v1`
 
 Last revised: 2026-08-29
-Active milestone: **B2 complete; next executable unit is B3 Domain Adaptation & Candidate Signals only**
+Active milestone: **B3 complete; next executable unit is B4 Validation / Abstention Decision only**
 
 Authoritative state:
 
@@ -146,8 +146,8 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | B1 Source Candidate Audit | Complete | 15 個來源完成 purpose-specific audit；2 primary、2 secondary、1 conditional、2 optional、8 hold（含永久排除 eLAND）、0 reject；四來源 B2 whitelist、preferred/fallback stack、schema guards 與 report 已凍結；無訓練/下載。 |
 | B2 Taiwan Financial Text Dataset | Complete | 四來源 whitelist 保持；`b2-financial-document-v1`、identity/version、timestamp、ticker mapping、dedup、rights/retention、lineage、RAW/NORMALIZED/FEATURE layers、retry/reconciliation/model-refresh contract 已凍結；6,021 筆 FSC private snapshot 完成；TPEx 65/65 bounded schema probe 通過；GDELT TLS probe 安全失敗、v1 採 fallback；無等待期、訓練或部署。 |
 | B2.1 TWMD secondary-source amendment | Complete / no ingestion | 認證成功；major-event taxonomy 的 2330 在 2018/2024 各 bounded 2 rows；最終 `ACCEPT_SECONDARY`。已凍結 runtime filter echo、ticker/window、31-day/100-row/1-MB、timezone assumption、dedup/version、rights/lineage fail-closed contract 與 provider tests；B2 v1 不回寫、無 TWMD dataset rows、B3 未開始。 |
-| B3 Domain Adaptation & Candidate Signals | Next / not started | 使用 compact open-source candidate set、pinned revisions/configs 與 B2 partitions；重用 FSC/BERT/MacBERT 合法證據；不使用 eLAND、未來資料或 model zoo。 |
-| B4 Validation / Abstention | Not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
+| B3 Domain Adaptation & Candidate Signals | Complete | 稽核並重用 FSC 6,021-row、BERT/MacBERT 200-step MLM pilot；hash 驗證通過，單一 promoted BERT-base-Chinese representation candidate；無新 sentiment classifier、pseudo labels、人工標注或 circular validation；TWMD zero rows；GDELT conditional；B4 manifest 已凍結。 |
+| B4 Validation / Abstention | Next / not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
 | B5 NLP Intelligence Integration | Not started | 只整合 B4 支援能力；unsupported Chinese polarity 保持 null/abstain；event/impact/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
 | F11B-1 Controlled LINE integration | Pending | migration copy 只新增 additive `risk`/`intel`/optional `news` routes；legacy holdings/Sheet/screenshots/triggers 不改；使用 fixture/stored snapshot 並標示 controlled demo；service auth/replay/timeout/idempotency/identity/rate/audit tests 通過。 |
@@ -430,11 +430,11 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-B2 完成後停在 normalized-dataset/update-contract boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
+B3 完成後停在 candidate-manifest boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
 M7 evaluation sequence 固定為 1。F10 與 F11A 完成但未部署；F11B pending；F12 last；B6/F9
 optional。
 
-下一個且唯一 executable unit 是 **B3 — Domain Adaptation & Candidate Signals**，必須另有使用者
-指令才可開始。B3 僅可使用 B2 private snapshot 與已核准來源/候選；不得使用 eLAND、人工標注、
-未來資料或 open-ended model zoo。B2 沒有部署 collector、等待未來資料、訓練模型、修改 live GAS、
+下一個且唯一 executable unit 是 **B4 — Validation / Abstention Decision**，必須另有使用者
+指令才可開始。B3 已凍結候選 manifest；B4 不得降低既有 gate、使用 eLAND、人工標注、
+未來資料或 circular validation。B2/B3 沒有部署 collector、修改 live GAS、
 webhook、trigger、Sheet 或 holdings，也未 commit 或 push。

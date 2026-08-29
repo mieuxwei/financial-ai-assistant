@@ -2,9 +2,9 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B2 + B2.1 TWMD source-contract amendment — COMPLETE**
+ACTIVE PHASE: **B3 Domain Adaptation & Candidate Signals — COMPLETE**
 
-NEXT EXECUTABLE UNIT: **B3 — Domain Adaptation & Candidate Signals only**
+NEXT EXECUTABLE UNIT: **B4 — Validation / Abstention Decision only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
@@ -20,14 +20,17 @@ GAS: **future modification authorized only through the verified immutable backup
 and rollback rules; live behavior was not changed in R0**
 
 Current source decision: **TWMD ACCEPT_SECONDARY — B2.1 contract/provider ready; B2 v1 unchanged,
-no TWMD dataset rows, B3 remains paused**
+no TWMD dataset rows were used by completed B3**
+
+B3 representation decision: **FSC-adapted BERT-base-Chinese promoted for representation only;
+Chinese sentiment remains ABSTAIN**
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Branch/remote state before the B2 edits: local `main` and `origin/main` both point to `d397cdf`
-  (`B1`).
-- Commit `d397cdf` contains B1; its parent history contains R0, the FinMind longitudinal audit and
-  TWMD entitlement probe. B2 changes remain uncommitted.
+- Branch/remote state before the current B3 edits: local `main` and `origin/main` both point to
+  `641c2aa` (`B2.1`).
+- Commit `641c2aa` contains B2.1; its parent history contains B2, B1, R0, the FinMind longitudinal
+  audit and historical TWMD entitlement probe. Current B3 changes remain uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -75,9 +78,11 @@ R0 Project Rebaseline & GAS Safety Freeze
 ```
 
 R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. B1 and B2 are now complete; do not interleave B3/B4, begin F12 early or proceed into B3
-without explicit user instruction. Definitions of Done are frozen in
+sequence. B1, B2, B2.1 and B3 are now complete; do not interleave B4/B5, begin F12 early or proceed
+into B4 without explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
+
+B3 is now complete. Do not begin B4 without a separate instruction.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -268,8 +273,9 @@ probabilities. Track B now follows exactly:
 
 1. **B1 Source Candidate Audit** — complete; source decisions and whitelist frozen;
 2. **B2 Taiwan Financial Text Dataset** — complete; normalized snapshot/update contract frozen;
-3. **B3 Domain Adaptation & Candidate Signals** — next; compact open-source candidate set;
-4. **B4 Validation / Abstention Decision** — frozen gate, no post-result lowering;
+3. **B3 Domain Adaptation & Candidate Signals** — complete; one frozen domain encoder and distinct
+   signal candidates;
+4. **B4 Validation / Abstention Decision** — next; frozen gate, no post-result lowering;
 5. **B5 NLP Intelligence Integration** — expose only B4-supported capabilities;
 6. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
 
@@ -324,7 +330,27 @@ private-beta MOPS endpoint remain HOLD. See
   an offset.
 - Rights tier is `LICENSED_EVENT_METADATA_PRIVATE`; no full text, sentiment truth or human-label
   claim is allowed.
-- No TWMD dataset was ingested. B2 v1 remains the active input if B3 is approved next.
+- No TWMD dataset was ingested. Completed B3 used B2 v1 and zero TWMD rows.
+
+### B3 domain adaptation and candidate signals
+
+- Protocol/B4 candidate manifest:
+  `research/configs/b3_domain_and_candidate_signals.v1.json`.
+- Protocol document: `docs/b3_domain_and_candidate_signals_protocol.md`.
+- Result: `research/evaluation/b3_domain_and_candidate_signals_result.md`.
+- B3 integrity audit reused the completed 200-step FSC MLM pilot; it did not retrain or read the
+  sealed FSC test file.
+- BERT-base-Chinese revision `8f23c25b...` is the single promoted representation candidate;
+  adapted weight SHA-256 is
+  `eaacc66a4993a448e9e9dd7d6aab0fc33290d1f4e4e4e8d209efc1d7a17fd3b9`.
+- No independent permissible sentiment-label source exists; no sentiment classifier, pseudo-label
+  set, manual label/review or circular validation was created.
+- Chinese sentiment remains `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`.
+- Candidate categories remain separate: domain encoder, embedding, linguistic sentiment, event
+  class, impact signal, market reaction and media tone.
+- TWMD supplied contract/schema context only and zero rows. `event_class` is not sentiment.
+- One bounded GDELT official RSS recovery kept TLS enabled and saved no raw payload; XML parsing
+  failed, so implementation is temporarily unavailable/conditional and non-blocking.
 
 ### B2 normalized dataset and update contract
 
@@ -742,12 +768,12 @@ Latest bounded Pro re-audit superseding operational source status:
 - issuer-classification helper HTTP 200;
 - company-news HTTP 200 but zero rows in 2018, 2024 and the documented 2026 sample date;
 - legacy material-information HTTP 404; private-beta MOPS not entitled;
-- final classification `ACCEPT_SECONDARY`, B2 v1 unchanged, B3 not started.
+- final classification `ACCEPT_SECONDARY`, B2 v1 unchanged; completed B3 used zero TWMD rows.
 
 No automatic commit or push is authorized.
 
-After B2 review, the next one executable unit is **B3 — Domain Adaptation & Candidate Signals**.
-Do not begin B3 automatically. B3 may use the private B2 partitions and already approved compact
-model evidence only; it may not use eLAND, manual labels, future data or an open-ended model zoo.
+After B3 review, the next one executable unit is **B4 — Validation / Abstention Decision**.
+Do not begin B4 automatically. B4 must use the frozen B3 candidate manifest and may not lower the
+predeclared gate, use eLAND/manual labels/future data or introduce circular validation.
 F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be
 reopened.
