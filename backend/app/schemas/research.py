@@ -115,6 +115,80 @@ class IntelligenceClaimBoundary(StrictSchema):
     track_a_dependency: Literal[False]
 
 
+class B5EventClassification(StrictSchema):
+    status: Literal["INFERRED_STRUCTURED_TAXONOMY", "UNAVAILABLE"]
+    event_class: str | None
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    rule_version: str | None
+    source: Literal["TWMD"] | None
+    sentiment_ground_truth: Literal[False]
+    market_direction: Literal[False]
+
+
+class B5LinguisticSentiment(StrictSchema):
+    status: Literal["ABSTAIN", "NOT_APPLICABLE_USE_F8_LANGUAGE_ROUTE"]
+    maturity: Literal["ABSTAIN", "NOT_APPLICABLE"]
+    polarity: None
+    positive_probability: None
+    neutral_probability: None
+    negative_probability: None
+    reason: Literal["CHINESE_SENTIMENT_NOT_VALIDATED"] | None
+
+
+class B5MarketReaction(StrictSchema):
+    status: Literal[
+        "AVAILABLE_STORED_RESEARCH_SIGNAL",
+        "UNAVAILABLE_NO_STORED_B4_SIGNAL",
+        "ABSTAIN_UNCERTAIN_AVAILABILITY_TIMESTAMP",
+        "ABSTAIN_SIGNAL_NOT_AVAILABLE_AT_CUTOFF",
+    ]
+    maturity: Literal["AUTOMATED_SIGNAL_ONLY"]
+    reaction_magnitude_score: float | None = Field(default=None, ge=0)
+    historical_percentile: float | None = Field(default=None, ge=0, le=100)
+    communication_band: Literal["LOW", "MODERATE", "HIGH", "VERY_HIGH"] | None
+    direction: None
+    direction_status: Literal["ABSTAIN_DIRECTION_NOT_SUPPORTED"]
+    model_version: str
+    reference_version: str
+    availability_timestamp: datetime | None
+    disclaimer: str
+
+
+class B5MediaTone(StrictSchema):
+    status: Literal["UNAVAILABLE_OR_CONDITIONAL"]
+    output_type: Literal["MEDIA_TONE_PROXY"]
+    tone: None
+
+
+class B5Representation(StrictSchema):
+    encoder: str
+    upstream_revision: str
+    adapted_weight_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    supported_use: Literal["FINANCIAL_DOMAIN_REPRESENTATION"]
+    return_direction_prediction_supported: Literal[False]
+    used_for_market_reaction_prediction: Literal[False]
+
+
+class B5Lineage(StrictSchema):
+    b5_config_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    b4_result_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source: str
+    source_type: str
+    publication_cutoff: datetime
+    availability_timestamp: datetime | None
+
+
+class B5TrackBIntelligence(StrictSchema):
+    contract_version: Literal["b5-financial-intelligence-v1"]
+    event_classification: B5EventClassification
+    linguistic_sentiment: B5LinguisticSentiment
+    market_reaction: B5MarketReaction
+    media_tone: B5MediaTone
+    representation: B5Representation
+    lineage: B5Lineage
+    limitations: list[str] = Field(min_length=3)
+
+
 class FinancialIntelligenceItem(StrictSchema):
     schema_version: str
     item_id: str = Field(pattern=r"^[0-9a-f]{64}$")
@@ -131,6 +205,7 @@ class FinancialIntelligenceItem(StrictSchema):
     generated_summary: None
     lineage: IntelligenceLineage
     claim_boundary: IntelligenceClaimBoundary
+    track_b_intelligence: B5TrackBIntelligence | None = None
 
 
 class IntelligenceRetrievalBoundary(StrictSchema):

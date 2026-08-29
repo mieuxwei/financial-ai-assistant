@@ -12,6 +12,10 @@ from backend.app.schemas.research import (
     IntelligenceRetrievalBoundary,
 )
 from backend.app.services.tickers import normalize_ticker
+from pipelines.intelligence.b5_integration import (
+    B5IntelligenceConfig,
+    assemble_b5_intelligence,
+)
 from pipelines.intelligence.financial_nlp import (
     FinancialNlpIntelligenceConfig,
     assemble_intelligence_item,
@@ -28,12 +32,16 @@ class FinancialIntelligenceService:
         session: Session,
         backend_config: BackendIntegrationConfig,
         intelligence_config: FinancialNlpIntelligenceConfig,
+        b5_config: B5IntelligenceConfig,
     ) -> None:
         if intelligence_config.canonical_sha256 != backend_config.f8_config_sha256:
             raise ValueError("F10/F8 intelligence-config lineage mismatch")
         self.repository = IntelligenceRepository(session)
         self.backend_config = backend_config
         self.intelligence_config = intelligence_config
+        if b5_config.f8_config_canonical_sha256 != intelligence_config.canonical_sha256:
+            raise ValueError("B5/F8 intelligence-config lineage mismatch")
+        self.b5_config = b5_config
 
     def list_recent(
         self,
@@ -104,6 +112,15 @@ class FinancialIntelligenceService:
                 sentiment_prediction=prediction,
                 sentiment_model_version=model_version,
             )
+            assembled["track_b_intelligence"] = assemble_b5_intelligence(
+                self.b5_config,
+                source=item.source,
+                source_type=item.source_type,
+                published_at=item.published_at,
+                language=item.language,
+                metadata=metadata,
+                requested_cutoff=as_of_cutoff,
+            )
             items.append(FinancialIntelligenceItem.model_validate(assembled))
         return FinancialIntelligenceResponse(
             schema_version=self.backend_config.intelligence_response_version,
@@ -121,8 +138,8 @@ class FinancialIntelligenceService:
                 full_article_content_returned=False,
             ),
             disclaimer=(
-                "Financial NLP intelligence is a research signal, not investment advice; "
-                "Chinese sentiment abstains unless independently validated."
+                "此結果為研究型歷史關聯訊號，不代表投資建議、因果關係或未來報酬保證；"
+                "中文文字情緒目前尚未通過獨立驗證。"
             ),
         )
 

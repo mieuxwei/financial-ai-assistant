@@ -20,8 +20,9 @@ external validation。
 
 - **Track A — COMPLETE / FROZEN**：continuous stock-normalized volatility-surprise forecasting；
   final Ridge Regression `alpha=100`。
-- **Track B — ACTIVE**：B4 corrected five-year market-reaction validation complete；metadata
-  magnitude signal 為 `AUTOMATED_SIGNAL_ONLY`，BERT text 無 incremental value；下一步 B5。
+- **Track B — COMPLETE THROUGH B5**：F8/F10 database-only intelligence 已加入 backward-safe
+  Track B contract；metadata magnitude signal 為 `AUTOMATED_SIGNAL_ONLY`，Chinese sentiment 與
+  direction 明確 abstain，BERT text 無 incremental value。
 - **Track C — Product**：F10 FastAPI complete、F11A controlled Streamlit complete、F11B
   LINE/GAS pending、F12 last。
 
@@ -32,7 +33,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**B4 market-reaction validation complete / next: B5 only / not deployed**。
+目前狀態：**B5 NLP Intelligence Integration complete / next: F11B only / not deployed**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
@@ -62,6 +63,11 @@ external validation。
   為 `AUTOMATED_SIGNAL_ONLY`，中文 sentiment 仍為獨立 abstain。詳見
   [B4 protocol](docs/b4_market_reaction_validation_protocol.md) 與
   [B4 result](research/evaluation/b4_market_reaction_validation_result.md)。
+- B5 沿用 F8/F10 architecture，在既有 intelligence item 加入 optional/backward-safe
+  `track_b_intelligence`：event class、Chinese abstention、stored B4 magnitude band、media-tone
+  proxy status、BERT representation lineage 與限制完全分離；API request 不呼叫 provider、模型
+  或 LLM。詳見 [B5 protocol](docs/b5_nlp_intelligence_integration_protocol.md) 與
+  [B5 result](research/evaluation/b5_nlp_intelligence_integration_result.md)。
 
 單一正式 roadmap 與 Definition of Done 見
 [R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見

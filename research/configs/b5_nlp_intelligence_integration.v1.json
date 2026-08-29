@@ -1,0 +1,58 @@
+{
+  "contract_version": "b5-financial-intelligence-v1",
+  "f8_config_canonical_sha256": "de7c372fc4ba136f10cc2bf78056898d8ea97cf6ff0fbb4a2aa7857be9e1bbc4",
+  "b4_result_sha256": "9c2cb41b12d0084da84134c2727e494f14a01bd45ab966cb008e42e80aeb8c26",
+  "market_reaction": {
+    "maturity": "AUTOMATED_SIGNAL_ONLY",
+    "model_version": "b4-metadata-ridge-alpha100-absolute-reaction-v1",
+    "reference_version": "b4-2021-2025-oof-metadata-magnitude-v1",
+    "reference_row_count": 2131,
+    "score_semantics": "predicted absolute abnormal return magnitude from stored B4 inference only",
+    "percentile_cutoffs": [50, 80, 95],
+    "score_cutoffs": [0.009133620050420918, 0.012103827790509903, 0.014800695324485953],
+    "bands": ["LOW", "MODERATE", "HIGH", "VERY_HIGH"],
+    "direction_status": "ABSTAIN_DIRECTION_NOT_SUPPORTED",
+    "signed_oof_spearman": {"market_only": 0.0349, "metadata_only": 0.0784, "bert_text_metadata": 0.0408},
+    "bert_text_minus_metadata_mean_spearman": -0.0394,
+    "absolute_metadata_oof_spearman": 0.2504,
+    "absolute_metadata_top_decile_lift": 1.623
+  },
+  "chinese_linguistic_sentiment": {
+    "status": "ABSTAIN",
+    "maturity": "ABSTAIN",
+    "reason": "CHINESE_SENTIMENT_NOT_VALIDATED",
+    "probabilities_must_be_null": true
+  },
+  "event_class": {
+    "source": "TWMD",
+    "status": "INFERRED_STRUCTURED_TAXONOMY",
+    "sentiment_ground_truth": false,
+    "market_direction": false
+  },
+  "media_tone": {"status": "UNAVAILABLE_OR_CONDITIONAL", "output_type_if_present": "MEDIA_TONE_PROXY"},
+  "representation": {
+    "encoder": "google-bert/bert-base-chinese",
+    "upstream_revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+    "adapted_weight_sha256": "eaacc66a4993a448e9e9dd7d6aab0fc33290d1f4e4e4e8d209efc1d7a17fd3b9",
+    "supported_use": "FINANCIAL_DOMAIN_REPRESENTATION",
+    "return_direction_prediction_supported": false
+  },
+  "source_boundary": {
+    "twmd_status": "ACCEPT_SECONDARY",
+    "twmd_rights_tier": "LICENSED_EVENT_METADATA_PRIVATE",
+    "raw_payload_public": false,
+    "provider_call_on_request": false,
+    "llm_call_on_request": false
+  },
+  "band_copy_zh_tw": {
+    "explanation": "根據歷史相似事件與事件資訊，評估後續市場出現較大價格反應的相對程度。",
+    "direction": "目前證據不足以可靠預測上漲或下跌方向。",
+    "sentiment": "中文文字情緒目前尚未通過獨立驗證，因此不輸出正面／中立／負面判定。",
+    "disclaimer": "此結果為研究型歷史關聯訊號，不代表投資建議、因果關係或未來報酬保證。"
+  },
+  "model_training_performed_in_b5": false,
+  "provider_calls_performed_in_b5": false,
+  "track_a_modified": false,
+  "gas_line_modified": false,
+  "deployed": false
+}

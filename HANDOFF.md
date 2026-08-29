@@ -2,9 +2,9 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B4 Market Impact / Reaction Validation — COMPLETE / AUTOMATED_SIGNAL_ONLY**
+ACTIVE PHASE: **B5 NLP Intelligence Integration — COMPLETE**
 
-NEXT EXECUTABLE UNIT: **B5 — NLP Intelligence Integration only**
+NEXT EXECUTABLE UNIT: **F11B — Controlled LINE Financial AI Integration only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
@@ -33,10 +33,10 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Before the current B3.1/B4 edits, local `main` and `origin/main` both point to `afac2a4` (`B3`).
-- Commit `afac2a4` contains B3; its parent history contains B2.1, B2, B1, R0, the FinMind
-  longitudinal audit and historical TWMD entitlement probe. Current B3.1 and B4 changes are
-  uncommitted.
+- Local `main` and `origin/main` both point to `136069e` (`B4`).
+- Commit `136069e` contains the corrected B4 work; its parent history contains B3.1, B3, B2.1,
+  B2, B1, R0, the FinMind longitudinal audit and historical TWMD entitlement probe. Current B5
+  changes are uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -85,11 +85,11 @@ R0 Project Rebaseline & GAS Safety Freeze
 ```
 
 R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. B1, B2, B2.1, B3, B3.1 and B4 are now complete; do not begin B5, F11B or F12 without
+sequence. B1, B2, B2.1, B3, B3.1, B4 and B5 are now complete; do not begin F11B or F12 without
 explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-B4 is now complete. Do not begin B5 without a separate instruction.
+B5 is now complete. Do not begin F11B without a separate instruction.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -286,8 +286,8 @@ probabilities. Track B now follows exactly:
 5. **B4 Market Impact / Reaction Validation** — complete; corrected five-year backfill passed the
    data gate; metadata magnitude signal is `AUTOMATED_SIGNAL_ONLY`, while BERT text incremental
    value is unsupported;
-6. **B5 NLP Intelligence Integration** — next; expose only supported or explicit-abstention
-   capabilities;
+6. **B5 NLP Intelligence Integration** — complete; F8/F10 reused with a backward-safe Track B
+   extension and explicit capability separation;
 7. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
 
 B4 did not reinterpret returns as linguistic sentiment. Its primary target was frozen as
@@ -411,7 +411,25 @@ private-beta MOPS endpoint remain HOLD. See
   `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`.
 - Private TWMD manifest SHA-256 is
   `aa78324c80d12872c8a4023e26184673cdff90552fb8b41bb5b2a635e1f7149d`.
-- B5 was not started; Track A, GAS, LINE, FastAPI, Streamlit and deployment were unchanged.
+- At the B4 stop boundary, B5 had not started; Track A, GAS, LINE, FastAPI, Streamlit and deployment
+  were unchanged.
+
+### B5 NLP Intelligence Integration
+
+- Protocol/config: `docs/b5_nlp_intelligence_integration_protocol.md` and
+  `research/configs/b5_nlp_intelligence_integration.v1.json`.
+- Result: `research/evaluation/b5_nlp_intelligence_integration_result.md`.
+- Existing F8 assembler and F10 database-only endpoint were extended, not duplicated. Each item has
+  an optional `track_b_intelligence` object, preserving response-v1 compatibility.
+- Chinese polarity/probabilities and market direction are always null with explicit abstention.
+- Stored B4 magnitude scores use frozen 50/80/95 percentile band thresholds; missing or cutoff-
+  unsafe stored signals abstain. Maturity remains `AUTOMATED_SIGNAL_ONLY`.
+- TWMD event class is separate inferred taxonomy; GDELT media tone is null/conditional proxy;
+  FSC-adapted BERT is representation-only and is not used to claim prediction improvement.
+- No request-time provider/model/LLM call, raw TWMD output, training, deployment, Track A change or
+  GAS/LINE change occurred.
+- Audit analysis SHA-256:
+  `99d2fa67a7fd32a76fecbc41cfc0c362f40d5cf06979d92a7d9e11a3bfd856c2`.
 
 ### B2 normalized dataset and update contract
 
@@ -809,16 +827,16 @@ Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted work contains the B3.1 audit plus the B4 protocol, config, alignment and
-sufficiency implementation, result, documentation updates and tests. Exact worktree state must be
-taken from final `git status`. No commit or push is authorized.
+The current uncommitted work contains only the B5 protocol/config, schema/assembler/API integration,
+audit report, documentation updates and tests. Exact worktree state must be taken from final
+`git status`. No commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
 Most recent validation including B4:
 
-- full project suite: 273 tests passed (2 dependency/environment warnings only);
+- full project suite: 277 tests passed (2 dependency/environment warnings only);
 - full Ruff check, `git diff --check` and repository secret scan passed;
 - historical TWMD entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
 
@@ -833,8 +851,7 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-After B4 review, the next one executable unit is **B5 — NLP Intelligence Integration**. Do not
-begin B5 automatically. B5 may expose only already supported functions or explicit abstention;
-it must keep linguistic sentiment, event class, market reaction, financial impact and media tone
-separate. F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must
-not be reopened.
+After B5 review, the next one executable unit is **F11B — Controlled LINE Financial AI
+Integration**. Do not begin F11B automatically. F11B may consume only the frozen B5 backend
+contract and must preserve legacy GAS behavior plus the immutable backup/rollback boundary. F12
+remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be reopened.

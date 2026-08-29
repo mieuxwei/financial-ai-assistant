@@ -171,8 +171,8 @@ def test_intelligence_endpoint_returns_database_only_scored_and_abstained_items(
     chinese = NewsArticle(
         title="公司公告月營收成長並取得重大訂單",
         published_at=datetime(2026, 8, 28, 1, tzinfo=UTC),
-        source="twse_material",
-        source_type="official_announcement",
+        source="twmd_major_events",
+        source_type="LICENSED_EVENT_METADATA",
         url="https://example.invalid/twse-source-url",
         canonical_url="https://example.invalid/twse-source-url",
         summary="公開資訊觀測站重大訊息摘要",
@@ -180,7 +180,17 @@ def test_intelligence_endpoint_returns_database_only_scored_and_abstained_items(
         title_fingerprint="d" * 64,
         language="zh-TW",
         external_id="chinese-1",
-        source_metadata={"company_name": "範例公司", "clause": "31", "fact_date": "1150828"},
+        source_metadata={
+            "company_name": "範例公司",
+            "clause": "31",
+            "fact_date": "1150828",
+            "event_class": "重大契約",
+            "event_confidence": 0.91,
+            "rule_version": "mops_taxonomy_v1",
+            "b5_reaction_magnitude_score": 0.013,
+            "b5_historical_percentile": 85.0,
+            "b5_signal_available_at": "2026-08-28T01:01:00+00:00",
+        },
     )
     db_session.add_all([english, chinese])
     db_session.flush()
@@ -233,6 +243,14 @@ def test_intelligence_endpoint_returns_database_only_scored_and_abstained_items(
     assert chinese_result["sentiment"]["positive_probability"] is None
     assert chinese_result["event_intelligence"]["status"] == "SIGNAL"
     assert chinese_result["event_intelligence"]["sentiment_ground_truth"] is False
+    track_b = chinese_result["track_b_intelligence"]
+    assert track_b["linguistic_sentiment"]["positive_probability"] is None
+    assert track_b["linguistic_sentiment"]["reason"] == "CHINESE_SENTIMENT_NOT_VALIDATED"
+    assert track_b["event_classification"]["event_class"] == "重大契約"
+    assert track_b["market_reaction"]["maturity"] == "AUTOMATED_SIGNAL_ONLY"
+    assert track_b["market_reaction"]["communication_band"] == "HIGH"
+    assert track_b["market_reaction"]["direction"] is None
+    assert track_b["media_tone"]["tone"] is None
     assert english_result["sentiment"]["status"] == "SCORED"
     assert english_result["sentiment"]["model_version"] == FINBERT_VERSION
     assert english_result["sentiment"]["score"] == 0.6

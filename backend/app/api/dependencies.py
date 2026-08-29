@@ -7,6 +7,10 @@ from fastapi import Header
 from backend.app.core.config import get_settings
 from backend.app.core.errors import ForbiddenError, ServiceUnavailableError
 from backend.app.services.research_prediction import ResearchPredictionService
+from pipelines.intelligence.b5_integration import (
+    B5IntelligenceConfig,
+    load_b5_intelligence_config,
+)
 from pipelines.intelligence.financial_nlp import (
     FinancialNlpIntelligenceConfig,
     load_financial_nlp_intelligence_config,
@@ -48,6 +52,15 @@ def get_financial_nlp_intelligence_config() -> FinancialNlpIntelligenceConfig:
         raise ServiceUnavailableError(
             "financial intelligence configuration is unavailable"
         ) from error
+
+
+@lru_cache
+def get_b5_intelligence_config() -> B5IntelligenceConfig:
+    path = _resolve_repository_path(get_settings().b5_intelligence_config_path)
+    try:
+        return load_b5_intelligence_config(path)
+    except (OSError, ValueError) as error:
+        raise ServiceUnavailableError("B5 intelligence configuration is unavailable") from error
 
 
 @lru_cache

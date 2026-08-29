@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     news_provider: str = ""
     final_model_artifact_path: str = ".tools/models/f7-final-ridge-research-v1/model.json"
     backend_integration_config_path: str = "research/configs/backend_integration.v1.json"
+    b5_intelligence_config_path: str = "research/configs/b5_nlp_intelligence_integration.v1.json"
 
     @property
     def resolved_database_url(self) -> str:
