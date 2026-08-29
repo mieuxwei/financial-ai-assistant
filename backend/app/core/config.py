@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     final_model_artifact_path: str = ".tools/models/f7-final-ridge-research-v1/model.json"
     backend_integration_config_path: str = "research/configs/backend_integration.v1.json"
     b5_intelligence_config_path: str = "research/configs/b5_nlp_intelligence_integration.v1.json"
+    f11b_service_key_id: str = ""
+    f11b_service_secret: str = ""
+    f11b_controlled_fixture_path: str = "demo/fixtures/controlled_dashboard_demo.v1.json"
 
     @property
     def resolved_database_url(self) -> str:

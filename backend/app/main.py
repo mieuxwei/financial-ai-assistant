@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from backend.app.api.controlled_demo import router as controlled_demo_router
 from backend.app.api.portfolios import router as portfolio_router
 from backend.app.api.research import router as research_router
 from backend.app.core.config import get_settings
@@ -20,6 +21,7 @@ def create_app() -> FastAPI:
     application = FastAPI(title=settings.service_name)
     application.include_router(portfolio_router)
     application.include_router(research_router)
+    application.include_router(controlled_demo_router)
 
     @application.exception_handler(AppError)
     async def handle_app_error(request: Request, error: AppError) -> JSONResponse:

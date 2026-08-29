@@ -2,15 +2,15 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **F11B-D0 LINE UX + Multi-user + GAS/FastAPI Design Freeze — COMPLETE**
+ACTIVE PHASE: **F11B-1B Controlled Read-only Demo — COMPLETE / NOT DEPLOYED**
 
-NEXT EXECUTABLE UNIT: **F11B-1A — Controlled LINE Routing in Migration Copy only**
+NEXT EXECUTABLE UNIT: **F11B-2 only after all frozen current-market gates pass**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
 TRACK B: **ACTIVE — B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9**
 
-TRACK C: **F10 complete / F11A Streamlit complete / F11B LINE-GAS pending / F12 last**
+TRACK C: **F10/F11A/F11B-D0/1A/1B complete / F11B-2 gated / F12 last**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -33,10 +33,9 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Local `main` and `origin/main` both point to `8077d6b` (`B5`).
-- Commit `8077d6b` contains B5; its parent history contains corrected B4, B3.1, B3, B2.1, B2, B1,
-  R0, the FinMind longitudinal audit and historical TWMD entitlement probe. Current F11B-D0
-  changes are uncommitted.
+- Local `main` and `origin/main` both pointed to `d23a5f4` (`F11B-1A`) before this unit.
+- Current uncommitted changes implement F11B-1B only; historical B5, D0 and 1A evidence remains
+  preserved.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -64,8 +63,9 @@ Primary research question:
 
 Track A predicts a continuous next-session stock-normalized volatility-surprise score and is now
 complete/frozen. Track B is the active Taiwan Financial Sentiment / Impact Modeling and Financial
-NLP Intelligence program. Track C is the Python/FastAPI product with F11A Streamlit complete and
-F11B-D0 design freeze complete; F11B-1A/1B/2 implementation pending.
+NLP Intelligence program. Track C is the Python/FastAPI product with F11A and F11B-D0/1A/1B
+complete. F11B-1B is deterministic, authenticated, read-only and not deployed; F11B-2 remains
+blocked by the frozen current-market gates.
 
 ## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
 
@@ -86,12 +86,12 @@ R0 Project Rebaseline & GAS Safety Freeze
   → F12 Portfolio Finalization
 ```
 
-R0 created the F11B-0 private safety copies early, but this does not begin F11B-1A or alter the
-sequence. B1, B2, B2.1, B3, B3.1, B4, B5 and F11B-D0 are complete; do not begin F11B-1A or F12 without
-explicit user instruction. Definitions of Done are frozen in
+R0 created the F11B-0 private safety copies early without altering the sequence. B1, B2, B2.1, B3,
+B3.1, B4, B5 and F11B-D0/1A/1B are complete; do not begin F11B-2 or F12 without explicit user
+instruction and the applicable gates. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-F11B-D0 is complete. Do not begin F11B-1A without a separate instruction.
+F11B-1B is complete and not deployed. Do not begin F11B-2 until all nine frozen gates pass.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -507,7 +507,7 @@ private-beta MOPS endpoint remain HOLD. See
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
 - **F11A:** controlled Streamlit dashboard complete; not deployed.
-- **F11B:** D0 design complete. F11B-0 safety copy exists; F11B-1A/1B/2 have not started.
+- **F11B:** D0/1A/1B complete; F11B-0 safety copy remains immutable; F11B-2 has not started.
 - **F12:** portfolio finalization pending and last; it is not the next executable unit.
 
 ## B1 ARTIFACTS
@@ -848,9 +848,9 @@ Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted work contains only the F11B-D0 design document, machine contract,
-documentation status updates and invariant tests. Exact worktree state must be taken from final
-`git status`. No commit or push is authorized.
+The current uncommitted work contains the F11B-1B FastAPI controlled endpoint, HMAC service-auth,
+schemas/service/tests/documentation and ignored private migration-copy integration. Exact worktree
+state must be taken from final `git status`. No automatic commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
@@ -872,7 +872,7 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-After F11B-D0 review, the next one executable unit is **F11B-1A — Controlled LINE Routing in
-Migration Copy**. Do not begin it automatically. It may consume only the frozen B5 backend contract,
-must modify only the private migration copy, and must preserve legacy behavior plus immutable
-backup/rollback. F12 remains last; B6/F9 is optional/non-blocking; Track A/B models stay frozen.
+F11B-1B is complete and not deployed. The next implementation unit is **F11B-2 Current-market
+integration**, but it may begin only after all nine frozen source/parity/cutoff/timezone/missingness/
+lineage/validation gates pass and separate approval is given. F12 remains last; B6/F9 is optional/
+non-blocking; Track A/B models stay frozen.

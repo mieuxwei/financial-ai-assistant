@@ -13,11 +13,13 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     readme = _read("README.md")
 
     assert (
-        "NEXT EXECUTABLE UNIT: **F11B-1A — Controlled LINE Routing in Migration Copy only**"
+        "NEXT EXECUTABLE UNIT: **F11B-2 only after all frozen current-market gates pass**"
         in handoff
     )
-    assert "next executable unit is F11B-1A Controlled LINE Routing in Migration Copy only" in plan
-    assert "next: F11B-1A only" in readme
+    assert "F11B-1B controlled read-only demo complete" in plan
+    assert "F11B-1B controlled read-only demo complete" in readme
+    assert "F11B-2" in plan and "gated" in plan
+    assert "F11B-2" in readme and "gated" in readme
     assert "B3.1" in handoff
     assert "B3.1" in plan
     assert "B3.1" in readme
@@ -25,6 +27,19 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     assert "AUTOMATED_SIGNAL_ONLY" in plan
     assert "AUTOMATED_SIGNAL_ONLY" in readme
     assert "NEXT EXECUTABLE UNIT: **F12" not in handoff
+
+
+def test_f11b_1b_documentation_preserves_controlled_demo_boundary() -> None:
+    document = _read("docs/f11b_controlled_line_demo.md")
+
+    assert "CONTROLLED RESEARCH DEMO" in document
+    assert "NOT DEPLOYED" in document
+    assert "fixture_only = true" in document
+    assert "external_api_called = false" in document
+    assert "model_inference_performed = false" in document
+    assert "portfolio_write = false" in document
+    assert "raw-body/header" in document
+    assert "all nine current-market gates" in document
 
 
 def test_core_documents_freeze_track_a_and_split_f11() -> None:
