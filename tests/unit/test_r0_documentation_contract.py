@@ -12,9 +12,15 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     plan = _read("PROJECT_PLAN.md")
     readme = _read("README.md")
 
-    assert "NEXT EXECUTABLE UNIT: **B4 — Validation / Abstention Decision only**" in handoff
-    assert "next executable unit is B4 Validation / Abstention Decision only" in plan
-    assert "next: B4 only" in readme
+    assert "NEXT EXECUTABLE UNIT: **B5 — NLP Intelligence Integration only**" in handoff
+    assert "next executable unit is B5 NLP Intelligence Integration only" in plan
+    assert "next: B5 only" in readme
+    assert "B3.1" in handoff
+    assert "B3.1" in plan
+    assert "B3.1" in readme
+    assert "AUTOMATED_SIGNAL_ONLY" in handoff
+    assert "AUTOMATED_SIGNAL_ONLY" in plan
+    assert "AUTOMATED_SIGNAL_ONLY" in readme
     assert "NEXT EXECUTABLE UNIT: **F12" not in handoff
 
 

@@ -62,6 +62,9 @@ financial-ai-backend-integration = "jobs.backend_integration:main"
 financial-ai-dashboard-fixture = "demo.fixture_builder:main"
 financial-ai-b2-dataset = "jobs.b2_dataset:main"
 financial-ai-b3-candidate-signals = "jobs.b3_candidate_signals:main"
+financial-ai-b4-market-reaction = "jobs.b4_market_reaction_models:main"
+financial-ai-b4-twmd-backfill = "jobs.b4_twmd_historical_backfill:main"
+financial-ai-b4-models = "jobs.b4_market_reaction_models:main"
 
 [project.optional-dependencies]
 dev = [

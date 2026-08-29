@@ -20,8 +20,8 @@ external validation。
 
 - **Track A — COMPLETE / FROZEN**：continuous stock-normalized volatility-surprise forecasting；
   final Ridge Regression `alpha=100`。
-- **Track B — ACTIVE**：B3 domain adaptation/candidate signals complete；下一步 B4
-  Validation / Abstention Decision，之後 B5→optional B6/F9。
+- **Track B — ACTIVE**：B4 corrected five-year market-reaction validation complete；metadata
+  magnitude signal 為 `AUTOMATED_SIGNAL_ONLY`，BERT text 無 incremental value；下一步 B5。
 - **Track C — Product**：F10 FastAPI complete、F11A controlled Streamlit complete、F11B
   LINE/GAS pending、F12 last。
 
@@ -32,7 +32,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**B3 domain adaptation + candidate signals complete / next: B4 only / not deployed**。
+目前狀態：**B4 market-reaction validation complete / next: B5 only / not deployed**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
@@ -51,6 +51,17 @@ external validation。
   candidate；沒有 sentiment fine-tuning、pseudo-label training 或人工標注。中文 sentiment
   仍 `ABSTAIN`。詳見 [B3 protocol](docs/b3_domain_and_candidate_signals_protocol.md) 與
   [B3 result](research/evaluation/b3_domain_and_candidate_signals_result.md)。
+- B3.1 只稽核 CFSC-ABSA、multilingual Chinese financial sentiment 與 StockSentCN。三者目前
+  均為 `HOLD`：分別受標註／授權／aspect split、標註來源與授權衝突、以及 weak/pseudo label
+  與不可取得 gold subset 限制；gate answer 為 `NO`，未建立 B3.2 或訓練模型。詳見
+  [B3.1 audit](research/evaluation/b3_1_chinese_sentiment_label_source_audit.md)。
+- B4 將 linguistic sentiment 與 market reaction 明確分離，凍結 publication-time 對齊、
+  TAIEX abnormal-return target、dedup 與 chronological gates。更正早期 `limit=2` probe 誤用
+  後，2021–2025 TWMD 私有回填取得 7,582 events、3,433 windows、9 tickers；metadata-only
+  對 absolute reaction 有 modest ranking signal，但 BERT title text 未增加效益。市場反應模型
+  為 `AUTOMATED_SIGNAL_ONLY`，中文 sentiment 仍為獨立 abstain。詳見
+  [B4 protocol](docs/b4_market_reaction_validation_protocol.md) 與
+  [B4 result](research/evaluation/b4_market_reaction_validation_result.md)。
 
 單一正式 roadmap 與 Definition of Done 見
 [R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見

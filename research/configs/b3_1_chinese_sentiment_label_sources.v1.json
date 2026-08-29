@@ -1,0 +1,231 @@
+{
+  "audit_version": "b3.1-chinese-sentiment-label-source-audit-v1",
+  "status": "B3_1_COMPLETE_B4_NOT_STARTED",
+  "audit_date": "2026-08-29",
+  "scope": {
+    "primary_candidates": [
+      "cfsc-absa",
+      "multilingual-financial-sentiment-zh",
+      "stocksentcn"
+    ],
+    "secondary_candidates_used": [],
+    "eland_used": false,
+    "bulk_download_performed": false,
+    "sentiment_model_trained": false,
+    "manual_labels_created": false,
+    "manual_label_review_performed": false
+  },
+  "ignored_local_evidence_manifests": {
+    "cfsc_metadata_readme_sha256": "9e4e4679c0a9131dbeedbb3caff94c6fbaf866e3c8b435b2f3bdda9a78c57ff8",
+    "multilingual_metadata_readme_sha256": "05f2d411643802ad73c1da163b8288230d701739838b1ddefc1775c7dcdbe5c2",
+    "multilingual_eight_offset_sample_sha256": "97c2685facd3980d258bf8a76a65c44e0de3f5e38271b4cdf7e0a2a12e9d5dc3",
+    "stocksentcn_metadata_readme_sha256": "de206f109d61c878e55785e5a930b39b83c350876d7d250e1863e6e437d6b566",
+    "hash_method": "sha256 over sorted per-file shasum manifest",
+    "storage": ".tools/b3_1_audit (git-ignored)"
+  },
+  "desired_task": {
+    "name": "CHINESE_TAIWAN_FINANCIAL_LINGUISTIC_SENTIMENT",
+    "labels": [
+      "negative",
+      "neutral",
+      "positive"
+    ],
+    "separate_from": [
+      "EVENT_CLASS",
+      "MARKET_REACTION",
+      "FINANCIAL_IMPACT",
+      "MEDIA_TONE",
+      "INVESTOR_MOOD"
+    ]
+  },
+  "candidates": [
+    {
+      "candidate_id": "cfsc-absa",
+      "source_url": "https://github.com/Ya-dongLi/CFSC",
+      "observed_tree_sha": "3f0226161cf5266b87438c98a30418f65d5cd064",
+      "access": "PUBLIC_REPOSITORY_DATA_FILES_VISIBLE",
+      "language": "SIMPLIFIED_CHINESE",
+      "domain": "MAINLAND_CHINESE_FINANCIAL_NEWS_SENTENCES",
+      "task": "ASPECT_LEVEL_SENTIMENT_POLARITY",
+      "task_alignment": "PARTIAL_MATCH",
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "label_provenance": "UNVERIFIED_NOT_DOCUMENTED_BY_REPOSITORY",
+      "human_weak_pseudo": "UNVERIFIED",
+      "sentence_count": 15446,
+      "chinese_sample_count": 15446,
+      "aspect_instance_count": 41496,
+      "class_distribution": {
+        "negative": 10717,
+        "neutral": 5260,
+        "positive": 25519
+      },
+      "official_split": {
+        "train": 33184,
+        "dev": 0,
+        "test": 8312,
+        "method": "REPORTED_8_TO_2_ASPECT_INSTANCE_SPLIT",
+        "sentence_group_isolation": "UNVERIFIED"
+      },
+      "leakage_risk": "HIGH_UNRESOLVED_ASPECT_EXPANSION_AND_SENTENCE_CROSS_SPLIT_RISK",
+      "license": "NO_DATASET_LICENSE_FOUND_REPOSITORY_API_LICENSE_NULL",
+      "raw_text_redistribution": "NOT_PERMITTED_BY_AVAILABLE_EVIDENCE",
+      "local_training_permission": "NOT_ESTABLISHED",
+      "model_artifact_permission": "NOT_ESTABLISHED",
+      "train_suitability": false,
+      "independent_eval_suitability": false,
+      "final_classification": "HOLD",
+      "blocking_reasons": [
+        "annotation process and annotator provenance are not documented",
+        "exact financial-news publishers and underlying-text rights are not documented",
+        "no dataset license is present",
+        "aspect-level labels cannot be converted to sentence-level labels without a frozen mapping",
+        "sentence-family isolation across the provided split is unverified"
+      ]
+    },
+    {
+      "candidate_id": "multilingual-financial-sentiment-zh",
+      "source_url": "https://huggingface.co/datasets/Kenpache/multilingual-financial-sentiment",
+      "observed_revision": "9d43950d151602f623f28bba62f30554b5d40dd2",
+      "access": "PUBLIC_UNGATED_SINGLE_CSV_AND_DATASET_VIEWER",
+      "language": "SIMPLIFIED_CHINESE_FROM_MAINLAND_CHINESE_SOURCES_LIKELY_ORIGINAL_BUT_NOT_PROVEN",
+      "domain": "FINANCIAL_NEWS_SENTENCES",
+      "task": "SENTENCE_LEVEL_SENTIMENT_CLASSIFICATION_CLAIMED",
+      "task_alignment": "DIRECT_MATCH",
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "label_provenance": "UNVERIFIED_DATASET_CARD_SAYS_ANNOTATED_BUT_PROVIDES_NO_METHOD_OR_ANNOTATORS",
+      "human_weak_pseudo": "UNVERIFIED",
+      "total_sample_count": 39829,
+      "chinese_sample_count": 7930,
+      "class_distribution": {
+        "negative": 1921,
+        "neutral": 3126,
+        "positive": 2883
+      },
+      "official_split": {
+        "train": 39829,
+        "dev": 0,
+        "test": 0,
+        "method": "SINGLE_UNSPLIT_FILE"
+      },
+      "bounded_sample_audit": {
+        "sampling_plan": "eight fixed Dataset Viewer offsets times 100 rows",
+        "rows_observed": 800,
+        "chinese_rows_observed": 100,
+        "exact_duplicate_sentences_in_observed_800": 0,
+        "scope_limit": "not a full-corpus duplicate or cross-language overlap audit"
+      },
+      "leakage_risk": "HIGH_UNRESOLVED_NO_OFFICIAL_SPLITS_PROVENANCE_OR_CROSS_LANGUAGE_INDEPENDENCE",
+      "license": "CONFLICTING_APACHE_2_0_METADATA_AND_ACADEMIC_NONCOMMERCIAL_ONLY_CARD_TEXT",
+      "underlying_text_rights": "PUBLISHER_COPYRIGHT_RETAINED_FAIR_USE_TDM_ASSERTION_ONLY",
+      "raw_text_redistribution": "NONCOMMERCIAL_RESEARCH_ONLY_CLAIMED_NOT_CLEANLY_GRANTED",
+      "local_training_permission": "AMBIGUOUS",
+      "model_artifact_permission": "NOT_ESTABLISHED",
+      "train_suitability": false,
+      "independent_eval_suitability": false,
+      "final_classification": "HOLD",
+      "blocking_reasons": [
+        "label provenance is absent",
+        "Chinese-original versus translated status is not documented",
+        "only one unsplit file is provided",
+        "cross-language and source overlap are unverified",
+        "Apache-2.0 metadata conflicts with the card's academic/noncommercial restriction",
+        "publisher-text copyright remains outside a clean dataset license grant"
+      ]
+    },
+    {
+      "candidate_id": "stocksentcn",
+      "source_url": "https://github.com/lidayuls/StockSentCN",
+      "paper_doi": "10.13451/j.sxu.ns.2024111",
+      "observed_tree_sha": "62a4b6118cf70dde63ab0ce6a21e3f4669c975aa",
+      "access": "README_SAMPLE_ONLY_FULL_DATASET_REQUIRES_AUTHOR_CONTACT",
+      "language": "SIMPLIFIED_CHINESE",
+      "domain": "EASTMONEY_STOCK_FORUM_COMMENTS_INVESTOR_MOOD",
+      "task": "BULLISH_BEARISH_NEUTRAL_INVESTOR_EXPECTATION",
+      "task_alignment": "WEAK_PROXY",
+      "labels": [
+        "negative_bearish",
+        "positive_bullish",
+        "neutral"
+      ],
+      "label_provenance": "MIXED_EMOJI_DISTANT_SUPERVISION_MANUAL_NEUTRAL_SEED_AND_MODEL_PSEUDO_LABELS",
+      "human_weak_pseudo": "MIXED_MOSTLY_WEAK_AND_PSEUDO",
+      "total_sample_count": 9238551,
+      "chinese_sample_count": 9238551,
+      "class_distribution": {
+        "negative": 2695632,
+        "neutral": 1579339,
+        "positive": 4963580
+      },
+      "portions": {
+        "base_distant_supervised": {
+          "count": 191129,
+          "negative": 50261,
+          "neutral": 13965,
+          "positive": 126903,
+          "provenance": "emoji rules for positive/negative; small manually created neutral seed"
+        },
+        "pseudo_labeled_expansion": {
+          "count": 9047422,
+          "negative": 2645371,
+          "neutral": 1565374,
+          "positive": 4836677,
+          "provenance": "continual-learning classifier pseudo labels"
+        },
+        "human_evaluation": {
+          "count": 900,
+          "design": "three random groups of 300, one trained financial expert per group",
+          "released_and_separable": false
+        }
+      },
+      "official_split": {
+        "base_train": 152903,
+        "base_dev": 19113,
+        "base_test": 19113,
+        "method": "REPORTED_8_TO_1_TO_1_NON_TEMPORAL_BASE_DATA_SPLIT",
+        "human_gold_test_released": false
+      },
+      "leakage_risk": "HIGH_PSEUDO_LABEL_CIRCULARITY_RANDOM_SPLIT_AND_DUPLICATION_UNVERIFIED",
+      "license": "NO_DATASET_LICENSE_FOUND_REPOSITORY_API_LICENSE_NULL",
+      "underlying_text_rights": "SCRAPED_EASTMONEY_FORUM_TEXT_RIGHTS_NOT_GRANTED_BY_AVAILABLE_EVIDENCE",
+      "raw_text_redistribution": "NOT_PERMITTED_BY_AVAILABLE_EVIDENCE",
+      "local_training_permission": "NOT_ESTABLISHED",
+      "model_artifact_permission": "NOT_ESTABLISHED",
+      "train_suitability": false,
+      "independent_eval_suitability": false,
+      "final_classification": "HOLD",
+      "conceptual_portion_classification": {
+        "base_distant_supervised": "WEAK_SUPERVISION_ONLY_IF_ACCESS_AND_LICENSE_ARE_LATER_CLEARED",
+        "pseudo_labeled_expansion": "TRAINING_AUXILIARY_ONLY_NOT_GROUND_TRUTH_IF_ACCESS_AND_LICENSE_ARE_LATER_CLEARED",
+        "human_evaluation_subset": "GOLD_EVALUATION_ONLY_IN_PRINCIPLE_BUT_NOT_RELEASED_OR_SEPARABLE"
+      },
+      "blocking_reasons": [
+        "full data is not directly downloadable from the repository",
+        "no dataset license is present",
+        "most labels are pseudo labels and the base positive/negative labels are emoji-derived",
+        "the 900 expert labels are not released as a separable gold set",
+        "task is investor bullish/bearish mood rather than Taiwan news linguistic sentiment",
+        "duplication and source-family leakage could not be verified"
+      ]
+    }
+  ],
+  "decision": {
+    "clean_training_source_exists": false,
+    "independent_evaluation_source_exists": false,
+    "gating_answer": "NO",
+    "b3_2_created": false,
+    "next_executable_unit": "B4_VALIDATION_ABSTENTION_DECISION",
+    "b4_gate_unchanged": {
+      "macro_f1_minimum": 0.7,
+      "per_required_class_recall_minimum": 0.6
+    },
+    "current_product_output": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED"
+  }
+}

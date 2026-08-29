@@ -1,0 +1,15 @@
+{
+  "backfill_version": "b4-twmd-historical-backfill-v1",
+  "source_contract": "b2.1-twmd-secondary-source-v1",
+  "date_from": "2021-01-01",
+  "date_to": "2025-12-31",
+  "tickers": ["0050", "1301", "1303", "2308", "2317", "2330", "2412", "2454", "2881", "2882"],
+  "windowing": "calendar_month",
+  "maximum_window_days": 31,
+  "request_limit": 100,
+  "maximum_workers": 4,
+  "private_output": ".tools/datasets/b4-twmd-historical-backfill-v1",
+  "raw_or_normalized_subject_publication_allowed": false,
+  "redistribution_allowed": false,
+  "purpose": "B4 private market-reaction validation only"
+}

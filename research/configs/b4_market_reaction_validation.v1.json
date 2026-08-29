@@ -1,0 +1,124 @@
+{
+  "protocol_version": "b4-market-reaction-validation-v1",
+  "status": "B4_PROTOCOL_FROZEN_BEFORE_MODEL_EVALUATION",
+  "market_timezone": "Asia/Taipei",
+  "market_open": "09:00:00",
+  "market_close": "13:30:00",
+  "intraday_publication_policy": "ABSTAIN_DAILY_PRICE_CANNOT_ISOLATE_POST_PUBLICATION_REACTION",
+  "primary_target": {
+    "name": "next_eligible_session_signed_abnormal_return",
+    "formula": "stock_simple_return(anchor_close,reaction_close)-taiex_simple_return(anchor_close,reaction_close)",
+    "continuous": true,
+    "causal_claim": false
+  },
+  "secondary_targets": [
+    {
+      "name": "next_eligible_session_absolute_abnormal_return",
+      "formula": "abs(next_eligible_session_signed_abnormal_return)"
+    }
+  ],
+  "timestamp_bases_allowed": [
+    "OBSERVED_OFFSET",
+    "SOURCE_CONTRACT_ASSUMPTION"
+  ],
+  "deduplication": {
+    "exact_family_key": "sha256(ticker + normalized_subject + publication_local_date)",
+    "source_priority": [
+      "twse_openapi_daily_material",
+      "tpex_openapi_daily_material",
+      "twmd_major_event_taxonomy",
+      "gdelt_gkg_gal"
+    ],
+    "exact_duplicate_policy": "keep earliest publication; source priority then source record ID break ties",
+    "same_reaction_window_policy": "one ticker-window modeling row; mean unique event embeddings; metadata counts and category multi-hot",
+    "cross_split_family_policy": "all members of one exact family remain in the earliest chronological split"
+  },
+  "sources": [
+    {
+      "source_id": "fsc_filtered_corpus",
+      "role": "domain encoder adaptation only",
+      "b4_permission": "NO_DIRECT_EVENT_ROWS_WITHOUT_TICKER_AND_PRECISE_PUBLICATION_TIME"
+    },
+    {
+      "source_id": "twse_openapi_daily_material",
+      "role": "official listed-company event input",
+      "b4_permission": "B2_CONTRACT_ONLY_CURRENT_SNAPSHOT_NOT_HISTORICAL_BACKFILL"
+    },
+    {
+      "source_id": "tpex_openapi_daily_material",
+      "role": "official OTC event input",
+      "b4_permission": "B2_CONTRACT_ONLY_CURRENT_SNAPSHOT_NOT_HISTORICAL_BACKFILL"
+    },
+    {
+      "source_id": "twmd_major_event_taxonomy",
+      "role": "secondary title and inferred event metadata",
+      "b4_permission": "FROZEN_B2_1_PRIVATE_METADATA_ONLY"
+    },
+    {
+      "source_id": "gdelt_gkg_gal",
+      "role": "media metadata only",
+      "b4_permission": "CONDITIONAL_SAFE_ACCESS_REQUIRED"
+    }
+  ],
+  "representation": {
+    "encoder": "FSC-adapted google-bert/bert-base-chinese",
+    "encoder_revision": "8f23c25b06e129b6c986331a13d8d025a92cf0ea",
+    "adapted_weight_sha256": "eaacc66a4993a448e9e9dd7d6aab0fc33290d1f4e4e4e8d209efc1d7a17fd3b9",
+    "retrain_encoder": false,
+    "availability_rule": "text must be available by publication cutoff"
+  },
+  "candidate_models": [
+    {
+      "candidate_id": "market_only_ridge",
+      "feature_group": "market context and ticker identity",
+      "family": "Ridge"
+    },
+    {
+      "candidate_id": "metadata_only_ridge",
+      "feature_group": "market plus event metadata",
+      "family": "Ridge"
+    },
+    {
+      "candidate_id": "bert_text_metadata_ridge",
+      "feature_group": "market plus metadata plus frozen B3 text representation",
+      "family": "Ridge"
+    }
+  ],
+  "chronological_evaluation": {
+    "random_split_allowed": false,
+    "preferred_design": "expanding_window_rolling_origin",
+    "inner_selection": "contained entirely inside each outer training history",
+    "duplicate_family_isolation_required": true,
+    "minimum_outer_folds": 3,
+    "minimum_events_per_evaluation_fold": 50
+  },
+  "data_sufficiency_gate": {
+    "minimum_usable_event_windows": 300,
+    "minimum_unique_tickers": 5,
+    "minimum_calendar_years": 3,
+    "minimum_outer_folds": 3,
+    "minimum_events_per_evaluation_fold": 50,
+    "minimum_reliable_timestamp_ratio": 0.95,
+    "minimum_market_match_ratio": 0.9,
+    "required_cross_source_dedup_coverage": 1.0
+  },
+  "research_signal_gate": {
+    "all_leakage_checks_required": true,
+    "minimum_median_outer_spearman": 0.0,
+    "minimum_text_minus_metadata_mean_spearman": 0.02,
+    "minimum_fraction_outer_folds_with_positive_text_increment": 0.6666666667,
+    "maximum_text_mae_relative_degradation": 0.01,
+    "minimum_worst_outer_spearman": -0.05
+  },
+  "sentiment": {
+    "status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED",
+    "market_reaction_is_sentiment_ground_truth": false,
+    "retrain_sentiment_model": false,
+    "old_sentiment_gate_reused": false
+  },
+  "prohibited_sources": [
+    "eland"
+  ],
+  "on_insufficient_data": "ABSTAIN_INSUFFICIENT_MARKET_REACTION_DATA",
+  "next_unit_if_b4_complete": "B5_NLP_INTELLIGENCE_INTEGRATION"
+}

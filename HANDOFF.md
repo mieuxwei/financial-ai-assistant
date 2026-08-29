@@ -2,13 +2,13 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B3 Domain Adaptation & Candidate Signals — COMPLETE**
+ACTIVE PHASE: **B4 Market Impact / Reaction Validation — COMPLETE / AUTOMATED_SIGNAL_ONLY**
 
-NEXT EXECUTABLE UNIT: **B4 — Validation / Abstention Decision only**
+NEXT EXECUTABLE UNIT: **B5 — NLP Intelligence Integration only**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
-TRACK B: **ACTIVE — B1 → B2 → B3 → B4 → B5 → optional B6/F9**
+TRACK B: **ACTIVE — B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9**
 
 TRACK C: **F10 complete / F11A Streamlit complete / F11B LINE-GAS pending / F12 last**
 
@@ -25,12 +25,18 @@ no TWMD dataset rows were used by completed B3**
 B3 representation decision: **FSC-adapted BERT-base-Chinese promoted for representation only;
 Chinese sentiment remains ABSTAIN**
 
+B3.1 label-source decision: **CFSC-ABSA HOLD; multilingual Chinese financial sentiment HOLD;
+StockSentCN HOLD; gate answer NO; no B3.2**
+
+B4 market-reaction decision: **corrected 2021–2025 TWMD backfill; 7,582 events / 3,433 aggregated
+ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ONLY**
+
 ## CURRENT REPOSITORY SNAPSHOT
 
-- Branch/remote state before the current B3 edits: local `main` and `origin/main` both point to
-  `641c2aa` (`B2.1`).
-- Commit `641c2aa` contains B2.1; its parent history contains B2, B1, R0, the FinMind longitudinal
-  audit and historical TWMD entitlement probe. Current B3 changes remain uncommitted.
+- Before the current B3.1/B4 edits, local `main` and `origin/main` both point to `afac2a4` (`B3`).
+- Commit `afac2a4` contains B3; its parent history contains B2.1, B2, B1, R0, the FinMind
+  longitudinal audit and historical TWMD entitlement probe. Current B3.1 and B4 changes are
+  uncommitted.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -68,6 +74,7 @@ R0 Project Rebaseline & GAS Safety Freeze
   → B1 Source Candidate Audit
   → B2 Taiwan Financial Text Dataset
   → B3 Domain Adaptation & Candidate Signals
+  → B3.1 Chinese Sentiment Label Source Audit
   → B4 Validation / Abstention Decision
   → B5 NLP Intelligence Integration
   → F11B-0 GAS Immutable Backup & Migration Copy
@@ -78,11 +85,11 @@ R0 Project Rebaseline & GAS Safety Freeze
 ```
 
 R0 created the F11B-0 private safety copies early, but this does not begin F11B-1 or alter the
-sequence. B1, B2, B2.1 and B3 are now complete; do not interleave B4/B5, begin F12 early or proceed
-into B4 without explicit user instruction. Definitions of Done are frozen in
+sequence. B1, B2, B2.1, B3, B3.1 and B4 are now complete; do not begin B5, F11B or F12 without
+explicit user instruction. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-B3 is now complete. Do not begin B4 without a separate instruction.
+B4 is now complete. Do not begin B5 without a separate instruction.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -275,13 +282,19 @@ probabilities. Track B now follows exactly:
 2. **B2 Taiwan Financial Text Dataset** — complete; normalized snapshot/update contract frozen;
 3. **B3 Domain Adaptation & Candidate Signals** — complete; one frozen domain encoder and distinct
    signal candidates;
-4. **B4 Validation / Abstention Decision** — next; frozen gate, no post-result lowering;
-5. **B5 NLP Intelligence Integration** — expose only B4-supported capabilities;
-6. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
+4. **B3.1 Chinese Sentiment Label Source Audit** — complete; three candidates HOLD, gate answer NO;
+5. **B4 Market Impact / Reaction Validation** — complete; corrected five-year backfill passed the
+   data gate; metadata magnitude signal is `AUTOMATED_SIGNAL_ONLY`, while BERT text incremental
+   value is unsupported;
+6. **B5 NLP Intelligence Integration** — next; expose only supported or explicit-abstention
+   capabilities;
+7. **B6/F9 optional incremental-value study** — same frozen Track A discipline, non-blocking.
 
-The preferred B4 sentiment gate remains macro-F1 `>=0.70` and recall `>=0.60` for every required
-class. Possible outcomes are `VALIDATED`, `AUTOMATED_SIGNAL_ONLY` or `ABSTAIN`. The project retains
-the zero-manual-label, zero-manual-review and no-human-adjudication requirements.
+B4 did not reinterpret returns as linguistic sentiment. Its primary target was frozen as
+next-eligible-session signed abnormal return relative to TAIEX, with absolute abnormal return as a
+secondary magnitude outcome. A corrected 2021–2025 private backfill passed the data gate and ran
+three rolling-origin folds. The project retains the zero-manual-label, zero-manual-review and
+no-human-adjudication requirements.
 
 AP11 is an optional future source enhancement, not required before Chinese NLP, F11B or F12. eLAND
 is prohibited permanently from datasets, models, APIs, audits, weak supervision, features,
@@ -351,6 +364,54 @@ private-beta MOPS endpoint remain HOLD. See
 - TWMD supplied contract/schema context only and zero rows. `event_class` is not sentiment.
 - One bounded GDELT official RSS recovery kept TLS enabled and saved no raw payload; XML parsing
   failed, so implementation is temporarily unavailable/conditional and non-blocking.
+
+### B3.1 Chinese sentiment label-source audit
+
+- Authoritative report:
+  `research/evaluation/b3_1_chinese_sentiment_label_source_audit.md`.
+- Machine-readable decision:
+  `research/configs/b3_1_chinese_sentiment_label_sources.v1.json`.
+- CFSC-ABSA is `HOLD`: aspect-level task, annotation provenance and exact news sources are not
+  documented, no license exists, and sentence-family split isolation is unverified.
+- `Kenpache/multilingual-financial-sentiment` Chinese subset is `HOLD`: its single unsplit file has
+  no annotation method; Apache-2.0 metadata conflicts with academic/noncommercial-only card text
+  and retained publisher copyright.
+- StockSentCN is `HOLD`: the base is primarily emoji distant supervision, 9.05M rows are model
+  pseudo-labels, the 900 expert rows are not released/separable, the repository has no full dataset
+  or license, and its task is investor mood/direction rather than news linguistic sentiment.
+- Clean training source: no. Independent evaluation source: no. Exact gate answer: `NO`.
+- B3.2 was not created. No sentiment model training, manual labels, eLAND use, GAS change or Track A
+  change occurred.
+
+### B4 market impact / reaction validation
+
+- Frozen protocol: `docs/b4_market_reaction_validation_protocol.md` and
+  `research/configs/b4_market_reaction_validation.v1.json`.
+- Authoritative result: `research/evaluation/b4_market_reaction_validation_result.md`.
+- Correction: the initial four rows came from two intentional `limit=2` entitlement/schema probes
+  and were not a historical dataset. The first insufficiency conclusion was superseded before B4
+  finalization.
+- Private 2021–2025 monthly backfill over the frozen ten-ticker universe produced 7,582 events;
+  deterministic family/window aggregation left 3,433 windows across nine represented tickers.
+- FSC supplied 6,021 domain-adaptation documents but no ticker/timestamp-ready event rows; the old
+  M8 TWSE evidence is target-only and concentrated in two days; TPEx and GDELT had zero admitted
+  historical rows.
+- Publication-time rules use Asia/Taipei and observed exchange sessions: before open maps prior
+  close to same close; intraday abstains with daily prices; after close maps same close to next
+  close; weekends/holidays map prior close to next exchange close; unknown timezone abstains.
+- Primary target is stock simple return minus TAIEX total-return-index return; secondary target is
+  its absolute value. This is subsequent market reaction, not sentiment or causal impact.
+- Three rolling folds train on earlier years and evaluate 2023 (730), 2024 (713) and 2025 (688),
+  using Ridge alpha 100 with fold-local scaling/category encoding.
+- Signed OOF Spearman: market 0.0349, metadata 0.0784, BERT text+metadata 0.0408. Text-minus-metadata
+  was negative in every fold and mean increment was -0.0394.
+- Absolute-reaction metadata model achieved OOF Spearman 0.2504 and top-decile lift 1.623, with
+  positive fold Spearman 0.1434/0.1960/0.3418. This is modest automated evidence, not validation.
+- Exact maturity is `AUTOMATED_SIGNAL_ONLY`; Chinese linguistic sentiment independently remains
+  `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`.
+- Private TWMD manifest SHA-256 is
+  `aa78324c80d12872c8a4023e26184673cdff90552fb8b41bb5b2a635e1f7149d`.
+- B5 was not started; Track A, GAS, LINE, FastAPI, Streamlit and deployment were unchanged.
 
 ### B2 normalized dataset and update contract
 
@@ -748,16 +809,16 @@ Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted work includes the TWMD Pro re-audit code/config/result and core-document
-status updates. Exact worktree state must be taken from final `git status`. No commit or push is
-authorized.
+The current uncommitted work contains the B3.1 audit plus the B4 protocol, config, alignment and
+sufficiency implementation, result, documentation updates and tests. Exact worktree state must be
+taken from final `git status`. No commit or push is authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
-Most recent historical validation after the B2 handoff update:
+Most recent validation including B4:
 
-- full project suite: 244 tests passed;
+- full project suite: 273 tests passed (2 dependency/environment warnings only);
 - full Ruff check, `git diff --check` and repository secret scan passed;
 - historical TWMD entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
 
@@ -772,8 +833,8 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-After B3 review, the next one executable unit is **B4 — Validation / Abstention Decision**.
-Do not begin B4 automatically. B4 must use the frozen B3 candidate manifest and may not lower the
-predeclared gate, use eLAND/manual labels/future data or introduce circular validation.
-F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must not be
-reopened.
+After B4 review, the next one executable unit is **B5 — NLP Intelligence Integration**. Do not
+begin B5 automatically. B5 may expose only already supported functions or explicit abstention;
+it must keep linguistic sentiment, event class, market reaction, financial impact and media tone
+separate. F12 remains last; B6/F9 remains optional and non-blocking; Track A is complete and must
+not be reopened.

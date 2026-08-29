@@ -1,23 +1,24 @@
 # Financial AI Assistant — Final Project Plan
 
-Plan version: `b2-taiwan-financial-text-v1`
+Plan version: `b4-market-reaction-validation-v1`
 
 Last revised: 2026-08-29
-Active milestone: **B3 complete; next executable unit is B4 Validation / Abstention Decision only**
+Active milestone: **B4 market-reaction validation complete; next executable unit is B5 NLP Intelligence Integration only**
 
 Authoritative state:
 
 - **Track A:** complete/frozen; Ridge Regression `alpha=100`; do not reopen.
-- **Track B:** active; B1 → B2 → B3 → B4 → B5 → optional B6/F9.
+- **Track B:** active; B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9.
 - **Track C:** F10 complete; F11A Streamlit complete; F11B LINE/GAS pending; F12 last.
 - **AP11:** optional enhancement, not a prerequisite.
 - **eLAND:** permanent historical exclusion; no active use or re-audit.
 - **GAS:** future private migration-copy modification authorized only under the immutable
   backup/rollback rules in `docs/gas_migration_safety_freeze.md`.
 
-The single canonical execution sequence and Definitions of Done are frozen in
-`docs/r0_project_rebaseline_protocol.md`. Historical milestone documents remain evidence but do not
-override this roadmap.
+The R0 base sequence and Definitions of Done remain frozen in
+`docs/r0_project_rebaseline_protocol.md`. B3.1 was a later user-authorized bounded source audit;
+B4 is the later approved market-reaction validation formulation. Historical milestone documents
+remain evidence but do not override this active roadmap.
 
 ## 1. Final Project Identity
 
@@ -135,7 +136,7 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 ## 5.1 Canonical Active Roadmap and Definition of Done
 
 ```text
-R0 → B1 → B2 → B3 → B4 → B5 → F11B-0 → F11B-1 → F11B-2 → optional B6/F9 → F12
+R0 → B1 → B2 → B3 → B3.1 audit → B4 → B5 → F11B-0 → F11B-1 → F11B-2 → optional B6/F9 → F12
 ```
 
 R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此跳過 B1–B5 或開始 F11B-1。
@@ -147,15 +148,19 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | B2 Taiwan Financial Text Dataset | Complete | 四來源 whitelist 保持；`b2-financial-document-v1`、identity/version、timestamp、ticker mapping、dedup、rights/retention、lineage、RAW/NORMALIZED/FEATURE layers、retry/reconciliation/model-refresh contract 已凍結；6,021 筆 FSC private snapshot 完成；TPEx 65/65 bounded schema probe 通過；GDELT TLS probe 安全失敗、v1 採 fallback；無等待期、訓練或部署。 |
 | B2.1 TWMD secondary-source amendment | Complete / no ingestion | 認證成功；major-event taxonomy 的 2330 在 2018/2024 各 bounded 2 rows；最終 `ACCEPT_SECONDARY`。已凍結 runtime filter echo、ticker/window、31-day/100-row/1-MB、timezone assumption、dedup/version、rights/lineage fail-closed contract 與 provider tests；B2 v1 不回寫、無 TWMD dataset rows、B3 未開始。 |
 | B3 Domain Adaptation & Candidate Signals | Complete | 稽核並重用 FSC 6,021-row、BERT/MacBERT 200-step MLM pilot；hash 驗證通過，單一 promoted BERT-base-Chinese representation candidate；無新 sentiment classifier、pseudo labels、人工標注或 circular validation；TWMD zero rows；GDELT conditional；B4 manifest 已凍結。 |
-| B4 Validation / Abstention | Next / not started | 在評估前固定 macro-F1 `>=0.70` 且每類 recall `>=0.60`；chronological/family/source isolation；輸出 `VALIDATED`、`AUTOMATED_SIGNAL_ONLY` 或 `ABSTAIN`，不得事後降門檻。 |
-| B5 NLP Intelligence Integration | Not started | 只整合 B4 支援能力；unsupported Chinese polarity 保持 null/abstain；event/impact/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
+| B3.1 Chinese sentiment label-source audit | Complete / audit only | CFSC-ABSA、multilingual Chinese financial sentiment 與 StockSentCN 均為 `HOLD`；目前無可獨立許可的 training 或 evaluation label source；gate answer `NO`，未建立 B3.2、未訓練模型。 |
+| B4 Market Impact / Reaction Validation | Complete / `AUTOMATED_SIGNAL_ONLY` | 更正早期 `limit=2` probe 誤用後，依 B2.1 月批次私有回填 2021–2025：7,582 events、3,433 windows、9 tickers、3 rolling folds。Metadata-only 對 absolute reaction 有穩定但有限的 ranking signal（OOF Spearman 0.2504、top-decile lift 1.623）；BERT text 未提供 incremental value。中文 sentiment 仍獨立 abstain。 |
+| B5 NLP Intelligence Integration | Next / not started | 只整合 B4 已支持或明確 abstain 的能力；Chinese polarity 保持 null/abstain；market-reaction metadata signal 僅標示 automated/research-only；event/retrieval/summary 與 sentiment 分型；lineage/claims/security tests 通過。 |
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
 | F11B-1 Controlled LINE integration | Pending | migration copy 只新增 additive `risk`/`intel`/optional `news` routes；legacy holdings/Sheet/screenshots/triggers 不改；使用 fixture/stored snapshot 並標示 controlled demo；service auth/replay/timeout/idempotency/identity/rate/audit tests 通過。 |
 | F11B-2 Current-market integration | Conditional / pending | audited current OHLCV/TAIEX、cutoff/timezone/missingness/lineage 與 exact 23-feature parity tests 全部通過；GAS 不自行拼湊特徵。 |
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
 | F12 Portfolio Finalization | Pending / last | 完成 final workflow、README、visuals、abstract、demo、limitations/security/privacy；如實標明未完成/optional/live limitations；tests/lint/secret/reproducibility 全通過。 |
 
-詳細規格：`docs/r0_project_rebaseline_protocol.md`。
+R0 詳細規格見 `docs/r0_project_rebaseline_protocol.md`；B3.1 的 later-authorized audit decision
+見 `research/evaluation/b3_1_chinese_sentiment_label_source_audit.md`。B4 凍結協定與結果分別見
+`docs/b4_market_reaction_validation_protocol.md` 與
+`research/evaluation/b4_market_reaction_validation_result.md`。
 
 ## 6. Frozen Primary Target
 
@@ -430,11 +435,13 @@ profitability。Prospective validation 是自然未來資料累積後的 externa
 
 ## 18. Immediate Execution Boundary
 
-B3 完成後停在 candidate-manifest boundary。Track A 與 F7 Ridge alpha 100 永久 frozen；
-M7 evaluation sequence 固定為 1。F10 與 F11A 完成但未部署；F11B pending；F12 last；B6/F9
-optional。
+B4 已完成 corrected five-year market-reaction evaluation。早期 4-row 結論誤把 `limit=2`
+entitlement/schema probe 當成資料集，已更正；2021–2025 私有回填取得 7,582 events，聚合後
+3,433 windows、9 tickers，並完成 2023／2024／2025 三個 rolling-origin folds。Metadata 對
+absolute reaction 有 modest automated signal；BERT title representation 未提供 incremental
+value。`MARKET_REACTION_MODEL` 為 `AUTOMATED_SIGNAL_ONLY`；`LINGUISTIC_SENTIMENT` 獨立維持
+`ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`。
 
-下一個且唯一 executable unit 是 **B4 — Validation / Abstention Decision**，必須另有使用者
-指令才可開始。B3 已凍結候選 manifest；B4 不得降低既有 gate、使用 eLAND、人工標注、
-未來資料或 circular validation。B2/B3 沒有部署 collector、修改 live GAS、
-webhook、trigger、Sheet 或 holdings，也未 commit 或 push。
+下一個且唯一 executable unit 是 **B5 — NLP Intelligence Integration**，必須另有使用者指令
+才可開始，且只能整合已支援或明確 abstain 的能力。Track A/F7 Ridge alpha 100、GAS、LINE、
+FastAPI、Streamlit 與 deployment 均未變更；B5 尚未開始，也未 commit 或 push。
