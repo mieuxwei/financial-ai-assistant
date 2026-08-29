@@ -1,5 +1,5 @@
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 import httpx
 
@@ -17,13 +17,15 @@ def get_with_retries(
     *,
     max_retries: int,
     sleep: Callable[[float], None] = time.sleep,
+    params: Mapping[str, str | int | bool] | None = None,
+    headers: Mapping[str, str] | None = None,
 ) -> httpx.Response:
     if max_retries < 1:
         raise ValueError("max_retries must be at least one")
     last_error: Exception | None = None
     for attempt in range(max_retries):
         try:
-            response = client.get(url)
+            response = client.get(url, params=params, headers=headers)
             if response.status_code not in RETRYABLE_STATUS_CODES:
                 response.raise_for_status()
                 return response
@@ -39,4 +41,3 @@ def get_with_retries(
         if attempt < max_retries - 1:
             sleep(0.5 * (2**attempt))
     raise NewsProviderUnavailableError("news request failed after retries") from last_error
-

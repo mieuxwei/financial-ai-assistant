@@ -32,14 +32,16 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**B2 Taiwan financial-text dataset/update contract complete / next: B3 only / not deployed**。
+目前狀態：**B2 dataset + B2.1 TWMD secondary-source contract complete / next: B3 only / not deployed**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
 - eLAND 永久排除於 active work，只保留歷史拒絕證據。
 - GAS 後續只可在 verified private migration copy 上依 rollback 規則演進；R0 未改 live behavior。
-- B2 frozen whitelist 為 FSC filtered corpus、TWSE/TPEx daily official announcements 與 GDELT
-  metadata；FinMind remains conditional，TWMD hold，eLAND HOLD/permanently excluded。詳見
+- B2 v1 frozen whitelist 為 FSC filtered corpus、TWSE/TPEx daily official announcements 與 GDELT
+  metadata；FinMind remains conditional。TWMD 經後續 Pro 小樣本稽核升為 `ACCEPT_SECONDARY`
+  （只限 major-event taxonomy／issuer mapping）；B2.1 fail-closed contract/provider 已完成，但
+  尚無 TWMD dataset rows，未加入 B2 v1 或 B3；eLAND 仍永久排除。詳見
   [B1 source candidate audit](research/evaluation/b1_source_candidate_audit.md)。
 - B2 已建立 6,021 筆 private normalized FSC snapshot、TPEx forward provider 與 TWSE/TPEx/GDELT
   長期 acquisition/reconciliation contract；無最低等待期，也未部署 collector。詳見

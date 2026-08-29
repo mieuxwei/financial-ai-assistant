@@ -2,7 +2,7 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **B2 Taiwan Financial Text Dataset — COMPLETE**
+ACTIVE PHASE: **B2 + B2.1 TWMD source-contract amendment — COMPLETE**
 
 NEXT EXECUTABLE UNIT: **B3 — Domain Adaptation & Candidate Signals only**
 
@@ -19,7 +19,8 @@ eLAND: **permanent historical exclusion; no active use, API call or re-audit**
 GAS: **future modification authorized only through the verified immutable backup, migration-copy
 and rollback rules; live behavior was not changed in R0**
 
-Current source decision: **TWMD HOLD — account/API entitlement is not usable; do not depend on it**
+Current source decision: **TWMD ACCEPT_SECONDARY — B2.1 contract/provider ready; B2 v1 unchanged,
+no TWMD dataset rows, B3 remains paused**
 
 ## CURRENT REPOSITORY SNAPSHOT
 
@@ -291,7 +292,8 @@ authority: `research/configs/b1_source_candidate_manifest.v1.json`.
 - **CONDITIONAL:** FinMind `TaiwanStockNews` for deduplicated later-period title/link discovery only.
 - **OPTIONAL_FUTURE:** TEJ/AP11 (`OPTIONAL_HIGH_QUALITY_OFFICIAL_SOURCE`); TWSE Data E-Shop MOPS
   distribution.
-- **HOLD:** interactive historical MOPS automation, TWMD, `tw-finance-159M`, derived `tw-fsc`,
+- **HOLD (historical frozen B1 manifest):** interactive historical MOPS automation, TWMD,
+  `tw-finance-159M`, derived `tw-fsc`,
   Cnyes/Anue, Yahoo Taiwan Finance, WantGoo, and eLAND as a permanent exclusion record.
 - **REJECT:** none; eLAND's historically mandated label remains HOLD/excluded rather than being
   reclassified.
@@ -300,6 +302,29 @@ Frozen preferred B2 stack: FSC domain text + TWSE/TPEx official announcements + 
 media metadata. Fallback: FSC + TWSE/TPEx only. Official announcements and media news remain
 different source types; GDELT Tone is `MEDIA_TONE_PROXY`, never validated sentiment. Publisher
 article bodies are not approved for fetching, caching, training or redistribution.
+
+Post-B2 re-audit superseding operational status: **TWMD `ACCEPT_SECONDARY`** for major-event
+taxonomy/title metadata and current issuer mapping only. The historical B1 manifest and B2 v1
+whitelist stay immutable. Company news, the unavailable legacy material-information path and the
+private-beta MOPS endpoint remain HOLD. See
+`research/evaluation/twmd_pro_reaudit_result.md` and
+`research/configs/twmd_pro_source_decision.v1.json`.
+
+### B2.1 TWMD amendment
+
+- Contract: `docs/b2_1_twmd_secondary_source_contract.md` and
+  `research/configs/b2_1_twmd_secondary_source.v1.json`.
+- Result: `research/evaluation/b2_1_twmd_secondary_source_result.md`.
+- Provider/schema: `pipelines/news/twmd_major_events.py`.
+- Runtime query is frozen to `ticker/date_from/date_to/limit`; every response must echo those
+  values, and ticker/window/schema mismatches fail closed.
+- Maximum request is one ticker, 31 days, 100 rows and 1 MB. Reaching the limit is rejected as
+  possible truncation.
+- Timestamps are Asia/Taipei under an explicit source-contract assumption because the API omits
+  an offset.
+- Rights tier is `LICENSED_EVENT_METADATA_PRIVATE`; no full text, sentiment truth or human-label
+  claim is allowed.
+- No TWMD dataset was ingested. B2 v1 remains the active input if B3 is approved next.
 
 ### B2 normalized dataset and update contract
 
@@ -330,15 +355,18 @@ article bodies are not approved for fetching, caching, training or redistributio
   descriptions were absent, timestamps were timezone-naive/semantically undocumented, exact-link
   duplicates were 25.21% and exact-title duplicates were 20.49%. Raw responses remain only in
   ignored `.tools/` storage.
-- **TWMD major-event taxonomy: HOLD / currently unavailable.** A safe 2330 entitlement probe for
-  2018, 2022 and 2024 received HTTP 402 for all three periods and returned zero usable rows. This
-  does not establish dataset coverage, quality or licensing fitness. Do not use TWMD for training,
-  evaluation, NLP features, weak supervision or product claims unless access is later activated and
-  a new provenance/licensing/timestamp/duplicate audit passes.
+- **TWMD major-event taxonomy: `ACCEPT_SECONDARY` after bounded Pro re-audit.** The earlier
+  2018/2022/2024 HTTP 402 result remains preserved as diagnostic history. On 2026-08-29 the active
+  Pro key authenticated and returned two 2330 rows from both 2018 and 2024 with ticker, market,
+  event date/time, verbatim subject, inferred event class/confidence and rule version. The API has
+  a documentation/runtime filter-name mismatch, no encoded timezone and no full body. Company-news
+  probes returned zero rows; legacy material information returned 404; private-beta MOPS was not
+  entitled. B2 v1 remains unchanged, and TWMD is forbidden from B3 until a separately approved
+  versioned B2.1/B2-v2 contract gate passes.
 - The TWMD key, if retained locally, belongs only in ignored `.env`. The public `.env.example`
   contains an empty variable name, never a value.
 - **eLAND remains `HOLD / excluded from active modeling` and permanently excluded from active
-  work.** TWMD being unavailable does not reactivate eLAND.
+  work.** The later TWMD secondary acceptance does not reactivate eLAND.
 
 ## FROZEN F-SERIES RECORD AND CURRENT PRODUCT STATUS
 
@@ -688,24 +716,33 @@ Commit `d397cdf` already tracks B1 and, through its parent history, R0 plus:
   `research/evaluation/finmind_news_longitudinal_audit.py`,
   `research/evaluation/finmind_taiwan_stock_news_longitudinal_audit.md`,
   `tests/unit/test_finmind_news_longitudinal_audit.py`;
-- TWMD HOLD/probe files:
+- historical TWMD HOLD/probe files:
   `research/configs/twmd_major_event_probe.v1.json`,
   `research/evaluation/twmd_major_event_probe.py`,
   `tests/unit/test_twmd_major_event_probe.py`;
 - the related `.env.example`, `pyproject.toml` and Taiwan source-decision updates.
 
-The current uncommitted work contains B2 documents, config, schema/provider, CLI and tests plus
-core-document status updates. Exact worktree state must be taken from final `git status`. No B2
-commit or push is authorized.
+The current uncommitted work includes the TWMD Pro re-audit code/config/result and core-document
+status updates. Exact worktree state must be taken from final `git status`. No commit or push is
+authorized.
 
 Ignored local-only files include FinMind raw audit cache, the TWMD probe output/cache, model/eval
 artifacts and `.env`. Never add them with a forced Git add.
 
-Most recent validation after the B2 handoff update:
+Most recent historical validation after the B2 handoff update:
 
 - full project suite: 244 tests passed;
 - full Ruff check, `git diff --check` and repository secret scan passed;
-- TWMD live entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
+- historical TWMD entitlement result: 2018/2022/2024 all HTTP 402, zero accepted rows.
+
+Latest bounded Pro re-audit superseding operational source status:
+
+- authentication confirmed without recording the key;
+- major-event taxonomy HTTP 200 with two bounded 2330 rows in each of 2018 and 2024;
+- issuer-classification helper HTTP 200;
+- company-news HTTP 200 but zero rows in 2018, 2024 and the documented 2026 sample date;
+- legacy material-information HTTP 404; private-beta MOPS not entitled;
+- final classification `ACCEPT_SECONDARY`, B2 v1 unchanged, B3 not started.
 
 No automatic commit or push is authorized.
 

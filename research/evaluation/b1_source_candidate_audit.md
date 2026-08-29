@@ -4,6 +4,12 @@ Audit date: 2026-08-29
 Protocol/manifest: `b1-source-candidate-manifest-v1`  
 Decision: **PASS — B2 whitelist frozen; no training or dataset construction performed**
 
+Post-B2 source-status addendum (2026-08-29): a bounded authenticated Pro re-audit now classifies
+TWMD **`ACCEPT_SECONDARY`** for major-event taxonomy and issuer-mapping metadata only. The original
+B1 decision and four-source B2 v1 whitelist below remain immutable historical records; see
+`research/evaluation/twmd_pro_reaudit_result.md`. TWMD may enter only a separately approved,
+versioned B2.1/B2-v2 amendment before B3 use.
+
 Manifest SHA-256:
 `ca727489294c451987117466b2d80aa841b7d8c5bef9e96874dcf88aa40a80ce`.
 

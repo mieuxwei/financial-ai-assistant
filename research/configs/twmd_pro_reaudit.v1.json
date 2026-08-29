@@ -1,0 +1,49 @@
+{
+  "audit_version": "twmd-pro-reaudit-v1",
+  "api_key_environment_variable": "TWMD_API_KEY",
+  "timeout_seconds": 30,
+  "max_response_bytes": 1000000,
+  "raw_retention": "ignored_local_cache_only",
+  "probes": [
+    {
+      "label": "major_event_taxonomy_runtime_filters_2018",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/major-event-taxonomy",
+      "params": {"ticker": "2330", "date_from": "2018-01-01", "date_to": "2018-12-31", "limit": 2}
+    },
+    {
+      "label": "major_event_taxonomy_runtime_filters_2024",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/major-event-taxonomy",
+      "params": {"ticker": "2330", "date_from": "2024-01-01", "date_to": "2024-12-31", "limit": 2}
+    },
+    {
+      "label": "company_news_runtime_filters_2018",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/company-news",
+      "params": {"ticker": "2330", "date_from": "2018-01-01", "date_to": "2018-12-31", "limit": 2}
+    },
+    {
+      "label": "company_news_runtime_filters_2024",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/company-news",
+      "params": {"ticker": "2330", "date_from": "2024-01-01", "date_to": "2024-12-31", "limit": 2}
+    },
+    {
+      "label": "company_news_documented_sample_date_2026",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/company-news",
+      "params": {"ticker": "2330", "date_from": "2026-04-21", "date_to": "2026-04-21", "limit": 2}
+    },
+    {
+      "label": "material_information_2024",
+      "endpoint": "https://api.twmarketdata.com/v1/filings/material-information",
+      "params": {"symbol": "2330", "start_date": "2024-01-01", "end_date": "2024-12-31", "limit": 2}
+    },
+    {
+      "label": "issuer_classification_current",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/issuer-classification",
+      "params": {"symbol": "2330", "limit": 2}
+    },
+    {
+      "label": "mops_material_events_private_beta",
+      "endpoint": "https://api.twmarketdata.com/v2/datasets/news/mops-material-events",
+      "params": {"company_code": "2330", "date_from": "2024-01-01", "date_to": "2024-12-31", "limit": 1, "source_mode": "production_db_read", "include_detail_labels": true}
+    }
+  ]
+}

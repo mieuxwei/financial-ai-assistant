@@ -1,0 +1,51 @@
+{
+  "contract_version": "b2.1-twmd-secondary-source-v1",
+  "source_decision": "research/configs/twmd_pro_source_decision.v1.json",
+  "source_id": "twmd_major_events",
+  "status": "ACCEPT_SECONDARY_CONTRACT_READY_NO_DATASET_INGESTION",
+  "endpoint": "https://api.twmarketdata.com/v2/datasets/major-event-taxonomy",
+  "runtime_query_fields": ["ticker", "date_from", "date_to", "limit"],
+  "documented_but_rejected_query_fields": ["symbol", "start_date", "end_date"],
+  "required_response_fields": [
+    "ticker",
+    "market",
+    "event_date",
+    "event_time",
+    "subject",
+    "event_class",
+    "confidence",
+    "rule_version"
+  ],
+  "max_window_days": 31,
+  "max_rows_per_request": 100,
+  "reject_when_limit_reached": true,
+  "require_filter_echo": true,
+  "timezone": "Asia/Taipei",
+  "timezone_basis": "source contract assumption; API event_time has no offset",
+  "timestamp_semantics": "MOPS-derived disclosure date and local event clock, not market-session time",
+  "identity": "sha256(ticker + event_date + event_time + normalized subject + rule_version)",
+  "version_identity": "sha256(document_id + content_hash)",
+  "duplicate_policy": "deduplicate exact event identity within a response; immutable versions across runs",
+  "raw_storage": "ignored/private only; never Git",
+  "normalized_storage": "future private B2.1/B2-v2 snapshot only",
+  "rights_tier": "LICENSED_EVENT_METADATA_PRIVATE",
+  "public_output": "schema, code, counts, hashes and permitted aggregate metadata only",
+  "prohibited_uses": [
+    "sentiment ground truth",
+    "human-validated label claim",
+    "full-text language-model corpus",
+    "bulk mirroring",
+    "redistribution",
+    "automatic B3 inclusion",
+    "automatic model retraining"
+  ],
+  "collection_policy": {
+    "deployed": false,
+    "forward_schedule_if_later_deployed": ["22:30", "08:00+1d"],
+    "historical_backfill": "explicitly approved bounded ticker/month windows only",
+    "retry_attempts": 3,
+    "reconcile": "re-query prior event date; immutable upsert by document/version identity"
+  },
+  "b2_v1_unchanged": true,
+  "b3_started": false
+}

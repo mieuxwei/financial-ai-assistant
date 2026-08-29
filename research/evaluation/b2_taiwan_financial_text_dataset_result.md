@@ -4,6 +4,13 @@ Run date: 2026-08-29
 Decision: **PASS — normalized v1 snapshot and long-term update contract frozen**  
 Training/manual labels: **none**
 
+Post-freeze addendum (2026-08-29): a bounded Pro re-audit reclassifies TWMD as
+`ACCEPT_SECONDARY` for major-event taxonomy and issuer-mapping metadata only. B2 v1 remains
+unchanged and contains no TWMD rows. The B2.1 source-contract/provider amendment has now passed,
+but no TWMD dataset snapshot was constructed; company news and private-beta MOPS remain HOLD. See
+`research/evaluation/twmd_pro_reaudit_result.md` and
+`research/evaluation/b2_1_twmd_secondary_source_result.md`.
+
 ## Frozen artifacts
 
 - Contract/config: `research/configs/b2_taiwan_financial_text.v1.json`

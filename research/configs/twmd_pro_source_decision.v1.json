@@ -1,0 +1,29 @@
+{
+  "decision_version": "twmd-pro-source-decision-v1",
+  "decision_date": "2026-08-29",
+  "overall_classification": "ACCEPT_SECONDARY",
+  "accepted_scope": [
+    "major-event taxonomy title and structured event metadata",
+    "historical event date/time fields with explicit timezone-semantic caution",
+    "ticker and market identifiers",
+    "current issuer-classification mapping as a helper snapshot"
+  ],
+  "excluded_scope": [
+    "sentiment ground truth",
+    "full-text language-model training corpus",
+    "unrestricted bulk mirroring or redistribution",
+    "company-news historical backfill",
+    "private-beta MOPS material-event ingestion",
+    "retroactive mutation of the frozen B2 v1 snapshot"
+  ],
+  "dataset_status": {
+    "major_event_taxonomy": "ACCEPT_SECONDARY",
+    "issuer_classification": "ACCEPT_SECONDARY_HELPER_ONLY",
+    "company_news": "HOLD_ZERO_ROWS_AND_METADATA_ONLY",
+    "legacy_material_information": "HOLD_ENDPOINT_UNAVAILABLE",
+    "mops_material_events_private_beta": "HOLD_NOT_ENTITLED"
+  },
+  "b2_b3_gate": "A future versioned B2.1/B2-v2 amendment must freeze storage, attribution, timezone and reproducibility rules before any TWMD row may enter B3.",
+  "raw_retention": "ignored local audit cache only",
+  "api_key_recorded": false
+}

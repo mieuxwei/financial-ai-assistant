@@ -5,6 +5,14 @@ Schema version: `b2-financial-document-v1`
 Frozen: 2026-08-29  
 Status: **B2 COMPLETE / not deployed / B3 not started**
 
+Post-freeze source addendum (2026-08-29): TWMD is now `ACCEPT_SECONDARY` for major-event taxonomy
+and issuer-mapping metadata after a bounded Pro audit. This does not mutate B2 v1, its four-source
+whitelist or its 6,021-row snapshot. B2.1 has now frozen the runtime filter, timezone, attribution,
+private retention, deduplication and lineage contract, but has not ingested a TWMD dataset.
+Company news and private-beta MOPS endpoints remain HOLD. See
+`research/evaluation/twmd_pro_reaudit_result.md` and
+`docs/b2_1_twmd_secondary_source_contract.md`.
+
 This is the single authoritative long-term acquisition contract for the Taiwan Financial Text
 Dataset. The machine-readable authority is
 `research/configs/b2_taiwan_financial_text.v1.json`. B1 source decisions remain authoritative and
