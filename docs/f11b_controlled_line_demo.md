@@ -68,5 +68,5 @@ drift produces a safe text error and does not fall back to live data.
 
 Rollback is deletion/reversion of the additive 1B functions in the ignored migration copy plus the
 dedicated controlled endpoint. Desktop original GAS, immutable backup and `appsscript.json` remain
-unchanged. F11B-2 may begin only after all nine current-market gates frozen in
-`f11b_line_integration_design.v1.json` all pass; this milestone performed none of that work.
+unchanged. The later bounded gate audit passed only two of nine current-market gates, so F11B-2
+integration remains blocked. See `research/evaluation/f11b_current_market_gate_audit.md`.

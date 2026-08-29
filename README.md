@@ -23,8 +23,8 @@ external validation。
 - **Track B — COMPLETE THROUGH B5**：F8/F10 database-only intelligence 已加入 backward-safe
   Track B contract；metadata magnitude signal 為 `AUTOMATED_SIGNAL_ONLY`，Chinese sentiment 與
   direction 明確 abstain，BERT text 無 incremental value。
-- **Track C — Product**：F10/F11A/F11B-D0/1A/1B complete；controlled LINE demo 未部署，
-  F11B-2 current-market integration 仍受 gate 阻擋，F12 last。
+- **Track C — Product**：F10/F11A/F11B-D0/1A/1B complete；controlled LINE demo 未部署；
+  F11B-2 prerequisite audit 僅 2/9 通過，current-market integration blocked，F12 last。
 
 本系統不是自動交易系統、AI 選股神諭、買賣建議或保證報酬工具。
 
@@ -33,7 +33,7 @@ external validation。
 - 私人實用版：未來可在受保護的環境保存真實持股與成本，並整合 LINE 推播及券商截圖辨識。
 - 受控公開研究版：只使用範例、合成或匿名資料，展示新聞情緒、模型訊號、回測結果與系統架構。
 
-目前狀態：**F11B-1B controlled read-only demo complete / not deployed / F11B-2 gated**。
+目前狀態：**F11B-2 prerequisite audit complete / 2 PASS + 7 BLOCKED / integration not started**。
 
 - 中文 sentiment 目前仍為 `ABSTAIN / CHINESE_SENTIMENT_NOT_VALIDATED`。
 - AP11 是 optional enhancement，不是 Chinese NLP、F11B 或 F12 的前置條件。
@@ -76,6 +76,10 @@ external validation。
   F11B-1B 新增 HMAC-authenticated FastAPI static-fixture endpoint 與受控 Flex renderer，只接受
   合成 2330 fixture，零 provider/model/portfolio access，未部署。詳見
   [F11B-1B controlled demo](docs/f11b_controlled_line_demo.md)。
+- F11B-2 九項前置 gate 已完成 bounded audit：FinMind TAIEX 與 Asia/Taipei timezone 通過；
+  Yahoo current-serving governance、current 23-feature parity、cutoff、missingness、lineage 與
+  end-to-end validation 等七項未通過，因此沒有開始 current integration。詳見
+  [F11B-2 gate audit](research/evaluation/f11b_current_market_gate_audit.md)。
 
 單一正式 roadmap 與 Definition of Done 見
 [R0 project rebaseline protocol](docs/r0_project_rebaseline_protocol.md)，GAS 安全凍結見

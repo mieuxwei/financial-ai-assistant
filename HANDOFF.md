@@ -2,15 +2,15 @@
 
 Last revised: 2026-08-29
 
-ACTIVE PHASE: **F11B-1B Controlled Read-only Demo — COMPLETE / NOT DEPLOYED**
+ACTIVE PHASE: **F11B-2 Prerequisite Gate Audit — COMPLETE / BLOCKED (2 PASS, 7 BLOCKED)**
 
-NEXT EXECUTABLE UNIT: **F11B-2 only after all frozen current-market gates pass**
+NEXT EXECUTABLE UNIT: **F11B-2 prerequisite remediation — do not begin integration**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
 TRACK B: **ACTIVE — B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9**
 
-TRACK C: **F10/F11A/F11B-D0/1A/1B complete / F11B-2 gated / F12 last**
+TRACK C: **F10/F11A/F11B-D0/1A/1B complete / F11B-2 gate audit 2/9 / integration blocked / F12 last**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -91,7 +91,9 @@ B3.1, B4, B5 and F11B-D0/1A/1B are complete; do not begin F11B-2 or F12 without 
 instruction and the applicable gates. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
-F11B-1B is complete and not deployed. Do not begin F11B-2 until all nine frozen gates pass.
+F11B-1B is complete and not deployed. The F11B-2 prerequisite audit passed only TAIEX source and
+timezone; seven gates remain blocked. Do not begin F11B-2 integration until a repeat audit reaches
+9/9.
 
 ## WHY THE FORMULATION CHANGED
 
@@ -507,7 +509,8 @@ private-beta MOPS endpoint remain HOLD. See
 - **F9:** optional NLP incremental-value study — not run; non-blocking.
 - **F10:** FastAPI/backend integration — complete; local only, not deployed.
 - **F11A:** controlled Streamlit dashboard complete; not deployed.
-- **F11B:** D0/1A/1B complete; F11B-0 safety copy remains immutable; F11B-2 has not started.
+- **F11B:** D0/1A/1B complete; F11B-0 safety copy remains immutable; F11B-2 integration has not
+  started because its prerequisite audit is 2/9.
 - **F12:** portfolio finalization pending and last; it is not the next executable unit.
 
 ## B1 ARTIFACTS
@@ -872,7 +875,7 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-F11B-1B is complete and not deployed. The next implementation unit is **F11B-2 Current-market
-integration**, but it may begin only after all nine frozen source/parity/cutoff/timezone/missingness/
-lineage/validation gates pass and separate approval is given. F12 remains last; B6/F9 is optional/
-non-blocking; Track A/B models stay frozen.
+F11B-1B is complete and not deployed. The bounded F11B-2 gate audit found only 2/9 gates passing:
+FinMind TAIEX and timezone. Current OHLCV governance, current 23-feature parity, cutoff semantics,
+missingness, training/inference parity, lineage and validation remain blocked. The next unit is
+**F11B-2 prerequisite remediation**, not integration. F12 remains last; Track A/B models stay frozen.

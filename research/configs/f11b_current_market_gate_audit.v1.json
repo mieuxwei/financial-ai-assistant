@@ -1,0 +1,118 @@
+{
+  "schema_version": "f11b-current-market-gate-audit-v1",
+  "milestone": "F11B-2_PREREQUISITE_GATE_AUDIT",
+  "audit_date": "2026-08-29",
+  "probe_window": {
+    "start_date": "2026-05-01",
+    "end_date": "2026-08-29",
+    "bounded_read_only": true,
+    "raw_provider_payload_stored": false,
+    "prices_published": false
+  },
+  "stock_source": {
+    "provider": "Yahoo Finance chart adapter",
+    "endpoint": "https://query1.finance.yahoo.com/v8/finance/chart",
+    "classification": "CONDITIONAL_BLOCKED_FOR_CURRENT_SERVING",
+    "official_terms": "https://legal.yahoo.com/us/en/yahoo/terms/product-atos/apiforydn/index.html",
+    "formal_endpoint_documentation_verified": false,
+    "provider_credential_used": false,
+    "requested_ticker_count": 10,
+    "latest_benchmark_session": "2026-08-28",
+    "tickers_complete_for_latest_35_sessions": 9,
+    "tickers_missing_latest_35_session": ["0050"],
+    "provider_warning_count": 1,
+    "accepted_for_private_research_history": true,
+    "accepted_for_current_serving": false
+  },
+  "benchmark_source": {
+    "provider": "FinMind",
+    "dataset": "TaiwanStockTotalReturnIndex",
+    "benchmark_id": "TAIEX",
+    "classification": "ACCEPT_RESEARCH_CURRENT",
+    "official_documentation": "https://finmind.github.io/tutor/TaiwanMarket/Technical/",
+    "documented_update_time": "WEEKDAYS_16:50_ASIA_TAIPEI_ACTUAL_API_TIME_CONTROLS",
+    "probe_row_count": 83,
+    "probe_first_session": "2026-05-04",
+    "probe_last_session": "2026-08-28",
+    "accepted_for_current_serving": true
+  },
+  "adjusted_ohlcv_alternative_probe": {
+    "provider": "FinMind",
+    "dataset": "TaiwanStockPriceAdj",
+    "documented_tier": "BACKER_OR_SPONSOR",
+    "ticker": "2330",
+    "start_date": "2026-08-01",
+    "end_date": "2026-08-29",
+    "http_status": 400,
+    "api_status": 400,
+    "row_count": 0,
+    "entitled_in_current_environment": false,
+    "response_message_stored": false
+  },
+  "observed_contract_conflicts": [
+    "HISTORICAL_INFORMATION_CUTOFF_13_30_PRECEDES_DOCUMENTED_TAIEX_AVAILABILITY_16_50",
+    "CURRENT_FEATURE_MATERIALIZER_DOES_NOT_EXIST",
+    "CURRENT_LINEAGE_ARTIFACT_DOES_NOT_EXIST",
+    "0050_MISSING_EXACT_LATEST_BENCHMARK_SESSION_BAR",
+    "YAHOO_CHART_ENDPOINT_FORMAL_CURRENT_SERVING_RIGHTS_NOT_VERIFIED"
+  ],
+  "gates": [
+    {
+      "id": "current_ohlcv_source_audited",
+      "status": "BLOCKED",
+      "reason": "Live schema/coverage probe succeeded for nine of ten tickers, but the chart endpoint's formal current-serving documentation/credential boundary is unverified and 0050 lacked the latest benchmark session."
+    },
+    {
+      "id": "taiex_source_audited",
+      "status": "PASS",
+      "reason": "FinMind officially documents TaiwanStockTotalReturnIndex/TAIEX, weekday 16:50 updates, and the bounded probe returned through 2026-08-28."
+    },
+    {
+      "id": "exact_23_feature_parity_verified",
+      "status": "BLOCKED",
+      "reason": "The frozen historical builder exists, but no separately validated current-session materializer currently produces and compares the exact 23-feature vector."
+    },
+    {
+      "id": "cutoff_semantics_verified",
+      "status": "BLOCKED",
+      "reason": "Historical rows use 13:30 Asia/Taipei, while the current TAIEX source documents availability around 16:50; feature-session close and serving availability are not yet separated in a frozen current contract."
+    },
+    {
+      "id": "timezone_verified",
+      "status": "PASS",
+      "reason": "Historical configuration and provider timestamp normalization explicitly use Asia/Taipei."
+    },
+    {
+      "id": "missing_data_rules_frozen",
+      "status": "BLOCKED",
+      "reason": "The latest probe exposed a real 0050 gap, but a current-serving exact-session abstention/staleness contract has not yet been implemented and validated."
+    },
+    {
+      "id": "training_inference_feature_parity_verified",
+      "status": "BLOCKED",
+      "reason": "F7 requires risk-features-v1, but no current inference feature package has been compared byte-for-byte/numerically against historical rows."
+    },
+    {
+      "id": "lineage_available",
+      "status": "BLOCKED",
+      "reason": "Historical hashes exist, but no current stock/benchmark retrieval timestamp, normalized snapshot hash, feature hash and source-version manifest is materialized."
+    },
+    {
+      "id": "validation_passed",
+      "status": "BLOCKED",
+      "reason": "No current-market end-to-end validation artifact exists; controlled F11B-1B fixture validation does not satisfy this gate."
+    }
+  ],
+  "gate_summary": {
+    "required": 9,
+    "passed": 2,
+    "blocked": 7,
+    "all_passed": false
+  },
+  "f11b_2_integration_allowed": false,
+  "f11b_2_started": false,
+  "live_gas_modified": false,
+  "deployed": false,
+  "portfolio_mutated": false,
+  "next_executable_unit": "F11B_2_PREREQUISITE_REMEDIATION"
+}

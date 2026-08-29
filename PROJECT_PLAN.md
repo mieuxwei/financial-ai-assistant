@@ -3,13 +3,13 @@
 Plan version: `b4-market-reaction-validation-v1`
 
 Last revised: 2026-08-29
-Active milestone: **F11B-1B controlled read-only demo complete; F11B-2 remains gated and not started**
+Active milestone: **F11B-2 prerequisite gate audit complete — BLOCKED (2/9 pass); remediation required**
 
 Authoritative state:
 
 - **Track A:** complete/frozen; Ridge Regression `alpha=100`; do not reopen.
 - **Track B:** active; B1 → B2 → B3 → B3.1 audit → B4 → B5 → optional B6/F9.
-- **Track C:** F10 complete; F11A complete; F11B-D0/1A/1B complete; F11B-2 gated; F12 last.
+- **Track C:** F10/F11A/F11B-D0/1A/1B complete; F11B-2 gate audit 2/9, integration blocked; F12 last.
 - **AP11:** optional enhancement, not a prerequisite.
 - **eLAND:** permanent historical exclusion; no active use or re-audit.
 - **GAS:** future private migration-copy modification authorized only under the immutable
@@ -127,7 +127,7 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 
 ### Track C — Financial Intelligence Product
 
-- **F10/F11A/F11B-D0/1A/1B complete；F11B-2 gated；F12 pending and last；**
+- **F10/F11A/F11B-D0/1A/1B complete；F11B-2 gate audit 2/9、integration blocked；F12 pending and last；**
 - Python backend 擁有 ingestion、features、ML、NLP、evaluation、inference、database 與 jobs；
 - GAS／LINE 只作 transitional adapter、event routing、API calls、reply/push/Flex UX；
 - UI 顯示 relative volatility-surprise score、percentile、band、context 與 recent intelligence；
@@ -155,7 +155,7 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | F11B-0 GAS backup | Safety prerequisite complete | 私有 ignored backup 與 migration copy byte-for-byte/hash 一致；immutable copy 唯讀；property names/accessible trigger/deployment facts 無秘密清冊；original 未改。 |
 | F11B-1A Controlled LINE routing | Complete / private migration copy | 六入口 parser/dispatcher 與 legacy compatibility 已完成；原始/immutable GAS、manifest、webhook、trigger、持股均未變。 |
 | F11B-1B Controlled read-only demo | Complete / not deployed | HMAC-authenticated FastAPI static-fixture endpoint 與 migration-copy Flex 已完成；只接受受控 2330 fixture，全程標示 `CONTROLLED RESEARCH DEMO`，零 provider/model/portfolio access。 |
-| F11B-2 Current-market integration | Conditional / pending | audited current OHLCV/TAIEX、cutoff/timezone/missingness/lineage 與 exact 23-feature parity tests 全部通過；GAS 不自行拼湊特徵。 |
+| F11B-2 Current-market integration | Blocked / gate audit 2 of 9 pass | TAIEX/timezone pass；OHLCV governance、23-feature current parity、cutoff、missingness、training/inference parity、lineage、end-to-end validation blocked。不得開始 integration。 |
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
 | F12 Portfolio Finalization | Pending / last | 完成 final workflow、README、visuals、abstract、demo、limitations/security/privacy；如實標明未完成/optional/live limitations；tests/lint/secret/reproducibility 全通過。 |
 
