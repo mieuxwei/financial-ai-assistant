@@ -328,3 +328,75 @@ Remaining P2 polish intentionally deferred:
 - optional shareable deep links for individual pages;
 - optional additional public-safe controlled fixtures, but only if derived without fabricating
   ticker-specific evidence.
+
+## Production deployment verification
+
+Verification date: 2026-08-31
+
+Production URL: <https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/>
+
+Deployed revision: `313b4c7cd07e9347086cae3793a087182020fe2e`
+
+The revision was confirmed on the GitHub `main` branch and detected by Streamlit Community Cloud.
+The existing process initially continued serving the previous interface, so the app was explicitly
+rebooted through the Streamlit management panel after user approval. A fresh browser session then
+loaded the revised Web-first interface.
+
+### First 30-second test — PRODUCTION AFTER
+
+| Question | Result | Production evidence |
+|---|---|---|
+| 這是什麼？ | PASS | Product name and Taiwan-equity research-assistant description are above the fold |
+| 解決什麼問題？ | PASS | Relative volatility-surprise forecasting and financial-event intelligence are stated directly |
+| 最核心 AI 功能？ | PASS | Plain-language volatility ranking is identified as the research core |
+| 可以操作什麼？ | PASS | Stock analysis, Demo portfolio health and financial intelligence are named immediately |
+| 第一個應按哪裡？ | PASS | “開始股票分析” is the primary CTA |
+| 不是投資建議？ | PASS | The first screen states non-live, no-direction and non-investment-advice boundaries |
+| 是研究作品而非交易產品？ | PASS | Controlled Research Demo status is visible without opening details |
+
+### Functional smoke — production
+
+| Surface/interaction | Result |
+|---|---|
+| Landing, main-content navigation and all three CTAs | PASS |
+| 2330 controlled stock analysis | PASS |
+| 0050 unsupported selection fails closed without borrowed or fabricated output | PASS |
+| Score, percentile and communication-band explanation | PASS |
+| Portfolio empty state | PASS |
+| Load two-holding example | PASS |
+| Add a holding through the form | PASS |
+| Update holding shares and average cost | PASS |
+| Delete and clear holdings | PASS |
+| Financial intelligence concept separation | PASS |
+| Research metrics, model comparison and ranking visual | PASS |
+| Architecture, experimental LINE path and forward-validation path | PASS |
+| Current-market blocker and Chinese sentiment limitation | PASS |
+| Sanitized UI with no browser console error/warning | PASS |
+
+### Responsive and operational checks
+
+- Desktop viewport (`1440 × 900`): PASS.
+- Narrow/mobile viewport (`390 × 844`): all seven pages remained usable with no horizontal
+  overflow, hidden sidebar dependency or traceback.
+- A bounded reboot/cold-start check returned the revised app in approximately 20 seconds,
+  including dependency preparation and a fresh browser connection.
+- Public request handling remained fixture-only. No Yahoo, FinMind, TWMD, Gemini, Perplexity,
+  OpenAI, GDELT, LINE or Google Sheets provider request was introduced.
+- Current-market F7 inference remains disabled; the documented readiness evidence remains `6/9`
+  serving gates and `5/23` exact features.
+- Chinese linguistic sentiment remains explicitly unvalidated and no P/N/N probability is shown.
+- Market-reaction magnitude remains a historical association signal, not direction or causality.
+
+### Production screenshots
+
+The public-safe assets under `docs/assets/public_web_demo_*.png` were refreshed from the verified
+production deployment for the landing page, stock analysis, portfolio health, financial
+intelligence, research results, architecture and mobile landing view.
+
+### Production verdict
+
+**PORTFOLIO_READY — production deployment verified.**
+
+No P0 issue was found in the deployed revision. The production interface and the reviewed source
+now match. This verification does not start Final Release Audit, create a release tag, freeze the
+project, enable current-market inference or alter Track A/Track B research artifacts.
