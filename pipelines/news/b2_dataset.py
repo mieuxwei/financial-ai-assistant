@@ -182,6 +182,19 @@ class CollectionResult:
     raw_sha256: str
 
 
+@dataclass(frozen=True)
+class RawSnapshotResult:
+    created: bool
+    sha256: str
+    reference: str
+
+
+@dataclass(frozen=True)
+class DocumentPersistenceResult:
+    inserted_versions: int
+    duplicate_versions: int
+
+
 def load_b2_contract(path: Path = DEFAULT_CONFIG) -> B2Contract:
     return B2Contract.model_validate_json(path.read_text(encoding="utf-8"))
 
@@ -270,6 +283,37 @@ def persist_collection_batch(
     root: Path,
     observed_at: datetime,
 ) -> CollectionResult:
+    for document in documents:
+        if document.source_id != source_id:
+            raise ValueError("document source does not match collection batch")
+    raw = persist_raw_snapshot(
+        source_id=source_id,
+        raw_content_kind=raw_content_kind,
+        raw_payload=raw_payload,
+        root=root,
+        observed_at=observed_at,
+    )
+    normalized = persist_document_versions(
+        source_id=source_id,
+        documents=documents,
+        root=root,
+    )
+    return CollectionResult(
+        raw.created,
+        normalized.inserted_versions,
+        normalized.duplicate_versions,
+        raw.sha256,
+    )
+
+
+def persist_raw_snapshot(
+    *,
+    source_id: str,
+    raw_content_kind: Literal["OFFICIAL_OPEN_DATA", "GDELT_METADATA_ONLY"],
+    raw_payload: bytes,
+    root: Path,
+    observed_at: datetime,
+) -> RawSnapshotResult:
     if observed_at.tzinfo is None:
         raise ValueError("observed_at must be timezone-aware")
     expected_kind = (
@@ -283,6 +327,16 @@ def persist_collection_batch(
     date_path = observed_at.astimezone(UTC).strftime("%Y/%m/%d")
     raw_path = root / "raw" / source_id / date_path / f"{raw_sha256}.bin"
     raw_created = _write_immutable(raw_path, raw_payload)
+    reference = f"raw/{source_id}/{date_path}/{raw_sha256}.bin"
+    return RawSnapshotResult(raw_created, raw_sha256, reference)
+
+
+def persist_document_versions(
+    *,
+    source_id: str,
+    documents: list[B2Document],
+    root: Path,
+) -> DocumentPersistenceResult:
     inserted = 0
     duplicates = 0
     for document in documents:
@@ -294,7 +348,7 @@ def persist_collection_batch(
             inserted += 1
         else:
             duplicates += 1
-    return CollectionResult(raw_created, inserted, duplicates, raw_sha256)
+    return DocumentPersistenceResult(inserted, duplicates)
 
 
 def stable_document_id(source_id: str, external_identity: str) -> str:

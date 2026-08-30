@@ -25,8 +25,26 @@ class NewsItem:
 
 
 @dataclass(frozen=True)
+class NewsProviderPayload:
+    raw_payload: bytes
+    content_type: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.raw_payload, bytes):
+            raise TypeError("raw_payload must be bytes")
+        if not self.content_type.strip():
+            raise ValueError("content_type is required")
+
+
+@dataclass(frozen=True)
+class NewsProviderBatch(NewsProviderPayload):
+    """One provider response with untouched bytes and parsed items."""
+
+    items: tuple[NewsItem, ...]
+
+
+@dataclass(frozen=True)
 class TickerMatch:
     ticker: str
     relevance_score: float
     match_method: str
-

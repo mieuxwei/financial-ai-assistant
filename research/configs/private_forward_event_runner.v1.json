@@ -1,0 +1,54 @@
+{
+  "schema_version": "private-forward-event-runner-result-v1",
+  "unit": "PRIVATE_FORWARD_EVENT_COLLECTION_RUNNER_IMPLEMENTATION",
+  "decision": "RUNNER_IMPLEMENTATION_COMPLETE_NOT_DEPLOYED",
+  "runner_version": "b2-private-forward-event-runner-v1",
+  "sources": [
+    "twse_openapi_daily_material",
+    "tpex_openapi_daily_material"
+  ],
+  "reconciliation_phases": {
+    "current": "16:30 Asia/Taipei",
+    "evening": "21:30 Asia/Taipei",
+    "next_morning": "08:00+1d Asia/Taipei"
+  },
+  "private_storage": {
+    "default_root": ".tools/private/b2-forward-events-v1",
+    "git_ignored": true,
+    "raw_before_parse": true,
+    "raw_immutable": true,
+    "normalized_versions_immutable": true,
+    "manifest_immutable": true,
+    "public_payload_allowed": false
+  },
+  "retry_contract": {
+    "max_attempts": 3,
+    "backoff_seconds": [
+      1.0,
+      2.0
+    ]
+  },
+  "safety": {
+    "single_run_lock": true,
+    "deterministic_run_id": true,
+    "same_run_id_no_second_provider_call": true,
+    "partial_source_failure_is_not_success": true,
+    "schema_drift_preserves_private_raw_evidence": true,
+    "error_details_sanitized": true,
+    "automatic_retraining": false,
+    "scheduler_deployed": false,
+    "live_collection_executed_in_this_unit": false,
+    "gas_or_line_modified": false,
+    "track_a_or_b_model_modified": false,
+    "f11b_2_unlocked": false
+  },
+  "remaining_before_schedule": [
+    "confirm the private persistent storage target",
+    "choose and explicitly approve one private scheduler",
+    "configure timezone-aware current/evening/next-morning invocations",
+    "configure sanitized failure monitoring",
+    "run one separately approved bounded private collection smoke test",
+    "verify retention and rollback controls"
+  ],
+  "next_executable_unit": "PRIVATE_FORWARD_EVENT_COLLECTION_DEPLOYMENT_CONFIGURATION"
+}

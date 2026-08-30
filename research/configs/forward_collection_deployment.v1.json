@@ -1,0 +1,90 @@
+{
+  "schema_version": "forward-collection-deployment-v1",
+  "unit": "FORWARD_COLLECTION_DEPLOYMENT_AND_FIRST_BOUNDED_LIVE_SMOKE_TEST",
+  "success_state": "FORWARD_COLLECTION_READY_FOR_MANUAL_DEPLOYMENT",
+  "implemented": true,
+  "deployed": false,
+  "first_smoke_verified": false,
+  "scheduler_enabled": false,
+  "storage": {
+    "provider": "CLOUDFLARE_R2",
+    "storage_class": "STANDARD",
+    "bucket_created": false,
+    "private_access_verified": false,
+    "public_listing": false,
+    "public_url": null,
+    "prefix": "forward-events",
+    "conditional_create": "IF_NONE_MATCH_STAR"
+  },
+  "scheduler": {
+    "provider": "GITHUB_ACTIONS",
+    "repository_visibility": "PUBLIC",
+    "workflow_file_prepared": true,
+    "workflow_on_default_branch": false,
+    "manual_dispatch_prepared": true,
+    "triggers": [
+      {
+        "phase": "next_morning",
+        "asia_taipei": "08:00",
+        "utc_cron": "0 0 * * *"
+      },
+      {
+        "phase": "current",
+        "asia_taipei": "16:30",
+        "utc_cron": "30 8 * * *"
+      },
+      {
+        "phase": "evening",
+        "asia_taipei": "21:30",
+        "utc_cron": "30 13 * * *"
+      }
+    ],
+    "concurrency_group": "private-forward-event-collection",
+    "cancel_in_progress": false,
+    "timeout_minutes": 10
+  },
+  "secret_inventory": [
+    "R2_ACCOUNT_ID",
+    "R2_ACCESS_KEY_ID",
+    "R2_SECRET_ACCESS_KEY",
+    "R2_BUCKET_NAME",
+    "R2_ENDPOINT"
+  ],
+  "repository_variable_inventory": [
+    "R2_BUCKET_PRIVATE_CONFIRMED"
+  ],
+  "smoke_test": {
+    "live_collection_executed": false,
+    "twse": "NOT_RUN",
+    "tpex": "NOT_RUN",
+    "same_run_id_live_idempotency": "NOT_VERIFIED",
+    "schema_drift_fixture": "VERIFIED",
+    "partial_failure_fixture": "VERIFIED"
+  },
+  "cost_boundary": {
+    "fixed_monthly_plan_enabled": false,
+    "r2_subscription_active": false,
+    "r2_free_standard_storage_gb_month": 10,
+    "r2_free_class_a_operations_month": 1000000,
+    "r2_free_class_b_operations_month": 10000000,
+    "github_public_standard_runner_minutes": "FREE",
+    "zero_cost_guaranteed": false,
+    "stop_before_paid_upgrade": true
+  },
+  "research_boundary": {
+    "automatic_retraining": false,
+    "model_executed": false,
+    "additional_provider_used": false,
+    "track_a_or_b_changed": false,
+    "f11b_2_unlocked": false,
+    "gas_or_line_changed": false
+  },
+  "blocked_on": [
+    "user confirmation for the usage-based R2 subscription",
+    "creation of a private R2 Standard bucket",
+    "creation and transmission of scoped R2 credentials into GitHub Actions secrets",
+    "deployment checkpoint commit and push authorization",
+    "manual workflow dispatch and bounded live smoke verification"
+  ],
+  "next_after_external_setup": "FORWARD_COLLECTION_DEPLOYMENT_VERIFICATION"
+}

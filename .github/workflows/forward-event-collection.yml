@@ -1,0 +1,83 @@
+name: Private forward event collection
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+    - cron: "30 8 * * *"
+    - cron: "30 13 * * *"
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: Reconciliation phase
+        required: true
+        type: choice
+        options:
+          - current
+          - evening
+          - next_morning
+      collection_date:
+        description: Optional Asia/Taipei date (YYYY-MM-DD)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: private-forward-event-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      R2_PREFIX: forward-events
+      R2_BUCKET_PRIVATE_CONFIRMED: ${{ vars.R2_BUCKET_PRIVATE_CONFIRMED }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install bounded collector
+        run: python -m pip install -e ".[forward]"
+      - name: Resolve reconciliation phase
+        id: schedule
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          CRON_EXPRESSION: ${{ github.event.schedule }}
+          INPUT_PHASE: ${{ inputs.phase }}
+          INPUT_COLLECTION_DATE: ${{ inputs.collection_date }}
+        shell: bash
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            phase="$INPUT_PHASE"
+            collection_date="$INPUT_COLLECTION_DATE"
+          else
+            collection_date="$(date -u +%F)"
+            case "$CRON_EXPRESSION" in
+              "0 0 * * *") phase="next_morning" ;;
+              "30 8 * * *") phase="current" ;;
+              "30 13 * * *") phase="evening" ;;
+              *) echo "Unknown frozen schedule" >&2; exit 2 ;;
+            esac
+          fi
+          echo "phase=$phase" >> "$GITHUB_OUTPUT"
+          echo "collection_date=$collection_date" >> "$GITHUB_OUTPUT"
+      - name: Collect and archive official forward events
+        env:
+          PHASE: ${{ steps.schedule.outputs.phase }}
+          COLLECTION_DATE: ${{ steps.schedule.outputs.collection_date }}
+        shell: bash
+        run: |
+          args=(--phase "$PHASE")
+          if [[ -n "$COLLECTION_DATE" ]]; then
+            args+=(--collection-date "$COLLECTION_DATE")
+          fi
+          python -m jobs.b2_forward_r2 "${args[@]}"

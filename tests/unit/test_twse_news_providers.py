@@ -1,3 +1,4 @@
+import json
 from datetime import timedelta
 
 import httpx
@@ -72,3 +73,41 @@ def test_tpex_material_parses_official_csv_without_frontend_scraping() -> None:
     assert item.explicit_tickers == ("9999",)
     assert item.published_at.isoformat() == "2026-08-29T17:45:01+08:00"
     assert item.summary == "官方說明"
+
+
+def test_official_providers_expose_raw_batches_for_private_b2_lineage() -> None:
+    twse_raw = json.dumps(
+        [
+            {
+                "發言日期": "1150825",
+                "發言時間": "064926",
+                "公司代號": "2330",
+                "公司名稱": "台積電",
+                "主旨": "說明",
+            }
+        ],
+        ensure_ascii=False,
+    ).encode()
+    twse_client = httpx.Client(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(
+                200, content=twse_raw, headers={"content-type": "application/json"}
+            )
+        )
+    )
+    twse = TwseMaterialAnnouncementProvider(client=twse_client, max_retries=1).fetch_batch()
+
+    tpex_raw = "\ufeff出表日期,發言日期,發言時間,公司代號,公司名稱,主旨\n".encode()
+    tpex_client = httpx.Client(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(
+                200, content=tpex_raw, headers={"content-type": "text/csv"}
+            )
+        )
+    )
+    tpex = TpexMaterialAnnouncementProvider(client=tpex_client, max_retries=1).fetch_batch()
+
+    assert twse.raw_payload == twse_raw
+    assert len(twse.items) == 1
+    assert tpex.raw_payload == tpex_raw
+    assert tpex.items == ()

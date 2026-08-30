@@ -9,7 +9,7 @@ import httpx
 from pipelines.news.errors import NewsProviderResponseError
 from pipelines.news.http import get_with_retries
 from pipelines.news.twse_material import _parse_roc_datetime, _short_text
-from pipelines.news.types import NewsItem
+from pipelines.news.types import NewsItem, NewsProviderBatch, NewsProviderPayload
 
 
 class TpexMaterialAnnouncementProvider:
@@ -22,6 +22,7 @@ class TpexMaterialAnnouncementProvider:
         *,
         client: httpx.Client | None = None,
         max_retries: int = 3,
+        backoff_seconds: tuple[float, ...] | None = None,
         sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self._owns_client = client is None
@@ -31,6 +32,7 @@ class TpexMaterialAnnouncementProvider:
             headers={"User-Agent": "financial-ai-assistant/0.1 research"},
         )
         self.max_retries = max_retries
+        self.backoff_seconds = backoff_seconds
         self.sleep = sleep
 
     def close(self) -> None:
@@ -44,15 +46,36 @@ class TpexMaterialAnnouncementProvider:
         self.close()
 
     def fetch(self) -> list[NewsItem]:
-        response = get_with_retries(
-            self.client, self.endpoint, max_retries=self.max_retries, sleep=self.sleep
+        return list(self.fetch_batch().items)
+
+    def fetch_batch(self) -> NewsProviderBatch:
+        payload = self.fetch_raw()
+        return NewsProviderBatch(
+            raw_payload=payload.raw_payload,
+            content_type=payload.content_type,
+            items=self.parse_raw(payload),
         )
+
+    def fetch_raw(self) -> NewsProviderPayload:
+        response = get_with_retries(
+            self.client,
+            self.endpoint,
+            max_retries=self.max_retries,
+            sleep=self.sleep,
+            backoff_seconds=self.backoff_seconds,
+        )
+        return NewsProviderPayload(
+            raw_payload=response.content,
+            content_type=response.headers.get("content-type", "text/csv"),
+        )
+
+    def parse_raw(self, payload: NewsProviderPayload) -> tuple[NewsItem, ...]:
         try:
-            text = response.content.decode("utf-8-sig")
+            text = payload.raw_payload.decode("utf-8-sig")
             rows = list(csv.DictReader(io.StringIO(text)))
             if not rows:
-                return []
-            return [self._parse(row) for row in rows]
+                return ()
+            return tuple(self._parse(row) for row in rows)
         except (KeyError, TypeError, UnicodeDecodeError, ValueError) as error:
             raise NewsProviderResponseError(
                 "TPEx material-announcement response did not match the expected schema"

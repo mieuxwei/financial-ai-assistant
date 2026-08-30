@@ -1,4 +1,5 @@
 import hashlib
+import json
 import time
 from collections.abc import Callable
 from datetime import datetime
@@ -8,7 +9,7 @@ import httpx
 
 from pipelines.news.errors import NewsProviderResponseError
 from pipelines.news.http import get_with_retries
-from pipelines.news.types import NewsItem
+from pipelines.news.types import NewsItem, NewsProviderBatch, NewsProviderPayload
 
 TAIPEI = ZoneInfo("Asia/Taipei")
 
@@ -23,6 +24,7 @@ class TwseMaterialAnnouncementProvider:
         *,
         client: httpx.Client | None = None,
         max_retries: int = 3,
+        backoff_seconds: tuple[float, ...] | None = None,
         sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         self._owns_client = client is None
@@ -32,6 +34,7 @@ class TwseMaterialAnnouncementProvider:
             headers={"User-Agent": "financial-ai-assistant/0.1 research"},
         )
         self.max_retries = max_retries
+        self.backoff_seconds = backoff_seconds
         self.sleep = sleep
 
     def close(self) -> None:
@@ -45,15 +48,36 @@ class TwseMaterialAnnouncementProvider:
         self.close()
 
     def fetch(self) -> list[NewsItem]:
-        response = get_with_retries(
-            self.client, self.endpoint, max_retries=self.max_retries, sleep=self.sleep
+        return list(self.fetch_batch().items)
+
+    def fetch_batch(self) -> NewsProviderBatch:
+        payload = self.fetch_raw()
+        return NewsProviderBatch(
+            raw_payload=payload.raw_payload,
+            content_type=payload.content_type,
+            items=self.parse_raw(payload),
         )
+
+    def fetch_raw(self) -> NewsProviderPayload:
+        response = get_with_retries(
+            self.client,
+            self.endpoint,
+            max_retries=self.max_retries,
+            sleep=self.sleep,
+            backoff_seconds=self.backoff_seconds,
+        )
+        return NewsProviderPayload(
+            raw_payload=response.content,
+            content_type=response.headers.get("content-type", "application/json"),
+        )
+
+    def parse_raw(self, payload: NewsProviderPayload) -> tuple[NewsItem, ...]:
         try:
-            payload = response.json()
-            if not isinstance(payload, list):
+            decoded = json.loads(payload.raw_payload)
+            if not isinstance(decoded, list):
                 raise TypeError
-            return [self._parse(row) for row in payload]
-        except (KeyError, TypeError, ValueError) as error:
+            return tuple(self._parse(row) for row in decoded)
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
             raise NewsProviderResponseError(
                 "TWSE material-announcement response did not match the expected schema"
             ) from error
@@ -107,4 +131,3 @@ def _parse_roc_datetime(date_value: str, time_value: str) -> datetime:
 def _short_text(value: object, limit: int = 500) -> str | None:
     text = " ".join(str(value or "").split())
     return text[:limit] or None
-

@@ -1,0 +1,89 @@
+{
+  "schema_version": "forward-data-collection-audit-v1",
+  "audit_unit": "FORWARD_DATA_COLLECTION_AUDIT",
+  "audited_at": "2026-08-30T22:39:20+08:00",
+  "decision": "AUDIT_COMPLETE_IMPLEMENTATION_NOT_READY",
+  "deployment_performed": false,
+  "automatic_retraining": false,
+  "track_a_changed": false,
+  "track_b_model_changed": false,
+  "f11b_2_unlocked": false,
+  "sources": [
+    {
+      "source_id": "twse_openapi_daily_material",
+      "purpose": "TRACK_B_OFFICIAL_EVENT_FORWARD_COLLECTION",
+      "probe_status": "PASS",
+      "probe_rows": 7,
+      "unique_ids": 7,
+      "duplicate_ids": 0,
+      "ticker_count": 7,
+      "min_publication_timestamp": "2026-08-29T00:00:24+08:00",
+      "max_publication_timestamp": "2026-08-29T14:18:25+08:00",
+      "timezone_aware": true,
+      "raw_payload_persisted": false
+    },
+    {
+      "source_id": "tpex_openapi_daily_material",
+      "purpose": "TRACK_B_OFFICIAL_EVENT_FORWARD_COLLECTION",
+      "probe_status": "PASS",
+      "probe_rows": 5,
+      "unique_ids": 5,
+      "duplicate_ids": 0,
+      "ticker_count": 5,
+      "min_publication_timestamp": "2026-08-29T07:00:03+08:00",
+      "max_publication_timestamp": "2026-08-29T07:00:03+08:00",
+      "timezone_aware": true,
+      "raw_payload_persisted": false
+    }
+  ],
+  "track_b_event_collection": {
+    "source_health": "PASS",
+    "schema_parsing": "PASS",
+    "official_timestamp_semantics": "PASS",
+    "stable_provider_identity": "PASS",
+    "immutable_document_primitives": "PASS",
+    "rights_and_private_storage_contract": "PASS",
+    "tpex_runner_wiring": "FAIL",
+    "raw_snapshot_integration": "FAIL",
+    "normalized_version_integration": "FAIL",
+    "run_manifest_and_lineage": "FAIL",
+    "reconciliation_orchestration": "FAIL",
+    "concurrency_lock": "FAIL",
+    "scheduler_deployed": "FAIL",
+    "retry_backoff_contract_parity": "FAIL",
+    "implementation_readiness": "NOT_READY"
+  },
+  "track_a_market_collection": {
+    "official_current_ohlcv_collectable": true,
+    "frozen_universe_official_coverage": "10_OF_10_TWSE",
+    "training_source": "YAHOO_INDICATORS_ADJCLOSE",
+    "official_adjusted_price_training_equivalence": "UNRESOLVED",
+    "exact_feature_parity": "5_OF_23",
+    "serving_gates": "6_OF_9",
+    "allowed_role": "LINEAGE_AND_PARITY_EVIDENCE_ONLY",
+    "f7_external_validation_ready": false,
+    "f11b_2_status": "BLOCKED"
+  },
+  "collection_policy": {
+    "minimum_wait_period": "NONE",
+    "collection_is_automatic_retraining": false,
+    "official_event_zero_row_semantics": "VALID_IF_SOURCE_AND_SCHEMA_SUCCEED",
+    "raw_storage": "PRIVATE_IGNORED_OR_ENCRYPTED_ONLY",
+    "public_git": "CODE_CONFIG_AGGREGATES_HASHES_ONLY",
+    "publisher_article_bodies": "FORBIDDEN",
+    "manual_sentiment_labels": "FORBIDDEN",
+    "line_gas_changes": "FORBIDDEN"
+  },
+  "required_before_private_schedule": [
+    "wire TPEx into a dedicated B2 forward runner",
+    "persist rights-safe immutable raw payload before normalization",
+    "persist immutable B2 document versions",
+    "write source-scoped run manifest and lineage hashes",
+    "implement current/evening/next-morning reconciliation",
+    "add a single-run concurrency lock",
+    "align retry backoff with the frozen 1/2-second contract",
+    "add fail-closed tests for partial source failure and schema drift",
+    "configure a private scheduler only after an explicit deployment approval"
+  ],
+  "next_executable_unit": "PRIVATE_FORWARD_EVENT_COLLECTION_RUNNER_IMPLEMENTATION"
+}
