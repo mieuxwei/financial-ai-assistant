@@ -1,8 +1,8 @@
 # Forward Collection Deployment
 
-Status: **FORWARD_COLLECTION_READY_FOR_MANUAL_DEPLOYMENT**
+Status: **FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED**
 
-Date: 2026-08-30
+Date: 2026-08-31
 Automatic retraining: **false**
 
 ## Architecture decision
@@ -23,8 +23,10 @@ R2 supports the S3 API and conditional `If-None-Match` writes, and its Standard 
 appropriate for three low-volume daily runs. Raw bytes are not placed in Neon/PostgreSQL or GitHub
 Actions artifacts.
 
-The R2 subscription and bucket do not yet exist. The repository implementation is complete, but
-the workflow is not on the default branch and no live collection has run.
+The R2 usage-based subscription is active at a `$0/month` fixed base price, while overage remains
+billable. The Standard bucket `financial-ai-forward-events-private` exists with public access
+disabled. The workflow is on `main`, its three schedules are enabled, and the bounded live smoke
+plus same-run remote-idempotency check passed.
 
 ## Cost boundary
 
@@ -63,8 +65,10 @@ It also provides `workflow_dispatch` with a required phase and optional Asia/Tai
 One global concurrency group serializes runs. A ten-minute timeout prevents a stuck request from
 occupying a runner indefinitely.
 
-GitHub scheduled workflows run only when the workflow exists on the default branch. Therefore the
-three triggers are **prepared but not enabled** until an authorized checkpoint is pushed.
+GitHub scheduled workflows run only when the workflow exists on the default branch. Commit
+`28739f1` placed the workflow on `main`; all three triggers are enabled. GitHub cron execution may
+still be delayed or dropped under load, so the configured times are reconciliation targets rather
+than exact execution guarantees.
 
 ## Private storage and object layout
 
@@ -105,8 +109,9 @@ remote completion marker.
   the provider runner or issuing a provider request.
 - Conditional R2 object writes prevent double object creation if an unusual collision occurs.
 
-This contract is automated in tests. Live same-run idempotency remains unverified until the first
-manual workflow dispatch is repeated with the same phase and date.
+This contract is automated in tests and was verified live. The `current` phase for 2026-08-31 used
+run ID `b404a2b4b63290f80876b3bb`. The repeated dispatch returned the identical manifest SHA and
+`reused_remote_manifest=true`; the provider runner is not constructed on that branch.
 
 ## Secrets and repository variable
 
@@ -144,18 +149,20 @@ authoritative raw object lifecycle deletion is configured.
 
 ## First bounded live smoke test
 
-After bucket and secrets exist and the workflow is pushed:
+The 2026-08-31 `current` dispatch completed successfully:
 
-1. manually dispatch one applicable phase for the current Asia/Taipei date;
-2. confirm TWSE and TPEx source statuses;
-3. confirm private raw, normalized versions and source/overall manifests exist;
-4. compare raw/document/manifest SHA lineage;
-5. verify no public bucket URL or listing exists;
-6. dispatch the exact same phase/date again;
-7. confirm `reused_remote_manifest=true` and no new source request/object;
-8. confirm no training/model job was triggered.
+- workflow run `33322315876`;
+- TWSE `SUCCESS`, 7 normalized rows;
+- TPEx `SUCCESS`, 5 normalized rows;
+- manifest SHA-256
+  `eec05cbde3a028f9c919383c3f4e5c3b2dc095ecbf38e4900a22862b2349c756`;
+- private raw bytes, normalized documents, source manifests and overall manifest were stored;
+- R2 dashboard confirmed Standard storage and public access disabled;
+- no schema drift, partial failure or model/training process occurred.
 
-No historical backfill or second distinct run is required.
+Workflow run `33322411524` repeated the exact phase/date. It completed successfully with the same
+run ID and manifest SHA, returned `reused_remote_manifest=true`, and did not construct or call the
+provider runner. No historical backfill or second distinct run was performed.
 
 ## Rollback
 

@@ -29,6 +29,10 @@ PATTERNS = {
     ),
 }
 
+SAFE_ASSIGNED_REFERENCE = re.compile(
+    r"(?i)[:=]\s*(?:session|settings|config|state)\.[A-Za-z_][A-Za-z0-9_]*[,;)]?$"
+)
+
 
 def candidate_files(root: Path):
     try:
@@ -66,7 +70,14 @@ def main() -> int:
         except (OSError, UnicodeDecodeError):
             continue
         for label, pattern in PATTERNS.items():
-            if pattern.search(text):
+            matches = list(pattern.finditer(text))
+            if label == "Assigned secret":
+                matches = [
+                    match
+                    for match in matches
+                    if not SAFE_ASSIGNED_REFERENCE.search(match.group(0))
+                ]
+            if matches:
                 findings.append((path.relative_to(root), label))
 
     if findings:

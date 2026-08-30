@@ -1,6 +1,6 @@
 # Private Forward Event Collection Runner
 
-Status: **RUNNER_IMPLEMENTATION_COMPLETE_NOT_DEPLOYED**
+Status: **DEPLOYED / FIRST_BOUNDED_LIVE_SMOKE_VERIFIED**
 Runner version: `b2-private-forward-event-runner-v1`
 
 ## Scope

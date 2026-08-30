@@ -9,18 +9,30 @@ def _config() -> dict[str, object]:
     return json.loads(CONFIG.read_text(encoding="utf-8"))
 
 
-def test_deployment_status_does_not_claim_external_resources_exist() -> None:
+def test_deployment_status_records_verified_external_resources() -> None:
     config = _config()
-    assert config["success_state"] == "FORWARD_COLLECTION_READY_FOR_MANUAL_DEPLOYMENT"
+    assert config["success_state"] == "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED"
     assert config["implemented"] is True
-    assert config["deployed"] is False
-    assert config["first_smoke_verified"] is False
-    assert config["scheduler_enabled"] is False
+    assert config["deployed"] is True
+    assert config["first_smoke_verified"] is True
+    assert config["scheduler_enabled"] is True
     storage = config["storage"]
     assert isinstance(storage, dict)
-    assert storage["bucket_created"] is False
-    assert storage["private_access_verified"] is False
+    assert storage["bucket_created"] is True
+    assert storage["private_access_verified"] is True
     assert storage["public_url"] is None
+
+
+def test_live_smoke_and_remote_idempotency_are_frozen() -> None:
+    smoke = _config()["smoke_test"]
+    assert isinstance(smoke, dict)
+    assert smoke["twse"] == {"status": "SUCCESS", "row_count": 7}
+    assert smoke["tpex"] == {"status": "SUCCESS", "row_count": 5}
+    assert smoke["same_run_id_live_idempotency"] == (
+        "VERIFIED_REUSED_REMOTE_MANIFEST_TRUE"
+    )
+    assert smoke["provider_recalled_on_second_run"] is False
+    assert smoke["schema_drift_live"] is False
 
 
 def test_deployment_contract_keeps_cost_and_research_boundaries() -> None:

@@ -8,7 +8,14 @@ FastAPI、Streamlit 與 LINE/GAS controlled demo。
 
 > 本專案不預測上漲／下跌、不提供買賣建議、不保證未來波動，也不宣稱中文情緒已驗證。
 
-![System architecture](docs/assets/system_architecture.svg)
+## Live Web Demo
+
+**Primary public experience：**[開啟 Live Web Demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)
+
+這是 zero-secret、fixture-only 的 **Controlled Research Demo**。可直接體驗股票分析、
+browser-session 持股健檢、金融情報、研究成果、架構與限制；它不是即時市場推論或交易系統。
+
+![Web-first controlled research demo](docs/assets/public_web_demo_home.png)
 
 ## Portfolio highlights
 
@@ -16,19 +23,27 @@ FastAPI、Streamlit 與 LINE/GAS controlled demo。
   Persistence、Ridge、HGB 中選出；模型未部署。
 - **Track B — COMPLETE THROUGH B5**：市場反應強度維持 `AUTOMATED_SIGNAL_ONLY`；中文
   linguistic sentiment 與方向預測明確 abstain。
-- **Track C — PORTFOLIO COMPLETE**：F10 FastAPI、F11A controlled Streamlit、F11B controlled
-  LINE integration 設計與 migration-copy demo 已完成，全部未部署。
+- **Track C — WEB FIRST**：Public Web Demo 是主要作品入口；LINE 保留為 experimental
+  multi-channel prototype 與工程證據。
 - **R1A — PUBLIC WEB DEMO DEPLOYED**：零秘密、fixture-only Streamlit public demo 已完成部署；
   公開 HTTPS smoke test 通過。
-- **R1B — DEPLOYED**：獨立 LINE Public Beta 已透過 Security Edge、Demo GAS、FastAPI 與 Neon
-  sandbox 上線；R1B-UX1 多持股 LIFF 編輯器已在本機完成，尚待 Demo LIFF 外部設定。
+- **R1B — PRESERVED TECHNICAL INTEGRATION**：獨立 LINE Public Beta 展示 Security Edge、
+  Demo GAS、FastAPI、Neon、HMAC identity、idempotency 與 user isolation；R1B-UX1 凍結為
+  `PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY`，不再阻擋封案。
 - **F11B-2A complete**：官方 current OHLCV 10/10，但 exact feature parity 僅 5/23；目前
   **6 of 9 gates PASS，current-market integration blocked**。
 - **Research integrity**：最終研究是 retrospective、leakage-aware、hypothesis-informed；
   不把已檢視的歷史期間重新包裝成 pristine sealed test。
+- **Forward collection audit complete**：TWSE／TPEx 官方重大訊息 feeds 經 bounded probe
+  確認可用；private runner 已完成 raw-first immutable lineage、三階段 reconciliation、lock 與
+  idempotency。Cloudflare R2 Standard 私有 archive 與 GitHub Actions 三排程已部署；首次
+  bounded live smoke 取得 TWSE 7 筆／TPEx 5 筆，重跑同 run-id 成功重用遠端 manifest。
+  收集不等於自動重訓或模型驗證。
 
 完整作品集故事、架構、成果、截圖與限制見
 [Portfolio Guide](docs/portfolio_finalization.md)。
+
+![System architecture](docs/assets/system_architecture.svg)
 
 ## Research question
 
@@ -90,8 +105,6 @@ media-tone proxy 分開，避免用報酬反推情緒。
 
 ## Controlled product demo
 
-![Controlled public Streamlit demo](docs/assets/public_web_demo_home.jpg)
-
 畫面中的 2330、特徵、分數與事件都是 deterministic synthetic fixture。它們不是 live market
 data、模型績效證據或真實投資訊號。
 
@@ -104,15 +117,21 @@ Status：`PUBLIC_WEB_DEMO_DEPLOYED`
 - Entrypoint：`demo/public_app.py`。
 - Runtime secrets：零。
 - Request-time provider calls：零。
+- Portfolio：browser-session sandbox，最多 5 檔，不需登入、不持久化、不計算即時 ROI。
 - Public URL：[Streamlit controlled demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)；
   nested-entrypoint 修正已部署，公開首頁與四個展示分頁的 bounded smoke test 通過。
 
 部署規格、平台比較、資料邊界與 rollback 步驟見
 [R1A Public Web Demo Release](docs/public_web_demo_release.md)。
 
-### LINE Public Beta — R1B
+### Experimental LINE prototype — R1B
 
-Status：`LINE_PUBLIC_BETA_DEPLOYED`；R1B-UX1：`READY_FOR_LIFF_EXTERNAL_SETUP`
+Status：`LINE_PUBLIC_BETA_DEPLOYED`；R1B-UX1：
+`PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY`
+
+LINE 版本作為多通路整合原型，用於展示 Webhook 資安、GAS 前端處理、FastAPI 串接、使用者
+隔離與 Sandbox 持股流程；主要互動體驗以 Web Demo 為主。LINE／LIFF 不再是作品集使用前提，
+也不是 final release blocker。
 
 - 新 Demo LINE OA → Cloudflare Worker raw-signature edge → 新 Demo GAS → FastAPI → managed
   PostgreSQL sandbox。
@@ -122,10 +141,11 @@ Status：`LINE_PUBLIC_BETA_DEPLOYED`；R1B-UX1：`READY_FOR_LIFF_EXTERNAL_SETUP`
 - 不使用私人 Google Sheet、Gemini、Perplexity、TWMD raw data 或 current-market F7 inference。
 - 只有既有 2330 controlled fixture 有研究數值；其他 ticker 明確 abstain，不製造假分數。
 
-架構、維運與 LIFF 升級順序見
+架構、維運與已凍結 LIFF prototype 見
 [LINE Public Beta Architecture](docs/line_public_beta_architecture.md) 與
 [Manual Setup Checklist](docs/line_public_beta_setup.md)。新 LIFF 編輯器一次管理最多五檔，
-仍保留原有文字輸入作為備援。
+仍保留原有文字輸入作為備援。若未來放置 Demo LINE QR，只能位於 Experimental Interfaces，
+不得成為首頁主要 CTA。
 
 ### FastAPI
 
@@ -224,6 +244,8 @@ git diff --check
 - English FinBERT eligibility 不代表 controlled fixture 已執行模型。
 - F9/B6 optional NLP incremental-value study 未執行，且不是完成條件。
 - Current-market serving 被 parity gate 阻擋；所有公開 demo 都是 controlled fixture。
+- Forward official OHLCV 目前只能作 lineage/parity evidence；因 adjusted-price 等價性
+  未解，不是 F7 exact external validation。
 - 本系統為學術／作品集研究，非投資建議。
 
 ## Documentation map
@@ -243,5 +265,8 @@ git diff --check
 - [R1A public web demo release](docs/public_web_demo_release.md)
 - [R1B LINE public beta architecture](docs/line_public_beta_architecture.md)
 - [R1B manual setup](docs/line_public_beta_setup.md)
+- [Forward data collection audit](docs/forward_data_collection_audit.md)
+- [Private forward event runner](docs/private_forward_event_collection_runner.md)
+- [Forward collection deployment](docs/forward_collection_deployment.md)
 - [Privacy](docs/privacy.md)
 - [Deployment boundary](docs/deployment.md)

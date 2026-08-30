@@ -17,14 +17,15 @@ Topology:
 Public browser
   → Streamlit Community Cloud HTTPS
   → demo/public_app.py
-  → repository-controlled synthetic fixture
-  → read-only presentation
+  → repository-controlled synthetic fixture + browser-session holdings
+  → controlled presentation
 ```
 
 FastAPI is not part of the public topology. The public entrypoint has no provider, model, LLM,
-portfolio, database or LINE request path. It does not require the ignored F7 model artifact.
+database or LINE request path. Its portfolio sandbox is browser-session only, maximum five holdings,
+and does not persist or require identity. It does not require the ignored F7 model artifact.
 
-![Controlled public web demo](assets/public_web_demo_home.jpg)
+![Controlled public web demo](assets/public_web_demo_home.png)
 
 ## 2. Hosting audit
 
@@ -81,8 +82,9 @@ Excluded from the public release:
 - LINE, Gemini, Perplexity, FinMind and other provider credentials;
 - private GAS originals, immutable backup and migration copy.
 
-The public entrypoint does not accept portfolio input, file uploads, arbitrary URLs or provider
-credentials.
+The public entrypoint accepts only frozen-universe ticker, shares and average-cost Demo input kept
+in browser session. It does not accept file uploads, arbitrary URLs or provider credentials and
+does not calculate current ROI without an audited current price.
 
 ## 5. Claim boundary
 
@@ -120,12 +122,13 @@ Verify only:
 
 1. HTTPS page returns successfully.
 2. `Controlled Research Demo` appears above the fold.
-3. Score, percentile and communication band render.
-4. Controlled financial intelligence and market-reaction magnitude render.
-5. Research evidence and limitations render.
-6. Chinese sentiment remains human-readable abstention.
-7. Current-market blocked explanation shows 6/9 and 5/23 in the detail view.
-8. No stack trace, private data, secret or request-time provider call appears.
+3. Stock analysis score, percentile and communication band render.
+4. Browser-session portfolio add/update/delete and empty states work with the five-holding limit.
+5. Controlled financial intelligence and market-reaction magnitude render.
+6. Research evidence, architecture and limitations render.
+7. Chinese sentiment remains human-readable abstention.
+8. Current-market blocked explanation shows 6/9 and 5/23 in the detail view.
+9. No stack trace, private data, secret or request-time provider call appears.
 
 Do not perform load testing.
 

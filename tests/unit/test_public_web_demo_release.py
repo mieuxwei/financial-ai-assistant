@@ -4,7 +4,6 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
-import demo.app as dashboard_app
 from demo.contracts import load_controlled_fixture, load_public_release_config
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,7 +26,11 @@ def test_public_release_config_is_fixture_only_and_fail_closed() -> None:
     assert release.current_market_inference_enabled is False
     assert release.chinese_sentiment_enabled is False
     assert release.price_direction_enabled is False
-    assert release.portfolio_input_enabled is False
+    assert release.portfolio_input_enabled is True
+    assert release.primary_public_experience == "LIVE_WEB_DEMO"
+    assert release.line_experience == "EXPERIMENTAL_MULTI_CHANNEL_PROTOTYPE"
+    assert release.portfolio_storage == "BROWSER_SESSION_ONLY"
+    assert release.line_primary_cta is False
     assert release.private_artifacts_packaged is False
 
 
@@ -50,11 +53,7 @@ def test_public_fixture_preserves_track_b_abstention_and_reaction_boundary() -> 
     assert track_b.representation.used_for_market_reaction_prediction is False
 
 
-def test_public_entrypoint_bypasses_api_and_renders_release_boundaries(monkeypatch) -> None:
-    def reject_api_path(*_args: object, **_kwargs: object) -> None:
-        raise AssertionError("public fixture mode attempted to resolve API data")
-
-    monkeypatch.setattr(dashboard_app, "_resolve_data", reject_api_path)
+def test_public_entrypoint_renders_web_first_release_boundaries() -> None:
     app = AppTest.from_file(str(ROOT / "demo/public_app.py"), default_timeout=15).run()
 
     assert not app.exception
@@ -73,14 +72,28 @@ def test_public_entrypoint_bypasses_api_and_renders_release_boundaries(monkeypat
         for element in collection
     )
     assert "CONTROLLED RESEARCH DEMO" in rendered
-    assert "不是投資建議" in rendered
-    assert "不表示上漲或下跌方向" in rendered
-    assert "市場反應強度" in rendered
-    assert "中文情緒：不輸出（尚未通過驗證）" in rendered
-    assert "即時市場推論尚未啟用" in rendered
-    assert "6/9" in rendered
-    assert "5/23" in rendered
-    assert "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED" not in rendered
+    assert "非投資建議" in rendered
+    assert "Public Live Web Demo" in rendered
+    assert "WEB-FIRST PORTFOLIO EXPERIENCE" in rendered
+    assert any(button.label == "開始股票分析" for button in app.button)
+    assert "LINE：Experimental Multi-channel Prototype" in rendered
+
+    app.radio[0].set_value("金融情報").run()
+    intelligence = "\n".join(str(element.value) for element in app.markdown)
+    assert "MARKET REACTION MAGNITUDE" in intelligence
+    assert "LINGUISTIC SENTIMENT" in intelligence
+    assert "尚未通過獨立驗證" in intelligence
+
+    app.radio[0].set_value("限制與方法").run()
+    limitations = "\n".join(
+        str(element.value)
+        for collection in (app.markdown, app.warning, app.metric)
+        for element in collection
+    )
+    assert "即時市場推論尚未啟用" in limitations
+    assert "6/9" in limitations
+    assert "5/23" in limitations
+    assert "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED" not in limitations
 
 
 def test_public_release_packaging_has_no_secret_or_private_dependency() -> None:
@@ -97,6 +110,11 @@ def test_public_release_packaging_has_no_secret_or_private_dependency() -> None:
     assert "httpx" not in requirements.casefold()
     assert ".tools/" in gitignore
     assert ".streamlit/secrets.toml" in gitignore
+
+    app_source = (ROOT / "demo/app.py").read_text(encoding="utf-8")
+    assert "@media (max-width: 700px)" in app_source
+    assert "requests." not in app_source
+    assert "httpx." not in app_source
 
 
 def test_nested_entrypoint_resolves_project_package_outside_repository(tmp_path: Path) -> None:

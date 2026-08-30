@@ -1,16 +1,16 @@
 {
   "schema_version": "forward-collection-deployment-v1",
   "unit": "FORWARD_COLLECTION_DEPLOYMENT_AND_FIRST_BOUNDED_LIVE_SMOKE_TEST",
-  "success_state": "FORWARD_COLLECTION_READY_FOR_MANUAL_DEPLOYMENT",
+  "success_state": "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED",
   "implemented": true,
-  "deployed": false,
-  "first_smoke_verified": false,
-  "scheduler_enabled": false,
+  "deployed": true,
+  "first_smoke_verified": true,
+  "scheduler_enabled": true,
   "storage": {
     "provider": "CLOUDFLARE_R2",
     "storage_class": "STANDARD",
-    "bucket_created": false,
-    "private_access_verified": false,
+    "bucket_created": true,
+    "private_access_verified": true,
     "public_listing": false,
     "public_url": null,
     "prefix": "forward-events",
@@ -20,7 +20,7 @@
     "provider": "GITHUB_ACTIONS",
     "repository_visibility": "PUBLIC",
     "workflow_file_prepared": true,
-    "workflow_on_default_branch": false,
+    "workflow_on_default_branch": true,
     "manual_dispatch_prepared": true,
     "triggers": [
       {
@@ -54,16 +54,30 @@
     "R2_BUCKET_PRIVATE_CONFIRMED"
   ],
   "smoke_test": {
-    "live_collection_executed": false,
-    "twse": "NOT_RUN",
-    "tpex": "NOT_RUN",
-    "same_run_id_live_idempotency": "NOT_VERIFIED",
+    "live_collection_executed": true,
+    "collection_date_asia_taipei": "2026-08-31",
+    "phase": "current",
+    "run_id": "b404a2b4b63290f80876b3bb",
+    "manifest_sha256": "eec05cbde3a028f9c919383c3f4e5c3b2dc095ecbf38e4900a22862b2349c756",
+    "first_workflow_run_id": 33322315876,
+    "idempotency_workflow_run_id": 33322411524,
+    "twse": {
+      "status": "SUCCESS",
+      "row_count": 7
+    },
+    "tpex": {
+      "status": "SUCCESS",
+      "row_count": 5
+    },
+    "same_run_id_live_idempotency": "VERIFIED_REUSED_REMOTE_MANIFEST_TRUE",
+    "provider_recalled_on_second_run": false,
+    "schema_drift_live": false,
     "schema_drift_fixture": "VERIFIED",
     "partial_failure_fixture": "VERIFIED"
   },
   "cost_boundary": {
     "fixed_monthly_plan_enabled": false,
-    "r2_subscription_active": false,
+    "r2_subscription_active": true,
     "r2_free_standard_storage_gb_month": 10,
     "r2_free_class_a_operations_month": 1000000,
     "r2_free_class_b_operations_month": 10000000,
@@ -79,12 +93,6 @@
     "f11b_2_unlocked": false,
     "gas_or_line_changed": false
   },
-  "blocked_on": [
-    "user confirmation for the usage-based R2 subscription",
-    "creation of a private R2 Standard bucket",
-    "creation and transmission of scoped R2 credentials into GitHub Actions secrets",
-    "deployment checkpoint commit and push authorization",
-    "manual workflow dispatch and bounded live smoke verification"
-  ],
-  "next_after_external_setup": "FORWARD_COLLECTION_DEPLOYMENT_VERIFICATION"
+  "blocked_on": [],
+  "next_action": "LIVE_WEB_DEMO_REVISION"
 }

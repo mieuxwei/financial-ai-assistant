@@ -61,7 +61,11 @@ class PublicWebDemoReleaseConfig(StrictModel):
     current_market_inference_enabled: Literal[False]
     chinese_sentiment_enabled: Literal[False]
     price_direction_enabled: Literal[False]
-    portfolio_input_enabled: Literal[False]
+    portfolio_input_enabled: Literal[True]
+    primary_public_experience: Literal["LIVE_WEB_DEMO"]
+    line_experience: Literal["EXPERIMENTAL_MULTI_CHANNEL_PROTOTYPE"]
+    portfolio_storage: Literal["BROWSER_SESSION_ONLY"]
+    line_primary_cta: Literal[False]
     private_artifacts_packaged: Literal[False]
     track_a_mean_outer_spearman: Literal[0.194]
     track_a_top_decile_lift: Literal[1.354]
@@ -77,6 +81,8 @@ class PublicWebDemoReleaseConfig(StrictModel):
             raise ValueError("public release must remain fixture-only")
         if self.current_market_inference_enabled or self.price_direction_enabled:
             raise ValueError("unsupported current-market capability enabled")
+        if self.line_primary_cta:
+            raise ValueError("LINE cannot be the primary portfolio CTA")
         return self
 
 

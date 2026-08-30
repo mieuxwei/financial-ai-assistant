@@ -12,8 +12,16 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     plan = _read("PROJECT_PLAN.md")
     readme = _read("README.md")
 
-    assert "NEXT EXECUTABLE UNIT: **R1B" in handoff
+    assert "NEXT EXECUTABLE UNIT: **Live Web Demo revision**" in handoff
     assert "R1B-UX1 LIFF Multi-Holding Form" in handoff
+    assert "PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY" in handoff
+    assert "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED" in plan
+    assert "AUDIT_COMPLETE_IMPLEMENTATION_NOT_READY" in handoff
+    assert "AUDIT_COMPLETE_IMPLEMENTATION_NOT_READY" in plan
+    assert "DEPLOYED / FIRST_BOUNDED_LIVE_SMOKE_VERIFIED" in handoff
+    assert "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED" in handoff
+    assert "reused_remote_manifest=true" in plan
+    assert "Primary public experience" in readme
     assert "PUBLIC_WEB_DEMO_DEPLOYED" in plan
     assert "PUBLIC_WEB_DEMO_DEPLOYED" in readme
     assert "LINE_PUBLIC_BETA_DEPLOYED" in plan

@@ -1,16 +1,20 @@
 # Financial AI Assistant — Authoritative Handoff
 
-Last revised: 2026-08-30
+Last revised: 2026-08-31
 
-ACTIVE PHASE: **R1B-UX1 LIFF Multi-Holding Form — LOCAL COMPLETE / EXTERNAL SETUP PENDING**
+ACTIVE PHASE: **FORWARD COLLECTION DEPLOYMENT — COMPLETE / SMOKE VERIFIED**
 
-NEXT EXECUTABLE UNIT: **R1B-UX1 Deployment Verification — create Demo LIFF resources, then smoke test**
+DEPLOYMENT SUCCESS STATE: **FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED**
+
+RUNNER DECISION: **DEPLOYED / FIRST_BOUNDED_LIVE_SMOKE_VERIFIED**
+
+NEXT EXECUTABLE UNIT: **Live Web Demo revision**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
 TRACK B: **COMPLETE THROUGH B5 — optional B6/F9 not run and not required**
 
-TRACK C: **R1A and R1B public demos live / R1B-UX1 local complete / F11B-2 blocked**
+TRACK C: **LIVE WEB DEMO PRIMARY / LINE EXPERIMENTAL PROTOTYPE / F11B-2 BLOCKED**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -34,12 +38,16 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 ## CURRENT REPOSITORY SNAPSHOT
 
 - R1A is deployed at the documented Streamlit HTTPS URL and its bounded smoke test passed.
-- R1B is live through the isolated Demo LINE OA, Cloudflare security edge, Demo GAS, Vercel
-  FastAPI and Neon sandbox. The original conversational add flow works but is retained only as a
-  fallback because it is cumbersome for multiple holdings.
-- Current uncommitted R1B-UX1 work adds a same-origin LIFF portfolio editor, server-verified LINE
-  identity exchange, 15-minute stateless sessions and an atomic multi-holding replacement API.
-  No external LIFF app, Vercel LIFF secrets or replacement rich menu has been configured yet.
+- R1B is preserved as technical integration evidence through the isolated Demo LINE OA,
+  Cloudflare security edge, Demo GAS, Vercel FastAPI and Neon sandbox. It is no longer the primary
+  portfolio experience and further LINE UX work is not a release blocker.
+- Commit `1e8a023` adds the same-origin LIFF portfolio editor, server-verified LINE identity
+  exchange, 15-minute stateless sessions and atomic multi-holding replacement. The Demo LINE
+  Login channel and LIFF app now exist under the same provider as the Demo Messaging API channel.
+  Vercel Production is configured and redeployed; the public LIFF page and fail-closed token
+  exchange are reachable. Cloudflare and Vercel now derive the same rotated Demo principal.
+  The replacement Demo rich menu is published with the LIFF entry. Remaining LINE smoke tests are
+  optional prototype verification, not a portfolio-freeze dependency.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -67,8 +75,8 @@ Primary research question:
 
 Track A predicts a continuous next-session stock-normalized volatility-surprise score and is
 complete/frozen. Track B is complete through B5. Track C now includes the deployed R1A controlled
-web demo and an R1B public-beta implementation ready for external Demo-only setup. R1B adds true
-sandbox portfolio persistence but uses only controlled research output. F11B-2A confirms official
+web demo as the primary public experience and R1B/LIFF as an experimental multi-channel prototype.
+R1B adds true sandbox portfolio persistence but uses only controlled research output. F11B-2A confirms official
 10/10 current coverage but only 5/23 exact features; F11B-2 remains gated.
 
 ## SINGLE AUTHORITATIVE EXECUTION SEQUENCE
@@ -92,15 +100,41 @@ R0 Project Rebaseline & GAS Safety Freeze
   → R1B LINE Public Beta Sandbox
   → R1B Deployment Verification
   → R1B-UX1 LIFF Multi-Holding Form
-  → R1B-UX1 Deployment Verification
+  → Web Demo Final Polish / Portfolio Freeze
+  → Forward Data Collection Audit
+  → Private Forward Event Collection Runner Implementation
+  → Private Forward Event Collection Deployment Configuration
 ```
 
 R0 created the F11B-0 private safety copies early without altering the sequence. B1, B2, B2.1, B3,
-B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12/R1A are complete. R1B is deployed. R1B-UX1 is locally
-complete but still requires a Demo LINE Login/LIFF app, four Vercel production settings and a
-replacement Demo rich menu before deployment verification. Do not begin F11B-2 unless all
+B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12/R1A are complete. R1B is deployed and preserved as
+technical evidence. R1B-UX1 is prototype-complete and no longer blocks the portfolio freeze.
+Do not begin F11B-2 unless all
 applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
+
+The Forward Data Collection Audit is complete with decision
+`AUDIT_COMPLETE_IMPLEMENTATION_NOT_READY`. One bounded read-only call per official feed confirmed
+that TWSE and TPEx material-information sources are live, parseable and timezone-aware. No payload
+was persisted. Scheduled collection is not ready because the repository still lacks a dedicated
+TWSE/TPEx B2 runner, immutable raw/version integration, complete run lineage, reconciliation,
+concurrency locking, frozen retry parity and a separately approved private scheduler. Track A
+official market data remains lineage/parity evidence only: adjusted-price equivalence is unresolved,
+exact feature parity remains 5/23, serving gates remain 6/9 and F11B-2 stays blocked.
+
+The dedicated private runner is deployed. It preserves raw official
+responses before parsing, normalizes immutable B2 document versions, writes hashed run manifests,
+supports the frozen 16:30/21:30/08:00+1d reconciliation phases, uses the frozen 1/2-second retry
+backoff, blocks concurrent runs and returns an immutable manifest without a second provider request
+for the same run ID. Tests retain deterministic mock coverage, and the 2026-08-31 bounded live
+smoke added TWSE 7 and TPEx 5 normalized rows to the private R2 archive.
+
+The Cloudflare R2 + GitHub Actions deployment layer is active. The
+workflow has three UTC schedules plus manual dispatch, global concurrency, a ten-minute timeout,
+R2 preflight manifest reuse and conditional immutable writes. R2 uses a Standard private bucket
+with public access disabled; credentials are scoped to that bucket and stored only in Actions
+secrets. Repeating the same live phase/date returned the same run ID/hash and
+`reused_remote_manifest=true`.
 
 F11B-1B is complete and not deployed. F11B-2A found official TWSE current OHLCV for all ten frozen
 tickers and exact TAIEX total-return parity, but historical Yahoo `adjclose` cannot be reproduced
@@ -896,14 +930,14 @@ differ; E2E was not run. Decision:
 complete. The R1A URL is public and its bounded HTTPS smoke passed. R1B uses a Cloudflare Worker
 security edge, an independent public-safe Demo GAS layer, existing FastAPI plus dedicated `demo_*`
 PostgreSQL tables, HMAC-derived principals, five-holding isolation, transaction-backed idempotency
-and 30-day retention. The public beta is deployed and responding through LINE. R1B-UX1 now replaces
-the primary one-at-a-time input UX with a server-verified LIFF editor while preserving text entry as
-a fallback. External LIFF configuration has not yet been performed. Track A/B, F11B-2 and all
+and 30-day retention. The public beta is deployed and responding through LINE. R1B-UX1 preserves
+a server-verified LIFF editor and text fallback as experimental interface evidence. Web Demo is now
+the primary public experience; remaining LINE UX work is optional. Track A/B, F11B-2 and all
 private resources stay frozen.
 
 ## R1B-UX1 LIFF MULTI-HOLDING HANDOFF
 
-Status: **LOCAL IMPLEMENTATION COMPLETE / NOT YET CONNECTED TO DEMO LINE**
+Status: **PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY**
 
 Problem addressed:
 
@@ -941,18 +975,77 @@ Key files:
 - `tests/integration/test_demo_liff_api.py`
 - `docs/line_public_beta_setup.md`
 
-Required external steps (never paste values into chat):
+External deployment status:
 
-1. Create a Demo LINE Login channel under the same LINE provider as the Demo Messaging API
-   channel.
-2. Add a LIFF app with `openid` only and endpoint
+1. **COMPLETE** — Demo LINE Login channel created under the same provider as the Demo Messaging
+   API channel.
+2. **COMPLETE** — LIFF app created with `openid` only and endpoint
    `https://financial-ai-assistant-one.vercel.app/demo/liff/portfolio`.
-3. Set the documented LIFF ID/channel ID and two identity/session secrets in Vercel Production.
-   `DEMO_IDENTITY_SECRET` must exactly match the existing Cloudflare Worker value.
-4. Redeploy, then create a replacement **Demo-only** rich menu whose add-holding area opens the
-   LIFF URL.
-5. Smoke-test existing portfolio continuity, multi-row save, stale conflict, two-user isolation and
-   private-environment non-impact before retiring the older Demo rich menu.
+3. **COMPLETE** — Vercel Production settings configured and redeployed. The identity secret was
+   rotated in both Vercel and Cloudflare because the prior Worker secret could not be read back.
+   This intentionally changes the Demo principal namespace; legacy Demo sandbox rows are not
+   migrated and remain subject to the 30-day retention policy. Private holdings are unaffected.
+4. **VERIFIED** — `/health` and the LIFF page return HTTP 200; invalid LIFF token exchange returns
+   401; the Cloudflare webhook edge returns 401 when the LINE signature is missing.
+5. **COMPLETE** — the replacement **Demo-only** rich menu is published for
+   `2026/08/30 00:00` through `2027/08/30 23:59`. Its six actions are 股票分析、持股健檢、the
+   LIFF multi-holding editor、我的持股、金融情報 and Demo 設定. The LIFF action opens
+   `https://liff.line.me/2011334850-prpwLM7F`.
+6. **PENDING** — smoke-test multi-row save/reopen, stale conflict, five-holding limit, two-user
+   isolation, legacy text-flow fallback and private-environment non-impact.
 
 Do not change the private Desktop GAS, private LINE OA, F7 model, feature-parity gate or F11B-2.
 Do not commit or push automatically.
+
+## FORWARD COLLECTION DEPLOYMENT HANDOFF
+
+1. **Final status:** deployed; first bounded live smoke and same-run idempotency verified.
+2. **Success state:** `FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED`.
+3. **Storage:** Cloudflare R2 Standard private object storage.
+4. **Why:** S3 compatibility, conditional writes, no raw bytes in PostgreSQL/Git, low-volume free
+   allowance and no fixed monthly R2 charge; overage remains usage-billed.
+5. **Scheduler:** enabled GitHub Actions workflow on the public repository.
+6. **Timezone:** contract is Asia/Taipei; cron values are UTC.
+7. **Triggers:** enabled 00:00/08:30/13:30 UTC on `main`.
+8. **Manual dispatch:** implemented with phase and optional collection date.
+9. **Private bucket:** `financial-ai-forward-events-private`, Standard class, created.
+10. **Public access:** disabled; no public URL or listing enabled.
+11. **Secrets:** five R2 values are stored only in GitHub Actions secrets; privacy confirmation is
+    a repository variable. Values were never committed or logged.
+12. **Raw location:** `forward-events/source=<twse|tpex>/date=<date>/run=<id>/raw/`.
+13. **Normalized location:** same run prefix under `normalized/`.
+14. **Manifest location:** source manifest under each source run; overall manifest under
+    `forward-events/runs/date=<date>/phase=<phase>/run=<id>/manifest.json`.
+15. **SHA lineage:** live manifest and raw/document lineage verified.
+16. **Collision control:** GitHub concurrency + remote manifest preflight + R2 `If-None-Match: *`.
+17. **Same-run live idempotency:** verified; identical run/hash returned
+    `reused_remote_manifest=true` without provider construction.
+18. **First live collection:** workflow run `33322315876`, 2026-08-31 `current`, `SUCCESS`.
+19. **TWSE live result:** `SUCCESS`, 7 rows.
+20. **TPEx live result:** `SUCCESS`, 5 rows.
+21. **Schema drift:** none live; fixture path also verified.
+22. **Partial failure:** fixture path verified and remains non-success.
+23. **Automatic retraining:** false.
+24. **Model execution:** none.
+25. **Additional providers:** none; only frozen TWSE/TPEx are wired.
+26. **Monitoring:** GitHub Actions native workflow status/email only.
+27. **Retention:** raw, normalized, drift evidence, manifests and hashes retained long term.
+28. **Rollback:** disable workflow, retain evidence, revoke scoped key if required; no model rollback.
+29. **Seven-day check:** runs, success, last success, row/duplicate/drift/object/manifest checks.
+30. **Thirty-day audit:** coverage, missingness, failures, duplicates, schema, distribution, growth.
+31. **Future validation:** consider after 3–6 months; never auto-retrain.
+32. **Files:** R2 adapter/wrapper, workflow, deployment config/docs/tests, env names and entry points.
+33. **Pytest:** 380 passed; one existing Starlette/httpx deprecation warning.
+34. **Ruff:** passed.
+35. **Secret scan:** passed; no supported credential pattern found.
+36. **Diff check:** `git diff --check` passed.
+37. **Git status:** deployment checkpoint is on `main`; preserved web-polish and status updates remain local.
+38. **Commit:** deployment checkpoint `28739f1`.
+39. **Push:** checkpoint pushed to `main`; post-smoke documentation not auto-pushed.
+40. **Live Web Demo:** unaffected.
+41. **LINE/GAS:** unaffected.
+42. **Track A/B:** models and results unaffected.
+43. **F11B-2:** remains blocked at 5/23 exact features and 6/9 gates.
+44. **After verified deployment:** next product revision may return to Live Web Demo revision.
+45. **Final Release Audit:** not started.
+46. **Project freeze:** not started.

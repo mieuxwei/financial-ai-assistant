@@ -1,13 +1,13 @@
 # Financial AI Assistant — Portfolio Guide
 
-Finalized: 2026-08-29  
-Status: **research portfolio complete; controlled demo only; not deployed**
+Finalized: 2026-08-30
+Status: **research portfolio complete; Web-first controlled demo deployed**
 
 ## 1. Project in one sentence
 
 Financial AI Assistant combines leakage-aware Taiwan-equity volatility-surprise forecasting with
-abstention-safe financial NLP intelligence, exposed through a local FastAPI contract, a controlled
-Streamlit dashboard and a migration-safe LINE/GAS design.
+abstention-safe financial NLP intelligence. The deployed Streamlit Web Demo is the primary public
+experience; FastAPI and LINE/GAS remain reproducible integration layers.
 
 The system does **not** predict price direction, issue buy/sell advice, guarantee future volatility
 or claim validated Chinese linguistic sentiment.
@@ -39,9 +39,10 @@ evidence rather than deleting or relabeling it as failure.
 
 - **Python/FastAPI:** feature contracts, Track A inference, Track B intelligence, portfolio rules,
   persistence, lineage, authorization and abstention rules.
-- **Streamlit:** controlled portfolio demonstration; offline fixture by default, loopback API only.
-- **LINE/GAS:** transitional thin adapter for routing, reply tokens, Flex rendering and scheduled
-  entry points. The live GAS project was not modified during portfolio finalization.
+- **Streamlit:** primary public controlled experience with fixture-only analysis and a non-persistent
+  browser-session portfolio sandbox (maximum five holdings).
+- **LINE/GAS:** experimental multi-channel prototype demonstrating secure webhook handling,
+  orchestration, Flex rendering and isolated sandbox persistence. It is not the primary CTA.
 - **Current-market serving:** remains blocked because F11B-2A proved only 5/23 exact feature parity.
 
 ## 4. Track A — Volatility-surprise forecasting
@@ -106,17 +107,23 @@ Track B deliberately separates concepts that are often incorrectly collapsed:
 
 ## 6. Product demonstrations
 
-### Streamlit — controlled offline demo
+### Streamlit — primary public controlled demo
 
 ![Controlled Streamlit dashboard](assets/controlled_streamlit_dashboard.jpg)
 
 The screenshot uses a deterministic synthetic fixture. The displayed ticker, feature values,
-score and intelligence are **not live 2330 data** and are not performance evidence.
+score and intelligence are **not live 2330 data** and are not performance evidence. The Web Demo
+also supports 0–5 browser-session holdings without login or persistence; only a public-safe fixture
+may show a research signal, and no current ROI is calculated.
 
 Additional screenshots:
 
-- [Controlled financial intelligence view](assets/controlled_streamlit_intelligence.jpg)
-- [Model lineage and limitations view](assets/controlled_streamlit_limitations.jpg)
+- [Stock analysis](assets/public_web_demo_stock_analysis.png)
+- [Portfolio health](assets/public_web_demo_portfolio_health.png)
+- [Financial intelligence](assets/public_web_demo_intelligence.png)
+- [Research results](assets/public_web_demo_research.png)
+- [System architecture page](assets/public_web_demo_architecture.png)
+- [Mobile viewport check](assets/public_web_demo_mobile.png)
 
 ### FastAPI — local research contract
 
@@ -128,12 +135,13 @@ Additional screenshots:
 The research endpoints validate versions and lineage. They do not perform live provider, LLM or
 model calls during ordinary request handling.
 
-### LINE/GAS — controlled migration design
+### LINE/GAS — experimental integration evidence
 
 The six frozen product entries are 股票分析、持股健檢、金融情報、匯入持股、新聞研究、設定。
-F11B-1A added routing only in the private migration copy. F11B-1B added a controlled read-only path
-from LINE → migration-copy GAS → FastAPI → deterministic fixture → Flex response. It was not
-deployed and did not alter the live webhook, triggers, sheets or holdings.
+The isolated public-beta path demonstrates LINE OA → Cloudflare security edge → Demo GAS →
+FastAPI → Neon → Flex Message. R1B-UX1 is prototype-complete and preserved, but additional LINE UX
+or LIFF verification is no longer required for portfolio freeze. Private GAS, LINE, sheets and
+holdings remain untouched.
 
 ## 7. F11B-2A current-market result
 
@@ -222,4 +230,3 @@ git diff --check
 | Dashboard | [F11A result](../research/evaluation/f11_dashboard_demo_result.md) |
 | LINE controlled demo | [F11B-1B design](f11b_controlled_line_demo.md) |
 | Current-market gate | [F11B-2A result](../research/evaluation/f11b_official_current_market_parity_result.md) |
-

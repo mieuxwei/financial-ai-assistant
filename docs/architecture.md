@@ -4,15 +4,17 @@
 
 ![Financial AI Assistant architecture](assets/system_architecture.svg)
 
-F12 is complete as a documentation and controlled-demo milestone. R1A adds a public-release
-boundary around the F11A presentation layer:
+F12 is complete. The deployed R1A Web Demo is the primary public portfolio experience:
 
 ```text
-Public browser → Streamlit Community Cloud → demo/public_app.py → synthetic fixture only
+Public browser
+  → Streamlit Community Cloud
+  → demo/public_app.py
+  → synthetic fixture + browser-session portfolio only
 ```
 
-The R1A path requires no FastAPI, database, provider, model artifact or runtime secret. It is ready
-for manual deployment but has no public URL yet. F11B-2 current-market serving remains blocked
+The R1A path requires no FastAPI, database, provider, model artifact or runtime secret. It is live
+at the documented HTTPS URL. F11B-2 current-market serving remains blocked
 after F11B-2A because exact feature parity is 5/23 and the audited official corporate-action
 lineage cannot reproduce the historical Yahoo `adjclose` contract.
 
@@ -21,9 +23,15 @@ The final ownership boundary is:
 - FastAPI/Python owns identity, portfolio rules, persistence, data pipelines, Track A/B contracts,
   lineage, abstention and auditability;
 - Streamlit presents a deterministic controlled fixture or an explicitly selected loopback API;
-- GAS remains a transitional thin LINE adapter and does not own model or portfolio logic;
+- LINE OA → Cloudflare Edge → GAS → FastAPI → Neon remains an **experimental messaging
+  interface** and engineering-evidence path, not the primary UX;
+- GAS remains a thin LINE frontend-processing adapter and does not own model or portfolio truth;
 - provider calls never occur inside the controlled demo request path;
 - live/current inference must remain unavailable until every frozen serving gate passes.
+
+R1B and R1B-UX1 code, security boundaries, Flex builders, identity derivation, idempotency and
+LIFF editor remain preserved. R1B-UX1 is `PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY`;
+further LINE UX work is not a portfolio-freeze blocker.
 
 ## Active research direction
 
