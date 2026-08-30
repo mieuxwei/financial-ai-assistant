@@ -33,7 +33,17 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "research/configs/dashboard_demo.v1.json"
 PUBLIC_RELEASE_CONFIG_PATH = ROOT / "research/configs/public_web_demo_release.v1.json"
 HOLDINGS_STATE_KEY = "web_demo_holdings"
+SELECTED_TICKER_STATE_KEY = "web_demo_selected_ticker"
 NAVIGATION = ("首頁", "股票分析", "持股健檢", "金融情報", "研究成果", "系統架構", "限制與方法")
+NAVIGATION_LABELS = {
+    "首頁": "首頁｜專題導覽",
+    "股票分析": "股票分析｜受控研究訊號",
+    "持股健檢": "持股健檢｜Demo Sandbox",
+    "金融情報": "金融情報｜事件與 NLP",
+    "研究成果": "研究成果｜模型與證據",
+    "系統架構": "系統架構｜工程實作",
+    "限制與方法": "限制與方法｜研究邊界",
+}
 
 
 @st.cache_resource
@@ -53,26 +63,38 @@ def render(*, public_release: bool = False) -> None:
         page_title="Financial AI Assistant | Controlled Research Demo",
         page_icon="📊",
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="collapsed",
     )
     _apply_theme()
-    config, fixture = load_assets()
-    release = load_public_release()
-    with st.sidebar:
-        st.markdown("## Financial AI Assistant")
-        st.caption("Public Live Web Demo · 主要作品入口")
-        page = st.radio("導覽", NAVIGATION, label_visibility="collapsed")
-        st.divider()
-        if public_release:
-            st.success("Controlled Research Demo")
-            st.caption("固定受控資料；零 runtime secret；無外部 provider 呼叫。")
-        else:
+    try:
+        with st.spinner("載入受控研究資料…"):
+            config, fixture = load_assets()
+            release = load_public_release()
+    except Exception:
+        if not public_release:
+            raise
+        st.error("目前無法載入受控研究資料，請稍後重新整理頁面。")
+        st.caption("系統已隱藏內部錯誤細節，且不會改用未驗證或即時來源補值。")
+        if st.button("重新載入"):
+            st.cache_resource.clear()
+            st.rerun()
+        return
+    if not public_release:
+        with st.sidebar:
+            st.markdown("## Financial AI Assistant")
+            st.caption("本機研究介面")
             mode = st.radio("資料模式", ("受控離線示範", "本機 FastAPI"))
             if mode == "本機 FastAPI":
                 st.info("本機開發入口保留；公開版本固定使用受控 fixture。")
-        st.divider()
-        st.caption("LINE：Experimental Multi-channel Prototype")
-        st.caption("非即時市場預測 · 非投資建議")
+            st.divider()
+            st.caption("LINE：實驗性多通路整合原型")
+            st.caption("非即時市場預測 · 非投資建議")
+    page = st.selectbox(
+        "頁面導覽",
+        NAVIGATION,
+        key="navigation",
+        format_func=lambda value: NAVIGATION_LABELS[value],
+    )
     pages = {
         "首頁": lambda: _render_landing(fixture, release),
         "股票分析": lambda: _render_stock_analysis(fixture),
@@ -91,112 +113,169 @@ def render(*, public_release: bool = False) -> None:
 
 
 def _go_to(page: str) -> None:
-    st.session_state["導覽"] = page
+    st.session_state["navigation"] = page
+
+
+def _select_ticker(ticker: str) -> None:
+    st.session_state[SELECTED_TICKER_STATE_KEY] = ticker
 
 
 def _render_landing(
     fixture: ControlledDashboardFixture, release: PublicWebDemoReleaseConfig
 ) -> None:
     st.markdown('<div class="release-badge">CONTROLLED RESEARCH DEMO</div>', unsafe_allow_html=True)
-    st.markdown('<div class="eyebrow">WEB-FIRST PORTFOLIO EXPERIENCE</div>', unsafe_allow_html=True)
     st.title("Financial AI Assistant")
-    st.subheader("基於機器學習之股票相對波動異常程度預測與金融 NLP 情報系統")
+    st.subheader("預測股票相對波動異常程度，整合金融事件情報")
     st.write(
-        "結合時間序列機器學習、金融 NLP 與多層應用架構，"
-        "提供股票相對波動異常程度與事件情報的研究型分析介面。"
+        "這是一套台股研究型 AI 助手：用時間序列機器學習比較股票下一交易日的波動"
+        "是否可能異常，並用金融 NLP 整理事件資訊。"
     )
     status, capability, boundary = st.columns(3)
-    status.success("Public Live Web Demo\n\n已部署的主要互動入口")
-    capability.info("核心能力\n\n風險排序、持股健檢、金融事件情報")
-    boundary.warning("研究邊界\n\n非即時推論、不預測漲跌、非投資建議")
+    status.success("Public Live Web Demo\n\n股票分析、Demo 持股健檢、金融情報")
+    capability.info("AI 研究核心\n\n預測相對波動異常，重點是排序而非精準數值")
+    boundary.warning("使用限制\n\n受控資料、非即時、不預測漲跌、非投資建議")
     cta_a, cta_b, cta_c = st.columns(3)
     cta_a.button(
         "開始股票分析", type="primary", width="stretch", on_click=_go_to, args=("股票分析",)
     )
     cta_b.button("查看持股健檢", width="stretch", on_click=_go_to, args=("持股健檢",))
     cta_c.button("查看研究方法", width="stretch", on_click=_go_to, args=("研究成果",))
-    st.markdown("### 30 秒研究摘要")
-    a, b, c, d = st.columns(4)
-    a.metric("Final model", "Ridge · α 100", border=True)
-    b.metric("Rolling periods", str(release.track_a_outer_folds), border=True)
-    c.metric("Mean outer Spearman", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
-    d.metric("Top-decile lift", f"{release.track_a_top_decile_lift:.3f}×", border=True)
+    st.markdown("### 30 秒研究證據")
+    a, b, c = st.columns(3)
+    a.metric("跨期測試", f"{release.track_a_outer_folds} 段", border=True)
+    b.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
+    c.metric("最高分組反應幅度", f"{release.track_a_top_decile_lift:.3f}×", border=True)
     st.caption(
-        f"受控範例：{fixture.company_display_name}。模型較適合做相對排序，"
-        "不代表精準振幅、價格方向或即時市場預測。"
+        "模型在七段時間序列外推測試中展現有限但一致的排序資訊；"
+        "完整模型比較、R² 限制與方法可在「研究成果」查看。"
     )
 
 
 def _render_stock_analysis(fixture: ControlledDashboardFixture) -> None:
+    selected_ticker = st.selectbox(
+        "選擇受控示範股票",
+        tuple(FROZEN_UNIVERSE),
+        index=tuple(FROZEN_UNIVERSE).index(
+            st.session_state.get(SELECTED_TICKER_STATE_KEY, fixture.prediction_request.ticker)
+        ),
+        format_func=lambda value: f"{value} {FROZEN_UNIVERSE[value]}",
+        key=SELECTED_TICKER_STATE_KEY,
+    )
     prediction = fixture.prediction_response
     st.markdown('<div class="eyebrow">STOCK ANALYSIS</div>', unsafe_allow_html=True)
     st.title("股票分析")
-    st.caption("目前公開版僅以 2330 台積電受控 fixture 展示完整研究訊號。")
-    st.subheader(fixture.company_display_name)
+    st.caption("可瀏覽凍結研究股票池；只有具公開安全 fixture 的股票才顯示研究分數。")
+    st.subheader(f"{selected_ticker} {FROZEN_UNIVERSE[selected_ticker]}")
+    if selected_ticker != fixture.prediction_request.ticker:
+        st.info(
+            "這檔股票目前沒有可公開的受控研究訊號，因此系統不補值、不套用其他股票結果，"
+            "也不製造即時預測。請選擇 2330 台積電查看完整互動範例。"
+        )
+        st.button(
+            "查看 2330 完整範例",
+            type="primary",
+            on_click=_select_ticker,
+            args=(fixture.prediction_request.ticker,),
+        )
+        return
+    st.caption(fixture.data_notice)
     score, percentile, band = st.columns(3)
     score.metric(
-        "Relative volatility-surprise score",
+        "相對波動異常分數",
         format_score(prediction.predicted_volatility_surprise),
         border=True,
     )
     percentile.metric(
-        "Historical percentile",
+        "歷史相對位置",
         format_percentile(prediction.historical_percentile),
         border=True,
     )
     band.metric(
-        "Communication band",
-        f"{band_label(prediction.risk_band)} · {prediction.risk_band}",
+        "溝通分級",
+        band_label(prediction.risk_band),
         border=True,
     )
     st.progress(
-        int(round(prediction.historical_percentile)), text="相對於 frozen historical OOF reference"
+        int(round(prediction.historical_percentile)),
+        text=f"高於約 {prediction.historical_percentile:.1f}% 的歷史研究樣本",
     )
     st.info(
-        "這個分數表示下一交易日相對於該股票自身歷史狀態的波動異常程度；它不是機率，也不表示上漲或下跌。"
+        "如何閱讀：分數衡量下一交易日的波動幅度，相對於這檔股票近期自身波動水準有多異常。"
+        "百分位是歷史相對位置，不是發生機率；分級也不表示上漲或下跌。"
     )
-    st.markdown("### Controlled event intelligence")
+    st.markdown("### 受控事件情報")
     _render_intelligence_cards(fixture.intelligence_items)
-    st.warning("目前公開研究版未啟用即時價格與即時模型推論。")
 
 
 def _render_portfolio_health(fixture: ControlledDashboardFixture) -> None:
     st.markdown('<div class="eyebrow">BROWSER-SESSION SANDBOX</div>', unsafe_allow_html=True)
     st.title("持股健檢")
     st.write(
-        "加入 0–5 檔 Demo holdings；資料只存在目前瀏覽器 session，"
+        "加入 0–5 檔 Demo 持股；資料只存在目前瀏覽器 session，"
         "不需登入，也不會寫入 LINE、Google Sheet 或後端資料庫。"
     )
-    st.warning(
-        "請勿輸入真實帳戶或其他敏感資訊。此頁沒有即時價格，因此不計算 ROI、市值或未實現損益。"
-    )
+    st.caption("請勿輸入敏感資訊。本頁沒有即時價格，因此不計算 ROI、市值或未實現損益。")
     holdings = _holdings()
+    sample, reset = st.columns(2)
+    if sample.button("載入兩檔示範持股", width="stretch"):
+        st.session_state[HOLDINGS_STATE_KEY] = [
+            build_holding("2330", 100, 800),
+            build_holding("0050", 20, 150),
+        ]
+        holdings = _holdings()
+    if reset.button("清空 Demo 持股", width="stretch", disabled=not holdings):
+        st.session_state[HOLDINGS_STATE_KEY] = []
+        st.rerun()
+    selected_ticker = st.selectbox(
+        "股票",
+        tuple(FROZEN_UNIVERSE),
+        format_func=lambda value: f"{value} {FROZEN_UNIVERSE[value]}",
+    )
+    existing = next((item for item in holdings if item["ticker"] == selected_ticker), None)
     with st.form("holding-editor", clear_on_submit=False):
-        ticker = st.selectbox(
-            "股票",
-            tuple(FROZEN_UNIVERSE),
-            format_func=lambda value: f"{value} {FROZEN_UNIVERSE[value]}",
-        )
         shares = st.number_input(
-            "股數", min_value=0.01, max_value=10_000_000.0, value=100.0, step=1.0
+            "股數",
+            min_value=0.01,
+            max_value=10_000_000.0,
+            value=float(existing["shares"] if existing else 100.0),
+            step=1.0,
+            key=f"shares-{selected_ticker}",
         )
         average_cost = st.number_input(
-            "平均成本（Demo input）", min_value=0.01, max_value=1_000_000.0, value=100.0, step=0.1
+            "平均成本（僅作 Demo 輸入）",
+            min_value=0.01,
+            max_value=1_000_000.0,
+            value=float(existing["average_cost"] if existing else 100.0),
+            step=0.1,
+            key=f"cost-{selected_ticker}",
         )
-        submitted = st.form_submit_button("加入或更新持股", type="primary")
+        submitted = st.form_submit_button(
+            "更新持股" if existing else "加入持股", type="primary"
+        )
     if submitted:
         try:
             st.session_state[HOLDINGS_STATE_KEY] = upsert_holding(
-                holdings, build_holding(ticker, shares, average_cost)
+                holdings, build_holding(selected_ticker, shares, average_cost)
             )
             holdings = _holdings()
-            st.success(f"已加入／更新 {ticker}；目前 {len(holdings)}/{MAX_DEMO_HOLDINGS} 檔。")
+            st.success(
+                f"已{'更新' if existing else '加入'} {selected_ticker}；"
+                f"目前 {len(holdings)}/{MAX_DEMO_HOLDINGS} 檔。"
+            )
         except ValueError as error:
             st.error(str(error))
     if not holdings:
-        st.info("尚未加入 Demo 持股。請從上方選擇股票、股數與平均成本開始。")
+        st.info("尚未加入 Demo 持股。可載入範例，或從上方選擇股票、股數與平均成本開始。")
         return
-    st.markdown(f"### 我的 Demo holdings（{len(holdings)}/{MAX_DEMO_HOLDINGS}）")
+    st.markdown("### 健檢摘要")
+    available = sum(
+        item["ticker"] == fixture.prediction_request.ticker for item in holdings
+    )
+    total_col, signal_col, unavailable_col = st.columns(3)
+    total_col.metric("Demo 持股", f"{len(holdings)}/{MAX_DEMO_HOLDINGS}", border=True)
+    signal_col.metric("有受控研究訊號", available, border=True)
+    unavailable_col.metric("安全地不輸出", len(holdings) - available, border=True)
+    st.markdown("### 我的 Demo 持股")
     for holding in holdings:
         with st.container(border=True):
             info, action = st.columns([4, 1])
@@ -207,18 +286,17 @@ def _render_portfolio_health(fixture: ControlledDashboardFixture) -> None:
                 st.rerun()
             if holding["ticker"] == fixture.prediction_request.ticker:
                 prediction = fixture.prediction_response
+                score_text = format_score(prediction.predicted_volatility_surprise)
                 info.caption(
-                    f"受控研究訊號：{format_score(prediction.predicted_volatility_surprise)} · "
+                    f"受控研究訊號：相對波動異常 {score_text} · "
                     f"歷史百分位 {format_percentile(prediction.historical_percentile)} · "
-                    f"{prediction.risk_band}"
+                    f"{band_label(prediction.risk_band)}"
                 )
             else:
                 info.caption(
-                    "此 ticker 尚無 public-safe controlled signal；"
-                    "系統安全地顯示 unavailable，不推估或補值。"
+                    "尚無可公開受控訊號；系統不推估、不補值，也不套用其他股票結果。"
                 )
-    st.markdown("### Portfolio Health")
-    st.info("持股健檢整合 browser-session 持股與可用的受控研究訊號；不代表當前市場狀態。")
+    st.info("健檢只整合 Demo 持股與可用的受控研究訊號，不代表當前市場狀態或投資建議。")
 
 
 def _holdings() -> list[BrowserDemoHolding]:
@@ -227,11 +305,13 @@ def _holdings() -> list[BrowserDemoHolding]:
 
 
 def _render_intelligence_page(items: list[FinancialIntelligenceItem]) -> None:
-    st.markdown('<div class="eyebrow">FINANCIAL NLP INTELLIGENCE</div>', unsafe_allow_html=True)
+    st.markdown('<div class="eyebrow">FINANCIAL NLP</div>', unsafe_allow_html=True)
     st.title("金融情報")
     st.write(
-        "系統刻意分離事件分類、市場反應幅度與文字情緒，避免把不同研究概念混成單一 sentiment score。"
+        "這裡把「事件類型」、「後續市場反應幅度」與「文字情緒」分開呈現。"
+        "三者不是同一件事，也不會合併成看似精確的單一分數。"
     )
+    st.caption("目前顯示的是受控事件範例，不是即時新聞或供應商原始資料。")
     _render_intelligence_cards(items)
 
 
@@ -241,8 +321,16 @@ def _render_intelligence_cards(items: list[FinancialIntelligenceItem]) -> None:
         return
     for item in items:
         with st.container(border=True):
-            st.markdown(f"**{item.source_excerpt or '受控事件範例'}**")
-            st.caption(f"{item.published_at:%Y-%m-%d %H:%M} · {item.source_type} · {item.language}")
+            is_chinese = item.language.casefold().startswith("zh")
+            title = (
+                "受控公告範例：重大契約事件"
+                if is_chinese
+                else "受控英文新聞範例（本範例未執行情緒模型）"
+            )
+            source_label = "受控官方公告" if is_chinese else "受控英文新聞"
+            language_label = "繁體中文" if is_chinese else "英文"
+            st.markdown(f"**{title}**")
+            st.caption(f"{item.published_at:%Y-%m-%d %H:%M} · {source_label} · {language_label}")
             if item.track_b_intelligence is None:
                 st.write(event_summary(item))
                 st.write(sentiment_summary(item))
@@ -251,65 +339,106 @@ def _render_intelligence_cards(items: list[FinancialIntelligenceItem]) -> None:
             event = track_b.event_classification
             reaction = track_b.market_reaction
             a, b, c = st.columns(3)
-            a.markdown(f"**EVENT CLASS**\n\n{event.event_class or '未分類'}")
+            a.markdown(f"**事件類型**\n\n{event.event_class or '未分類'}")
             b.markdown(
-                "**MARKET REACTION MAGNITUDE**\n\n" + (reaction.communication_band or "Unavailable")
+                "**歷史市場反應幅度**\n\n"
+                + (
+                    band_label(reaction.communication_band)
+                    if reaction.communication_band
+                    else "目前無資料"
+                )
             )
-            c.markdown("**LINGUISTIC SENTIMENT**\n\n尚未通過獨立驗證")
-            st.caption("市場反應強度是歷史幅度關聯的自動化研究訊號，不代表方向、因果或報酬預測。")
+            c.markdown("**中文文字情緒**\n\n尚未通過獨立驗證")
+            st.caption(
+                "市場反應幅度是歷史關聯的自動化研究訊號；"
+                "不代表上漲／下跌、因果效果或未來報酬。"
+            )
 
 
 def _render_research_results(release: PublicWebDemoReleaseConfig) -> None:
     st.markdown('<div class="eyebrow">RESEARCH EVIDENCE</div>', unsafe_allow_html=True)
     st.title("研究成果")
-    st.markdown("### Track A · Stock-normalized volatility surprise")
-    a, b, c, d = st.columns(4)
-    a.metric("Selected model", "Ridge · α 100", border=True)
-    b.metric("Outer periods", str(release.track_a_outer_folds), border=True)
-    c.metric("Mean Spearman", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
-    d.metric("Top-decile lift", f"{release.track_a_top_decile_lift:.3f}×", border=True)
+    st.markdown("### 研究問題如何演進")
     st.write(
-        "模型的證據主要在跨期相對排序；R² 接近零或略為負值，"
-        "因此不宣稱能精準預測振幅，更不預測方向。"
+        "最初把波動風險分成高／一般，但跨期實驗發現結果容易受門檻與市場狀態影響。"
+        "因此最終改為預測連續的『個股相對波動異常程度』，保留更多訊息，也更符合實驗證據。"
     )
-    st.markdown("### Track B · Financial NLP intelligence")
+    st.markdown("### 價格與成交量模型")
+    a, b, c, d = st.columns(4)
+    a.metric("最終模型", "Ridge", border=True)
+    b.metric("跨期測試", f"{release.track_a_outer_folds} 段", border=True)
+    c.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
+    d.metric("平均 R²", "-0.009", border=True)
+    st.write(
+        f"最高預測分組的實際波動異常平均為全體的約 "
+        f"{release.track_a_top_decile_lift:.3f} 倍。證據主要在跨期相對排序；"
+        "R² 接近零，因此不宣稱能精準預測振幅，更不預測方向。"
+    )
+    left, right = st.columns(2)
+    left.image(
+        str(ROOT / "docs/assets/track_a_model_comparison.svg"),
+        caption="三種候選模型的歷史外推比較",
+        width="stretch",
+    )
+    right.image(
+        str(ROOT / "docs/assets/track_a_ridge_deciles.svg"),
+        caption="預測分數分組與實際波動異常的關係",
+        width="stretch",
+    )
+    with st.expander("模型選擇與驗證細節"):
+        st.write(
+            "比較 Persistence、Ridge 與 HistGradientBoosting。Ridge 與樹模型落在預先凍結的"
+            "實務相近範圍內，最後依較低平均 MAE 的既定 tie-break 選擇 Ridge（alpha=100）。"
+        )
+        st.write(
+            "所有評估使用七段 rolling-origin 時序外推；每一段的前處理與模型只用較早資料擬合。"
+        )
+    st.markdown("### 金融 NLP 與事件情報")
     x, y = st.columns(2)
-    x.metric("Metadata magnitude OOF Spearman", "0.250", border=True)
-    y.metric("Magnitude top-decile lift", "1.623×", border=True)
+    x.metric("事件資訊的反應幅度排序相關", "0.250", border=True)
+    y.metric("高分組反應幅度", "1.623×", border=True)
     st.markdown(
-        "- FSC 金融領域適應完成；BERT-base-Chinese 僅保留為 representation capability。\n"
-        "- 中文 linguistic sentiment 未通過獨立驗證，因此 abstain。\n"
-        "- BERT text 對 signed market-reaction 的增量價值不受支持，沒有包裝成正面結果。"
+        "- 已完成台灣金融語料的中文 BERT 領域適應；目前只主張文字表示能力。\n"
+        "- 中文文字情緒尚未通過獨立驗證，因此不輸出正／中／負判定。\n"
+        "- BERT 文字沒有為市場反應方向帶來穩健增益；這項負面結果完整保留。"
     )
 
 
 def _render_architecture() -> None:
-    st.markdown('<div class="eyebrow">SYSTEM ARCHITECTURE</div>', unsafe_allow_html=True)
+    st.markdown('<div class="eyebrow">ENGINEERING EVIDENCE</div>', unsafe_allow_html=True)
     st.title("系統架構")
-    st.markdown("### Primary Web Experience")
+    web, backend = st.columns(2)
+    with web.container(border=True):
+        st.markdown("#### 公開 Web 展示路徑")
+        st.write("瀏覽器 → Streamlit → 受控研究 fixture／session 持股")
+        st.caption("零 runtime secret、零 request-time provider call；不是即時模型服務。")
+    with backend.container(border=True):
+        st.markdown("#### 研究與應用層")
+        st.write("FastAPI → 版本化 ML／NLP contract → PostgreSQL")
+        st.caption("負責驗證、持股規則、使用者隔離、資料管線與可追溯性。")
+    st.markdown("### 實驗性 LINE 多通路原型")
     st.code(
-        "Web UI (Streamlit)\n"
-        "  ↓\nControlled Research Services + Browser-session Portfolio\n"
-        "  ↓\nVersioned Research Artifacts",
+        "LINE Demo OA → Cloudflare 安全邊界 → Google Apps Script\n"
+        "→ FastAPI → PostgreSQL / Neon → GAS Flex Message → LINE",
         language="text",
     )
-    st.markdown("### Experimental Messaging Interface")
+    st.caption(
+        "此路徑用來證明 raw webhook 驗證、HMAC、GAS 呈現、FastAPI 串接、"
+        "冪等寫入與使用者隔離；LINE 不是主要作品入口。"
+    )
+    st.markdown("### 未來外部驗證資料路徑")
     st.code(
-        "LINE Demo OA\n  ↓\nCloudflare Security Edge\n  ↓\nGoogle Apps Script\n"
-        "  ↓\nFastAPI → PostgreSQL / Neon\n  ↓\nGAS Flex Message → LINE",
+        "TWSE / TPEx 官方資料 → 排程蒐集 → 私有不可變 raw archive\n"
+        "→ lineage / manifest → 未來 unseen-data validation",
         language="text",
     )
-    st.info(
-        "LINE 版本是多通路整合原型，保留 webhook 驗證、HMAC、GAS 呈現、"
-        "FastAPI 串接、使用者隔離與 Sandbox 寫入等工程證據；"
-        "主要互動體驗以 Web Demo 為主。"
-    )
-    st.markdown("### Technology stack")
-    st.write(
-        "Streamlit · LINE Messaging API / LIFF prototype · Google Apps Script · "
-        "Cloudflare Worker · FastAPI · PostgreSQL / Neon · scikit-learn Ridge / "
-        "HistGradientBoosting comparison · BERT-base-Chinese domain adaptation · Vercel"
-    )
+    st.caption("蒐集資料不會觸發自動重訓，也不會進入目前公開 Demo 的 request path。")
+    with st.expander("查看實際技術堆疊"):
+        st.write(
+            "Streamlit · FastAPI · PostgreSQL / Neon · LINE Messaging API · Google Apps Script · "
+            "Cloudflare Worker / R2 · GitHub Actions · scikit-learn Ridge / "
+            "HistGradientBoosting · BERT-base-Chinese"
+        )
 
 
 def _render_limitations(
@@ -318,33 +447,33 @@ def _render_limitations(
     st.markdown('<div class="eyebrow">METHODS & LIMITATIONS</div>', unsafe_allow_html=True)
     st.title("限制與方法")
     st.warning("即時市場推論尚未啟用，因訓練與即時資料的完整特徵一致性尚未通過驗證。")
-    a, b = st.columns(2)
-    a.metric(
-        "F11B-2A gates",
-        f"{release.current_market_gate_passed}/{release.current_market_gate_total}",
-        border=True,
-    )
-    b.metric(
-        "Exact feature parity",
-        f"{release.exact_feature_parity_passed}/{release.exact_feature_parity_total}",
-        border=True,
-    )
     st.markdown(
-        "- Retrospective、leakage-aware、rolling-origin evaluation；不是 prospective validation。\n"
+        "- 研究採回溯、避免未來資訊洩漏的時序外推評估；不是前瞻或外部獨立驗證。\n"
         "- 中文文字情緒目前尚未通過獨立驗證。\n"
-        "- Market-reaction magnitude 不是方向預測，也不是因果效果。\n"
-        "- Public Demo 無 request-time provider calls、真實持股、個人資料或秘密。"
+        "- 市場反應幅度不是方向預測，也不是因果效果。\n"
+        "- 公開 Demo 無即時供應商呼叫、真實持股、個人資料或秘密。"
     )
-    st.markdown("### Reproducibility lineage")
-    p = fixture.prediction_response
-    st.code(
-        f"model_version={p.model_version}\nfeature_pipeline_version={p.feature_pipeline_version}\n"
-        f"target_version={p.target_version}\nartifact_sha256={p.artifact_sha256}\nfixture_id={fixture.fixture_id}",
-        language="text",
-    )
+    with st.expander("為什麼尚未啟用即時推論？"):
+        st.write(
+            "官方即時 OHLCV 已可取得，但歷史訓練資料的調整收盤價語義無法由官方資料證明等價重建。"
+            f"目前 serving readiness 檢核通過 {release.current_market_gate_passed}/"
+            f"{release.current_market_gate_total}，23 個固定特徵中只有 "
+            f"{release.exact_feature_parity_passed} 個達到精確一致。"
+        )
+        st.write("因此系統選擇不降標準、不偷偷改用舊資料，也不把受控範例寫成即時結果。")
+    with st.expander("重現性與版本資訊（研究細節）"):
+        p = fixture.prediction_response
+        st.code(
+            f"model_version={p.model_version}\n"
+            f"feature_pipeline_version={p.feature_pipeline_version}\n"
+            f"target_version={p.target_version}\n"
+            f"artifact_sha256={p.artifact_sha256}\n"
+            f"fixture_id={fixture.fixture_id}",
+            language="text",
+        )
     st.markdown("### Future External Validation")
     st.write(
-        "未來 TWSE／TPEx forward collection 可形成真正未見資料的 external validation；"
+        "TWSE／TPEx forward collection 正在累積自然產生、模型未見過的資料，未來可用於外部驗證；"
         "排程蒐集不等於自動重訓，也不是目前作品集封案條件。"
     )
 
@@ -367,7 +496,7 @@ def _apply_theme() -> None:
         h1, h2, h3 { color: #12362f; }
         [data-testid="stMetric"] { background: rgba(255,255,255,.84); }
         @media (max-width: 700px) {
-          .block-container { padding: 1rem .8rem 2rem; }
+          .block-container { padding: 3rem .8rem 2rem; }
           h1 { font-size: 2rem !important; }
           h2 { font-size: 1.25rem !important; }
           [data-testid="stHorizontalBlock"] { gap: .5rem; }

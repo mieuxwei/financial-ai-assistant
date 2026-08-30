@@ -5,6 +5,7 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 
 from demo.contracts import load_controlled_fixture, load_public_release_config
+from demo.portfolio import FROZEN_UNIVERSE
 
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE_CONFIG = ROOT / "research/configs/public_web_demo_release.v1.json"
@@ -74,25 +75,39 @@ def test_public_entrypoint_renders_web_first_release_boundaries() -> None:
     assert "CONTROLLED RESEARCH DEMO" in rendered
     assert "非投資建議" in rendered
     assert "Public Live Web Demo" in rendered
-    assert "WEB-FIRST PORTFOLIO EXPERIENCE" in rendered
+    assert "預測股票相對波動異常程度" in rendered
     assert any(button.label == "開始股票分析" for button in app.button)
-    assert "LINE：Experimental Multi-channel Prototype" in rendered
+    assert not app.sidebar
 
-    app.radio[0].set_value("金融情報").run()
+    app.selectbox[0].set_value("股票分析").run()
+    stock_analysis = "\n".join(
+        str(element.value)
+        for collection in (app.title, app.markdown, app.caption, app.info, app.metric)
+        for element in collection
+    )
+    assert any(metric.label == "相對波動異常分數" for metric in app.metric)
+    assert "不是發生機率" in stock_analysis
+
+    app.selectbox[0].set_value("持股健檢").run()
+    assert any(button.label == "載入兩檔示範持股" for button in app.button)
+    assert any(button.label in {"加入持股", "更新持股"} for button in app.button)
+
+    app.selectbox[0].set_value("金融情報").run()
     intelligence = "\n".join(str(element.value) for element in app.markdown)
-    assert "MARKET REACTION MAGNITUDE" in intelligence
-    assert "LINGUISTIC SENTIMENT" in intelligence
+    assert "歷史市場反應幅度" in intelligence
+    assert "中文文字情緒" in intelligence
     assert "尚未通過獨立驗證" in intelligence
 
-    app.radio[0].set_value("限制與方法").run()
+    app.selectbox[0].set_value("限制與方法").run()
     limitations = "\n".join(
         str(element.value)
         for collection in (app.markdown, app.warning, app.metric)
         for element in collection
     )
     assert "即時市場推論尚未啟用" in limitations
-    assert "6/9" in limitations
-    assert "5/23" in limitations
+    assert any(expander.label == "為什麼尚未啟用即時推論？" for expander in app.expander)
+    assert not any("gate" in metric.label.casefold() for metric in app.metric)
+    assert not any("parity" in metric.label.casefold() for metric in app.metric)
     assert "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED" not in limitations
 
 
@@ -115,6 +130,41 @@ def test_public_release_packaging_has_no_secret_or_private_dependency() -> None:
     assert "@media (max-width: 700px)" in app_source
     assert "requests." not in app_source
     assert "httpx." not in app_source
+
+
+def test_public_demo_ticker_selection_fails_closed_without_borrowing_signal() -> None:
+    for ticker in FROZEN_UNIVERSE:
+        app = AppTest.from_file(str(ROOT / "demo/public_app.py"), default_timeout=15).run()
+        app.selectbox[0].set_value("股票分析").run()
+        app.selectbox[1].set_value(ticker).run()
+
+        has_score = any(metric.label == "相對波動異常分數" for metric in app.metric)
+        rendered = "\n".join(str(element.value) for element in app.info)
+        if ticker == "2330":
+            assert has_score
+            assert "不補值" not in rendered
+        else:
+            assert not has_score
+            assert "不補值" in rendered
+            assert "不製造即時預測" in rendered
+
+
+def test_public_demo_sample_portfolio_exposes_supported_and_unavailable_states() -> None:
+    app = AppTest.from_file(str(ROOT / "demo/public_app.py"), default_timeout=15).run()
+    app.selectbox[0].set_value("持股健檢").run()
+    sample = next(button for button in app.button if button.label == "載入兩檔示範持股")
+    sample.click().run()
+
+    rendered = "\n".join(
+        str(element.value)
+        for collection in (app.markdown, app.caption, app.info, app.metric)
+        for element in collection
+    )
+    assert "2330 台積電" in rendered
+    assert "0050 元大台灣50" in rendered
+    assert "相對波動異常 0.80×" in rendered
+    assert "不推估、不補值" in rendered
+    assert any(metric.label == "Demo 持股" and metric.value == "2/5" for metric in app.metric)
 
 
 def test_nested_entrypoint_resolves_project_package_outside_repository(tmp_path: Path) -> None:

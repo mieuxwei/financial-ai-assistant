@@ -37,9 +37,9 @@ def sentiment_summary(item: FinancialIntelligenceItem) -> str:
         label = labels.get(sentiment.label or "", sentiment.label or "未知")
         return f"英文 FinBERT：{label}（score {sentiment.score or 0:+.2f}）"
     if sentiment.abstention_reason == "CHINESE_SENTIMENT_NOT_VALIDATED":
-        return "中文情緒：不輸出（尚未通過驗證）"
+        return "中文文字情緒：尚未通過獨立驗證，因此不輸出判定"
     if sentiment.status == "ELIGIBLE_NOT_SCORED":
-        return "英文情緒：可評分，但此紀錄尚未執行模型"
+        return "英文文字情緒：此受控範例尚未執行模型"
     return "情緒：不支援／未評分"
 
 
