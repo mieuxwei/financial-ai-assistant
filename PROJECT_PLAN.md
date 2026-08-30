@@ -3,14 +3,14 @@
 Plan version: `r1b-line-public-beta-sandbox-v1`
 
 Last revised: 2026-08-30
-Active milestone: **R1B READY FOR MANUAL SETUP — external Demo resources pending**
+Active milestone: **R1B-UX1 LIFF MULTI-HOLDING — local complete / external setup pending**
 
 Authoritative state:
 
 - **Track A:** complete/frozen; Ridge Regression `alpha=100`; do not reopen.
 - **Track B:** complete through B5; optional B6/F9 not run and not required.
-- **Track C:** F10/F11A/F11B-D0/1A/1B/F11B-2A/F12/R1A complete；R1B code/security/setup
-  contracts ready for isolated external Demo setup；current integration remains blocked at 6/9 gates.
+- **Track C:** R1A/R1B deployed；R1B-UX1 local implementation complete；current-market integration
+  remains blocked at 6/9 gates.
 - **AP11:** optional enhancement, not a prerequisite.
 - **eLAND:** permanent historical exclusion; no active use or re-audit.
 - **GAS:** future private migration-copy modification authorized only under the immutable
@@ -128,7 +128,7 @@ RQ5 不阻塞核心研究，也不要求 positive result。
 
 ### Track C — Financial Intelligence Product
 
-- **F10/F11A/F11B-D0/1A/1B/F11B-2A/F12/R1A complete；R1B ready for manual setup；
+- **F10/F11A/F11B-D0/1A/1B/F11B-2A/F12/R1A/R1B complete；R1B-UX1 local complete；
   F11B-2 gate 6/9、integration blocked；**
 - Python backend 擁有 ingestion、features、ML、NLP、evaluation、inference、database 與 jobs；
 - R1B 的獨立 Demo GAS 正式作 LINE frontend processing/orchestration layer；portfolio truth、
@@ -163,7 +163,8 @@ R0 已提前完成 F11B-0 的私有 safety-copy prerequisite，但不得因此�
 | B6/F9 incremental value | Optional | 只有 timestamp-safe historical NLP features 足夠時，以相同 Track A target/folds/model discipline 比較 market-only vs market+NLP；null result 可接受。 |
 | F12 Portfolio Finalization | Complete / not deployed | README、research story、architecture、Track A/B summaries、model charts、controlled demo assets、F11B-2A blocked result、limitations、installation 與 consistency audit 完成。 |
 | R1A Public Web Demo Release | Deployed / HTTPS smoke passed | Streamlit URL 已公開；nested-entrypoint 修正已部署，首頁、分析、金融情報、研究證據與限制頁 bounded smoke test 通過。 |
-| R1B LINE Public Beta Sandbox | Ready for manual setup / not deployed | Cloudflare raw-signature Edge、獨立 Demo GAS、FastAPI sandbox portfolio、managed-Postgres migration、HMAC principal、idempotency、5 holdings、30-day retention、delete-my-data、Flex 與 tests 已完成；新 Demo OA/GAS/hosting/secrets/QR 尚待使用者配置。 |
+| R1B LINE Public Beta Sandbox | Deployed | Demo OA、Cloudflare Edge、Demo GAS、Vercel FastAPI 與 Neon sandbox 已完成 end-to-end LINE 回覆。 |
+| R1B-UX1 LIFF Multi-Holding | Local complete / external setup pending | 同頁管理最多 5 檔、LINE ID-token server verification、短期 session、全清單 preview 與 atomic batch write 已完成；尚待 Demo LIFF/Vercel env/rich-menu 設定。 |
 
 R0 詳細規格見 `docs/r0_project_rebaseline_protocol.md`；B3.1 的 later-authorized audit decision
 見 `research/evaluation/b3_1_chinese_sentiment_label_source_audit.md`。B4 凍結協定與結果分別見
@@ -420,8 +421,8 @@ adaptation、voting、evaluation、feature construction 或 corpus merge。
     final consistency checks 完成，未部署。
 14. **R1A — Public Web Demo Release：****DEPLOYED**；單一 Streamlit fixture-only topology
     已公開，零 runtime secret、零 provider call，bounded HTTPS smoke test 通過。
-15. **R1B — LINE Public Beta Sandbox：****READY FOR MANUAL SETUP**；程式、資安、資料隔離、
-    migration、Flex、測試與 setup/rollback 文件完成；只差全新的外部 Demo 資源與秘密配置。
+15. **R1B — LINE Public Beta Sandbox：****DEPLOYED**；獨立 Demo 環境已完成 LINE end-to-end。
+16. **R1B-UX1 — LIFF Multi-Holding：****LOCAL COMPLETE**；外部 Demo LIFF 設定後進行驗證。
 
 ## 16. Definition of Done
 
@@ -455,10 +456,7 @@ absolute reaction 有 modest automated signal；BERT title representation 未提
 value。`MARKET_REACTION_MODEL` 為 `AUTOMATED_SIGNAL_ONLY`；`LINGUISTIC_SENTIMENT` 獨立維持
 `ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`。
 
-R1A 已達 `PUBLIC_WEB_DEMO_DEPLOYED`。R1B 已達
-`LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP`：repository 內的 Cloudflare Worker、public-safe Demo
-GAS、FastAPI sandbox、migration、tests 與 manual setup/rollback 文件已完成。尚未確認新的 Demo
-LINE OA、Demo GAS project、Worker、FastAPI hosting、managed PostgreSQL 或 Add Friend QR，因此
-不得宣稱 deployed。下一個唯一建議 unit 是使用者完成
-`docs/line_public_beta_setup.md` 後執行 **R1B Deployment Verification**。Track A/B、F11B-2、
-private GAS、private LINE、真實持股與 R1A 均保持不變。
+R1A 已達 `PUBLIC_WEB_DEMO_DEPLOYED`，R1B 已達 `LINE_PUBLIC_BETA_DEPLOYED`。R1B-UX1 的本機程式
+與測試已完成；下一個唯一建議 unit 是依 `docs/line_public_beta_setup.md` 建立 Demo LIFF app、
+設定 Vercel Production secrets 與替換 Demo rich menu 後執行 **R1B-UX1 Deployment
+Verification**。Track A/B、F11B-2、private GAS、private LINE、真實持股與 R1A 均保持不變。

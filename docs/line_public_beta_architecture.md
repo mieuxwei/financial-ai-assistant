@@ -2,7 +2,7 @@
 
 Date: 2026-08-30
 
-Status: **LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP / NOT DEPLOYED**
+Status: **LINE_PUBLIC_BETA_DEPLOYED / R1B-UX1 LIFF UPGRADE READY FOR EXTERNAL SETUP**
 
 ## Purpose
 
@@ -39,6 +39,30 @@ flowchart TD
     A --> G
     G -->|Flex reply with Demo token| L
 ```
+
+### R1B-UX1 multi-holding LIFF path
+
+The original conversational add flow remains as a fallback. The primary portfolio editor becomes
+a LIFF page served by the existing Vercel FastAPI deployment:
+
+```mermaid
+flowchart TD
+    L[LINE Demo OA / Rich Menu] --> F[LIFF multi-holding form]
+    F -->|raw LIFF ID token| A[FastAPI]
+    A -->|server-side token verification| P[LINE Platform]
+    A -->|HMAC-derived demo principal| D[(Neon Demo Sandbox)]
+    F -->|preview + one confirmed batch| A
+```
+
+The browser sends only the raw `liff.getIDToken()` value. FastAPI verifies it with LINE's official
+ID-token endpoint and expected LINE Login channel ID, derives the same `dp_<HMAC-SHA256>` principal
+used by the webhook edge, and returns a 15-minute signed session. The raw LINE user ID and LIFF
+token are never stored. The browser keeps the short-lived session only in memory.
+
+The editor loads the user's existing portfolio, supports zero to five unique frozen-universe
+tickers, shows one complete preview and replaces the portfolio in a single database transaction.
+An optimistic portfolio hash and per-holding versions reject stale tabs; one idempotency key guards
+the confirmed batch. Invalid input rejects the entire request.
 
 ### Security Edge
 
@@ -95,9 +119,11 @@ After LINE signature verification, the edge derives:
 demo_principal_id = "dp_" + HMAC_SHA256(DEMO_IDENTITY_SECRET, raw_line_user_id)
 ```
 
-Only the derived principal crosses the edge. R1B does not call the LINE Profile API and does not
-store display name, avatar, email, phone, brokerage identifier, screenshot or raw LINE user ID.
-Every database lookup and mutation includes the trusted principal boundary.
+Only the derived principal crosses the webhook edge. R1B does not call the LINE Profile API and
+does not store display name, avatar, email, phone, brokerage identifier, screenshot or raw LINE
+user ID. R1B-UX1 performs only the required server-side LIFF ID-token verification with LINE; its
+verification response is used transiently to derive the same principal. Every database lookup and
+mutation includes the trusted principal boundary.
 
 ## Portfolio lifecycle
 

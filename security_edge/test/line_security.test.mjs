@@ -6,7 +6,7 @@ if (!globalThis.crypto) globalThis.crypto = webcrypto;
 
 import {
   deriveDemoPrincipal,
-  signEdgeEnvelope,
+  signEdgePayload,
   verifyLineSignature,
 } from "../line_security.mjs";
 import { handleRequest } from "../worker.mjs";
@@ -73,11 +73,12 @@ test("valid LINE signature passes and raw user id is not forwarded", async () =>
     },
   );
   assert.equal(response.status, 200);
-  assert.match(forwarded.envelope.demo_principal_id, /^dp_[0-9a-f]{64}$/);
+  const envelope = JSON.parse(forwarded.signed_payload);
+  assert.match(envelope.demo_principal_id, /^dp_[0-9a-f]{64}$/);
   assert.equal(JSON.stringify(forwarded).includes(RAW_USER_ID), false);
   assert.equal(
     forwarded.edge_signature,
-    await signEdgeEnvelope(forwarded.envelope, EDGE_SECRET),
+    await signEdgePayload(forwarded.signed_payload, EDGE_SECRET),
   );
 });
 

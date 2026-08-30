@@ -4,16 +4,25 @@ function doPost(e) {
   try {
     var request = JSON.parse(e.postData.contents || "{}");
     envelope = verifyEdgeEnvelope_(request);
+    console.log("demo_webhook_stage=verified");
   } catch (securityError) {
-    return jsonStatus_("rejected");
+    console.error("demo_webhook_stage=security_rejected reason=" + safeErrorReason_(securityError));
+    return jsonStatus_("security_rejected_" + safeStatusCode_(securityError));
   }
   try {
     var message = dispatchDemoEvent_(envelope);
+    console.log(
+      "demo_webhook_stage=dispatched message_type=" +
+      (message && message.type ? String(message.type).slice(0, 24) : "none") +
+      " has_reply_token=" + Boolean(envelope.reply_token)
+    );
     if (message && envelope.reply_token) {
       replyDemoMessage_(envelope.reply_token, message);
     }
+    console.log("demo_webhook_stage=completed");
     return jsonStatus_("ok");
   } catch (applicationError) {
+    console.error("demo_webhook_stage=application_error reason=" + safeErrorReason_(applicationError));
     if (envelope.reply_token) {
       try {
         replyDemoMessage_(
@@ -22,11 +31,37 @@ function doPost(e) {
         );
         return jsonStatus_("ok");
       } catch (replyError) {
-        return jsonStatus_("rejected");
+        console.error("demo_webhook_stage=fallback_reply_failed reason=" + safeErrorReason_(replyError));
+        return jsonStatus_("reply_rejected_" + safeStatusCode_(replyError));
       }
     }
     return jsonStatus_("ok");
   }
+}
+
+function safeErrorReason_(error) {
+  return String(error && error.message ? error.message : "unknown")
+    .replace(/[A-Za-z0-9_\-]{32,}/g, "[redacted]")
+    .slice(0, 160);
+}
+
+function safeStatusCode_(error) {
+  var message = String(error && error.message ? error.message : "unknown");
+  var known = {
+    "missing envelope": "missing_envelope",
+    "bad schema": "bad_schema",
+    "old envelope": "old_envelope",
+    "bad principal": "bad_principal",
+    "bad event id": "bad_event_id",
+    "bad nonce": "bad_nonce",
+    "bad signature": "bad_signature",
+    "replayed envelope": "replayed_envelope",
+    "missing configuration": "missing_configuration"
+  };
+  if (known[message]) return known[message];
+  var httpMatch = message.match(/^LINE reply failed with HTTP (\d{3})$/);
+  if (httpMatch) return "line_http_" + httpMatch[1];
+  return "unknown";
 }
 
 function jsonStatus_(status) {
@@ -94,7 +129,7 @@ function beginAddHolding_(principalId) {
 
 function continueDemoConversation_(envelope, state, value) {
   var principalId = envelope.demo_principal_id;
-  if (!state) return textMessage_("請使用主選單開始操作。輸入「主選單」可再次開啟。");
+  if (!state) return buildMainMenuFlex_();
   if (state.step === "STOCK_ANALYSIS_WAITING_TICKER") {
     var analysisTicker = requireTicker_(value);
     clearDemoState_(principalId);

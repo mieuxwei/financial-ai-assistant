@@ -12,7 +12,11 @@ export async function deriveDemoPrincipal(rawLineUserId, identitySecret) {
 }
 
 export async function signEdgeEnvelope(envelope, sharedSecret) {
-  return hmacHex(sharedSecret, canonicalEnvelope(envelope));
+  return signEdgePayload(JSON.stringify(envelope), sharedSecret);
+}
+
+export async function signEdgePayload(signedPayload, sharedSecret) {
+  return hmacHex(sharedSecret, signedPayload);
 }
 
 export function canonicalEnvelope(envelope) {

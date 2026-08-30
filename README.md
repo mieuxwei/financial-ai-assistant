@@ -20,8 +20,8 @@ FastAPI、Streamlit 與 LINE/GAS controlled demo。
   LINE integration 設計與 migration-copy demo 已完成，全部未部署。
 - **R1A — PUBLIC WEB DEMO DEPLOYED**：零秘密、fixture-only Streamlit public demo 已完成部署；
   公開 HTTPS smoke test 通過。
-- **R1B — READY FOR MANUAL SETUP**：獨立 LINE Public Beta 的 Security Edge、Demo GAS、FastAPI
-  sandbox portfolio、PostgreSQL migration、Flex、資安測試與 setup/rollback 文件已完成；尚未部署。
+- **R1B — DEPLOYED**：獨立 LINE Public Beta 已透過 Security Edge、Demo GAS、FastAPI 與 Neon
+  sandbox 上線；R1B-UX1 多持股 LIFF 編輯器已在本機完成，尚待 Demo LIFF 外部設定。
 - **F11B-2A complete**：官方 current OHLCV 10/10，但 exact feature parity 僅 5/23；目前
   **6 of 9 gates PASS，current-market integration blocked**。
 - **Research integrity**：最終研究是 retrospective、leakage-aware、hypothesis-informed；
@@ -112,7 +112,7 @@ Status：`PUBLIC_WEB_DEMO_DEPLOYED`
 
 ### LINE Public Beta — R1B
 
-Status：`LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP`（尚未部署）
+Status：`LINE_PUBLIC_BETA_DEPLOYED`；R1B-UX1：`READY_FOR_LIFF_EXTERNAL_SETUP`
 
 - 新 Demo LINE OA → Cloudflare Worker raw-signature edge → 新 Demo GAS → FastAPI → managed
   PostgreSQL sandbox。
@@ -122,9 +122,10 @@ Status：`LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP`（尚未部署）
 - 不使用私人 Google Sheet、Gemini、Perplexity、TWMD raw data 或 current-market F7 inference。
 - 只有既有 2330 controlled fixture 有研究數值；其他 ticker 明確 abstain，不製造假分數。
 
-架構與人工建立順序見 [LINE Public Beta Architecture](docs/line_public_beta_architecture.md) 與
-[Manual Setup Checklist](docs/line_public_beta_setup.md)。在新 Demo OA 建立前，QR 狀態為
-`LINE_DEMO_QR_PENDING`。
+架構、維運與 LIFF 升級順序見
+[LINE Public Beta Architecture](docs/line_public_beta_architecture.md) 與
+[Manual Setup Checklist](docs/line_public_beta_setup.md)。新 LIFF 編輯器一次管理最多五檔，
+仍保留原有文字輸入作為備援。
 
 ### FastAPI
 

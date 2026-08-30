@@ -33,7 +33,8 @@ and stores Worker values using [Cloudflare secrets](https://developers.cloudflar
 
 Generate three different values of at least 32 random bytes. Do not reuse LINE credentials.
 
-- [ ] `DEMO_IDENTITY_SECRET`: Cloudflare Worker only.
+- [ ] `DEMO_IDENTITY_SECRET`: Cloudflare Worker initially; when R1B-UX1 is enabled, the identical
+      value is also stored in Vercel Production so LIFF and webhook traffic derive one principal.
 - [ ] `DEMO_EDGE_GAS_SHARED_SECRET`: identical value in Worker secret store and Demo GAS Script
       Properties.
 - [ ] `DEMO_GAS_SERVICE_TOKEN`: identical value in Demo GAS Script Properties and FastAPI secret
@@ -140,6 +141,33 @@ before a scheduled demo is allowed; do not create keep-alive traffic.
 5. Pause or remove the Vercel project.
 6. Delete or securely purge the Demo sandbox database if required.
 7. Verify the private OA and private GAS were not changed.
+
+## R1B-UX1 — enable the LIFF multi-holding editor
+
+Complete this only for the existing **Demo** provider/resources. Do not place secrets in chat.
+
+1. In LINE Developers, create a LINE Login channel under the **same provider** as the Demo
+   Messaging API channel. This is required so the verified LINE subject derives the same Demo
+   principal as webhook traffic.
+2. Add one LIFF app with endpoint URL
+   `https://financial-ai-assistant-one.vercel.app/demo/liff/portfolio`, size `Tall` or `Full`, and
+   scope `openid`. Do not request profile/email scopes because the editor does not need them.
+3. In Vercel Production environment variables, set:
+   - `LINE_DEMO_LIFF_ID` — public LIFF app ID;
+   - `LINE_DEMO_LIFF_CHANNEL_ID` — expected LINE Login channel ID;
+   - `DEMO_IDENTITY_SECRET` — exactly the existing Worker identity secret;
+   - `DEMO_LIFF_SESSION_SECRET` — a new independent random secret of at least 32 bytes;
+   - `DEMO_LIFF_SESSION_MINUTES=15`.
+4. Redeploy Vercel and verify the page loads without exposing configuration secrets.
+5. Create a replacement Demo rich menu whose 「新增持股」 area uses the URI action
+   `https://liff.line.me/{LIFF_ID}`. Keep the current menu until the replacement passes smoke test;
+   then set the replacement as default. Do not use the private OA menu.
+6. In LINE, open the editor, confirm the existing sandbox holding appears, add at least two more
+   rows, preview once and save. Reopen it and verify all rows remain.
+7. Test stale-tab rejection, duplicate-ticker rejection, five-holding limit and user isolation.
+8. Confirm the legacy text add flow still works as fallback and the private OA remains unchanged.
+
+If any target resource cannot be positively identified as Demo, stop before changing it.
 
 ## Return to Codex for deployment verification
 

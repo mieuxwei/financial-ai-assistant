@@ -31,8 +31,10 @@ def test_r1b_documents_preserve_private_public_separation_and_rollback() -> None
     result = (ROOT / "research/evaluation/r1b_line_public_beta_result.md").read_text(
         encoding="utf-8"
     )
+    assert "LINE_PUBLIC_BETA_DEPLOYED" in architecture
+    assert "R1B-UX1" in architecture and "R1B-UX1" in setup
+    assert "LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP" in result
     for content in (architecture, setup, result):
-        assert "LINE_PUBLIC_BETA_READY_FOR_MANUAL_SETUP" in content
         assert "private" in content.casefold()
     assert "Cloudflare Worker" in architecture
     assert "raw LINE user ID" in architecture

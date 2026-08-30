@@ -6,7 +6,7 @@ import test from "node:test";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
-import { signEdgeEnvelope } from "../line_security.mjs";
+import { signEdgePayload } from "../line_security.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const source = fs.readFileSync(
@@ -35,6 +35,7 @@ function runtime() {
       }),
     },
     Utilities: {
+      Charset: { UTF_8: "UTF-8" },
       computeHmacSha256Signature: (value, key) => [...crypto.createHmac("sha256", key).update(value).digest()],
     },
   };
@@ -58,17 +59,25 @@ function envelope(issuedAt = Math.floor(Date.now() / 1000)) {
 test("Demo GAS accepts a fresh correctly signed envelope once", async () => {
   const context = runtime();
   const value = envelope();
-  const request = { envelope: value, edge_signature: await signEdgeEnvelope(value, secret) };
+  const signedPayload = JSON.stringify(value);
+  const request = {
+    signed_payload: signedPayload,
+    edge_signature: await signEdgePayload(signedPayload, secret),
+  };
   assert.equal(context.verifyEdgeEnvelope_(request).event_id, value.event_id);
   assert.throws(() => context.verifyEdgeEnvelope_(request), /replayed envelope/);
 });
 
 test("Demo GAS rejects old and badly signed envelopes", async () => {
   const current = envelope();
-  const bad = { envelope: current, edge_signature: "0".repeat(64) };
+  const bad = { signed_payload: JSON.stringify(current), edge_signature: "0".repeat(64) };
   assert.throws(() => runtime().verifyEdgeEnvelope_(bad), /bad signature/);
 
   const old = envelope(Math.floor(Date.now() / 1000) - 301);
-  const oldRequest = { envelope: old, edge_signature: await signEdgeEnvelope(old, secret) };
+  const oldPayload = JSON.stringify(old);
+  const oldRequest = {
+    signed_payload: oldPayload,
+    edge_signature: await signEdgePayload(oldPayload, secret),
+  };
   assert.throws(() => runtime().verifyEdgeEnvelope_(oldRequest), /old envelope/);
 });

@@ -8,8 +8,14 @@ function replyDemoMessage_(replyToken, message) {
     muteHttpExceptions: true,
     followRedirects: false
   });
-  if (response.getResponseCode() < 200 || response.getResponseCode() >= 300) {
-    throw new Error("LINE reply failed");
+  var status = response.getResponseCode();
+  console.log("line_reply_http_status=" + status);
+  if (status < 200 || status >= 300) {
+    var safeBody = String(response.getContentText() || "")
+      .replace(/[A-Za-z0-9_\-]{80,}/g, "[redacted]")
+      .slice(0, 300);
+    console.error("LINE reply failed: HTTP " + status + " " + safeBody);
+    throw new Error("LINE reply failed with HTTP " + status);
   }
 }
 

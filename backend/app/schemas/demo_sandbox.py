@@ -5,7 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class StrictDemoSchema(BaseModel):
@@ -36,6 +36,35 @@ class DemoHoldingUpdate(StrictDemoSchema):
     _cost_positive = field_validator("average_cost")(_finite_positive)
 
 
+class DemoPortfolioItemWrite(StrictDemoSchema):
+    ticker: str = Field(pattern=r"^[0-9]{4}$")
+    shares: Decimal
+    average_cost: Decimal
+    holding_id: str | None = None
+    version: int | None = Field(default=None, ge=1)
+
+    _shares_positive = field_validator("shares")(_finite_positive)
+    _cost_positive = field_validator("average_cost")(_finite_positive)
+
+    @model_validator(mode="after")
+    def matching_identity_and_version(self) -> DemoPortfolioItemWrite:
+        if (self.holding_id is None) != (self.version is None):
+            raise ValueError("holding_id and version must be supplied together")
+        return self
+
+
+class DemoPortfolioBatchWrite(StrictDemoSchema):
+    expected_portfolio_version: str = Field(pattern=r"^[0-9a-f]{64}$")
+    holdings: list[DemoPortfolioItemWrite] = Field(max_length=5)
+
+    @model_validator(mode="after")
+    def unique_tickers(self) -> DemoPortfolioBatchWrite:
+        tickers = [item.ticker for item in self.holdings]
+        if len(tickers) != len(set(tickers)):
+            raise ValueError("holdings must contain unique tickers")
+        return self
+
+
 class DemoHoldingResponse(StrictDemoSchema):
     id: str
     ticker: str
@@ -54,6 +83,7 @@ class DemoPortfolioResponse(StrictDemoSchema):
     max_holdings: int
     retention_days: int
     holdings: list[DemoHoldingResponse]
+    portfolio_version: str
     current_price_available: Literal[False] = False
     roi_available: Literal[False] = False
     limitation: str
@@ -69,6 +99,40 @@ class DemoMutationResponse(StrictDemoSchema):
     operation: Literal["created", "updated", "deleted", "disclosure_accepted"]
     applied: bool
     holding: DemoHoldingResponse | None = None
+
+
+class DemoPortfolioBatchResponse(StrictDemoSchema):
+    operation: Literal["portfolio_replaced"] = "portfolio_replaced"
+    applied: bool
+    portfolio: DemoPortfolioResponse
+
+
+class DemoLiffSessionRequest(StrictDemoSchema):
+    id_token: str = Field(min_length=16, max_length=4096)
+
+
+class DemoLiffSessionResponse(StrictDemoSchema):
+    contract_version: Literal["line-public-beta-liff-session-v1"] = (
+        "line-public-beta-liff-session-v1"
+    )
+    access_token: str
+    expires_at: datetime
+
+
+class DemoUniverseItem(StrictDemoSchema):
+    ticker: str
+    company: str
+
+
+class DemoLiffBootstrapResponse(StrictDemoSchema):
+    contract_version: Literal["line-public-beta-liff-bootstrap-v1"] = (
+        "line-public-beta-liff-bootstrap-v1"
+    )
+    max_holdings: int
+    retention_days: int
+    universe: list[DemoUniverseItem]
+    portfolio: DemoPortfolioResponse
+    disclosure_accepted: bool
 
 
 class DemoDeleteMeResponse(StrictDemoSchema):

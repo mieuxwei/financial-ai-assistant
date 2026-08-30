@@ -31,6 +31,11 @@ class Settings(BaseSettings):
     demo_max_average_cost: int = 1_000_000
     demo_per_user_requests_per_minute: int = 30
     demo_global_requests_per_minute: int = 300
+    line_demo_liff_id: str = ""
+    line_demo_liff_channel_id: str = ""
+    demo_identity_secret: str = ""
+    demo_liff_session_secret: str = ""
+    demo_liff_session_minutes: int = 15
 
     @property
     def resolved_database_url(self) -> str:

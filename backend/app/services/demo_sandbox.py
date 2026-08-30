@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -25,7 +26,10 @@ from backend.app.schemas.demo_sandbox import (
     DemoHoldingResponse,
     DemoHoldingUpdate,
     DemoIntelligenceSignal,
+    DemoLiffBootstrapResponse,
     DemoMutationResponse,
+    DemoPortfolioBatchResponse,
+    DemoPortfolioBatchWrite,
     DemoPortfolioHealthItem,
     DemoPortfolioHealthResponse,
     DemoPortfolioResponse,
@@ -35,9 +39,7 @@ from backend.app.schemas.demo_sandbox import (
 )
 from demo.contracts import ControlledDashboardFixture, load_controlled_fixture
 
-RETENTION_LIMITATION = (
-    "Demo 持股最長保存 30 天；不連接券商、私人 Google Sheet 或即時市場資料。"
-)
+RETENTION_LIMITATION = "Demo 持股最長保存 30 天；不連接券商、私人 Google Sheet 或即時市場資料。"
 RESEARCH_LIMITATION = (
     "此模型研究下一交易日相對波動異常程度，不預測股價上漲或下跌；"
     "本頁為受控研究訊號，不是即時資料或投資建議。"
@@ -129,6 +131,82 @@ class DemoSandboxService:
         holdings = self.repository.list_holdings(principal_id)
         self._commit("portfolio could not be read")
         return self._portfolio_response(holdings)
+
+    def liff_bootstrap(self, principal_id: str) -> DemoLiffBootstrapResponse:
+        principal = self._prepare(principal_id, "liff_bootstrap")
+        holdings = self.repository.list_holdings(principal_id)
+        self._commit("LIFF portfolio bootstrap could not be assembled")
+        return DemoLiffBootstrapResponse(
+            max_holdings=self.policy.max_holdings,
+            retention_days=self.policy.retention_days,
+            universe=[
+                {"ticker": ticker, "company": company}
+                for ticker, company in sorted(self.universe.items())
+            ],
+            portfolio=self._portfolio_response(holdings),
+            disclosure_accepted=principal.disclosure_accepted_at is not None,
+        )
+
+    def replace_portfolio(
+        self,
+        principal_id: str,
+        key: str,
+        values: DemoPortfolioBatchWrite,
+    ) -> DemoPortfolioBatchResponse:
+        principal = self._prepare(principal_id, "replace_portfolio")
+        replay = self._replay(principal_id, key, "replace_portfolio", DemoPortfolioBatchResponse)
+        if replay is not None:
+            return replay
+        if principal.disclosure_accepted_at is None:
+            raise ConflictError("demo disclosure must be accepted before saving holdings")
+
+        existing_holdings = self.repository.list_holdings(principal_id)
+        if values.expected_portfolio_version != self._portfolio_version(existing_holdings):
+            raise ConflictError("demo portfolio version conflict")
+        existing = {item.ticker: item for item in existing_holdings}
+
+        # Validate the complete request before applying any mutation.
+        for item in values.holdings:
+            self._validate_values(item.ticker, item.shares, item.average_cost)
+            current = existing.get(item.ticker)
+            if current is None:
+                if item.holding_id is not None or item.version is not None:
+                    raise ConflictError("new demo holding cannot reference an existing version")
+            elif item.holding_id != current.id or item.version != current.version:
+                raise ConflictError("demo holding version conflict")
+
+        requested = {item.ticker: item for item in values.holdings}
+        for ticker, holding in existing.items():
+            if ticker not in requested:
+                self.session.delete(holding)
+
+        expires_at = self._expiry()
+        for ticker, item in requested.items():
+            holding = existing.get(ticker)
+            if holding is None:
+                self.session.add(
+                    DemoHolding(
+                        principal_id=principal_id,
+                        ticker=ticker,
+                        shares=item.shares,
+                        average_cost=item.average_cost,
+                        expires_at=expires_at,
+                    )
+                )
+            else:
+                if holding.shares != item.shares or holding.average_cost != item.average_cost:
+                    holding.shares = item.shares
+                    holding.average_cost = item.average_cost
+                    holding.version += 1
+                holding.expires_at = expires_at
+
+        self._extend_expiry(principal, expires_at)
+        self.session.flush()
+        portfolio = self._portfolio_response(self.repository.list_holdings(principal_id))
+        response = DemoPortfolioBatchResponse(applied=True, portfolio=portfolio)
+        self._record_idempotency(principal_id, key, "replace_portfolio", response)
+        self._commit("demo portfolio could not be saved")
+        return response
 
     def create_holding(
         self, principal_id: str, key: str, values: DemoHoldingCreate
@@ -257,9 +335,7 @@ class DemoSandboxService:
             ticker=ticker,
             company=company,
             intelligence=self._intelligence_signal(ticker),
-            limitation=(
-                "市場反應強度只代表歷史幅度關聯，不代表方向、因果或未來報酬。"
-            ),
+            limitation=("市場反應強度只代表歷史幅度關聯，不代表方向、因果或未來報酬。"),
         )
 
     def cleanup_expired(self) -> int:
@@ -309,9 +385,7 @@ class DemoSandboxService:
             )
         )
 
-    def _validate_values(
-        self, ticker: str | None, shares: Decimal, average_cost: Decimal
-    ) -> None:
+    def _validate_values(self, ticker: str | None, shares: Decimal, average_cost: Decimal) -> None:
         if ticker is not None:
             self._company(ticker)
         if shares > self.policy.max_shares:
@@ -330,8 +404,18 @@ class DemoSandboxService:
             max_holdings=self.policy.max_holdings,
             retention_days=self.policy.retention_days,
             holdings=[self._holding_response(item) for item in holdings],
+            portfolio_version=self._portfolio_version(holdings),
             limitation=RETENTION_LIMITATION,
         )
+
+    @staticmethod
+    def _portfolio_version(holdings: list[DemoHolding]) -> str:
+        canonical = [
+            {"id": item.id, "ticker": item.ticker, "version": item.version}
+            for item in sorted(holdings, key=lambda value: value.ticker)
+        ]
+        encoded = json.dumps(canonical, separators=(",", ":"), sort_keys=True).encode("utf-8")
+        return hashlib.sha256(encoded).hexdigest()
 
     def _holding_response(self, holding: DemoHolding) -> DemoHoldingResponse:
         return DemoHoldingResponse(
@@ -390,9 +474,7 @@ class DemoSandboxService:
     def _expiry(self) -> datetime:
         return self.now() + timedelta(days=self.policy.retention_days)
 
-    def _extend_expiry(
-        self, principal: DemoPrincipal, expires_at: datetime | None = None
-    ) -> None:
+    def _extend_expiry(self, principal: DemoPrincipal, expires_at: datetime | None = None) -> None:
         value = expires_at or self._expiry()
         principal.expires_at = value
         for holding in self.repository.list_holdings(principal.id):

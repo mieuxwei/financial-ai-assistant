@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <title>Demo 持股編輯器｜Financial AI Assistant</title>
+    <link rel="stylesheet" href="/demo/liff/assets/styles.css" />
+    <script id="liff-public-config" type="application/json">__PUBLIC_LIFF_CONFIG__</script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script type="module" src="/demo/liff/assets/app.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">CONTROLLED RESEARCH DEMO</p>
+        <h1>Demo 持股編輯器</h1>
+        <p>一次新增或整理最多 5 檔受控研究股票，不必再逐題輸入。</p>
+      </header>
+
+      <section class="notice" aria-label="資料使用說明">
+        <strong>作品集公測版</strong>
+        <p>
+          僅儲存股票代號、股數與平均成本，最長 30 天。請勿輸入帳號、姓名或其他敏感資料；可隨時在 Demo 設定刪除。
+        </p>
+      </section>
+
+      <div id="status" class="status" role="status" aria-live="polite">正在安全連線…</div>
+
+      <section id="editor" class="card" hidden>
+        <div class="section-heading">
+          <div>
+            <h2>我的 Demo 持股</h2>
+            <p id="holding-count">0 / 5 檔</p>
+          </div>
+          <button id="add-row" type="button" class="button secondary">＋ 新增一列</button>
+        </div>
+
+        <div id="rows" class="rows"></div>
+
+        <div class="actions">
+          <button id="preview" type="button" class="button primary">預覽並確認</button>
+          <button id="close" type="button" class="button ghost">返回 LINE</button>
+        </div>
+      </section>
+
+      <section class="boundary">
+        <h2>研究限制</h2>
+        <p>此頁不取得即時價格，也不計算即時損益。</p>
+        <p>受控研究訊號研究相對波動異常程度，不預測股價上漲或下跌，亦非投資建議。</p>
+      </section>
+    </main>
+
+    <dialog id="preview-dialog">
+      <form method="dialog" class="dialog-card">
+        <p class="eyebrow">儲存前確認</p>
+        <h2>確認整份 Demo 持股</h2>
+        <div id="preview-list" class="preview-list"></div>
+        <label id="disclosure-row" class="consent" hidden>
+          <input id="disclosure" type="checkbox" />
+          <span>我了解這是暫存的 Demo Sandbox，不會輸入帳號或個人敏感資料。</span>
+        </label>
+        <p class="muted">按下確認後，整份清單會以單一交易儲存；未列出的舊持股會被移除。</p>
+        <div class="actions">
+          <button value="cancel" class="button secondary">返回修改</button>
+          <button id="confirm-save" value="default" type="button" class="button primary">
+            確認儲存
+          </button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

@@ -2,15 +2,15 @@
 
 Last revised: 2026-08-30
 
-ACTIVE PHASE: **R1B LINE Public Beta Sandbox — READY FOR MANUAL SETUP / NOT DEPLOYED**
+ACTIVE PHASE: **R1B-UX1 LIFF Multi-Holding Form — LOCAL COMPLETE / EXTERNAL SETUP PENDING**
 
-NEXT EXECUTABLE UNIT: **R1B Deployment Verification — after external Demo resources are configured**
+NEXT EXECUTABLE UNIT: **R1B-UX1 Deployment Verification — create Demo LIFF resources, then smoke test**
 
 TRACK A: **COMPLETE / FROZEN — Ridge Regression, alpha 100**
 
 TRACK B: **COMPLETE THROUGH B5 — optional B6/F9 not run and not required**
 
-TRACK C: **F10/F11A/F11B-D0/1A/1B/2A/F12 and R1A complete / R1B code ready / F11B-2 blocked**
+TRACK C: **R1A and R1B public demos live / R1B-UX1 local complete / F11B-2 blocked**
 
 AP11: **optional enhancement; not a prerequisite**
 
@@ -34,8 +34,12 @@ ticker-reaction windows / 9 tickers; MARKET_REACTION_MODEL = AUTOMATED_SIGNAL_ON
 ## CURRENT REPOSITORY SNAPSHOT
 
 - R1A is deployed at the documented Streamlit HTTPS URL and its bounded smoke test passed.
-- Current uncommitted work preserves the user's R1A status-document changes and adds the isolated
-  R1B Edge/Demo GAS/FastAPI sandbox implementation, migration, tests and setup documents.
+- R1B is live through the isolated Demo LINE OA, Cloudflare security edge, Demo GAS, Vercel
+  FastAPI and Neon sandbox. The original conversational add flow works but is retained only as a
+  fallback because it is cumbersome for multiple holdings.
+- Current uncommitted R1B-UX1 work adds a same-origin LIFF portfolio editor, server-verified LINE
+  identity exchange, 15-minute stateless sessions and an atomic multi-holding replacement API.
+  No external LIFF app, Vercel LIFF secrets or replacement rich menu has been configured yet.
 - Existing M-series and F1–F8/F10/F11A evidence remains preserved. F9/B6 is optional/not run.
 - The canonical roadmap is `docs/r0_project_rebaseline_protocol.md`; older milestone stop text is
   historical evidence and does not override it.
@@ -86,13 +90,16 @@ R0 Project Rebaseline & GAS Safety Freeze
   → F12 Portfolio Finalization
   → R1A Public Web Demo Release
   → R1B LINE Public Beta Sandbox
-  → R1B Deployment Verification (after external Demo resources exist)
+  → R1B Deployment Verification
+  → R1B-UX1 LIFF Multi-Holding Form
+  → R1B-UX1 Deployment Verification
 ```
 
 R0 created the F11B-0 private safety copies early without altering the sequence. B1, B2, B2.1, B3,
-B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12/R1A are complete. R1B code and contracts are ready, but a
-new Demo LINE OA, Demo GAS, Worker, backend and PostgreSQL must be created before deployment
-verification. Do not begin F11B-2 unless all applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
+B3.1, B4, B5 and F11B-D0/1A/1B/2A/F12/R1A are complete. R1B is deployed. R1B-UX1 is locally
+complete but still requires a Demo LINE Login/LIFF app, four Vercel production settings and a
+replacement Demo rich menu before deployment verification. Do not begin F11B-2 unless all
+applicable gates pass under a separately approved milestone. Definitions of Done are frozen in
 `docs/r0_project_rebaseline_protocol.md`.
 
 F11B-1B is complete and not deployed. F11B-2A found official TWSE current OHLCV for all ten frozen
@@ -881,7 +888,7 @@ Latest bounded Pro re-audit superseding operational source status:
 
 No automatic commit or push is authorized.
 
-F11B-1B is complete and not deployed. F11B-2A supersedes the earlier 2/9 snapshot: official TWSE
+F11B-1B is complete. F11B-2A supersedes the earlier 2/9 snapshot: official TWSE
 coverage, TAIEX, cutoff, missingness, timezone and lineage now pass, for 6/9. Exact 23-feature and
 training/inference parity fail because adjusted-price lineage is unresolved and raw-source values
 differ; E2E was not run. Decision:
@@ -889,6 +896,63 @@ differ; E2E was not run. Decision:
 complete. The R1A URL is public and its bounded HTTPS smoke passed. R1B uses a Cloudflare Worker
 security edge, an independent public-safe Demo GAS layer, existing FastAPI plus dedicated `demo_*`
 PostgreSQL tables, HMAC-derived principals, five-holding isolation, transaction-backed idempotency
-and 30-day retention. It is not deployed because the required new external Demo resources and
-secret stores have not been confirmed. Next: complete the manual checklist, then run R1B Deployment
-Verification. Track A/B, F11B-2 and all private resources stay frozen.
+and 30-day retention. The public beta is deployed and responding through LINE. R1B-UX1 now replaces
+the primary one-at-a-time input UX with a server-verified LIFF editor while preserving text entry as
+a fallback. External LIFF configuration has not yet been performed. Track A/B, F11B-2 and all
+private resources stay frozen.
+
+## R1B-UX1 LIFF MULTI-HOLDING HANDOFF
+
+Status: **LOCAL IMPLEMENTATION COMPLETE / NOT YET CONNECTED TO DEMO LINE**
+
+Problem addressed:
+
+- the database already allowed five holdings, but LINE collected one holding through three
+  sequential text prompts;
+- users had no single view for adding, editing and removing several holdings;
+- repeating the flow made the product appear limited to one holding.
+
+Implemented design:
+
+1. `/demo/liff/portfolio` serves a Traditional Chinese, mobile-first editor inside LINE.
+2. The browser sends the raw `liff.getIDToken()` token, never decoded profile/user data.
+3. FastAPI verifies that token with LINE and the expected Demo LINE Login channel ID.
+4. The verified subject is converted with the existing `DEMO_IDENTITY_SECRET`, producing the same
+   `dp_...` principal as the Cloudflare webhook edge without persisting the raw LINE user ID.
+5. FastAPI issues a signed 15-minute LIFF session kept only in browser memory.
+6. The editor loads existing holdings, permits zero to five unique frozen-universe rows, previews
+   the full result and submits one confirmed replacement.
+7. The backend validates the full payload before mutation, checks a frozen portfolio-version hash
+   plus per-holding versions, and commits add/update/delete changes atomically with idempotency.
+8. No current price, ROI, live F7 inference, direction, Chinese P/N/N, provider call or private
+   portfolio source was added.
+
+Key files:
+
+- `backend/app/core/liff_auth.py`
+- `backend/app/api/demo_liff.py`
+- `backend/app/static/demo_liff/index.html`
+- `backend/app/static/demo_liff/styles.css`
+- `backend/app/static/demo_liff/app.js`
+- `backend/app/schemas/demo_sandbox.py`
+- `backend/app/services/demo_sandbox.py`
+- `tests/unit/test_liff_auth.py`
+- `tests/unit/test_demo_liff_static_contract.py`
+- `tests/integration/test_demo_liff_api.py`
+- `docs/line_public_beta_setup.md`
+
+Required external steps (never paste values into chat):
+
+1. Create a Demo LINE Login channel under the same LINE provider as the Demo Messaging API
+   channel.
+2. Add a LIFF app with `openid` only and endpoint
+   `https://financial-ai-assistant-one.vercel.app/demo/liff/portfolio`.
+3. Set the documented LIFF ID/channel ID and two identity/session secrets in Vercel Production.
+   `DEMO_IDENTITY_SECRET` must exactly match the existing Cloudflare Worker value.
+4. Redeploy, then create a replacement **Demo-only** rich menu whose add-holding area opens the
+   LIFF URL.
+5. Smoke-test existing portfolio continuity, multi-row save, stale conflict, two-user isolation and
+   private-environment non-impact before retiring the older Demo rich menu.
+
+Do not change the private Desktop GAS, private LINE OA, F7 model, feature-parity gate or F11B-2.
+Do not commit or push automatically.

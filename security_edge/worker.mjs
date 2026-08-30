@@ -1,6 +1,6 @@
 import {
   deriveDemoPrincipal,
-  signEdgeEnvelope,
+  signEdgePayload,
   verifyLineSignature,
 } from "./line_security.mjs";
 
@@ -8,12 +8,12 @@ const MAX_BODY_BYTES = 128 * 1024;
 const MAX_MESSAGE_LENGTH = 1000;
 
 export default {
-  async fetch(request, env) {
-    return handleRequest(request, env, fetch);
+  async fetch(request, env, context) {
+    return handleRequest(request, env, fetch, context);
   },
 };
 
-export async function handleRequest(request, env, fetchImpl) {
+export async function handleRequest(request, env, fetchImpl, executionContext = null) {
   if (request.method !== "POST") return safeResponse("method not allowed", 405);
   if (!requiredEnvironment(env)) return safeResponse("service unavailable", 503);
 
@@ -36,21 +36,38 @@ export async function handleRequest(request, env, fetchImpl) {
   }
   if (!Array.isArray(payload.events)) return safeResponse("invalid request", 400);
 
-  try {
+  const processing = (async () => {
     for (const event of payload.events) {
       const envelope = await normalizeVerifiedEvent(event, env);
       if (!envelope) continue;
-      const edgeSignature = await signEdgeEnvelope(envelope, env.DEMO_EDGE_GAS_SHARED_SECRET);
+      const signedPayload = JSON.stringify(envelope);
+      const edgeSignature = await signEdgePayload(
+        signedPayload,
+        env.DEMO_EDGE_GAS_SHARED_SECRET,
+      );
       const forwarded = await fetchImpl(env.DEMO_GAS_WEB_APP_URL, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ envelope, edge_signature: edgeSignature }),
+        body: JSON.stringify({ signed_payload: signedPayload, edge_signature: edgeSignature }),
         redirect: "follow",
       });
+      console.log(`demo_gas_http_status=${forwarded.status}`);
       if (!forwarded.ok) throw new Error("demo GAS rejected verified envelope");
       const gasResult = await forwarded.json();
+      console.log(`demo_gas_application_status=${String(gasResult?.status || "missing")}`);
       if (gasResult?.status !== "ok") throw new Error("demo GAS rejected verified envelope");
     }
+  })();
+
+  if (executionContext && typeof executionContext.waitUntil === "function") {
+    executionContext.waitUntil(
+      processing.catch(() => console.error("demo_gas_background_status=failed")),
+    );
+    return safeResponse("ok", 200);
+  }
+
+  try {
+    await processing;
   } catch {
     return safeResponse("temporary processing failure", 502);
   }
