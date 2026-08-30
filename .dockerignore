@@ -1,0 +1,60 @@
+# Version-control and local tooling
+.git
+.github
+.venv
+venv
+.tools
+.local
+.wrangler
+.clasp.json
+
+# Secrets and local environment files
+.env
+.env.*
+*.pem
+*.key
+secrets
+.streamlit/secrets.toml
+.dev.vars*
+
+# Private or user-supplied data
+data/raw
+data/private
+data/personal
+private_datasets
+uploads
+user_data
+broker_screenshots
+imports
+
+# Generated/private research artifacts
+artifacts/*
+!artifacts/README.md
+outputs
+models/*.bin
+models/*.pt
+models/*.pth
+models/*.onnx
+*.joblib
+*.pkl
+
+# Development-only output
+tests
+htmlcov
+.coverage*
+.pytest_cache
+.ruff_cache
+**/__pycache__
+**/*.py[cod]
+*.sqlite
+*.sqlite3
+*.db
+logs
+*.log
+tmp
+temp
+*.tmp
+.DS_Store
+.idea
+.vscode
+.ipynb_checkpoints

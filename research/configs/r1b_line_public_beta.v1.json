@@ -8,8 +8,13 @@
     "line_account": "NEW_DEMO_LINE_OFFICIAL_ACCOUNT_REQUIRED",
     "security_edge": "CLOUDFLARE_WORKER",
     "gas": "NEW_DEMO_APPS_SCRIPT_PROJECT_REQUIRED",
-    "backend": "EXISTING_FASTAPI_EXTENDED",
-    "storage": "MANAGED_POSTGRES_REQUIRED",
+    "backend": "CLOUD_RUN_EXISTING_FASTAPI_EXTENDED",
+    "storage": "NEON_FREE_POSTGRES_REQUIRED",
+    "cloud_run_min_instances": 0,
+    "cloud_run_max_instances": 1,
+    "zero_fixed_fee_target": true,
+    "zero_invoice_guaranteed": false,
+    "cold_start_accepted": true,
     "request_time_providers": []
   },
   "identity": {
@@ -48,8 +53,8 @@
     "price_direction_enabled": false
   },
   "external_setup": {
-    "line_demo_oa": "PENDING",
-    "demo_gas_project": "PENDING",
+    "line_demo_oa": "CREATED_NOT_LIVE",
+    "demo_gas_project": "CREATED_SOURCE_IMPORTED_NOT_DEPLOYED",
     "security_edge": "PENDING",
     "fastapi_public_beta": "PENDING",
     "managed_postgres": "PENDING",
