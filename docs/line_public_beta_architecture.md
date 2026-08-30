@@ -33,7 +33,7 @@ inputs to this release artifact and must not be deployed or modified.
 flowchart TD
     L[LINE Demo OA] -->|raw webhook + X-Line-Signature| E[Cloudflare Worker Security Edge]
     E -->|verified signed envelope| G[New Demo GAS\nFrontend Processing Layer]
-    G -->|service-authenticated request| A[Cloud Run\nExisting FastAPI Public Beta API]
+    G -->|service-authenticated request| A[Vercel Hobby\nExisting FastAPI Public Beta API]
     A --> D[(Neon Free PostgreSQL\nDemo Sandbox)]
     A --> R[Controlled Research Fixture\nPublic-safe derived intelligence]
     A --> G
@@ -72,18 +72,18 @@ controlled research/intelligence output, expires data and performs user-scoped d
 
 ### Hosting and storage
 
-The approved release topology uses one Cloud Run service and one dedicated Neon Free PostgreSQL
-project. Cloud Run runs with request-based billing, minimum instances `0` and maximum instances
-`1`; Neon may suspend its compute while idle. This removes fixed monthly service fees for a small
-demo, but it does not guarantee a zero invoice if free quotas are exceeded. Google Cloud still
-requires a billing account, budget alerts and explicit quota monitoring.
+The approved release topology uses one Vercel Hobby FastAPI function and one dedicated Neon Free
+PostgreSQL project, both in Singapore. Hobby is restricted to personal, non-commercial use; this
+portfolio research sandbox must be moved to a suitable paid plan before any commercial use. Hobby
+does not charge for on-demand overages: the service may pause when included limits are exhausted.
 
 Dedicated `demo_*` tables provide transactions, unique idempotency keys, ownership filtering,
 expiry and cascade deletion. GAS Script Properties are never used as the portfolio database. SQLite
-remains suitable only for local tests, not cloud persistence. The container starts by applying the
-committed Alembic migrations before FastAPI begins serving requests.
+remains suitable only for local tests, not cloud persistence. The Vercel production build applies
+the committed Alembic migrations and fails closed unless `DATABASE_URL` is PostgreSQL; preview
+builds never migrate the shared database.
 
-Both Cloud Run and Neon can cold-start after idle time. This is acceptable for the bounded public
+Both Vercel Functions and Neon can cold-start after idle time. This is acceptable for the bounded public
 beta but may delay the first LINE response. Before a scheduled portfolio presentation, the owner
 may make one bounded `/health` request to warm the backend; no artificial keep-alive loop is used.
 

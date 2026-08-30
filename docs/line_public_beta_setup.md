@@ -14,8 +14,7 @@ and stores Worker values using [Cloudflare secrets](https://developers.cloudflar
 - A new Demo LINE Official Account and Messaging API channel, visibly named as a public beta.
 - A new Apps Script project dedicated to the Demo.
 - A Cloudflare account for the Worker edge.
-- A Google Cloud project with billing enabled for Cloud Run and a Neon account for the dedicated
-  Free PostgreSQL project.
+- A personal Vercel Hobby account and a Neon account for the dedicated Free PostgreSQL project.
 - The reviewed repository commit available to the chosen backend deployment.
 
 ## Checklist
@@ -43,39 +42,42 @@ Generate three different values of at least 32 random bytes. Do not reuse LINE c
 ### 3. Create the Neon Free sandbox database
 
 - [ ] Create a new Neon project dedicated to `financial-ai-public-beta`; choose a region close to
-      the Cloud Run region where available.
+      the Vercel Function region where available.
 - [ ] Keep the project on the Free plan and enable scale-to-zero behavior.
-- [ ] Copy the pooled PostgreSQL connection string directly into the Cloud Run secret/environment
-      setting as `DATABASE_URL`; keep `sslmode=require` and do not paste it into chat or Git.
+- [ ] Copy the pooled PostgreSQL connection string directly into the Vercel environment setting
+      as `DATABASE_URL`; keep `sslmode=require` and do not paste it into chat or Git.
 - [ ] Do not point `DATABASE_URL` to a private or research database.
 
-### 4. Deploy the FastAPI container to Cloud Run
+### 4. Deploy FastAPI to Vercel Hobby
 
-- [ ] Create a dedicated Google Cloud project or clearly isolated Demo service.
-- [ ] Enable Cloud Run and Artifact Registry. Google requires a billing account even when usage
-      remains inside its free allocation; create a small budget alert before deployment.
-- [ ] Build from the repository `Dockerfile` using the reviewed commit.
-- [ ] Select request-based billing, minimum instances `0`, maximum instances `1`, port `8080`, and
-      a nearby region. Do not configure always-on CPU or a minimum instance.
-- [ ] Allow unauthenticated HTTPS transport because Demo GAS is not a Google service identity;
-      application access remains protected by the bearer service token.
-- [ ] Configure only `APP_ENV=production`, `DATABASE_URL` and `DEMO_GAS_SERVICE_TOKEN`.
+- [ ] Use a personal Vercel Hobby account. The release is a personal, non-commercial portfolio
+      project and must not be used commercially under Hobby.
+- [ ] Import the reviewed GitHub repository as a new Vercel project. Do not import any private GAS
+      repository or local ignored directory.
+- [ ] Keep the repository root as the project root. Vercel reads the FastAPI entrypoint and build
+      command from `pyproject.toml`.
+- [ ] Keep the committed single Function region `sin1` so compute is close to the Neon Singapore
+      database.
+- [ ] Configure only `APP_ENV=production`, `DATABASE_URL` and `DEMO_GAS_SERVICE_TOKEN` for the
+      Production environment. Do not expose them to Preview unless a separate preview database is
+      intentionally created.
 - [ ] Keep all provider/LINE/private credentials absent from the backend.
-- [ ] The container runs `alembic upgrade head` before starting FastAPI; inspect the first startup
-      log and verify migration success.
-- [ ] Verify the Cloud Run HTTPS `/health` endpoint.
+- [ ] The production build runs `scripts/vercel_build.py`, which fails closed without PostgreSQL and
+      applies the Alembic migrations. Inspect the first build log and verify migration success.
+- [ ] Verify the Vercel HTTPS `/health` endpoint.
 - [ ] Verify an unauthenticated `/api/v1/demo/portfolio` request returns 401.
 - [ ] Record the HTTPS base URL without embedding it in source.
-- [ ] Keep the Cloud Run service URL out of public docs. Store it only as `DEMO_FASTAPI_BASE_URL`
+- [ ] Keep the Vercel service URL out of public docs. Store it only as `DEMO_FASTAPI_BASE_URL`
       in Demo GAS Script Properties.
-- [ ] Configure `financial-ai-demo-cleanup` daily only if a free/safely bounded scheduler is
-      available. Until done, record
-      `READY_FOR_SCHEDULE_CONFIGURATION`.
+- [ ] Configure `financial-ai-demo-cleanup` only after a protected cleanup route or other safely
+      authenticated scheduler path exists. Until then, record
+      `READY_FOR_SCHEDULE_CONFIGURATION`; do not expose the cleanup command publicly.
+- [ ] Monitor Hobby usage. If included limits are exhausted, accept service pause rather than
+      enabling paid on-demand usage.
 
-Cost boundary: this topology has no intended fixed monthly service fee at small demo usage, but
-Cloud Run/Google networking and Neon limits remain quotas, not a guarantee of a zero bill. Do not
-create keep-alive traffic. Cloud Run and Neon cold starts are accepted; one manual `/health` warm-up
-before a scheduled demo is allowed.
+Vercel Hobby is free and does not have a billing cycle, but it is limited to personal,
+non-commercial use. Both Vercel Functions and Neon may cold-start. One manual `/health` warm-up
+before a scheduled demo is allowed; do not create keep-alive traffic.
 
 ### 5. Create and deploy the new Demo GAS project
 
@@ -135,13 +137,13 @@ before a scheduled demo is allowed.
 2. Revoke the Demo channel access token.
 3. Disable the Cloudflare Worker route/service.
 4. Disable the Demo GAS web-app deployment.
-5. Stop the public-beta FastAPI service.
+5. Pause or remove the Vercel project.
 6. Delete or securely purge the Demo sandbox database if required.
 7. Verify the private OA and private GAS were not changed.
 
 ## Return to Codex for deployment verification
 
-After steps 1–6 are complete, provide only the non-secret resource status and open the Demo LINE
+After steps 1–7 are complete, provide only the non-secret resource status and open the Demo LINE
 OA/hosting consoles if help is needed. Do not provide tokens. Codex should then run bounded checks
 for webhook verification, add/update/delete, portfolio health, two-user isolation, delete-my-data,
 QR identity and private-environment non-impact.
