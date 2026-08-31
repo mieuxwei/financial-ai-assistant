@@ -1,0 +1,64 @@
+{
+  "schema_version": "controlled-historical-evidence-v1",
+  "fixture_id": "f7-f5-oof-b4-derived-public-v1",
+  "controlled_historical_data": true,
+  "synthetic_data": false,
+  "current_market_inference": false,
+  "request_time_provider_calls": false,
+  "private_raw_content_included": false,
+  "selection_policy": "Track A uses each ticker's latest Ridge OOF row from the frozen F5 rolling-origin evaluation. Track B uses the latest B4 OOF reaction window whose dominant event class is not '其他'; only licensed-derived metadata is exposed and raw subjects are excluded.",
+  "track_a_evidence_sha256": "a9d8b9d3be547dc50e977c460055bfdd2df643bb8c8622c5892aa134c2d6043a",
+  "track_b_evidence_sha256": "aaafe75e50e076f87f4cfb6b16f5dc74dbe97e86a53b4bb39a770c23e5f813ad",
+  "tickers": [
+    {
+      "ticker": "0050", "company": "元大台灣50", "coverage": "PARTIAL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-21", "target_session": "2026-08-24", "score": 0.365443898207, "historical_percentile": 2.650579, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": null
+    },
+    {
+      "ticker": "1301", "company": "台塑", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.658751965686, "historical_percentile": 38.639337, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-11-12T14:38:08+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 2, "summary": "台塑在此歷史反應時間窗內有 2 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.014779642603, "historical_percentile": 94.885031, "communication_band": "HIGH", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "1303", "company": "南亞", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-25", "target_session": "2026-08-26", "score": 0.50252935081, "historical_percentile": 8.334545, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-12-16T14:33:04+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 1, "summary": "南亞在此歷史反應時間窗內有 1 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.016154302704, "historical_percentile": 97.70061, "communication_band": "VERY_HIGH", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2308", "company": "台達電", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.448313912708, "historical_percentile": 5.112177, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-12-01T20:39:52+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "併購", "event_count": 1, "summary": "台達電在此歷史反應時間窗內有 1 則併購類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.019328868375, "historical_percentile": 99.906147, "communication_band": "VERY_HIGH", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2317", "company": "鴻海", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.411796920066, "historical_percentile": 3.702088, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-11-28T17:32:25+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 2, "summary": "鴻海在此歷史反應時間窗內有 2 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.0114383555, "historical_percentile": 74.565931, "communication_band": "MODERATE", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2330", "company": "台積電", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.382424028781, "historical_percentile": 2.95101, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-06-25T16:17:27+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "增資", "event_count": 1, "summary": "台積電在此歷史反應時間窗內有 1 則增資類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.010407459552, "historical_percentile": 63.115908, "communication_band": "MODERATE", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2412", "company": "中華電", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.580441001799, "historical_percentile": 18.011339, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2024-08-01T14:06:15+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 1, "summary": "中華電在此歷史反應時間窗內有 1 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.008525255763, "historical_percentile": 41.389019, "communication_band": "LOW", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2454", "company": "聯發科", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-25", "target_session": "2026-08-26", "score": 0.358589526083, "historical_percentile": 2.543974, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-12-03T17:10:58+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 1, "summary": "聯發科在此歷史反應時間窗內有 1 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.015861979309, "historical_percentile": 97.090568, "communication_band": "VERY_HIGH", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2881", "company": "富邦金", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.530386368334, "historical_percentile": 11.028735, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-12-22T16:54:14+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "私募", "event_count": 1, "summary": "富邦金在此歷史反應時間窗內有 1 則私募類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.009429921889, "historical_percentile": 53.589864, "communication_band": "MODERATE", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    },
+    {
+      "ticker": "2882", "company": "國泰金", "coverage": "FULL_DEMO_READY",
+      "track_a": {"feature_session": "2026-08-24", "target_session": "2026-08-25", "score": 0.455167742948, "historical_percentile": 5.441682, "band": "LOW", "outer_fold": "outer_2026_partial"},
+      "event": {"published_at": "2025-09-22T17:02:20+08:00", "source_type": "LICENSED_EVENT_METADATA_DERIVED_SUMMARY", "event_class": "董事會", "event_count": 1, "summary": "國泰金在此歷史反應時間窗內有 1 則董事會類重大訊息；公開版僅呈現事件分類與聚合資訊。", "reaction_magnitude_score": 0.007547368563, "historical_percentile": 22.243078, "communication_band": "LOW", "linguistic_sentiment_status": "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED", "raw_title_public": false}
+    }
+  ]
+}

@@ -1049,3 +1049,176 @@ Do not commit or push automatically.
 44. **After verified deployment:** next product revision may return to Live Web Demo revision.
 45. **Final Release Audit:** not started.
 46. **Project freeze:** not started.
+
+## LIVE WEB DEMO DEPLOYMENT VERIFICATION HANDOFF
+
+Verification date: 2026-08-31
+
+1. **Final status:** complete.
+2. **Success state:** `LIVE_WEB_DEMO_PRODUCTION_VERIFIED`.
+3. **Deployment pre-revision HEAD:** `4a3cd226b3f72ece1ab06de15a136d95d5ef32f3`.
+4. **Deployed application HEAD:** `313b4c7cd07e9347086cae3793a087182020fe2e`; final
+   production-evidence HEAD: `e27dc47fc26c583c25da15f735530f32475b7b29`.
+5. **Commits:** `Web demo portfolio UX revision`; `Document web demo production verification`.
+6. **Application commit files:** `demo/app.py`, `demo/presentation.py`,
+   `tests/unit/test_public_web_demo_release.py`,
+   `tests/integration/test_streamlit_dashboard.py`, and
+   `docs/live_demo_blind_product_audit.md`. The evidence commit contains only the seven
+   `docs/assets/public_web_demo_*.png` screenshots and the deployment-verification addition to the
+   audit document.
+7. **Unrelated changes:** none were included.
+8. **Push:** both focused commits were pushed to `main`; no force push.
+9. **Streamlit monitored branch:** `main`; entrypoint `demo/public_app.py` in
+   `mieuxwei/financial-ai-assistant`.
+10. **Production URL:** <https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/>.
+11. **Production revision:** confirmed through a fresh public browser session after a
+    user-approved Streamlit reboot. The page shows the new main-content navigation, landing page,
+    primary CTA and portfolio experience.
+12. **Frozen 10-ticker selector:** `2330` = `SUPPORTED_CONTROLLED_DEMO`; `0050`, `1301`, `1303`,
+    `2308`, `2317`, `2412`, `2454`, `2881`, and `2882` = `UNAVAILABLE_FAIL_CLOSED`.
+13. **Fabricated ticker data:** none found. Unsupported tickers do not borrow the 2330 score,
+    percentile, event or NLP content.
+14. **Portfolio add:** production PASS through the form.
+15. **Portfolio update:** production PASS for shares and average cost.
+16. **Portfolio delete:** production PASS.
+17. **Portfolio clear:** production PASS.
+18. **Empty state:** production PASS and clearly labeled browser-session Demo Sandbox.
+19. **Unsupported state:** production PASS; human-readable, sanitized and fail-closed.
+20. **Stock analysis:** production PASS for navigation, supported/unsupported ticker selection,
+    score explanation, percentile-as-relative-position explanation and non-direction boundary.
+21. **Financial intelligence:** production PASS. Event class, historical market-reaction
+    magnitude and linguistic sentiment are separated.
+22. **Research charts:** production PASS. Ridge, seven periods, mean Spearman `0.194`, top-decile
+    lift `1.354`, mean R² `-0.009`, model comparison and decile ranking visualization are present.
+    Track B preserves reaction-magnitude Spearman `0.250`, lift `1.623`, representation-only BERT
+    wording and the unsupported text-increment result.
+23. **Architecture:** production PASS for Web/Streamlit, FastAPI, PostgreSQL, experimental
+    LINE/Cloudflare/GAS path and private TWSE/TPEx forward-validation path.
+24. **Limitations:** production PASS. Human-readable default copy; `6/9` readiness and `5/23`
+    exact-feature evidence remain in details rather than the primary UI.
+25. **Mobile:** production PASS at `390 × 844` across all seven pages; no horizontal overflow,
+    blocking sidebar, unusable controls or traceback.
+26. **Production 30-second test:** 7/7 PASS for purpose, problem, AI core, first action,
+    interaction scope, non-investment-advice boundary and controlled/non-live status.
+27. **Cold start:** `ACCEPTABLE`; the bounded post-reboot start and fresh connection completed in
+    approximately 20 seconds.
+28. **Public error safety:** PASS. Unsupported/empty states are sanitized; no traceback, local
+    absolute path, raw exception, secret, internal host or debug payload was shown. Browser console
+    error/warning check was empty.
+29. **Research claim consistency:** PASS; no direction, return, causality, probability or trading
+    claim regression.
+30. **Current-market F7:** still disabled; F11B-2 remains blocked at 6/9 gates and 5/23 exact
+    feature parity.
+31. **Chinese sentiment:** remains abstained/unvalidated; no fabricated P/N/N probability.
+32. **Provider calls:** none added. Public mode remains fixture-only with zero request-time Yahoo,
+    FinMind, TWMD, GDELT, Gemini, Perplexity, OpenAI, LINE or Google Sheets calls.
+33. **Private resources:** private LINE/GAS, holdings, Google Sheet, credentials, TWMD data and
+    `.tools/private` were not accessed or changed.
+34. **Pytest:** 382 passed. Only existing Starlette/httpx deprecation and local CPU-detection
+    warnings were reported.
+35. **Ruff:** PASS.
+36. **Secret scan:** PASS; no supported credential pattern found.
+37. **`git diff --check`:** PASS.
+38. **Screenshots:** refreshed from the verified production URL for Home, stock analysis, portfolio
+    health, financial intelligence, research, architecture and mobile Home.
+39. **Audit document:** `docs/live_demo_blind_product_audit.md` preserves BEFORE, LOCAL AFTER and
+    PRODUCTION AFTER evidence and records the final production verdict.
+40. **Production P0:** none found.
+41. **Production P1:** none found in the bounded deployment smoke test.
+42. **Git state:** `main` and `origin/main` both reached `e27dc47`; this HANDOFF addition is the only
+    intentional post-verification local documentation change.
+43. **Final Release Audit:** not started.
+44. **Project freeze/tag/release:** not started.
+45. **Next and only recommended unit:** `Final Release Audit`.
+
+## LIVE WEB DEMO — EVIDENCE COVERAGE & CONTENT CORRECTION
+
+Revision date: 2026-08-31
+
+1. **Final status:** `LIVE_DEMO_EVIDENCE_CONTENT_REVISION_COMPLETE`.
+2. **Frozen universe:** `0050`, `1301`, `1303`, `2308`, `2317`, `2330`, `2412`, `2454`,
+   `2881`, `2882`.
+3. **Coverage audit:**
+
+   | Ticker | Company | Classification | Track A controlled snapshot | Event/intelligence | Human-readable event summary |
+   | --- | --- | --- | --- | --- | --- |
+   | 0050 | 元大台灣50 | `PARTIAL_DEMO_READY` | yes | no | no |
+   | 1301 | 台塑 | `FULL_DEMO_READY` | yes | yes | 董事會類，2 則聚合事件 |
+   | 1303 | 南亞 | `FULL_DEMO_READY` | yes | yes | 董事會類，1 則聚合事件 |
+   | 2308 | 台達電 | `FULL_DEMO_READY` | yes | yes | 併購類，1 則聚合事件 |
+   | 2317 | 鴻海 | `FULL_DEMO_READY` | yes | yes | 董事會類，2 則聚合事件 |
+   | 2330 | 台積電 | `FULL_DEMO_READY` | yes | yes | 增資類，1 則聚合事件 |
+   | 2412 | 中華電 | `FULL_DEMO_READY` | yes | yes | 董事會類，1 則聚合事件 |
+   | 2454 | 聯發科 | `FULL_DEMO_READY` | yes | yes | 董事會類，1 則聚合事件 |
+   | 2881 | 富邦金 | `FULL_DEMO_READY` | yes | yes | 私募類，1 則聚合事件 |
+   | 2882 | 國泰金 | `FULL_DEMO_READY` | yes | yes | 董事會類，1 則聚合事件 |
+
+4. **Track A evidence:** all 10 ticker snapshots are ticker-specific historical OOF predictions
+   from the frozen Ridge rolling-origin evaluation. The deterministic selection rule is each
+   ticker's latest Ridge OOF row; the UI labels them `受控歷史研究快照` and never calls them
+   current or live inference.
+5. **Track B evidence:** 9 tickers have an existing B4 absolute-reaction OOF window. The
+   deterministic display rule selects the latest window whose dominant event class is not `其他`.
+   `0050` has no B4 event and remains partial without substituted content.
+6. **Main stock selector:** all 10 frozen tickers remain selectable because all have legitimate
+   Track A snapshots. `✓` marks the 9 full-coverage tickers; `○` marks partial `0050`.
+7. **Default portfolio:** `2330 台積電`, `2308 台達電`, and `1301 台塑`; all three are
+   `FULL_DEMO_READY`. The default portfolio no longer foregrounds unavailable states.
+8. **Fail-closed example:** retained through user-selected `0050`: its real Track A snapshot is
+   shown, while the event section states that no public controlled event intelligence is available.
+9. **2330 displayed event:** one `增資`-class material-information event window at
+   `2025-06-25T16:17:27+08:00`.
+10. **2330 event source type:** licensed event metadata exposed only through a public-safe derived
+    summary; the raw title and subject remain private and are not packaged.
+11. **2330 event summary:** `台積電在此歷史反應時間窗內有 1 則增資類重大訊息；公開版僅呈現事件分類與聚合資訊。`
+12. **2330 market-reaction magnitude:** score `0.010407459552`, historical percentile
+    `63.115908`, communication band `MODERATE / 中等`. This remains a magnitude-ranking research
+    signal, not direction or causality.
+13. **Chinese sentiment UI:** secondary text only: `不提供判定`; the card explains that Chinese
+    sentiment has not passed independent validation and therefore emits no P/N/N output.
+14. **English FinBERT audit:** no product-facing English item was found that simultaneously has a
+    real pinned FinBERT result and sufficient public-safe source context. The previous synthetic
+    `ELIGIBLE_NOT_SCORED` item is no longer displayed as main intelligence.
+15. **English NLP location:** moved to `研究與系統說明 / Research & Technical Notes`, which states
+    that the pinned FinBERT pipeline and historical sanity-check evidence exist but do not supply a
+    suitable public product-facing intelligence item.
+16. **Financial intelligence before/after:** before, the page showed a synthetic event class,
+    magnitude and abstention with no concrete event context. After, it offers 9 ticker-specific
+    historical event cases with company, time, deterministic metadata-only summary, event class,
+    reaction magnitude percentile/band, plain-language interpretation and licensing boundary.
+17. **Technical content moved to Technical Notes:** `6/9` current-serving gate, `5/23` feature
+    parity, evidence hashes/lineage, Chinese/English NLP evidence boundaries, experimental
+    LINE/GAS/Cloudflare integration, forward collector, no-auto-retraining policy and future
+    validation positioning.
+18. **Main-function result coverage:** no primary stock-selection path is empty. Every ticker has
+    a Track A result; financial intelligence only offers the 9 tickers with actual event evidence;
+    default portfolio holdings all have complete content. `0050` remains the intentional partial
+    fail-closed case.
+19. **Capabilities de-prioritized:** unscored English-news demonstration, current-market serving,
+    provider/runtime details and engineering prototypes are no longer prominent interactive
+    intelligence features.
+20. **Fabricated data:** none added. Scores and percentiles come from frozen F5 OOF evidence;
+    event magnitude comes from B4 OOF evidence; event summaries are deterministic statements made
+    only from company, date, event class and aggregate count. No private title/full text is copied
+    or paraphrased.
+21. **Provider calls:** none added or executed at request time.
+22. **Current-market inference:** untouched and disabled; F11B-2 remains blocked.
+23. **Files changed for this unit:** `demo/app.py`, `demo/contracts.py`,
+    `demo/fixtures/controlled_historical_evidence.v1.json`,
+    `tests/unit/test_public_web_demo_release.py`, plus this appended HANDOFF report. The earlier
+    uncommitted deployment-verification HANDOFF section was preserved.
+24. **Targeted tests:** 20 passed across public Web release, dashboard contract, browser-session
+    portfolio and Streamlit integration tests. Only the existing Starlette/httpx deprecation
+    warning appeared. The full test suite was intentionally not run.
+25. **Ruff:** PASS on changed and directly related Python files.
+26. **Secret scan:** PASS; no supported credential patterns found.
+27. **`git diff --check`:** PASS.
+28. **Local smoke test:** PASS at `http://localhost:8510` for landing load; 2330 and 2308 full
+    evidence; 0050 partial fail-closed behavior; three full-coverage default holdings; add/delete;
+    meaningful financial-intelligence event content; and Technical Notes separation.
+29. **Deployment:** no.
+30. **Commit:** no.
+31. **Push:** no.
+32. **Research/model impact:** no retraining, no target/model/fold changes, no new dataset and no
+    private-system changes.
+33. **Next and only allowed unit:** `Production Web Demo Deployment Verification`.

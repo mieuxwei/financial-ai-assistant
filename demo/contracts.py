@@ -128,6 +128,65 @@ class ControlledDashboardFixture(StrictModel):
         return self
 
 
+class HistoricalTrackASnapshot(StrictModel):
+    feature_session: str
+    target_session: str
+    score: float = Field(ge=0)
+    historical_percentile: float = Field(ge=0, le=100)
+    band: Literal["LOW", "MODERATE", "HIGH", "VERY_HIGH"]
+    outer_fold: str
+
+
+class HistoricalEventEvidence(StrictModel):
+    published_at: str
+    source_type: Literal["LICENSED_EVENT_METADATA_DERIVED_SUMMARY"]
+    event_class: str
+    event_count: int = Field(ge=1)
+    summary: str
+    reaction_magnitude_score: float = Field(ge=0)
+    historical_percentile: float = Field(ge=0, le=100)
+    communication_band: Literal["LOW", "MODERATE", "HIGH", "VERY_HIGH"]
+    linguistic_sentiment_status: Literal["ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED"]
+    raw_title_public: Literal[False]
+
+
+class TickerEvidence(StrictModel):
+    ticker: str
+    company: str
+    coverage: Literal["FULL_DEMO_READY", "PARTIAL_DEMO_READY", "UNAVAILABLE"]
+    track_a: HistoricalTrackASnapshot | None
+    event: HistoricalEventEvidence | None
+
+    @model_validator(mode="after")
+    def validate_coverage(self) -> TickerEvidence:
+        if self.coverage == "FULL_DEMO_READY" and (self.track_a is None or self.event is None):
+            raise ValueError("full demo coverage requires Track A and event evidence")
+        if self.coverage == "UNAVAILABLE" and (self.track_a is not None or self.event is not None):
+            raise ValueError("unavailable ticker cannot carry evidence")
+        return self
+
+
+class HistoricalEvidenceFixture(StrictModel):
+    schema_version: Literal["controlled-historical-evidence-v1"]
+    fixture_id: Literal["f7-f5-oof-b4-derived-public-v1"]
+    controlled_historical_data: Literal[True]
+    synthetic_data: Literal[False]
+    current_market_inference: Literal[False]
+    request_time_provider_calls: Literal[False]
+    private_raw_content_included: Literal[False]
+    selection_policy: str
+    track_a_evidence_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    track_b_evidence_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    tickers: list[TickerEvidence] = Field(min_length=10, max_length=10)
+
+    @model_validator(mode="after")
+    def validate_universe(self) -> HistoricalEvidenceFixture:
+        ticker_values = [item.ticker for item in self.tickers]
+        if len(ticker_values) != len(set(ticker_values)):
+            raise ValueError("historical evidence tickers must be unique")
+        return self
+
+
 def load_dashboard_config(path: Path) -> DashboardDemoConfig:
     return DashboardDemoConfig.model_validate_json(path.read_text(encoding="utf-8"))
 
@@ -138,6 +197,10 @@ def load_public_release_config(path: Path) -> PublicWebDemoReleaseConfig:
 
 def load_controlled_fixture(path: Path) -> ControlledDashboardFixture:
     return ControlledDashboardFixture.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def load_historical_evidence_fixture(path: Path) -> HistoricalEvidenceFixture:
+    return HistoricalEvidenceFixture.model_validate_json(path.read_text(encoding="utf-8"))
 
 
 def canonical_dashboard_config_sha256(config: DashboardDemoConfig) -> str:
