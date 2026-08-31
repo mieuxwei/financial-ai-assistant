@@ -39,5 +39,5 @@ def test_r1b_documents_preserve_private_public_separation_and_rollback() -> None
     assert "Cloudflare Worker" in architecture
     assert "raw LINE user ID" in architecture
     assert "Disable the Demo LINE webhook" in setup
-    assert "Do not provide tokens" in setup
+    assert "not provide tokens" in setup.casefold()
     assert "LINE_DEMO_QR_PENDING" in result

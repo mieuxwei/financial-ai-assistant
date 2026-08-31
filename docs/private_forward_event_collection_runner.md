@@ -5,9 +5,9 @@ Runner version: `b2-private-forward-event-runner-v1`
 
 ## Scope
 
-This unit implements a local/private B2 forward collector for official TWSE and TPEx material
-information. It does not deploy a scheduler, train a model, create sentiment labels, modify GAS or
-LINE, or unlock current-market F11B-2 inference.
+This component implements the private B2 forward collector for official TWSE and TPEx material
+information. Deployment adds only scheduling and private archive persistence; it does not train a
+model, create sentiment labels, modify GAS or LINE, or unlock current-market inference.
 
 The existing application-news job remains unchanged. The dedicated entry point is:
 
@@ -17,8 +17,9 @@ python -m jobs.b2_forward --phase evening
 python -m jobs.b2_forward --phase next_morning
 ```
 
-These commands perform real read-only provider requests and write private local evidence. They were
-not executed during this implementation unit; tests use deterministic mock responses.
+These commands perform real read-only provider requests and write private evidence. Automated tests
+use deterministic mock responses; the separately documented deployment smoke test used one bounded
+live collection.
 
 ## Frozen collection flow
 
@@ -44,8 +45,9 @@ contracts, tests, aggregate decisions and hashes.
 | `evening` | 21:30 Asia/Taipei | capture late same-day announcements or revisions |
 | `next_morning` | 08:00+1d Asia/Taipei | final pre-session reconciliation |
 
-No scheduler is configured by this unit. A scheduler must use an Asia/Taipei-aware trigger and must
-not infer exchange sessions from weekdays.
+The deployed GitHub Actions workflow runs these phases at the equivalent UTC times and also supports
+manual dispatch. Scheduled execution can be delayed by the platform and must not infer exchange
+sessions from weekdays.
 
 ## Idempotency and failure behavior
 
@@ -64,23 +66,15 @@ Every successful source result records endpoint, content type, row count, raw SH
 document-version SHA-256, publication range, timezone, retry contract and B2/runner versions. The
 overall manifest has its own SHA-256 and explicitly records:
 
+- `scheduler_deployed = true`
 - `automatic_retraining = false`
-- `scheduler_deployed = false`
 - `raw_payload_public = false`
 
 Forward collection is not sentiment ground truth, automatic model validation or automatic model
 refresh.
 
-## Remaining deployment gate
+## Deployment status
 
-Before enabling a schedule, the project still requires explicit approval of:
-
-1. a persistent private storage target;
-2. one scheduler and its Asia/Taipei invocations;
-3. sanitized failure monitoring;
-4. a bounded private live-collection smoke test;
-5. retention, disable and rollback controls.
-
-The next unit is therefore:
-
-`PRIVATE_FORWARD_EVENT_COLLECTION_DEPLOYMENT_CONFIGURATION`
+GitHub Actions, the private Cloudflare R2 archive, all three reconciliation schedules, manual
+dispatch and same-run remote idempotency have been smoke verified. Operational details, cost
+boundary, retention and rollback are recorded in `docs/forward_collection_deployment.md`.

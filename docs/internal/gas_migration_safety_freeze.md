@@ -1,4 +1,7 @@
-# GAS Migration Safety Freeze
+# GAS Migration Safety Freeze — Internal Archive
+
+> Retained to document the private-system safety boundary. Private paths and identifiers are
+> intentionally abstracted; this file is not a deployment guide.
 
 Status: **R0 backup verified; live behavior unchanged**  
 Date: 2026-08-29
@@ -29,7 +32,7 @@ All private source copies are Git-ignored under:
 - `immutable-original/*` permissions: read-only (`0400`).
 - `migration-copy/*` permissions: owner read/write (`0600`).
 - `.tools/` is excluded by `.gitignore`; do not force-add either tree.
-- The original supplied Desktop files were read after backup and remained byte-identical.
+- The original supplied private files were read after backup and remained byte-identical.
 
 ## Verification
 
@@ -45,10 +48,8 @@ change requires a separately reviewed deployment/rollback unit.
 
 ## Sanitized inventory
 
-Located original inputs:
-
-- `/Users/xander/Desktop/code.gs`;
-- `/Users/xander/Desktop/appsscript.json`.
+Located original inputs: two private legacy GAS source files outside the repository. Their local
+absolute paths are intentionally omitted from this public archive.
 
 Manifest facts:
 

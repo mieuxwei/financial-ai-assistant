@@ -66,7 +66,7 @@ Unlike tasks are not compared with one common accuracy metric.
 
 No permissible independent sentiment-label source was found. The FSC corpus is unlabeled;
 TWMD event classes are inferred categories; market returns are reactions; GDELT Tone is a media
-proxy; and the prior Gemini/Codex comparison is an AI stability diagnostic. None can become
+proxy; and the prior cross-model comparison is an AI stability diagnostic. None can become
 human-validated sentiment truth.
 
 Therefore B3 trained no sentiment classifier and generated no pseudo-label training/evaluation

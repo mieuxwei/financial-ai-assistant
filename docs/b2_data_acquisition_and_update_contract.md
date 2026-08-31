@@ -202,5 +202,5 @@ future refresh must:
 - no minimum future waiting period;
 - no deployment, B3 training, GAS/LINE change, commit or push.
 
-B2 is complete. The next executable unit is **B3 — Domain Adaptation & Candidate Signals**, which
-requires separate user approval.
+B2 completed before **B3 — Domain Adaptation & Candidate Signals** began. B3 evidence and final
+status are documented separately; this contract remains frozen.

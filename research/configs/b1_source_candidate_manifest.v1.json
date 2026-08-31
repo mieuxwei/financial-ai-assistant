@@ -271,7 +271,7 @@
       "approved_purposes": ["future licensed AP11 audit"],
       "prohibited_uses": ["manufactured audit claims", "credential sharing", "B2 dependency", "redistribution without permission"],
       "evidence_urls": ["https://www.tejwin.com/"],
-      "evidence_files": ["HANDOFF.md"],
+      "evidence_files": ["docs/internal/development_history.md"],
       "evidence_basis": "repository_audit",
       "network_probe_performed_in_b1": false
     },

@@ -51,7 +51,8 @@ done.
 ## Legacy-to-new milestone mapping
 
 Legacy milestone numbers below refer to the plan that existed before 2026-08-27. New milestone
-numbers refer to `PROJECT_PLAN.md` version `post-m8-risk-extension-v3`.
+numbers refer to the archived project-plan version `post-m8-risk-extension-v3` in
+`docs/internal/project_plan_archive.md`.
 
 | Legacy milestone / work | Preserved status | New destination |
 | --- | --- | --- |

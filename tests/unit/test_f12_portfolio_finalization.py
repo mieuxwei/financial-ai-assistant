@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT / "research/configs/f12_portfolio_finalization.v1.json"
+RELEASE_CONFIG_PATH = ROOT / "research/configs/portfolio_release.v1.json"
 
 
 def _read(path: str) -> str:
@@ -66,7 +67,7 @@ def test_portfolio_copy_preserves_supported_and_abstained_capabilities() -> None
     assert "NOT_READY_FOR_F11B_2" in combined
     assert "5/23" in combined
     assert "6/9" in combined
-    assert "not live 2330 data" in combined
+    assert "not current-market inference" in combined.casefold()
     assert "not deployed" in combined
 
 
@@ -91,3 +92,18 @@ def test_portfolio_markdown_local_links_resolve() -> None:
                 continue
             resolved = (document.parent / target.split("#", 1)[0]).resolve()
             assert resolved.exists(), f"{relative_path}: {target}"
+
+
+def test_v1_portfolio_release_freezes_claim_and_serving_boundaries() -> None:
+    config = json.loads(RELEASE_CONFIG_PATH.read_text(encoding="utf-8"))
+
+    assert config["release_version"] == "1.0.0"
+    assert config["state"] == "V1_0_PORTFOLIO_FROZEN"
+    assert config["track_a"]["model"] == "ridge_regression"
+    assert config["track_a"]["alpha"] == 100
+    assert config["track_b"]["chinese_linguistic_sentiment"].startswith("ABSTAIN")
+    assert config["current_market_inference"]["enabled"] is False
+    assert config["forward_collection"]["automatic_retraining"] is False
+    assert config["line"]["primary_experience"] is False
+    assert all(value is False for value in config["research_claims"].values())
+    assert config["next_action"] == "NONE_V1_0_PORTFOLIO_COMPLETE"

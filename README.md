@@ -2,204 +2,157 @@
 
 **基於機器學習之股票相對波動異常程度預測與金融 NLP 情報系統**
 
-一套研究導向的台股 Financial Intelligence Assistant：以 leakage-aware temporal evaluation
-預測下一交易日的**個股相對波動異常程度**，並整合事件分類、市場反應強度、金融文字表示、
-FastAPI、Streamlit 與 LINE/GAS controlled demo。
+一套研究導向的台股 Financial Intelligence Assistant。專案以 leakage-safe 的價格、成交量、
+波動與市場情境特徵，預測下一交易日相對於個股自身歷史水準的波動異常程度；另一條 NLP
+研究線則提供事件分類與歷史市場反應幅度情報。
 
-> 本專案不預測上漲／下跌、不提供買賣建議、不保證未來波動，也不宣稱中文情緒已驗證。
+**Primary public experience：**
+[開啟 Public Live Web Demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)
 
-## Live Web Demo
+> **Controlled Research Demo**：公開網站使用已凍結、ticker-specific 的歷史研究快照，
+> 不是即時市場推論、漲跌預測或投資建議。
 
-**Primary public experience：**[開啟 Live Web Demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)
+![Financial AI Assistant Web Demo](docs/assets/public_web_demo_home.png)
 
-這是 zero-secret、fixture-only 的 **Controlled Research Demo**。可直接體驗股票分析、
-browser-session 持股健檢、金融情報、研究成果、架構與限制；它不是即時市場推論或交易系統。
+## Problem
 
-![Web-first controlled research demo](docs/assets/public_web_demo_home.png)
-
-## Portfolio highlights
-
-- **Track A — COMPLETE / FROZEN**：Ridge Regression `alpha=100`，依預先凍結規則從
-  Persistence、Ridge、HGB 中選出；模型未部署。
-- **Track B — COMPLETE THROUGH B5**：市場反應強度維持 `AUTOMATED_SIGNAL_ONLY`；中文
-  linguistic sentiment 與方向預測明確 abstain。
-- **Track C — WEB FIRST**：Public Web Demo 是主要作品入口；LINE 保留為 experimental
-  multi-channel prototype 與工程證據。
-- **R1A — PUBLIC WEB DEMO DEPLOYED**：零秘密、fixture-only Streamlit public demo 已完成部署；
-  公開 HTTPS smoke test 通過。
-- **R1B — PRESERVED TECHNICAL INTEGRATION**：獨立 LINE Public Beta 展示 Security Edge、
-  Demo GAS、FastAPI、Neon、HMAC identity、idempotency 與 user isolation；R1B-UX1 凍結為
-  `PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY`，不再阻擋封案。
-- **F11B-2A complete**：官方 current OHLCV 10/10，但 exact feature parity 僅 5/23；目前
-  **6 of 9 gates PASS，current-market integration blocked**。
-- **Research integrity**：最終研究是 retrospective、leakage-aware、hypothesis-informed；
-  不把已檢視的歷史期間重新包裝成 pristine sealed test。
-- **Forward collection audit complete**：TWSE／TPEx 官方重大訊息 feeds 經 bounded probe
-  確認可用；private runner 已完成 raw-first immutable lineage、三階段 reconciliation、lock 與
-  idempotency。Cloudflare R2 Standard 私有 archive 與 GitHub Actions 三排程已部署；首次
-  bounded live smoke 取得 TWSE 7 筆／TPEx 5 筆，重跑同 run-id 成功重用遠端 manifest。
-  收集不等於自動重訓或模型驗證。
-
-完整作品集故事、架構、成果、截圖與限制見
-[Portfolio Guide](docs/portfolio_finalization.md)。
-
-![System architecture](docs/assets/system_architecture.svg)
+短期價格方向高度雜訊化，而同一個絕對漲跌幅對高波動與低波動股票的意義也不同。本研究因此
+不預測上漲或下跌，而是研究：能否在嚴格時間切分下，預測下一交易日相對於該股票自身近期
+波動背景的異常程度？
 
 ## Research question
 
 > Can leakage-safe price, volume, volatility and market-context features forecast next-session
 > volatility surprise relative to each stock's own historical volatility context?
 
-Primary target：下一交易日絕對 adjusted-close log return，除以截至 feature session `t` 已知的
-20-session 個股歷史波動。所有 predictor 僅能使用 cutoff 前資訊。
+主要 target 為下一交易日 adjusted-close 絕對 log return，除以 feature session `t` 當下可知的
+20-session 個股歷史波動。所有 predictors 僅使用資訊截止時間以前的資料。
 
-## Research evolution
+## What the system does
 
-1. 初始研究將 normalized risk 轉為 `HIGH_RISK / NORMAL`。
-2. M7–M11 顯示 threshold 與 volatility regime 對 binary operating behavior 影響顯著。
-3. M9 發現 aggregate raw outcome 與 conditioned outcome 存在 Simpson-type composition effect。
-4. 較穩定的研究訊號是 stock-relative volatility surprise，而不是 unconditional absolute
-   volatility。
-5. 最終研究改為 continuous forecasting，使用 nested rolling-origin evaluation、ranking、decile
-   與 robustness 分析。
-6. 舊 binary 結果完整保留為 **Exploratory Research History**，不是被刪除的失敗實驗。
+- **股票分析：**顯示受控歷史 volatility-surprise score、歷史百分位與溝通分級。
+- **持股健檢：**在瀏覽器 session 中管理最多五檔 Demo holdings，整合研究快照與事件情報。
+- **金融情報：**分開呈現事件類型、歷史市場反應幅度與語言情緒的驗證狀態。
+- **研究與工程展示：**呈現 rolling-origin 評估、FastAPI contracts、資料管線、安全邊界與
+  experimental LINE/GAS integration。
 
-## Track A results
+公開 Demo 不計算即時 ROI、不呼叫外部 provider，也不保存使用者持股。
+
+## Method
+
+研究最初探索二元 `HIGH_RISK / NORMAL` 分類。門檻與波動 regime 敏感度、以及 conditioned
+analysis 的 Simpson-type composition effect 顯示，較穩定的問題定義是連續的 stock-relative
+volatility surprise。舊二元研究完整保留為問題形成證據，最終模型則以以下程序評估：
+
+1. 十檔固定台股 universe 與 TAIEX benchmark 對齊；
+2. 所有 rolling features 僅使用 `t` 以前資訊；
+3. 七個 chronological rolling-origin outer periods；
+4. 每個 outer training history 內再做 temporal model selection；
+5. preprocessing 僅在當下 training fold 重新擬合；
+6. 以 regression error、Spearman ranking、decile lift 與 subgroup robustness 評估。
+
+這是 **retrospective、leakage-aware、hypothesis-informed** 研究，不是 pristine holdout、
+prospective validation 或獨立外部驗證。
+
+## Data
+
+- 10 檔固定台股／ETF，40,691 筆個股歷史 OHLCV rows；
+- 4,080 個 TAIEX benchmark sessions；
+- 32,357 筆符合 frozen target/feature contract 的 final rows；
+- 20,637 筆 unique historical out-of-sample evaluation rows；
+- Track B 私有授權來源研究包含 7,582 events，聚合為 3,433 個 reaction windows、涵蓋九檔。
+
+歷史市場資料、官方事件資料與授權來源各自保留來源、時間、版本與 hash lineage。私人 raw
+資料、文章全文、持股與 credentials 不進入公開 repository。
+
+## Results
+
+### Track A — volatility-surprise forecasting
 
 ![Historical OOS model comparison](docs/assets/track_a_model_comparison.svg)
 
-| model | mean outer Spearman | mean outer MAE | worst-fold Spearman | mean top-10% lift |
+| model | mean outer Spearman | mean outer MAE | worst-fold Spearman | top-decile lift |
 |---|---:|---:|---:|---:|
 | Persistence | 0.0608 | 0.7274 | 0.0080 | 1.1766 |
 | Ridge | **0.1940** | **0.5473** | 0.1091 | 1.3542 |
-| HGB | 0.1863 | 0.5480 | **0.1349** | **1.3611** |
+| HistGradientBoosting | 0.1863 | 0.5480 | **0.1349** | **1.3611** |
 
-- 32,357 final eligible historical rows。
-- 20,637 historical OOS rows、七個 rolling-origin outer folds。
-- Ridge 與 HGB 落在 frozen 0.01 Spearman practical-tie margin；Ridge 依較低 mean MAE 決勝。
-- 最終安全 JSON artifact 使用完整 23-feature contract、`log1p` target transform 與 20,637 筆
-  historical OOF percentile reference。
-- Point-forecast R² 平均接近零；正確定位是 modest historical ranking signal，而非精準振幅預測。
+Ridge 與 HGB 落在預先凍結的 0.01 Spearman practical-tie margin 內；Ridge 因 mean outer MAE
+較低而依規則選出，最終 `alpha=100`。平均 R² 接近零／略為負值，因此結論是 **modest
+historical ranking signal**，不是精準的未來振幅預測。
 
-![Ridge pooled deciles](docs/assets/track_a_ridge_deciles.svg)
+![Ridge historical OOS deciles](docs/assets/track_a_ridge_deciles.svg)
 
-Pooled Ridge deciles 從 D1 realized mean 0.5413 上升至 D10 1.1395，adjacent steps 9/9；個別
-期間並非全部完美單調，且這不是 prospective validation。
+### Track B — Financial NLP Intelligence
 
-## Track B results
+Track B 刻意將 linguistic sentiment、event class、market-reaction magnitude、financial-domain
+representation 與 media tone 分開：
 
-Track B 將 linguistic sentiment、event class、market reaction、financial representation 與
-media-tone proxy 分開，避免用報酬反推情緒。
+- Metadata-only absolute-reaction model：OOF Spearman **0.2504**、top-decile lift **1.623**；
+- maturity 僅為 automated historical-association signal，不代表方向或因果；
+- signed reaction 的 evidence 弱，BERT text 對 metadata baseline 沒有 supported incremental
+  value；
+- FSC-adapted BERT 保留為 financial-domain representation，不能宣稱改善報酬預測；
+- 中文 linguistic sentiment 未取得獨立有效驗證，因此不輸出 Positive/Neutral/Negative
+  機率；
+- eLAND 排除於 active modeling，只保留資料稽核與拒絕證據。
 
-- B4 corrected private backfill：7,582 events、3,433 aggregated ticker-reaction windows、9 tickers。
-- Metadata-only absolute-reaction model：OOF Spearman 0.2504、top-decile lift 1.623。
-- Signed reaction：market-only 0.0349、metadata-only 0.0784、BERT text + metadata 0.0408。
-- BERT text 對 signed reaction 沒有 robust incremental value；這個負面結果完整保留。
-- Market reaction maturity：`AUTOMATED_SIGNAL_ONLY`，只代表歷史關聯強度，不是方向、因果或
-  報酬預測。
-- Chinese linguistic sentiment：`ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED`；positive、neutral、
-  negative probabilities 全部為 null。
-- Direction：`ABSTAIN_DIRECTION_NOT_SUPPORTED`。
-- B3.1 沒有找到可獨立接受的中文 P/N/N ground truth；沒有降低 gate、人工標注或偽造結果。
-- eLAND 永久排除於 active modeling，只保留歷史 rejection evidence。
+## Public Demo
 
-## Controlled product demo
+Production URL：<https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/>
 
-畫面中的 2330、特徵、分數與事件都是 deterministic synthetic fixture。它們不是 live market
-data、模型績效證據或真實投資訊號。
+- 部署於 Streamlit Community Cloud；
+- 使用十檔 ticker-specific Track A 受控歷史快照；
+- 九檔具有 public-safe、metadata-derived event summary，0050 明確 fail closed；
+- browser-session portfolio 不登入、不持久化，最多五檔；
+- zero runtime secret、zero request-time provider call；
+- 不載入私人 model/data artifact，不執行 current-market inference。
 
-### Public Web Demo — R1A
+![Stock analysis](docs/assets/public_web_demo_stock_analysis.png)
+![Portfolio health](docs/assets/public_web_demo_portfolio_health.png)
+![Financial intelligence](docs/assets/public_web_demo_intelligence.png)
 
-Status：`PUBLIC_WEB_DEMO_DEPLOYED`
+## Architecture
 
-- Primary hosting：Streamlit Community Cloud。
-- Topology：單一 fixture-only Streamlit app；不需要 FastAPI。
-- Entrypoint：`demo/public_app.py`。
-- Runtime secrets：零。
-- Request-time provider calls：零。
-- Portfolio：browser-session sandbox，最多 5 檔，不需登入、不持久化、不計算即時 ROI。
-- Public URL：[Streamlit controlled demo](https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/)；
-  nested-entrypoint 修正已部署，公開首頁與四個展示分頁的 bounded smoke test 通過。
+![System architecture](docs/assets/system_architecture.svg)
 
-部署規格、平台比較、資料邊界與 rollback 步驟見
-[R1A Public Web Demo Release](docs/public_web_demo_release.md)。
+```text
+Primary portfolio path
+Browser → Streamlit → controlled historical evidence + browser-session portfolio
 
-### Experimental LINE prototype — R1B
+Research/API path
+Market and event pipelines → ML/NLP research → FastAPI versioned contracts
 
-Status：`LINE_PUBLIC_BETA_DEPLOYED`；R1B-UX1：
-`PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY`
+Experimental messaging path
+LINE OA → Cloudflare security edge → Google Apps Script → FastAPI → PostgreSQL sandbox
 
-LINE 版本作為多通路整合原型，用於展示 Webhook 資安、GAS 前端處理、FastAPI 串接、使用者
-隔離與 Sandbox 持股流程；主要互動體驗以 Web Demo 為主。LINE／LIFF 不再是作品集使用前提，
-也不是 final release blocker。
+Future validation path
+GitHub Actions → official TWSE/TPEx feeds → private Cloudflare R2 archive
+```
 
-- 新 Demo LINE OA → Cloudflare Worker raw-signature edge → 新 Demo GAS → FastAPI → managed
-  PostgreSQL sandbox。
-- raw LINE user ID 只在驗證成功的 Edge 中使用，後端僅接收 keyed-HMAC principal。
-- 每位使用者最多 5 檔 frozen-universe Demo 持股，30 天 retention，可自行刪除。
-- 新增、修改、刪除皆需 Preview/Confirm，並以 webhook event ID 做 backend idempotency。
-- 不使用私人 Google Sheet、Gemini、Perplexity、TWMD raw data 或 current-market F7 inference。
-- 只有既有 2330 controlled fixture 有研究數值；其他 ticker 明確 abstain，不製造假分數。
+Streamlit 是主要公開體驗。LINE/GAS 保留為多通路、安全 webhook、HMAC identity、idempotency
+與使用者隔離的工程原型，不是使用專案的必要入口。
 
-架構、維運與已凍結 LIFF prototype 見
-[LINE Public Beta Architecture](docs/line_public_beta_architecture.md) 與
-[Manual Setup Checklist](docs/line_public_beta_setup.md)。新 LIFF 編輯器一次管理最多五檔，
-仍保留原有文字輸入作為備援。若未來放置 Demo LINE QR，只能位於 Experimental Interfaces，
-不得成為首頁主要 CTA。
+## Repository structure
 
-### FastAPI
+| path | purpose |
+|---|---|
+| `demo/` | Streamlit controlled public experience and public-safe fixtures |
+| `backend/` | FastAPI application, schemas, services and persistence boundaries |
+| `pipelines/` | market, news, feature, sentiment and intelligence pipelines |
+| `research/` | frozen configs, model code and evaluation evidence |
+| `jobs/` | reproducible CLI entry points |
+| `line_adapter/` | experimental public-beta GAS frontend source |
+| `security_edge/` | LINE raw-signature verification edge |
+| `docs/` | architecture, methodology, deployment and limitations |
+| `tests/` | unit and integration regression suite |
 
-- `GET /health`
-- `POST /api/v1/research/volatility-surprise/predict`
-- `GET /api/v1/research/intelligence/{ticker}`
-- controlled LINE demo endpoint with local service authentication
+Historical milestone and internal development records are archived under `docs/internal/` and are
+not the public entry point.
 
-Research API 驗證 exact contract 與 lineage；一般 request 不即時抓 provider、不呼叫 LLM，
-也不回傳私人持股。
+## Run locally
 
-### Streamlit — F11A
-
-- 預設 `CONTROLLED_OFFLINE`，只讀合成 fixture，零網路請求。
-- 選配 `LOCAL_API` 只接受帶明確 port 的 loopback origin。
-- 顯示 continuous score、percentile、communication band、事件情報與明確限制。
-
-### LINE/GAS — F11B
-
-- 六個凍結入口：股票分析、持股健檢、金融情報、匯入持股、新聞研究、設定。
-- F11B-1A 只在 private migration copy 建立 parser/dispatcher 與 legacy compatibility。
-- F11B-1B 是 LINE → migration-copy GAS → FastAPI → deterministic fixture → Flex 的 controlled
-  read-only demo。
-- 未修改 live webhook、trigger、Sheet schema、真實持股或 Desktop original GAS；未部署。
-
-## F11B-2A current-market gate
-
-F11B-2A 的正式 decision：
-
-`OFFICIAL_OHLCV_AVAILABLE_BUT_ADJUSTED_PARITY_UNRESOLVED`
-
-- TWSE current OHLCV：10/10 frozen tickers、最近 35 sessions 完整。
-- 0050：TWSE 有 2026-08-28；先前缺日是 candidate-provider freshness 問題。
-- TAIEX total-return：與 TWSE 官方值在 20/20 current overlap sessions 完全一致。
-- Historical stock training source：Yahoo `indicators.adjclose`。
-- Audited official corporate-action lineage 無法證明可重建 training-equivalent adjusted close。
-- Raw OHLCV 亦不是 source-identical。
-- Exact feature parity：5/23；updated gate：6/9。
-
-因此 `NOT_READY_FOR_F11B_2`。不得改模型、降低 tolerance、fallback 舊日資料或把 controlled demo
-寫成 live。詳見 [F11B-2A result](research/evaluation/f11b_official_current_market_parity_result.md)。
-
-## Architecture boundary
-
-Python/FastAPI 負責 ingestion、features、ML/NLP、identity、portfolio business rules、persistence、
-lineage、abstention 與 audit logs。GAS 長期只保留 LINE webhook entry、minimal routing、reply/push
-與 Flex rendering。`X-User-ID` 仍是 development-only contract，不是正式 authentication。
-
-私人實用版與受控公開版保持分離：真實持股、券商截圖、credentials、私人 GAS、licensed TWMD
-raw records 與個人資料不得進入 public Git。
-
-## Local installation
-
-需要 Python 3.12 與 Git。
+Requirements: Python 3.12 and Git.
 
 ```bash
 python3.12 -m venv .venv
@@ -208,24 +161,20 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev,demo]"
 ```
 
-若需本機設定，複製 `.env.example` 為 `.env`；不得提交 `.env` 或印出其中內容。
+Run the public-safe dashboard:
 
-### Run FastAPI
+```bash
+python -m streamlit run demo/public_app.py
+```
+
+Run the local FastAPI foundation:
 
 ```bash
 python -m uvicorn backend.app.main:app --reload
 curl http://127.0.0.1:8000/health
 ```
 
-### Run the controlled Streamlit demo
-
-```bash
-python -m streamlit run demo/app.py
-```
-
-保持預設「受控離線示範」即可進行無網路作品展示。
-
-### Tests and lint
+Validation:
 
 ```bash
 python -m pytest -q
@@ -234,39 +183,41 @@ python scripts/check_secrets.py
 git diff --check
 ```
 
-## Research integrity and limitations
+## Limitations
 
-- Retrospective、hypothesis-informed；不是 prospective 或 independent external validation。
-- 十檔 frozen universe 與 documented temporal exclusion concentration 限制泛化能力。
-- Track A 的主要價值是 ranking，不是 exact magnitude 或 direction。
+- Track A 支持 historical ranking 的程度高於 exact magnitude prediction；不預測價格方向。
+- 十檔 universe 與具年份集中的 coverage exclusions 限制泛化能力。
 - Track B reaction magnitude 是 observational association，不是 causal impact。
-- 中文 sentiment 尚未驗證，正常行為是 abstain。
-- English FinBERT eligibility 不代表 controlled fixture 已執行模型。
-- F9/B6 optional NLP incremental-value study 未執行，且不是完成條件。
-- Current-market serving 被 parity gate 阻擋；所有公開 demo 都是 controlled fixture。
-- Forward official OHLCV 目前只能作 lineage/parity evidence；因 adjusted-price 等價性
-  未解，不是 F7 exact external validation。
-- 本系統為學術／作品集研究，非投資建議。
+- 中文 sentiment 尚未通過獨立驗證，系統以 abstention 保護 claim boundary。
+- Current-market serving 保持 disabled：官方 current OHLCV 雖涵蓋 10/10，但 training/serving
+  exact feature parity 僅 5/23，整體 gate 6/9。
+- 公開 Demo 是歷史受控展示，不是交易系統或投資建議。
 
-## Documentation map
+## Future External Validation
+
+已部署的 private forward collector 每日三次擷取 TWSE／TPEx 官方重大訊息，使用 raw-first、
+immutable manifests、SHA-256 lineage 與 same-run idempotency 保存自然形成的未來證據。資料收集
+**不會自動重訓或驗證模型**。累積約 3–6 個月後，可另開 v1.1 research milestone，以真正 unseen
+future observations 評估 frozen v1.0。
+
+## Documentation
 
 - [Portfolio guide](docs/portfolio_finalization.md)
-- [Project plan](PROJECT_PLAN.md)
-- [Authoritative handoff](HANDOFF.md)
 - [Architecture](docs/architecture.md)
 - [Final study protocol](docs/final_volatility_surprise_study_protocol.md)
-- [F5 temporal evaluation](research/evaluation/f5_nested_temporal_evaluation_result.md)
-- [F6 ranking robustness](research/evaluation/f6_ranking_robustness_result.md)
-- [F7 final model](research/evaluation/f7_final_research_model_result.md)
-- [B5 NLP integration](research/evaluation/b5_nlp_intelligence_integration_result.md)
-- [F11A dashboard](research/evaluation/f11_dashboard_demo_result.md)
-- [F11B controlled LINE demo](docs/f11b_controlled_line_demo.md)
-- [F11B-2A parity audit](research/evaluation/f11b_official_current_market_parity_result.md)
-- [R1A public web demo release](docs/public_web_demo_release.md)
-- [R1B LINE public beta architecture](docs/line_public_beta_architecture.md)
-- [R1B manual setup](docs/line_public_beta_setup.md)
-- [Forward data collection audit](docs/forward_data_collection_audit.md)
-- [Private forward event runner](docs/private_forward_event_collection_runner.md)
+- [Temporal evaluation result](research/evaluation/f5_nested_temporal_evaluation_result.md)
+- [Ranking and robustness result](research/evaluation/f6_ranking_robustness_result.md)
+- [Final model result](research/evaluation/f7_final_research_model_result.md)
+- [NLP integration result](research/evaluation/b5_nlp_intelligence_integration_result.md)
+- [Public Web Demo release](docs/public_web_demo_release.md)
 - [Forward collection deployment](docs/forward_collection_deployment.md)
-- [Privacy](docs/privacy.md)
-- [Deployment boundary](docs/deployment.md)
+- [Privacy boundary](docs/privacy.md)
+- [Final release audit](docs/final_release_audit.md)
+
+## License and data rights
+
+No repository-wide source-code license has been granted; public visibility does not imply permission
+to reuse the code. Third-party market, benchmark, publisher and licensed event data remain subject
+to their original terms. Raw TWMD records, publisher article bodies, private holdings, screenshots,
+credentials and private GAS source are excluded from this repository. Public event examples contain
+only permitted derived metadata summaries and research aggregates.

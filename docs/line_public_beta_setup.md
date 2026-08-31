@@ -169,9 +169,9 @@ Complete this only for the existing **Demo** provider/resources. Do not place se
 
 If any target resource cannot be positively identified as Demo, stop before changing it.
 
-## Return to Codex for deployment verification
+## Deployment verification handoff
 
-After steps 1–7 are complete, provide only the non-secret resource status and open the Demo LINE
-OA/hosting consoles if help is needed. Do not provide tokens. Codex should then run bounded checks
-for webhook verification, add/update/delete, portfolio health, two-user isolation, delete-my-data,
-QR identity and private-environment non-impact.
+After steps 1–7 are complete, provide only non-secret resource status to the release operator. Do
+not provide tokens. The operator should then run bounded checks for webhook verification,
+add/update/delete, portfolio health, two-user isolation, delete-my-data, QR identity and
+private-environment non-impact.

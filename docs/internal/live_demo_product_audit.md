@@ -1,4 +1,7 @@
-# Live Demo Blind Third-Party Product Audit
+# Live Demo Product Audit Archive
+
+> Internal before/after product-review evidence retained for design provenance. It is not a
+> primary portfolio document.
 
 Audit date: 2026-08-31  
 Audited deployment: `https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/`

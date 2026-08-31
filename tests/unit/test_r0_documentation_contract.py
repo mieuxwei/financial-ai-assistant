@@ -7,12 +7,15 @@ def _read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
 
-def test_core_documents_share_the_current_execution_boundary() -> None:
-    handoff = _read("HANDOFF.md")
-    plan = _read("PROJECT_PLAN.md")
+def test_public_and_archived_documents_preserve_final_research_boundaries() -> None:
+    assert not (ROOT / "HANDOFF.md").exists()
+    assert not (ROOT / "PROJECT_PLAN.md").exists()
+    handoff = _read("docs/internal/development_history.md")
+    plan = _read("docs/internal/project_plan_archive.md")
     readme = _read("README.md")
 
-    assert "NEXT EXECUTABLE UNIT: **Live Web Demo revision**" in handoff
+    assert "Development History Archive" in handoff
+    assert "Historical Project Plan Archive" in plan
     assert "R1B-UX1 LIFF Multi-Holding Form" in handoff
     assert "PROTOTYPE-COMPLETE / NOT PRIMARY PORTFOLIO ENTRY" in handoff
     assert "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED" in plan
@@ -23,20 +26,21 @@ def test_core_documents_share_the_current_execution_boundary() -> None:
     assert "reused_remote_manifest=true" in plan
     assert "Primary public experience" in readme
     assert "PUBLIC_WEB_DEMO_DEPLOYED" in plan
-    assert "PUBLIC_WEB_DEMO_DEPLOYED" in readme
     assert "LINE_PUBLIC_BETA_DEPLOYED" in plan
-    assert "LINE_PUBLIC_BETA_DEPLOYED" in readme
+    assert "Streamlit Community Cloud" in readme
+    assert "Experimental messaging path" in readme
     assert all(item in plan for item in ("F11B-2A", "F12", "R1A", "R1B-UX1"))
-    assert "F11B-2A complete" in readme
     assert "6/9" in plan and "blocked" in plan.casefold()
-    assert "6 of 9" in readme and "blocked" in readme.casefold()
+    assert "6/9" in readme and "disabled" in readme.casefold()
     assert "B3.1" in handoff
     assert "B3.1" in plan
-    assert "B3.1" in readme
+    assert "未取得獨立有效驗證" in readme
     assert "AUTOMATED_SIGNAL_ONLY" in handoff
     assert "AUTOMATED_SIGNAL_ONLY" in plan
-    assert "AUTOMATED_SIGNAL_ONLY" in readme
+    assert "automated historical-association signal" in readme
     assert "NOT_READY_FOR_F11B_2" in handoff
+    assert "Public Live Web Demo" in readme
+    assert "modest" in readme.casefold() and "ranking signal" in readme.casefold()
 
 
 def test_f11b_1b_documentation_preserves_controlled_demo_boundary() -> None:
@@ -56,17 +60,26 @@ def test_f11b_1b_documentation_preserves_controlled_demo_boundary() -> None:
 
 
 def test_core_documents_freeze_track_a_and_split_f11() -> None:
-    for document in (_read("HANDOFF.md"), _read("PROJECT_PLAN.md"), _read("README.md")):
+    for document in (
+        _read("docs/internal/development_history.md"),
+        _read("docs/internal/project_plan_archive.md"),
+    ):
         assert "F11A" in document
         assert "F11B" in document
         assert "Ridge" in document
         assert "alpha 100" in document or "alpha=100" in document
 
+    readme = _read("README.md")
+    assert "Streamlit" in readme
+    assert "LINE/GAS" in readme
+    assert "Ridge" in readme
+    assert "alpha=100" in readme
+
 
 def test_source_and_gas_boundaries_are_explicit() -> None:
-    handoff = _read("HANDOFF.md")
-    protocol = _read("docs/r0_project_rebaseline_protocol.md")
-    gas_freeze = _read("docs/gas_migration_safety_freeze.md")
+    handoff = _read("docs/internal/development_history.md")
+    protocol = _read("docs/internal/r0_project_rebaseline_protocol.md")
+    gas_freeze = _read("docs/internal/gas_migration_safety_freeze.md")
 
     assert "AP11: **optional enhancement" in handoff
     assert "eLAND: **permanent historical exclusion" in handoff

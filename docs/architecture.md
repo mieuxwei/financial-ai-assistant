@@ -10,7 +10,7 @@ F12 is complete. The deployed R1A Web Demo is the primary public portfolio exper
 Public browser
   → Streamlit Community Cloud
   → demo/public_app.py
-  → synthetic fixture + browser-session portfolio only
+  → public-safe controlled historical evidence + browser-session portfolio only
 ```
 
 The R1A path requires no FastAPI, database, provider, model artifact or runtime secret. It is live
@@ -22,7 +22,8 @@ The final ownership boundary is:
 
 - FastAPI/Python owns identity, portfolio rules, persistence, data pipelines, Track A/B contracts,
   lineage, abstention and auditability;
-- Streamlit presents a deterministic controlled fixture or an explicitly selected loopback API;
+- Streamlit presents ticker-specific controlled historical evidence or an explicitly selected
+  loopback API;
 - LINE OA → Cloudflare Edge → GAS → FastAPI → Neon remains an **experimental messaging
   interface** and engineering-evidence path, not the primary UX;
 - GAS remains a thin LINE frontend-processing adapter and does not own model or portfolio truth;

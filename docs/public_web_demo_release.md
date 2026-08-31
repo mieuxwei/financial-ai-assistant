@@ -17,7 +17,7 @@ Topology:
 Public browser
   → Streamlit Community Cloud HTTPS
   → demo/public_app.py
-  → repository-controlled synthetic fixture + browser-session holdings
+  → repository-controlled historical evidence fixture + browser-session holdings
   → controlled presentation
 ```
 
@@ -70,8 +70,10 @@ to the entrypoint. No separate build command or backend start command is require
 
 ## 4. Data and secret boundary
 
-Packaged public inputs are limited to code, the deterministic synthetic fixture, safe lineage
-identifiers and aggregate research evidence. Runtime secrets are zero.
+Packaged public inputs are limited to code, ticker-specific controlled historical snapshots,
+public-safe metadata-derived event summaries, safe lineage identifiers and aggregate research
+evidence. Runtime secrets are zero. The fixture explicitly records `synthetic_data=false` and
+`current_market_inference=false`.
 
 Excluded from the public release:
 

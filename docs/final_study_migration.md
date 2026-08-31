@@ -2,7 +2,8 @@
 
 Migration date: 2026-08-28
 Status: historical F-series mapping; R0 reclassifies F11 as F11A complete / F11B pending and makes
-B1 the next executable unit. See `docs/r0_project_rebaseline_protocol.md`.
+B1 as the historical next research stage. See
+`docs/internal/r0_project_rebaseline_protocol.md`.
 
 ## Migration principle
 

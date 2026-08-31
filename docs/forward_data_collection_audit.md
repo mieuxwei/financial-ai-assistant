@@ -84,15 +84,12 @@ retrain or promote a model. Model refresh requires a new candidate version, froz
 evaluation and explicit approval. TWSE/TPEx event text is not Chinese sentiment ground truth, and
 market reaction must not be relabelled as linguistic sentiment.
 
-## Decision and next unit
+## Historical implementation decision
 
-The audit is complete, but scheduled collection is not yet implementation-ready:
+At the time of this audit, scheduled collection was not yet implementation-ready:
 
 `AUDIT_COMPLETE_IMPLEMENTATION_NOT_READY`
 
-The next executable unit is:
-
-`PRIVATE_FORWARD_EVENT_COLLECTION_RUNNER_IMPLEMENTATION`
-
-That unit should implement and locally validate the runner only. Deployment or scheduled execution
-requires separate approval and a confirmed private storage target.
+The subsequent private runner and deployment work resolved these implementation gaps. Current
+deployment status is documented in `docs/forward_collection_deployment.md`; this file remains the
+pre-implementation source audit.

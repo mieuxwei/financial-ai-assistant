@@ -280,11 +280,10 @@ F2–F6 must test:
 11. dataset/config/model/OOF hashes reproduce deterministically where feasible;
 12. previously inspected periods are never described as a new sealed test.
 
-## 15. F1 stop boundary
+## 15. F1 protocol boundary
 
-F1 creates only plans, schemas and safety tests. It authorizes no dataset rebuild, model fitting,
-outer evaluation, final result, API integration, deployment, GAS change, commit or push. The next
-minimum executable unit after review is **F2 — Historical Dataset Rebuild**.
+F1 created only plans, schemas and safety tests. Dataset rebuilding and model evaluation began only
+after this protocol was frozen and independently reviewed.
 
 ## 16. F2 implementation record
 
@@ -296,7 +295,7 @@ F1 protocol. It produced 32,357 eligible rows from 38,290 candidates for feature
 The rebuild fitted no preprocessing/model and created no binary label. It documented 5,933 strict
 session-availability exclusions, including systematic provider/benchmark gaps, rather than
 imputing or substituting later bars. See `research/evaluation/f2_historical_dataset_result.md`.
-At the F2 stop boundary, F3 had not started.
+F3 began only after the F2 snapshot and exclusions were frozen.
 
 ## 17. F3 implementation record
 
@@ -309,8 +308,8 @@ concentration. It did find abnormal exclusion concentration in calendar years 20
 2017 and 2019, plus `outer_2017_2018`; 7.10% of evaluation candidates also lacked enough bars for a
 regime assignment. The coverage warning therefore cannot be fully downgraded. Its frozen
 classification is `DATA_LIMITATION_WITH_DETECTED_COVERAGE_CONCENTRATION`, documented in
-`research/evaluation/f3_target_feature_coverage_audit_result.md`. At the F3 stop boundary, F4 had
-not started.
+`research/evaluation/f3_target_feature_coverage_audit_result.md`. F4 began only after this audit was
+frozen.
 
 ## 18. F4 implementation record
 
@@ -323,8 +322,8 @@ Every fit requires an explicit temporal context and rejects target overlap, non-
 duplicate identities, non-finite data and parameters outside the F1 grid. Synthetic repeated fits
 produced identical manifests and predictions. F4 ran no historical outer evaluation, selected no
 hyperparameters/winner and persisted no final model. See
-`research/evaluation/f4_regression_candidates_result.md`. At the F4 stop boundary, F5 had not
-started.
+`research/evaluation/f4_regression_candidates_result.md`. Historical outer evaluation began only
+after the candidate implementations and guards were frozen.
 
 ## 19. F5 implementation record
 

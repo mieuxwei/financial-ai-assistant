@@ -109,12 +109,13 @@ Track B deliberately separates concepts that are often incorrectly collapsed:
 
 ### Streamlit — primary public controlled demo
 
-![Controlled Streamlit dashboard](assets/controlled_streamlit_dashboard.jpg)
+![Controlled Streamlit dashboard](assets/public_web_demo_home.png)
 
-The screenshot uses a deterministic synthetic fixture. The displayed ticker, feature values,
-score and intelligence are **not live 2330 data** and are not performance evidence. The Web Demo
-also supports 0–5 browser-session holdings without login or persistence; only a public-safe fixture
-may show a research signal, and no current ROI is calculated.
+The current public fixture uses ticker-specific historical Track A OOF snapshots and permitted
+metadata-derived Track B summaries. It is **not current-market inference** and does not turn one
+ticker's result into another's. The Web Demo supports 0–5 browser-session holdings without login or
+persistence; 0050 intentionally demonstrates a fail-closed missing-event state, and no current ROI
+is calculated.
 
 Additional screenshots:
 

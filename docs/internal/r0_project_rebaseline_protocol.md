@@ -1,4 +1,7 @@
-# R0 Project Rebaseline Protocol
+# R0 Project Rebaseline Protocol — Archive
+
+> Historical milestone-control document retained for research provenance; current status is in
+> the public README and final release audit.
 
 Status: **FROZEN — R0 complete; next executable unit is B1 only**  
 Date: 2026-08-29

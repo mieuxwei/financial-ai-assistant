@@ -2,7 +2,7 @@
 
 Date: 2026-08-30
 
-Status: **LINE_PUBLIC_BETA_DEPLOYED / R1B-UX1 LIFF UPGRADE READY FOR EXTERNAL SETUP**
+Status: **LINE_PUBLIC_BETA_DEPLOYED / EXPERIMENTAL PROTOTYPE PRESERVED / NOT PRIMARY PORTFOLIO ENTRY**
 
 ## Purpose
 
@@ -23,9 +23,8 @@ validated Chinese sentiment or brokerage integration.
 | providers | Private configuration | No Yahoo/FinMind/TWMD/Gemini/Perplexity calls |
 | data lifecycle | Private policy | 30-day expiry plus self-delete |
 
-The authoritative private files `/Users/xander/Desktop/code.gs`,
-`/Users/xander/Desktop/appsscript.json`, the ignored immutable backup and migration copy are not
-inputs to this release artifact and must not be deployed or modified.
+The private legacy GAS source, ignored immutable backup and migration copy are not inputs to this
+release artifact and must not be deployed or modified.
 
 ## Architecture
 

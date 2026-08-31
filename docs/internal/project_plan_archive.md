@@ -1,4 +1,8 @@
-# Financial AI Assistant — Final Project Plan
+# Financial AI Assistant — Historical Project Plan Archive
+
+> Archived for research and milestone provenance before the v1.0 portfolio release. This plan
+> records the path used to reach the final study; its active-milestone labels are historical. The
+> current public status is summarized in `README.md` and `docs/final_release_audit.md`.
 
 Plan version: `forward-collection-deployment-ready-v1`
 

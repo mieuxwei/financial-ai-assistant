@@ -1,4 +1,8 @@
-# Financial AI Assistant — Authoritative Handoff
+# Financial AI Assistant — Development History Archive
+
+> Archived for engineering provenance before the v1.0 portfolio release. This record contains
+> historical milestone boundaries and implementation handoffs; it is not the current project
+> status or the public portfolio entry point. See `README.md` and `docs/final_release_audit.md`.
 
 Last revised: 2026-08-31
 
@@ -711,8 +715,8 @@ unchanged; F11B integration pending**.
 
 Authoritative private inputs inspected:
 
-- `/Users/xander/Desktop/code.gs`;
-- `/Users/xander/Desktop/appsscript.json`.
+- private legacy GAS source (`code.gs`), stored outside this repository;
+- private legacy GAS manifest (`appsscript.json`), stored outside this repository.
 
 They are not repository artifacts and must not be copied into this public/research repository.
 `gas_legacy/README.md` remains a warning-only placeholder; `line_adapter/` remains a transitional

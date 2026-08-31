@@ -1,0 +1,47 @@
+{
+  "schema_version": "portfolio-release-v1",
+  "release_version": "1.0.0",
+  "release_tag": "v1.0.0-portfolio",
+  "state": "V1_0_PORTFOLIO_FROZEN",
+  "success_state": "V1_0_RELEASE_READY_WITH_NONBLOCKING_NOTES",
+  "production_url": "https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/",
+  "primary_experience": "CONTROLLED_WEB_DEMO",
+  "track_a": {
+    "status": "COMPLETE_FROZEN",
+    "model": "ridge_regression",
+    "alpha": 100,
+    "mean_outer_spearman": 0.194,
+    "top_decile_lift": 1.3542,
+    "interpretation": "MODEST_HISTORICAL_RANKING_SIGNAL"
+  },
+  "track_b": {
+    "status": "COMPLETE_THROUGH_B5",
+    "chinese_linguistic_sentiment": "ABSTAIN_NOT_INDEPENDENTLY_VALIDATED",
+    "market_reaction_maturity": "AUTOMATED_SIGNAL_ONLY",
+    "bert_supported_use": "FINANCIAL_DOMAIN_REPRESENTATION"
+  },
+  "current_market_inference": {
+    "enabled": false,
+    "feature_parity_passed": 5,
+    "feature_parity_total": 23,
+    "serving_gates_passed": 6,
+    "serving_gates_total": 9
+  },
+  "forward_collection": {
+    "deployed": true,
+    "first_smoke_verified": true,
+    "automatic_retraining": false
+  },
+  "line": {
+    "status": "EXPERIMENTAL_MULTI_CHANNEL_PROTOTYPE",
+    "primary_experience": false
+  },
+  "research_claims": {
+    "prospective_validation": false,
+    "price_direction": false,
+    "investment_advice": false,
+    "causal_market_impact": false,
+    "validated_chinese_sentiment": false
+  },
+  "next_action": "NONE_V1_0_PORTFOLIO_COMPLETE"
+}
