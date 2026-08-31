@@ -1222,3 +1222,54 @@ Revision date: 2026-08-31
 32. **Research/model impact:** no retraining, no target/model/fold changes, no new dataset and no
     private-system changes.
 33. **Next and only allowed unit:** `Production Web Demo Deployment Verification`.
+
+## PRODUCTION WEB DEMO DEPLOYMENT VERIFICATION — LOW-USAGE MODE
+
+Attempt date: 2026-08-31
+
+1. **Success state:** `PRODUCTION_WEB_DEMO_DEPLOYMENT_BLOCKED`.
+2. **Deployment pre-revision HEAD:** `e27dc47fc26c583c25da15f735530f32475b7b29`.
+3. **Deployment candidate HEAD:** `97ba2fdfd4355a6a7ad8b30107e71ef680905529`.
+4. **Commit message:** `Finalize controlled evidence coverage for web demo`.
+5. **Commit files:** `HANDOFF.md`, `demo/app.py`, `demo/contracts.py`,
+   `demo/fixtures/controlled_historical_evidence.v1.json`, and
+   `tests/unit/test_public_web_demo_release.py`.
+6. **Unrelated changes:** none were included. The commit contains only the evidence/content
+   revision, its contract/test, and the known required HANDOFF updates.
+7. **Push:** failed before any remote update. `git push origin main` returned
+   `could not read Username for 'https://github.com': Device not configured`. No force push,
+   credential workaround or alternate remote was attempted.
+8. **Production URL:** <https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/>.
+9. **Production revision:** not updated or verified because `origin/main` remains at
+   `e27dc47fc26c583c25da15f735530f32475b7b29` while local `main` is one commit ahead.
+10. **2330 production stock analysis:** not re-verified; the deployment candidate is not on the
+    monitored remote branch.
+11. **2308 production stock analysis:** not re-verified for the same reason.
+12. **0050 production partial behavior:** not re-verified for the same reason.
+13. **Default production portfolio:** not re-verified. Local candidate remains configured for
+    `2330`, `2308`, and `1301`.
+14. **Production portfolio add/delete:** not re-verified. Local targeted tests and prior local
+    browser smoke passed.
+15. **Production financial intelligence:** not re-verified. The deployment candidate contains
+    real historical event-derived content for 9 tickers.
+16. **Production Technical Notes:** not re-verified. The deployment candidate contains the
+    required `5/23`, `6/9`, Chinese/English NLP, LINE prototype, and forward-collector notes.
+17. **Mobile production smoke:** not run because production never received the candidate commit.
+18. **Production error safety:** not re-verified. Local partial/empty-state smoke and contract
+    tests passed without exposing traceback, path, secret or debug payload.
+19. **Targeted tests:** 20 passed. Only the existing Starlette/httpx deprecation warning appeared.
+20. **Ruff:** PASS on changed and directly related Python files.
+21. **Secret scan:** PASS; no supported credential patterns found.
+22. **`git diff --check`:** PASS before commit.
+23. **Model changes:** none. Track A, Ridge alpha 100, targets, folds and Track B models remain
+    frozen.
+24. **Provider calls:** none added.
+25. **Private resources:** not accessed or modified; no private LINE/GAS, holdings, Google Sheet,
+    credentials or private TWMD content entered the commit.
+26. **Git status after attempt:** local `main` is ahead of `origin/main` by one commit. This
+    deployment-attempt HANDOFF section is an intentional uncommitted documentation update.
+27. **Final Release Audit:** not started.
+28. **Project freeze/tag:** not started.
+29. **Next action:** restore normal GitHub push authentication and push local commit `97ba2fd`;
+    then resume the same `Production Web Demo Deployment Verification`. `Final Release Audit` is
+    not yet allowed because production verification has not completed.
