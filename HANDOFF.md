@@ -1273,3 +1273,64 @@ Attempt date: 2026-08-31
 29. **Next action:** restore normal GitHub push authentication and push local commit `97ba2fd`;
     then resume the same `Production Web Demo Deployment Verification`. `Final Release Audit` is
     not yet allowed because production verification has not completed.
+
+## PRODUCTION WEB DEMO DEPLOYMENT VERIFICATION — VERIFIED RESUMPTION
+
+Verification date: 2026-08-31
+
+1. **Success state:** `PRODUCTION_WEB_DEMO_VERIFIED`.
+2. **Deployment pre-revision HEAD:** `e27dc47fc26c583c25da15f735530f32475b7b29`.
+3. **Web Demo application commit:** `97ba2fdfd4355a6a7ad8b30107e71ef680905529`;
+   production branch HEAD at verification: `87b678b2e276f8698ef431c257b6020a67349284`.
+4. **Application commit message:** `Finalize controlled evidence coverage for web demo`.
+5. **Application commit files:** `HANDOFF.md`, `demo/app.py`, `demo/contracts.py`,
+   `demo/fixtures/controlled_historical_evidence.v1.json`, and
+   `tests/unit/test_public_web_demo_release.py`. The follow-up `87b678b` commit contains only the
+   prior deployment-blocked HANDOFF record.
+6. **Unrelated changes:** none were mixed into either focused commit.
+7. **Push:** complete. Local `main`, `origin/main`, and fetched remote HEAD were all
+   `87b678b2e276f8698ef431c257b6020a67349284` before this verification report was appended.
+8. **Production URL:** <https://mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app/>.
+9. **Production revision:** verified. Streamlit initially retained an old connected session even
+   after logging `Updated app`; one reboot of the existing app was performed. A fresh production
+   session then exposed the new 8-item navigation including `研究與系統說明｜Technical Notes`.
+   No second app was created.
+10. **2330 stock analysis:** PASS. Production shows the ticker-specific historical OOF snapshot,
+    score `0.38×`, percentile `3.0%`, LOW band, the `2025-06-25` increase-capital event summary,
+    event class, and MODERATE reaction magnitude.
+11. **2308 stock analysis:** PASS. Production shows score `0.45×`, ticker-specific snapshot, the
+    merger/acquisition-class event, and its historical reaction-magnitude interpretation.
+12. **0050 partial behavior:** PASS. Production shows its own `0.37×` Track A snapshot and clearly
+    states that no public controlled event intelligence exists. It does not borrow 2330/2308 event
+    content.
+13. **Default portfolio:** PASS. `2330 台積電`, `2308 台達電`, and `1301 台塑` load as three
+    full-coverage Demo holdings, each with Track A and event summary content.
+14. **Portfolio add/delete:** PASS in production. Adding the fourth `0050` holding produced `4/5`;
+    deleting it returned the sandbox to `3/5`.
+15. **Financial intelligence:** PASS. Production was explicitly switched to both `2330` and
+    `2308`; each shows company, event time, concrete deterministic summary, event class, historical
+    reaction magnitude, percentile interpretation, sentiment limitation, and licensing boundary.
+16. **Technical Notes split:** PASS. `6/9`, `5/23`, Chinese sentiment limitation, English NLP
+    product-evidence limitation, LINE/GAS/Cloudflare prototype and forward collector are present on
+    the notes page and absent from the main financial-intelligence card.
+17. **Mobile smoke:** PASS at `390 × 844`. Navigation, stock analysis, portfolio controls and
+    financial-intelligence card remained usable with `scrollWidth == clientWidth == 390`; no
+    blocking sidebar or horizontal overflow was found.
+18. **Error safety:** PASS for the empty portfolio and 0050 partial state. No traceback, raw
+    exception, `/mount/src` path, secret or debug payload appeared in user-facing content.
+19. **Targeted tests:** 20 passed before deployment across public Web release, dashboard contract,
+    browser-session portfolio and Streamlit integration tests. Only the existing Starlette/httpx
+    deprecation warning appeared; the full suite was intentionally not run.
+20. **Ruff:** PASS on changed and directly related Python files.
+21. **Secret scan:** PASS; no supported credential patterns found.
+22. **`git diff --check`:** PASS before deployment and again after this HANDOFF addition.
+23. **Model changes:** none. Track A, Ridge alpha 100, target, folds and Track B model evidence
+    remain frozen.
+24. **Provider calls:** none added; production remains controlled fixture-only at request time.
+25. **Private resources:** no private LINE/GAS, holdings, Google Sheet, credentials, private TWMD
+    rows or `.tools/private` content was accessed, modified or deployed.
+26. **Git status:** clean at production verification start; this verification report is the only
+    intentional uncommitted change afterward (`HANDOFF.md`).
+27. **Final Release Audit:** not started.
+28. **Project freeze/tag:** not started.
+29. **Next and only allowed unit:** `Final Release Audit`.
