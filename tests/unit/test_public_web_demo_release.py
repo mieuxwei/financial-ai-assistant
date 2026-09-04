@@ -79,7 +79,7 @@ def test_public_entrypoint_renders_web_first_release_boundaries() -> None:
     )
     assert "CONTROLLED RESEARCH DEMO" in rendered
     assert "非投資建議" in rendered
-    assert "Public Live Web Demo" in rendered
+    assert "Independent ML & Financial NLP Research Project" in rendered
     assert "預測股票相對波動異常程度" in rendered
     assert any(button.label == "開始股票分析" for button in app.button)
     assert not app.sidebar
@@ -198,8 +198,7 @@ def test_historical_evidence_fixture_is_real_oof_derived_and_public_safe() -> No
     assert all(item.track_a is not None for item in evidence.tickers)
     assert all(
         item.event.raw_title_public is False
-        and item.event.linguistic_sentiment_status
-        == "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED"
+        and item.event.linguistic_sentiment_status == "ABSTAIN_CHINESE_SENTIMENT_NOT_VALIDATED"
         for item in evidence.tickers
         if item.event is not None
     )

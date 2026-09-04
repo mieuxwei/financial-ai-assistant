@@ -26,6 +26,8 @@ from demo.portfolio import (
 from demo.presentation import band_label, format_percentile, format_score
 
 ROOT = Path(__file__).resolve().parents[1]
+REPOSITORY_URL = "https://github.com/mieuxwei/financial-ai-assistant"
+EVIDENCE_BASE_URL = f"{REPOSITORY_URL}/blob/v1.0.0-portfolio"
 CONFIG_PATH = ROOT / "research/configs/dashboard_demo.v1.json"
 PUBLIC_RELEASE_CONFIG_PATH = ROOT / "research/configs/public_web_demo_release.v1.json"
 HISTORICAL_EVIDENCE_PATH = ROOT / "demo/fixtures/controlled_historical_evidence.v1.json"
@@ -131,33 +133,74 @@ def _select_ticker(ticker: str) -> None:
     st.session_state[SELECTED_TICKER_STATE_KEY] = ticker
 
 
+def _open_ticker_page(page: str, ticker: str) -> None:
+    _go_to(page)
+    _select_ticker(ticker)
+    st.session_state["intelligence_ticker"] = ticker
+
+
+def _render_related_pages(ticker: str, *, key: str) -> None:
+    st.markdown("#### 繼續探索")
+    stock, intelligence, portfolio = st.columns(3)
+    stock.button(
+        "股票分析",
+        key=f"{key}-stock",
+        width="stretch",
+        on_click=_open_ticker_page,
+        args=("股票分析", ticker),
+    )
+    intelligence.button(
+        "金融情報",
+        key=f"{key}-intelligence",
+        width="stretch",
+        on_click=_open_ticker_page,
+        args=("金融情報", ticker),
+    )
+    portfolio.button(
+        "Demo 持股",
+        key=f"{key}-portfolio",
+        width="stretch",
+        on_click=_go_to,
+        args=("持股健檢",),
+    )
+    st.button("查看研究證據", key=f"{key}-research", on_click=_go_to, args=("研究成果",))
+
+
 def _render_landing(
     fixture: ControlledDashboardFixture, release: PublicWebDemoReleaseConfig
 ) -> None:
     st.markdown('<div class="release-badge">CONTROLLED RESEARCH DEMO</div>', unsafe_allow_html=True)
     st.title("Financial AI Assistant")
+    st.caption("Independent ML & Financial NLP Research Project · v1.0.0-portfolio")
     st.subheader("預測股票相對波動異常程度，整合金融事件情報")
     st.write(
-        "這是一套台股研究型 AI 助手：用時間序列機器學習比較股票下一交易日的波動"
-        "是否可能異常，並用金融 NLP 整理事件資訊。"
+        "研究下一交易日相對於個股自身歷史水準的波動異常程度，"
+        "並將金融事件類型與歷史市場反應幅度分開呈現。"
     )
-    status, capability, boundary = st.columns(3)
-    status.success("Public Live Web Demo\n\n股票分析、Demo 持股健檢、金融情報")
-    capability.info("AI 研究核心\n\n預測相對波動異常，重點是排序而非精準數值")
-    boundary.warning("使用限制\n\n受控資料、非即時、不預測漲跌、非投資建議")
-    cta_a, cta_b, cta_c = st.columns(3)
+    st.info(
+        "v1.0 研究已完成並凍結。這裡展示受控歷史 OOF 快照與允許公開的衍生事件 metadata，"
+        "不是合成市場資料、即時行情或現場模型推論；不預測漲跌，非投資建議。"
+    )
+    cta_a, cta_b = st.columns(2)
     cta_a.button(
         "開始股票分析", type="primary", width="stretch", on_click=_go_to, args=("股票分析",)
     )
-    cta_b.button("查看持股健檢", width="stretch", on_click=_go_to, args=("持股健檢",))
-    cta_c.button("查看研究方法", width="stretch", on_click=_go_to, args=("研究成果",))
-    st.markdown("### 30 秒研究證據")
+    cta_b.link_button("查看 GitHub", REPOSITORY_URL, width="stretch")
+    with st.expander("其他入口與資料說明"):
+        st.button("查看持股健檢", on_click=_go_to, args=("持股健檢",))
+        st.button("查看研究方法", on_click=_go_to, args=("研究成果",))
+        st.write(
+            "10 檔股票均有歷史研究分數，其中 9 檔有可公開事件；0050 不補造事件。"
+            "Demo 持股是暫存輸入，歷史分數與事件不是合成新聞或行情。"
+        )
+    st.markdown("### Historical evidence｜歷史研究證據")
     a, b, c = st.columns(3)
     a.metric("跨期測試", f"{release.track_a_outer_folds} 段", border=True)
-    b.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
-    c.metric("最高分組反應幅度", f"{release.track_a_top_decile_lift:.3f}×", border=True)
+    b.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.4f}", border=True)
+    c.metric("Top-decile lift", "1.3542×", border=True)
     st.caption(
-        "模型在七段時間序列外推測試中展現有限但一致的排序資訊；"
+        "Track A：10 檔股票、20,637 筆 historical OOS rows、7 個 rolling-origin outer periods。"
+        "結果是有限的歷史排序訊號；"
         "完整模型比較、R² 限制與方法可在「研究成果」查看。"
     )
 
@@ -188,7 +231,7 @@ def _render_stock_analysis(evidence: HistoricalEvidenceFixture) -> None:
         return
     st.caption(
         f"受控歷史研究快照｜特徵日 {prediction.feature_session}｜"
-        "來自 frozen rolling-origin OOF 結果；不是今日或即時預測。"
+        "來自已凍結的歷史外推結果；不是今日或即時預測。"
     )
     score, percentile, band = st.columns(3)
     score.metric(
@@ -212,10 +255,13 @@ def _render_stock_analysis(evidence: HistoricalEvidenceFixture) -> None:
     )
     st.info(
         "如何閱讀：分數衡量下一交易日的波動幅度，相對於這檔股票近期自身波動水準有多異常。"
-        "百分位是歷史相對位置，不是發生機率；分級也不表示上漲或下跌。"
+        "百分位是分數在歷史研究樣本中的相對位置，不是發生機率；"
+        "分級是依既定歷史分數邊界轉成的溝通標籤，不是另一個模型，也不表示上漲或下跌。"
     )
     st.markdown("### 受控事件情報")
     _render_event_card(item)
+    st.caption("股票分數與事件案例分屬兩條獨立研究線；日期不一定相同，不構成事件當日的聯合預測。")
+    _render_related_pages(selected_ticker, key="stock-related")
 
 
 def _render_portfolio_health(evidence: HistoricalEvidenceFixture) -> None:
@@ -229,7 +275,10 @@ def _render_portfolio_health(evidence: HistoricalEvidenceFixture) -> None:
     st.caption("請勿輸入敏感資訊。本頁沒有即時價格，因此不計算 ROI、市值或未實現損益。")
     holdings = _holdings()
     sample, reset = st.columns(2)
-    if sample.button("載入三檔完整示範持股", width="stretch"):
+    st.caption(
+        "建議先載入範例：2330、2308、1301。股數與成本僅為 Demo 輸入；載入會取代本次 session 持股。"
+    )
+    if sample.button("載入三檔完整示範持股", width="stretch", type="primary"):
         st.session_state[HOLDINGS_STATE_KEY] = [
             build_holding("2330", 100, 800),
             build_holding("2308", 40, 420),
@@ -262,9 +311,7 @@ def _render_portfolio_health(evidence: HistoricalEvidenceFixture) -> None:
             step=0.1,
             key=f"cost-{selected_ticker}",
         )
-        submitted = st.form_submit_button(
-            "更新持股" if existing else "加入持股", type="primary"
-        )
+        submitted = st.form_submit_button("更新持股" if existing else "加入持股", type="primary")
     if submitted:
         try:
             st.session_state[HOLDINGS_STATE_KEY] = upsert_holding(
@@ -289,7 +336,7 @@ def _render_portfolio_health(evidence: HistoricalEvidenceFixture) -> None:
     st.markdown("### 我的 Demo 持股")
     for holding in holdings:
         with st.container(border=True):
-            info, action = st.columns([4, 1])
+            info, action = st.columns([3, 1])
             info.markdown(f"**{holding['ticker']} {holding['company']}**")
             info.write(f"{holding['shares']:,.2f} 股 · 平均成本 {holding['average_cost']:,.2f}")
             if action.button("刪除", key=f"delete-{holding['ticker']}", width="stretch"):
@@ -314,7 +361,15 @@ def _render_portfolio_health(evidence: HistoricalEvidenceFixture) -> None:
                     info.write("此股票目前沒有可公開的受控事件情報。")
             else:
                 info.caption("此股票目前沒有可公開的受控研究訊號。")
+            action.button(
+                "分析",
+                key=f"analyse-{holding['ticker']}",
+                width="stretch",
+                on_click=_open_ticker_page,
+                args=("股票分析", holding["ticker"]),
+            )
     st.info("健檢只整合 Demo 持股與可用的受控研究訊號，不代表當前市場狀態或投資建議。")
+    st.button("查看研究證據", key="portfolio-research", on_click=_go_to, args=("研究成果",))
 
 
 def _holdings() -> list[BrowserDemoHolding]:
@@ -329,15 +384,20 @@ def _render_intelligence_page(evidence: HistoricalEvidenceFixture) -> None:
         "這裡把「事件類型」、「後續市場反應幅度」與「文字情緒」分開呈現。"
         "三者不是同一件事，也不會合併成看似精確的單一分數。"
     )
-    st.caption("顯示既有 B4 歷史 OOF 事件視窗的公開安全衍生資訊，不是即時新聞。")
-    available = [item for item in evidence.tickers if item.event is not None]
+    st.caption("顯示歷史外推事件視窗的公開安全衍生資訊，不是即時新聞。")
+    by_ticker = {item.ticker: item for item in evidence.tickers}
+    st.session_state.setdefault("intelligence_ticker", "2330")
     ticker = st.selectbox(
-        "選擇具有事件證據的股票",
-        tuple(item.ticker for item in available),
-        format_func=lambda value: f"{value} {FROZEN_UNIVERSE[value]}",
+        "選擇事件研究股票",
+        tuple(FROZEN_UNIVERSE),
+        format_func=lambda value: (
+            f"{value} {FROZEN_UNIVERSE[value]}"
+            f"{' · 無可公開事件' if by_ticker[value].event is None else ''}"
+        ),
         key="intelligence_ticker",
     )
-    _render_event_card(next(item for item in available if item.ticker == ticker))
+    _render_event_card(by_ticker[ticker])
+    _render_related_pages(ticker, key="intel-related")
 
 
 def _render_event_card(item: TickerEvidence) -> None:
@@ -354,9 +414,7 @@ def _render_event_card(item: TickerEvidence) -> None:
         st.write(event.summary)
         event_col, reaction_col, sentiment_col = st.columns(3)
         event_col.markdown(f"**事件類型**\n\n{event.event_class}")
-        reaction_col.markdown(
-            f"**歷史市場反應幅度**\n\n{band_label(event.communication_band)}"
-        )
+        reaction_col.markdown(f"**歷史市場反應幅度**\n\n{band_label(event.communication_band)}")
         sentiment_col.markdown("**中文文字情緒**\n\n不提供判定")
         st.info(
             f"如何閱讀：此事件的自動化反應幅度分數位於歷史樣本約第 "
@@ -381,12 +439,23 @@ def _render_research_results(release: PublicWebDemoReleaseConfig) -> None:
     a, b, c, d = st.columns(4)
     a.metric("最終模型", "Ridge", border=True)
     b.metric("跨期測試", f"{release.track_a_outer_folds} 段", border=True)
-    c.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.3f}", border=True)
+    c.metric("平均排序相關", f"{release.track_a_mean_outer_spearman:.4f}", border=True)
     d.metric("平均 R²", "-0.009", border=True)
     st.write(
-        f"最高預測分組的實際波動異常平均為全體的約 "
-        f"{release.track_a_top_decile_lift:.3f} 倍。證據主要在跨期相對排序；"
+        "最高預測分組的實際波動異常平均為全體的約 "
+        "1.3542 倍（top-decile lift）；mean outer MAE 為 0.5473。證據主要在跨期相對排序；"
         "R² 接近零，因此不宣稱能精準預測振幅，更不預測方向。"
+    )
+    st.caption(
+        "Track A｜10 檔 · 20,637 筆 historical OOS rows · 7 個 rolling-origin outer periods。"
+        "Inner temporal selection 與前處理均限制在各 outer fold 的較早訓練資料內。"
+    )
+    st.markdown(
+        f"[時序評估證據]({EVIDENCE_BASE_URL}/research/evaluation/f5_nested_temporal_evaluation_result.md)"
+        f" · [排序與穩健性]({EVIDENCE_BASE_URL}"
+        "/research/evaluation/f6_ranking_robustness_result.md)"
+        f" · [模型選擇紀錄]({EVIDENCE_BASE_URL}"
+        "/research/evaluation/f7_final_research_model_result.md)"
     )
     left, right = st.columns(2)
     left.image(
@@ -402,15 +471,24 @@ def _render_research_results(release: PublicWebDemoReleaseConfig) -> None:
     with st.expander("模型選擇與驗證細節"):
         st.write(
             "比較 Persistence、Ridge 與 HistGradientBoosting。Ridge 與樹模型落在預先凍結的"
-            "實務相近範圍內，最後依較低平均 MAE 的既定 tie-break 選擇 Ridge（alpha=100）。"
+            "0.01 Spearman practical-tie margin 內，最後依較低平均 MAE 的既定 tie-break "
+            "選擇 Ridge（alpha=100），不代表 Ridge 在所有指標全面勝出。"
         )
-        st.write(
-            "所有評估使用七段 rolling-origin 時序外推；每一段的前處理與模型只用較早資料擬合。"
-        )
+        st.write("所有評估使用七段 rolling-origin 時序外推；每一段的前處理與模型只用較早資料擬合。")
     st.markdown("### 金融 NLP 與事件情報")
     x, y = st.columns(2)
-    x.metric("事件資訊的反應幅度排序相關", "0.250", border=True)
+    x.metric("事件資訊的反應幅度排序相關", "0.2504", border=True)
     y.metric("高分組反應幅度", "1.623×", border=True)
+    st.caption(
+        "Track B｜7,582 events → 3,433 reaction windows · 9 檔 · chronological OOF。"
+        "此處評估 metadata-only 的 absolute market reaction，是歷史關聯，不是方向或因果。"
+    )
+    st.info("兩個 track 的研究問題、target 與評估協議不同，不能直接比較兩組 Spearman 誰更好。")
+    st.markdown(
+        f"[市場反應評估證據]({EVIDENCE_BASE_URL}/research/evaluation/b4_market_reaction_validation_result.md)"
+        f" · [NLP 整合與能力邊界]({EVIDENCE_BASE_URL}"
+        "/research/evaluation/b5_nlp_intelligence_integration_result.md)"
+    )
     st.markdown(
         "- 已完成台灣金融語料的中文 BERT 領域適應；目前只主張文字表示能力。\n"
         "- 中文文字情緒尚未通過獨立驗證，因此不輸出正／中／負判定。\n"
@@ -421,15 +499,16 @@ def _render_research_results(release: PublicWebDemoReleaseConfig) -> None:
 def _render_architecture() -> None:
     st.markdown('<div class="eyebrow">ENGINEERING EVIDENCE</div>', unsafe_allow_html=True)
     st.title("系統架構")
+    st.image(str(ROOT / "docs/assets/system_architecture.svg"), width="stretch")
     web, backend = st.columns(2)
     with web.container(border=True):
         st.markdown("#### 公開 Web 展示路徑")
-        st.write("瀏覽器 → Streamlit → 受控研究 fixture／session 持股")
+        st.write("瀏覽器 → Streamlit → 歷史 OOF 快照／衍生 metadata／session 持股")
         st.caption("零 runtime secret、零 request-time provider call；不是即時模型服務。")
     with backend.container(border=True):
         st.markdown("#### 研究與應用層")
-        st.write("FastAPI → 版本化 ML／NLP contract → PostgreSQL")
-        st.caption("負責驗證、持股規則、使用者隔離、資料管線與可追溯性。")
+        st.write("離線資料管線 → 研究 artifacts → FastAPI 版本化 contract")
+        st.caption("此路徑與 LINE sandbox 的 PostgreSQL 不在公開 Streamlit request path 中執行。")
     st.markdown("### 實驗性 LINE 多通路原型")
     st.code(
         "LINE Demo OA → Cloudflare 安全邊界 → Google Apps Script\n"
@@ -471,7 +550,7 @@ def _render_limitations(
     st.markdown("### Future External Validation")
     st.write(
         "TWSE／TPEx forward collection 正在累積自然產生、模型未見過的資料，未來可用於外部驗證；"
-        "排程蒐集不等於自動重訓，也不是目前作品集封案條件。"
+        "排程蒐集不等於自動重訓，尚未產生外部驗證結果，也不影響已完成的 v1.0 研究。"
     )
 
 
@@ -484,14 +563,12 @@ def _render_technical_notes(
     with st.expander("即時推論 gate 與 fail-closed 決策", expanded=True):
         st.write(
             f"目前 serving readiness 檢核通過 {release.current_market_gate_passed}/"
-            f"{release.current_market_gate_total}；23 個固定特徵中有 "
-            f"{release.exact_feature_parity_passed} 個達到精確一致。"
+            f"{release.current_market_gate_total} gates；exact feature parity 為 "
+            f"{release.exact_feature_parity_passed}/{release.exact_feature_parity_total}。"
         )
         st.write("因此 current-market inference 維持停用，公開版只呈現歷史 OOF 受控快照。")
     with st.expander("中文與英文 NLP 證據邊界"):
-        st.write(
-            "中文情緒未通過獨立驗證，因此主頁只呈現事件本身與反應幅度，不輸出正／中／負。"
-        )
+        st.write("中文情緒未通過獨立驗證，因此主頁只呈現事件本身與反應幅度，不輸出正／中／負。")
         st.write(
             "系統具有 pinned FinBERT pipeline 與歷史 sanity-check 證據，但目前沒有適合公開產品頁、"
             "且具完整來源脈絡的英文 intelligence item，因此英文 NLP 不作為主功能。"

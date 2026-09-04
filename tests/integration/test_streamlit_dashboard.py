@@ -17,5 +17,7 @@ def test_streamlit_dashboard_renders_controlled_offline_mode() -> None:
     assert app.title[0].value == "Financial AI Assistant"
     assert app.selectbox[0].value == "首頁"
     assert app.radio[0].value == "受控離線示範"
-    assert any("Public Live Web Demo" in success.value for success in app.success)
+    assert any(
+        "Independent ML & Financial NLP Research Project" in item.value for item in app.caption
+    )
     assert len(app.metric) >= 3
