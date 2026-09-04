@@ -75,6 +75,7 @@ financial-ai-forward-events-r2 = "jobs.b2_forward_r2:main"
 dev = [
   "pytest>=8.3,<9.0",
   "pytest-cov>=6.0,<8.0",
+  "requests>=2.32,<3.0",
   "ruff>=0.8,<1.0",
 ]
 nlp = [

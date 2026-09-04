@@ -24,22 +24,22 @@ def test_public_and_archived_documents_preserve_final_research_boundaries() -> N
     assert "DEPLOYED / FIRST_BOUNDED_LIVE_SMOKE_VERIFIED" in handoff
     assert "FORWARD_COLLECTION_DEPLOYED_AND_SMOKE_VERIFIED" in handoff
     assert "reused_remote_manifest=true" in plan
-    assert "Primary public experience" in readme
+    assert "Streamlit is the primary entry" in readme
     assert "PUBLIC_WEB_DEMO_DEPLOYED" in plan
     assert "LINE_PUBLIC_BETA_DEPLOYED" in plan
-    assert "Streamlit Community Cloud" in readme
-    assert "Experimental messaging path" in readme
+    assert "mieuxwei-f6rbk4pvtvxs3rsh3k2zmn.streamlit.app" in readme
+    assert "Experimental messaging:" in readme
     assert all(item in plan for item in ("F11B-2A", "F12", "R1A", "R1B-UX1"))
     assert "6/9" in plan and "blocked" in plan.casefold()
     assert "6/9" in readme and "disabled" in readme.casefold()
     assert "B3.1" in handoff
     assert "B3.1" in plan
-    assert "未取得獨立有效驗證" in readme
+    assert "中文情緒仍未通過獨立驗證" in readme
     assert "AUTOMATED_SIGNAL_ONLY" in handoff
     assert "AUTOMATED_SIGNAL_ONLY" in plan
-    assert "automated historical-association signal" in readme
+    assert "automated historical-association signal" in readme.casefold()
     assert "NOT_READY_FOR_F11B_2" in handoff
-    assert "Public Live Web Demo" in readme
+    assert "Open Live Demo" in readme
     assert "modest" in readme.casefold() and "ranking signal" in readme.casefold()
 
 
@@ -73,7 +73,7 @@ def test_core_documents_freeze_track_a_and_split_f11() -> None:
     assert "Streamlit" in readme
     assert "LINE/GAS" in readme
     assert "Ridge" in readme
-    assert "alpha=100" in readme
+    assert "alpha = 100" in readme
 
 
 def test_source_and_gas_boundaries_are_explicit() -> None:
